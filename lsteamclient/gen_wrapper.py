@@ -11,6 +11,7 @@ import os
 import re
 
 SDK_VERSIONS = [
+    "164",
     "163",
     "162",
     "161",
@@ -572,6 +573,8 @@ class Struct:
         for cursor in self.type.get_fields():
             assert not cursor.is_bitfield()
             offset = self.type.get_offset(cursor.spelling)
+            if offset % 8 != 0:
+                print(cursor.spelling, ', offset=', offset)
             assert offset % 8 == 0
             offset = offset // 8
             # assert offset >= size or type(self) is Union

@@ -159,6 +159,39 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetNumBetas,
     ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetBetaInfo,
     ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribed,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsLowViolence,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsCybercafe,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsVACBanned,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetCurrentGameLanguage,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAvailableGameLanguages,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedApp,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsDlcInstalled,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetEarliestPurchaseUnixTime,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedFromFreeWeekend,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetDLCCount,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BGetDLCDataByIndex,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_InstallDLC,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_UninstallDLC,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_RequestAppProofOfPurchaseKey,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetCurrentBetaName,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_MarkContentCorrupt,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetInstalledDepots,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppInstallDir,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsAppInstalled,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppOwner,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetLaunchQueryParam,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetDlcDownloadProgress,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppBuildId,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_RequestAllProofOfPurchaseKeys,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetFileDetails,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetLaunchCommandLine,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedFromFamilySharing,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsTimedTrial,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetDlcContext,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetNumBetas,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetBetaInfo,
+    ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetActiveBeta,
     ISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData,
     ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init,
     ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown,
@@ -581,6 +614,26 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMousePosition,
     ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_CreateMouseCursor,
     ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMouseCursor,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionCount,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionID,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BSessionRemotePlayTogether,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionSteamID,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionGuestID,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSmallSessionAvatar,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetMediumSessionAvatar,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetLargeSessionAvatar,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionClientName,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionClientFormFactor,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BGetSessionClientResolution,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_ShowRemotePlayTogetherUI,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BSendRemotePlayTogetherInvite,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BEnableRemotePlayTogetherDirectInput,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_DisableRemotePlayTogetherDirectInput,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetInput,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMouseVisibility,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMousePosition,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_CreateMouseCursor,
+    ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMouseCursor,
     ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite,
     ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize,
     ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead,
@@ -2473,6 +2526,9 @@ extern "C" const unixlib_entry_t __wine_unix_call_funcs[] =
     ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally,
     ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems,
+    ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems,
     ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod,
     ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo,
     ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData,
@@ -6509,6 +6565,39 @@ extern "C" const unixlib_entry_t __wine_unix_call_wow64_funcs[] =
     wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetNumBetas,
     wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION008_GetBetaInfo,
     wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION008_SetActiveBeta,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribed,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsLowViolence,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsCybercafe,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsVACBanned,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetCurrentGameLanguage,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAvailableGameLanguages,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedApp,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsDlcInstalled,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetEarliestPurchaseUnixTime,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedFromFreeWeekend,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetDLCCount,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BGetDLCDataByIndex,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_InstallDLC,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_UninstallDLC,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_RequestAppProofOfPurchaseKey,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetCurrentBetaName,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_MarkContentCorrupt,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetInstalledDepots,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppInstallDir,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsAppInstalled,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppOwner,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetLaunchQueryParam,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetDlcDownloadProgress,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetAppBuildId,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_RequestAllProofOfPurchaseKeys,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetFileDetails,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetLaunchCommandLine,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribedFromFamilySharing,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsTimedTrial,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetDlcContext,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetNumBetas,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetBetaInfo,
+    wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetActiveBeta,
     wow64_ISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData,
     wow64_ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init,
     wow64_ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown,
@@ -6931,6 +7020,26 @@ extern "C" const unixlib_entry_t __wine_unix_call_wow64_funcs[] =
     wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMousePosition,
     wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_CreateMouseCursor,
     wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION003_SetMouseCursor,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionCount,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionID,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BSessionRemotePlayTogether,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionSteamID,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionGuestID,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSmallSessionAvatar,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetMediumSessionAvatar,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetLargeSessionAvatar,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionClientName,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetSessionClientFormFactor,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BGetSessionClientResolution,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_ShowRemotePlayTogetherUI,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BSendRemotePlayTogetherInvite,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_BEnableRemotePlayTogetherDirectInput,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_DisableRemotePlayTogetherDirectInput,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_GetInput,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMouseVisibility,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMousePosition,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_CreateMouseCursor,
+    wow64_ISteamRemotePlay_STEAMREMOTEPLAY_INTERFACE_VERSION004_SetMouseCursor,
     wow64_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileWrite,
     wow64_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_GetFileSize,
     wow64_ISteamRemoteStorage_STEAMREMOTESTORAGE_INTERFACE_VERSION001_FileRead,
@@ -8823,6 +8932,9 @@ extern "C" const unixlib_entry_t __wine_unix_call_wow64_funcs[] =
     wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetUserContentDescriptorPreferences,
     wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetItemsDisabledLocally,
     wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems,
+    wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems,
     wow64_ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_SendMethod,
     wow64_ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseInfo,
     wow64_ISteamUnifiedMessages_STEAMUNIFIEDMESSAGES_INTERFACE_VERSION001_GetMethodResponseData,
@@ -14113,35 +14225,67 @@ C_ASSERT( sizeof(SteamNetConnectionRealTimeLaneStatus_t().m_usecQueueTime) >= 8 
 C_ASSERT( offsetof(SteamNetConnectionRealTimeLaneStatus_t, reserved) == 24 );
 C_ASSERT( sizeof(SteamNetConnectionRealTimeLaneStatus_t().reserved) >= 40 );
 
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t) >= 120 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_eState) == 0 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_eState) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_nPing) == 4 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_nPing) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_flConnectionQualityLocal) == 8 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_flConnectionQualityLocal) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_flConnectionQualityRemote) == 12 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_flConnectionQualityRemote) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_flOutPacketsPerSec) == 16 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_flOutPacketsPerSec) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_flOutBytesPerSec) == 20 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_flOutBytesPerSec) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_flInPacketsPerSec) == 24 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_flInPacketsPerSec) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_flInBytesPerSec) == 28 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_flInBytesPerSec) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_nSendRateBytesPerSecond) == 32 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_nSendRateBytesPerSecond) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_cbPendingUnreliable) == 36 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_cbPendingUnreliable) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_cbPendingReliable) == 40 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_cbPendingReliable) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_cbSentUnackedReliable) == 44 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_cbSentUnackedReliable) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, m_usecQueueTime) == 48 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().m_usecQueueTime) >= 8 );
-C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t, reserved) == 56 );
-C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t().reserved) >= 64 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164) >= 120 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_eState) == 0 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_eState) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_nPing) == 4 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_nPing) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_flConnectionQualityLocal) == 8 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_flConnectionQualityLocal) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_flConnectionQualityRemote) == 12 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_flConnectionQualityRemote) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_flOutPacketsPerSec) == 16 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_flOutPacketsPerSec) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_flOutBytesPerSec) == 20 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_flOutBytesPerSec) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_flInPacketsPerSec) == 24 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_flInPacketsPerSec) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_flInBytesPerSec) == 28 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_flInBytesPerSec) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_nSendRateBytesPerSecond) == 32 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_nSendRateBytesPerSecond) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_cbPendingUnreliable) == 36 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_cbPendingUnreliable) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_cbPendingReliable) == 40 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_cbPendingReliable) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_cbSentUnackedReliable) == 44 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_cbSentUnackedReliable) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_usecQueueTime) == 48 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_usecQueueTime) >= 8 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, m_usecMaxJitter) == 56 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().m_usecMaxJitter) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_164, reserved) == 60 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_164().reserved) >= 60 );
+
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a) >= 120 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_eState) == 0 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_eState) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_nPing) == 4 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_nPing) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_flConnectionQualityLocal) == 8 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_flConnectionQualityLocal) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_flConnectionQualityRemote) == 12 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_flConnectionQualityRemote) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_flOutPacketsPerSec) == 16 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_flOutPacketsPerSec) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_flOutBytesPerSec) == 20 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_flOutBytesPerSec) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_flInPacketsPerSec) == 24 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_flInPacketsPerSec) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_flInBytesPerSec) == 28 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_flInBytesPerSec) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_nSendRateBytesPerSecond) == 32 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_nSendRateBytesPerSecond) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_cbPendingUnreliable) == 36 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_cbPendingUnreliable) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_cbPendingReliable) == 40 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_cbPendingReliable) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_cbSentUnackedReliable) == 44 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_cbSentUnackedReliable) >= 4 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, m_usecQueueTime) == 48 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().m_usecQueueTime) >= 8 );
+C_ASSERT( offsetof(SteamNetConnectionRealTimeStatus_t_153a, reserved) == 56 );
+C_ASSERT( sizeof(SteamNetConnectionRealTimeStatus_t_153a().reserved) >= 64 );
 
 C_ASSERT( sizeof(SteamNetworkPingLocation_t) >= 512 );
 C_ASSERT( offsetof(SteamNetworkPingLocation_t, m_data) == 0 );
@@ -14232,6 +14376,16 @@ C_ASSERT( offsetof(SteamRelayNetworkStatus_t, m_eAvailAnyRelay) == 12 );
 C_ASSERT( sizeof(SteamRelayNetworkStatus_t().m_eAvailAnyRelay) >= 4 );
 C_ASSERT( offsetof(SteamRelayNetworkStatus_t, m_debugMsg) == 16 );
 C_ASSERT( sizeof(SteamRelayNetworkStatus_t().m_debugMsg) >= 256 );
+
+C_ASSERT( sizeof(SteamRemotePlaySessionAvatarLoaded_t) >= 16 );
+C_ASSERT( offsetof(SteamRemotePlaySessionAvatarLoaded_t, m_unSessionID) == 0 );
+C_ASSERT( sizeof(SteamRemotePlaySessionAvatarLoaded_t().m_unSessionID) >= 4 );
+C_ASSERT( offsetof(SteamRemotePlaySessionAvatarLoaded_t, m_iImage) == 4 );
+C_ASSERT( sizeof(SteamRemotePlaySessionAvatarLoaded_t().m_iImage) >= 4 );
+C_ASSERT( offsetof(SteamRemotePlaySessionAvatarLoaded_t, m_iWide) == 8 );
+C_ASSERT( sizeof(SteamRemotePlaySessionAvatarLoaded_t().m_iWide) >= 4 );
+C_ASSERT( offsetof(SteamRemotePlaySessionAvatarLoaded_t, m_iTall) == 12 );
+C_ASSERT( sizeof(SteamRemotePlaySessionAvatarLoaded_t().m_iTall) >= 4 );
 
 C_ASSERT( sizeof(SteamRemotePlaySessionConnected_t) >= 4 );
 C_ASSERT( offsetof(SteamRemotePlaySessionConnected_t, m_unSessionID) == 0 );
@@ -27933,335 +28087,335 @@ u64_SubmitPlayerResultResultCallback_t::operator w32_SubmitPlayerResultResultCal
 const struct callback_def wow64_callback_data[] = {};
 const struct callback_def callback_data[] =
 {
-    { 152, 163, 24, 16, []( void *d, const void *s ){ *(w32_MicroTxnAuthorizationResponse_t_123 *)d = *(const u32_MicroTxnAuthorizationResponse_t_123 *)s; } },
+    { 152, 164, 24, 16, []( void *d, const void *s ){ *(w32_MicroTxnAuthorizationResponse_t_123 *)d = *(const u32_MicroTxnAuthorizationResponse_t_123 *)s; } },
     /*{ 152, 122, 24, 16 },*/
-    { 209, 163, 40, 32, []( void *d, const void *s ){ *(w32_GSReputation_t_123 *)d = *(const u32_GSReputation_t_123 *)s; } },
+    { 209, 164, 40, 32, []( void *d, const void *s ){ *(w32_GSReputation_t_123 *)d = *(const u32_GSReputation_t_123 *)s; } },
     /*{ 209, 122, 40, 32 },*/
-    { 513, 163, 16, 12, []( void *d, const void *s ){ *(w32_LobbyCreated_t_123 *)d = *(const u32_LobbyCreated_t_123 *)s; } },
+    { 513, 164, 16, 12, []( void *d, const void *s ){ *(w32_LobbyCreated_t_123 *)d = *(const u32_LobbyCreated_t_123 *)s; } },
     /*{ 513, 122, 16, 12 },*/
-    { 1023, 163, 40, 36, []( void *d, const void *s ){ *(w32_FileDetailsResult_t *)d = *(const u32_FileDetailsResult_t *)s; } },
-    { 1106, 163, 32, 28, []( void *d, const void *s ){ *(w32_LeaderboardScoreUploaded_t_123 *)d = *(const u32_LeaderboardScoreUploaded_t_123 *)s; } },
+    { 1023, 164, 40, 36, []( void *d, const void *s ){ *(w32_FileDetailsResult_t *)d = *(const u32_FileDetailsResult_t *)s; } },
+    { 1106, 164, 32, 28, []( void *d, const void *s ){ *(w32_LeaderboardScoreUploaded_t_123 *)d = *(const u32_LeaderboardScoreUploaded_t_123 *)s; } },
     /*{ 1106, 122, 32, 28 },*/
-    { 1111, 163, 16, 12, []( void *d, const void *s ){ *(w32_LeaderboardUGCSet_t_123 *)d = *(const u32_LeaderboardUGCSet_t_123 *)s; } },
+    { 1111, 164, 16, 12, []( void *d, const void *s ){ *(w32_LeaderboardUGCSet_t_123 *)d = *(const u32_LeaderboardUGCSet_t_123 *)s; } },
     /*{ 1111, 122, 16, 12 },*/
     { 1112, 161, 24, 20, []( void *d, const void *s ){ *(w32_PS3TrophiesInstalled_t_123 *)d = *(const u32_PS3TrophiesInstalled_t_123 *)s; } },
     /*{ 1112, 122, 24, 20 },*/
-    { 1221, 163, 712, 704, []( void *d, const void *s ){ *(w32_SteamNetConnectionStatusChangedCallback_t_153a *)d = *(const u32_SteamNetConnectionStatusChangedCallback_t_153a *)s; } },
+    { 1221, 164, 712, 704, []( void *d, const void *s ){ *(w32_SteamNetConnectionStatusChangedCallback_t_153a *)d = *(const u32_SteamNetConnectionStatusChangedCallback_t_153a *)s; } },
     /*{ 1221, 152, 712, 704 },*/
     { 1221, 151, 584, 576, []( void *d, const void *s ){ *(w32_SteamNetConnectionStatusChangedCallback_t_151 *)d = *(const u32_SteamNetConnectionStatusChangedCallback_t_151 *)s; } },
     { 1303, 151, 288, 280, []( void *d, const void *s ){ *(w32_RemoteStorageAppSyncProgress_t_123 *)d = *(const u32_RemoteStorageAppSyncProgress_t_123 *)s; } },
     /*{ 1303, 122, 288, 280 },*/
-    { 1307, 163, 280, 272, []( void *d, const void *s ){ *(w32_RemoteStorageFileShareResult_t_128x *)d = *(const u32_RemoteStorageFileShareResult_t_128x *)s; } },
+    { 1307, 164, 280, 272, []( void *d, const void *s ){ *(w32_RemoteStorageFileShareResult_t_128x *)d = *(const u32_RemoteStorageFileShareResult_t_128x *)s; } },
     { 1307, 128, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageFileShareResult_t_123 *)d = *(const u32_RemoteStorageFileShareResult_t_123 *)s; } },
     /*{ 1307, 122, 16, 12 },*/
     { 1308, 116, 40, 32, []( void *d, const void *s ){ *(w32_RemoteStorageDownloadUGCResult_t_111x *)d = *(const u32_RemoteStorageDownloadUGCResult_t_111x *)s; } },
-    { 1309, 163, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStoragePublishFileResult_t_125 *)d = *(const u32_RemoteStoragePublishFileResult_t_125 *)s; } },
+    { 1309, 164, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStoragePublishFileResult_t_125 *)d = *(const u32_RemoteStoragePublishFileResult_t_125 *)s; } },
     { 1309, 124, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStoragePublishFileResult_t_123 *)d = *(const u32_RemoteStoragePublishFileResult_t_123 *)s; } },
     /*{ 1309, 122, 16, 12 },*/
     { 1310, 117, 1744, 1732, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedFileDetailsResult_t_116x *)d = *(const u32_RemoteStorageGetPublishedFileDetailsResult_t_116x *)s; } },
-    { 1311, 163, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageDeletePublishedFileResult_t_123 *)d = *(const u32_RemoteStorageDeletePublishedFileResult_t_123 *)s; } },
+    { 1311, 164, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageDeletePublishedFileResult_t_123 *)d = *(const u32_RemoteStorageDeletePublishedFileResult_t_123 *)s; } },
     /*{ 1311, 122, 16, 12 },*/
-    { 1312, 163, 416, 412, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)d = *(const u32_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)s; } },
+    { 1312, 164, 416, 412, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)d = *(const u32_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)s; } },
     /*{ 1312, 122, 416, 412 },*/
-    { 1313, 163, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageSubscribePublishedFileResult_t_123 *)d = *(const u32_RemoteStorageSubscribePublishedFileResult_t_123 *)s; } },
+    { 1313, 164, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageSubscribePublishedFileResult_t_123 *)d = *(const u32_RemoteStorageSubscribePublishedFileResult_t_123 *)s; } },
     { 1313, 122, 4, 4, []( void *d, const void *s ){ *(w32_RemoteStorageSubscribePublishedFileResult_t_116x *)d = *(const u32_RemoteStorageSubscribePublishedFileResult_t_116x *)s; } },
-    { 1314, 163, 616, 612, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)d = *(const u32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)s; } },
+    { 1314, 164, 616, 612, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)d = *(const u32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)s; } },
     /*{ 1314, 122, 616, 612 },*/
-    { 1315, 163, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageUnsubscribePublishedFileResult_t_123 *)d = *(const u32_RemoteStorageUnsubscribePublishedFileResult_t_123 *)s; } },
+    { 1315, 164, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageUnsubscribePublishedFileResult_t_123 *)d = *(const u32_RemoteStorageUnsubscribePublishedFileResult_t_123 *)s; } },
     { 1315, 122, 4, 4, []( void *d, const void *s ){ *(w32_RemoteStorageUnsubscribePublishedFileResult_t_116x *)d = *(const u32_RemoteStorageUnsubscribePublishedFileResult_t_116x *)s; } },
-    { 1316, 163, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStorageUpdatePublishedFileResult_t_125 *)d = *(const u32_RemoteStorageUpdatePublishedFileResult_t_125 *)s; } },
+    { 1316, 164, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStorageUpdatePublishedFileResult_t_125 *)d = *(const u32_RemoteStorageUpdatePublishedFileResult_t_125 *)s; } },
     { 1316, 124, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageUpdatePublishedFileResult_t_123 *)d = *(const u32_RemoteStorageUpdatePublishedFileResult_t_123 *)s; } },
     /*{ 1316, 122, 16, 12 },*/
-    { 1317, 163, 296, 288, []( void *d, const void *s ){ *(w32_RemoteStorageDownloadUGCResult_t_123 *)d = *(const u32_RemoteStorageDownloadUGCResult_t_123 *)s; } },
+    { 1317, 164, 296, 288, []( void *d, const void *s ){ *(w32_RemoteStorageDownloadUGCResult_t_123 *)d = *(const u32_RemoteStorageDownloadUGCResult_t_123 *)s; } },
     /*{ 1317, 122, 296, 288 },*/
-    { 1318, 163, 9760, 9748, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedFileDetailsResult_t_126 *)d = *(const u32_RemoteStorageGetPublishedFileDetailsResult_t_126 *)s; } },
+    { 1318, 164, 9760, 9748, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedFileDetailsResult_t_126 *)d = *(const u32_RemoteStorageGetPublishedFileDetailsResult_t_126 *)s; } },
     { 1318, 125, 9752, 9744, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedFileDetailsResult_t_123 *)d = *(const u32_RemoteStorageGetPublishedFileDetailsResult_t_123 *)s; } },
     /*{ 1318, 122, 9752, 9744 },*/
     { 1318, 119, 9752, 9740, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedFileDetailsResult_t_119 *)d = *(const u32_RemoteStorageGetPublishedFileDetailsResult_t_119 *)s; } },
     { 1318, 118, 9496, 9484, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedFileDetailsResult_t_118 *)d = *(const u32_RemoteStorageGetPublishedFileDetailsResult_t_118 *)s; } },
-    { 1319, 163, 624, 620, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)d = *(const u32_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)s; } },
+    { 1319, 164, 624, 620, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)d = *(const u32_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)s; } },
     { 1319, 124, 616, 612, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateWorkshopFilesResult_t_123 *)d = *(const u32_RemoteStorageEnumerateWorkshopFilesResult_t_123 *)s; } },
     /*{ 1319, 122, 616, 612 },*/
-    { 1320, 163, 32, 28, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)d = *(const u32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)s; } },
+    { 1320, 164, 32, 28, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)d = *(const u32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)s; } },
     /*{ 1320, 122, 32, 28 },*/
-    { 1324, 163, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)d = *(const u32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)s; } },
+    { 1324, 164, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)d = *(const u32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)s; } },
     /*{ 1324, 122, 16, 12 },*/
-    { 1325, 163, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStorageUserVoteDetails_t_123 *)d = *(const u32_RemoteStorageUserVoteDetails_t_123 *)s; } },
+    { 1325, 164, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStorageUserVoteDetails_t_123 *)d = *(const u32_RemoteStorageUserVoteDetails_t_123 *)s; } },
     /*{ 1325, 122, 24, 16 },*/
-    { 1326, 163, 416, 412, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)d = *(const u32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)s; } },
+    { 1326, 164, 416, 412, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)d = *(const u32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)s; } },
     /*{ 1326, 122, 416, 412 },*/
-    { 1327, 163, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStorageSetUserPublishedFileActionResult_t_123 *)d = *(const u32_RemoteStorageSetUserPublishedFileActionResult_t_123 *)s; } },
+    { 1327, 164, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStorageSetUserPublishedFileActionResult_t_123 *)d = *(const u32_RemoteStorageSetUserPublishedFileActionResult_t_123 *)s; } },
     /*{ 1327, 122, 24, 16 },*/
-    { 1330, 163, 24, 20, []( void *d, const void *s ){ *(w32_RemoteStoragePublishedFileUpdated_t *)d = *(const u32_RemoteStoragePublishedFileUpdated_t *)s; } },
-    { 2101, 163, 32, 24, []( void *d, const void *s ){ *(w32_HTTPRequestCompleted_t_132x *)d = *(const u32_HTTPRequestCompleted_t_132x *)s; } },
+    { 1330, 164, 24, 20, []( void *d, const void *s ){ *(w32_RemoteStoragePublishedFileUpdated_t *)d = *(const u32_RemoteStoragePublishedFileUpdated_t *)s; } },
+    { 2101, 164, 32, 24, []( void *d, const void *s ){ *(w32_HTTPRequestCompleted_t_132x *)d = *(const u32_HTTPRequestCompleted_t_132x *)s; } },
     { 2101, 132, 24, 20, []( void *d, const void *s ){ *(w32_HTTPRequestCompleted_t_123 *)d = *(const u32_HTTPRequestCompleted_t_123 *)s; } },
     /*{ 2101, 122, 24, 20 },*/
-    { 2102, 163, 16, 12, []( void *d, const void *s ){ *(w32_HTTPRequestHeadersReceived_t_123 *)d = *(const u32_HTTPRequestHeadersReceived_t_123 *)s; } },
+    { 2102, 164, 16, 12, []( void *d, const void *s ){ *(w32_HTTPRequestHeadersReceived_t_123 *)d = *(const u32_HTTPRequestHeadersReceived_t_123 *)s; } },
     /*{ 2102, 122, 16, 12 },*/
-    { 2103, 163, 24, 20, []( void *d, const void *s ){ *(w32_HTTPRequestDataReceived_t_123 *)d = *(const u32_HTTPRequestDataReceived_t_123 *)s; } },
+    { 2103, 164, 24, 20, []( void *d, const void *s ){ *(w32_HTTPRequestDataReceived_t_123 *)d = *(const u32_HTTPRequestDataReceived_t_123 *)s; } },
     /*{ 2103, 122, 24, 20 },*/
-    { 2803, 163, 40, 32, []( void *d, const void *s ){ *(w32_SteamInputConfigurationLoaded_t *)d = *(const u32_SteamInputConfigurationLoaded_t *)s; } },
-    { 2804, 163, 32, 24, []( void *d, const void *s ){ *(w32_SteamInputGamepadSlotChange_t *)d = *(const u32_SteamInputGamepadSlotChange_t *)s; } },
-    { 3402, 163, 9792, 9776, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_160 *)d = *(const u32_SteamUGCRequestUGCDetailsResult_t_160 *)s; } },
+    { 2803, 164, 40, 32, []( void *d, const void *s ){ *(w32_SteamInputConfigurationLoaded_t *)d = *(const u32_SteamInputConfigurationLoaded_t *)s; } },
+    { 2804, 164, 32, 24, []( void *d, const void *s ){ *(w32_SteamInputGamepadSlotChange_t *)d = *(const u32_SteamInputGamepadSlotChange_t *)s; } },
+    { 3402, 164, 9792, 9776, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_160 *)d = *(const u32_SteamUGCRequestUGCDetailsResult_t_160 *)s; } },
     { 3402, 159, 9784, 9768, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_128x *)d = *(const u32_SteamUGCRequestUGCDetailsResult_t_128x *)s; } },
     { 3402, 129, 9776, 9764, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_129 *)d = *(const u32_SteamUGCRequestUGCDetailsResult_t_129 *)s; } },
     { 3402, 128, 9768, 9760, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_126 *)d = *(const u32_SteamUGCRequestUGCDetailsResult_t_126 *)s; } },
-    { 3403, 163, 24, 16, []( void *d, const void *s ){ *(w32_CreateItemResult_t *)d = *(const u32_CreateItemResult_t *)s; } },
-    { 3405, 163, 32, 28, []( void *d, const void *s ){ *(w32_ItemInstalled_t_160 *)d = *(const u32_ItemInstalled_t_160 *)s; } },
+    { 3403, 164, 24, 16, []( void *d, const void *s ){ *(w32_CreateItemResult_t *)d = *(const u32_CreateItemResult_t *)s; } },
+    { 3405, 164, 32, 28, []( void *d, const void *s ){ *(w32_ItemInstalled_t_160 *)d = *(const u32_ItemInstalled_t_160 *)s; } },
     { 3405, 159, 16, 12, []( void *d, const void *s ){ *(w32_ItemInstalled_t_130 *)d = *(const u32_ItemInstalled_t_130 *)s; } },
-    { 3406, 163, 24, 16, []( void *d, const void *s ){ *(w32_DownloadItemResult_t *)d = *(const u32_DownloadItemResult_t *)s; } },
-    { 3412, 163, 24, 20, []( void *d, const void *s ){ *(w32_AddUGCDependencyResult_t *)d = *(const u32_AddUGCDependencyResult_t *)s; } },
-    { 3413, 163, 24, 20, []( void *d, const void *s ){ *(w32_RemoveUGCDependencyResult_t *)d = *(const u32_RemoveUGCDependencyResult_t *)s; } },
-    { 3414, 163, 24, 16, []( void *d, const void *s ){ *(w32_AddAppDependencyResult_t *)d = *(const u32_AddAppDependencyResult_t *)s; } },
-    { 3415, 163, 24, 16, []( void *d, const void *s ){ *(w32_RemoveAppDependencyResult_t *)d = *(const u32_RemoveAppDependencyResult_t *)s; } },
-    { 3416, 163, 152, 148, []( void *d, const void *s ){ *(w32_GetAppDependenciesResult_t *)d = *(const u32_GetAppDependenciesResult_t *)s; } },
-    { 3417, 163, 16, 12, []( void *d, const void *s ){ *(w32_DeleteItemResult_t *)d = *(const u32_DeleteItemResult_t *)s; } },
-    { 4502, 163, 48, 48, []( void *d, const void *s ){ *(w32_HTML_NeedsPaint_t *)d = *(const u32_HTML_NeedsPaint_t *)s; } },
-    { 4503, 163, 20, 20, []( void *d, const void *s ){ *(w32_HTML_StartRequest_t *)d = *(const u32_HTML_StartRequest_t *)s; } },
-    { 4505, 163, 24, 24, []( void *d, const void *s ){ *(w32_HTML_URLChanged_t *)d = *(const u32_HTML_URLChanged_t *)s; } },
-    { 4506, 163, 12, 12, []( void *d, const void *s ){ *(w32_HTML_FinishedRequest_t *)d = *(const u32_HTML_FinishedRequest_t *)s; } },
-    { 4507, 163, 8, 8, []( void *d, const void *s ){ *(w32_HTML_OpenLinkInNewTab_t *)d = *(const u32_HTML_OpenLinkInNewTab_t *)s; } },
-    { 4508, 163, 8, 8, []( void *d, const void *s ){ *(w32_HTML_ChangedTitle_t *)d = *(const u32_HTML_ChangedTitle_t *)s; } },
-    { 4513, 163, 20, 20, []( void *d, const void *s ){ *(w32_HTML_LinkAtPosition_t *)d = *(const u32_HTML_LinkAtPosition_t *)s; } },
-    { 4514, 163, 8, 8, []( void *d, const void *s ){ *(w32_HTML_JSAlert_t *)d = *(const u32_HTML_JSAlert_t *)s; } },
-    { 4515, 163, 8, 8, []( void *d, const void *s ){ *(w32_HTML_JSConfirm_t *)d = *(const u32_HTML_JSConfirm_t *)s; } },
-    { 4516, 163, 12, 12, []( void *d, const void *s ){ *(w32_HTML_FileOpenDialog_t *)d = *(const u32_HTML_FileOpenDialog_t *)s; } },
+    { 3406, 164, 24, 16, []( void *d, const void *s ){ *(w32_DownloadItemResult_t *)d = *(const u32_DownloadItemResult_t *)s; } },
+    { 3412, 164, 24, 20, []( void *d, const void *s ){ *(w32_AddUGCDependencyResult_t *)d = *(const u32_AddUGCDependencyResult_t *)s; } },
+    { 3413, 164, 24, 20, []( void *d, const void *s ){ *(w32_RemoveUGCDependencyResult_t *)d = *(const u32_RemoveUGCDependencyResult_t *)s; } },
+    { 3414, 164, 24, 16, []( void *d, const void *s ){ *(w32_AddAppDependencyResult_t *)d = *(const u32_AddAppDependencyResult_t *)s; } },
+    { 3415, 164, 24, 16, []( void *d, const void *s ){ *(w32_RemoveAppDependencyResult_t *)d = *(const u32_RemoveAppDependencyResult_t *)s; } },
+    { 3416, 164, 152, 148, []( void *d, const void *s ){ *(w32_GetAppDependenciesResult_t *)d = *(const u32_GetAppDependenciesResult_t *)s; } },
+    { 3417, 164, 16, 12, []( void *d, const void *s ){ *(w32_DeleteItemResult_t *)d = *(const u32_DeleteItemResult_t *)s; } },
+    { 4502, 164, 48, 48, []( void *d, const void *s ){ *(w32_HTML_NeedsPaint_t *)d = *(const u32_HTML_NeedsPaint_t *)s; } },
+    { 4503, 164, 20, 20, []( void *d, const void *s ){ *(w32_HTML_StartRequest_t *)d = *(const u32_HTML_StartRequest_t *)s; } },
+    { 4505, 164, 24, 24, []( void *d, const void *s ){ *(w32_HTML_URLChanged_t *)d = *(const u32_HTML_URLChanged_t *)s; } },
+    { 4506, 164, 12, 12, []( void *d, const void *s ){ *(w32_HTML_FinishedRequest_t *)d = *(const u32_HTML_FinishedRequest_t *)s; } },
+    { 4507, 164, 8, 8, []( void *d, const void *s ){ *(w32_HTML_OpenLinkInNewTab_t *)d = *(const u32_HTML_OpenLinkInNewTab_t *)s; } },
+    { 4508, 164, 8, 8, []( void *d, const void *s ){ *(w32_HTML_ChangedTitle_t *)d = *(const u32_HTML_ChangedTitle_t *)s; } },
+    { 4513, 164, 20, 20, []( void *d, const void *s ){ *(w32_HTML_LinkAtPosition_t *)d = *(const u32_HTML_LinkAtPosition_t *)s; } },
+    { 4514, 164, 8, 8, []( void *d, const void *s ){ *(w32_HTML_JSAlert_t *)d = *(const u32_HTML_JSAlert_t *)s; } },
+    { 4515, 164, 8, 8, []( void *d, const void *s ){ *(w32_HTML_JSConfirm_t *)d = *(const u32_HTML_JSConfirm_t *)s; } },
+    { 4516, 164, 12, 12, []( void *d, const void *s ){ *(w32_HTML_FileOpenDialog_t *)d = *(const u32_HTML_FileOpenDialog_t *)s; } },
     { 4517, 132, 16, 16, []( void *d, const void *s ){ *(w32_HTML_ComboNeedsPaint_t *)d = *(const u32_HTML_ComboNeedsPaint_t *)s; } },
-    { 4521, 163, 28, 28, []( void *d, const void *s ){ *(w32_HTML_NewWindow_t_132x *)d = *(const u32_HTML_NewWindow_t_132x *)s; } },
+    { 4521, 164, 28, 28, []( void *d, const void *s ){ *(w32_HTML_NewWindow_t_132x *)d = *(const u32_HTML_NewWindow_t_132x *)s; } },
     { 4521, 132, 24, 24, []( void *d, const void *s ){ *(w32_HTML_NewWindow_t_130x *)d = *(const u32_HTML_NewWindow_t_130x *)s; } },
-    { 4523, 163, 8, 8, []( void *d, const void *s ){ *(w32_HTML_StatusText_t *)d = *(const u32_HTML_StatusText_t *)s; } },
-    { 4524, 163, 8, 8, []( void *d, const void *s ){ *(w32_HTML_ShowToolTip_t *)d = *(const u32_HTML_ShowToolTip_t *)s; } },
-    { 4525, 163, 8, 8, []( void *d, const void *s ){ *(w32_HTML_UpdateToolTip_t *)d = *(const u32_HTML_UpdateToolTip_t *)s; } },
-    { 4704, 163, 24, 20, []( void *d, const void *s ){ *(w32_SteamInventoryStartPurchaseResult_t *)d = *(const u32_SteamInventoryStartPurchaseResult_t *)s; } },
+    { 4523, 164, 8, 8, []( void *d, const void *s ){ *(w32_HTML_StatusText_t *)d = *(const u32_HTML_StatusText_t *)s; } },
+    { 4524, 164, 8, 8, []( void *d, const void *s ){ *(w32_HTML_ShowToolTip_t *)d = *(const u32_HTML_ShowToolTip_t *)s; } },
+    { 4525, 164, 8, 8, []( void *d, const void *s ){ *(w32_HTML_UpdateToolTip_t *)d = *(const u32_HTML_UpdateToolTip_t *)s; } },
+    { 4704, 164, 24, 20, []( void *d, const void *s ){ *(w32_SteamInventoryStartPurchaseResult_t *)d = *(const u32_SteamInventoryStartPurchaseResult_t *)s; } },
     { 5211, 162, 16, 12, []( void *d, const void *s ){ *(w32_RequestPlayersForGameProgressCallback_t *)d = *(const u32_RequestPlayersForGameProgressCallback_t *)s; } },
     { 5212, 162, 64, 56, []( void *d, const void *s ){ *(w32_RequestPlayersForGameResultCallback_t *)d = *(const u32_RequestPlayersForGameResultCallback_t *)s; } },
     { 5213, 162, 24, 20, []( void *d, const void *s ){ *(w32_RequestPlayersForGameFinalResultCallback_t *)d = *(const u32_RequestPlayersForGameFinalResultCallback_t *)s; } },
     { 5214, 162, 24, 20, []( void *d, const void *s ){ *(w32_SubmitPlayerResultResultCallback_t *)d = *(const u32_SubmitPlayerResultResultCallback_t *)s; } },
     { 5215, 162, 16, 12, []( void *d, const void *s ){ *(w32_EndGameResultCallback_t *)d = *(const u32_EndGameResultCallback_t *)s; } },
-    { 5301, 163, 280, 276, []( void *d, const void *s ){ *(w32_JoinPartyCallback_t *)d = *(const u32_JoinPartyCallback_t *)s; } },
-    { 5302, 163, 16, 12, []( void *d, const void *s ){ *(w32_CreateBeaconCallback_t *)d = *(const u32_CreateBeaconCallback_t *)s; } },
+    { 5301, 164, 280, 276, []( void *d, const void *s ){ *(w32_JoinPartyCallback_t *)d = *(const u32_JoinPartyCallback_t *)s; } },
+    { 5302, 164, 16, 12, []( void *d, const void *s ){ *(w32_CreateBeaconCallback_t *)d = *(const u32_CreateBeaconCallback_t *)s; } },
 };
 #endif
 #if defined(__x86_64__) || defined(__aarch64__)
 const struct callback_def wow64_callback_data[] =
 {
-    { 152, 163, 24, 16, []( void *d, const void *s ){ *(w32_MicroTxnAuthorizationResponse_t_123 *)d = *(const u64_MicroTxnAuthorizationResponse_t_123 *)s; } },
+    { 152, 164, 24, 16, []( void *d, const void *s ){ *(w32_MicroTxnAuthorizationResponse_t_123 *)d = *(const u64_MicroTxnAuthorizationResponse_t_123 *)s; } },
     { 152, 122, 24, 24, []( void *d, const void *s ){ *(w32_MicroTxnAuthorizationResponse_t_109 *)d = *(const u64_MicroTxnAuthorizationResponse_t_109 *)s; } },
-    { 209, 163, 40, 32, []( void *d, const void *s ){ *(w32_GSReputation_t_123 *)d = *(const u64_GSReputation_t_123 *)s; } },
+    { 209, 164, 40, 32, []( void *d, const void *s ){ *(w32_GSReputation_t_123 *)d = *(const u64_GSReputation_t_123 *)s; } },
     { 209, 122, 40, 40, []( void *d, const void *s ){ *(w32_GSReputation_t_108 *)d = *(const u64_GSReputation_t_108 *)s; } },
-    { 513, 163, 16, 12, []( void *d, const void *s ){ *(w32_LobbyCreated_t_123 *)d = *(const u64_LobbyCreated_t_123 *)s; } },
+    { 513, 164, 16, 12, []( void *d, const void *s ){ *(w32_LobbyCreated_t_123 *)d = *(const u64_LobbyCreated_t_123 *)s; } },
     { 513, 122, 16, 16, []( void *d, const void *s ){ *(w32_LobbyCreated_t_099u *)d = *(const u64_LobbyCreated_t_099u *)s; } },
-    { 1023, 163, 40, 36, []( void *d, const void *s ){ *(w32_FileDetailsResult_t *)d = *(const u64_FileDetailsResult_t *)s; } },
-    { 1106, 163, 32, 28, []( void *d, const void *s ){ *(w32_LeaderboardScoreUploaded_t_123 *)d = *(const u64_LeaderboardScoreUploaded_t_123 *)s; } },
+    { 1023, 164, 40, 36, []( void *d, const void *s ){ *(w32_FileDetailsResult_t *)d = *(const u64_FileDetailsResult_t *)s; } },
+    { 1106, 164, 32, 28, []( void *d, const void *s ){ *(w32_LeaderboardScoreUploaded_t_123 *)d = *(const u64_LeaderboardScoreUploaded_t_123 *)s; } },
     { 1106, 122, 32, 32, []( void *d, const void *s ){ *(w32_LeaderboardScoreUploaded_t_104 *)d = *(const u64_LeaderboardScoreUploaded_t_104 *)s; } },
-    { 1111, 163, 16, 12, []( void *d, const void *s ){ *(w32_LeaderboardUGCSet_t_123 *)d = *(const u64_LeaderboardUGCSet_t_123 *)s; } },
+    { 1111, 164, 16, 12, []( void *d, const void *s ){ *(w32_LeaderboardUGCSet_t_123 *)d = *(const u64_LeaderboardUGCSet_t_123 *)s; } },
     { 1111, 122, 16, 16, []( void *d, const void *s ){ *(w32_LeaderboardUGCSet_t_111x *)d = *(const u64_LeaderboardUGCSet_t_111x *)s; } },
     { 1112, 161, 24, 20, []( void *d, const void *s ){ *(w32_PS3TrophiesInstalled_t_123 *)d = *(const u64_PS3TrophiesInstalled_t_123 *)s; } },
     { 1112, 122, 24, 24, []( void *d, const void *s ){ *(w32_PS3TrophiesInstalled_t_112x *)d = *(const u64_PS3TrophiesInstalled_t_112x *)s; } },
-    { 1221, 163, 712, 704, []( void *d, const void *s ){ *(w32_SteamNetConnectionStatusChangedCallback_t_153a *)d = *(const u64_SteamNetConnectionStatusChangedCallback_t_153a *)s; } },
+    { 1221, 164, 712, 704, []( void *d, const void *s ){ *(w32_SteamNetConnectionStatusChangedCallback_t_153a *)d = *(const u64_SteamNetConnectionStatusChangedCallback_t_153a *)s; } },
     /*{ 1221, 152, 712, 704 },*/
     { 1221, 151, 584, 576, []( void *d, const void *s ){ *(w32_SteamNetConnectionStatusChangedCallback_t_151 *)d = *(const u64_SteamNetConnectionStatusChangedCallback_t_151 *)s; } },
     { 1303, 151, 288, 280, []( void *d, const void *s ){ *(w32_RemoteStorageAppSyncProgress_t_123 *)d = *(const u64_RemoteStorageAppSyncProgress_t_123 *)s; } },
     { 1303, 122, 288, 288, []( void *d, const void *s ){ *(w32_RemoteStorageAppSyncProgress_t_111x *)d = *(const u64_RemoteStorageAppSyncProgress_t_111x *)s; } },
-    { 1307, 163, 280, 272, []( void *d, const void *s ){ *(w32_RemoteStorageFileShareResult_t_128x *)d = *(const u64_RemoteStorageFileShareResult_t_128x *)s; } },
+    { 1307, 164, 280, 272, []( void *d, const void *s ){ *(w32_RemoteStorageFileShareResult_t_128x *)d = *(const u64_RemoteStorageFileShareResult_t_128x *)s; } },
     { 1307, 128, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageFileShareResult_t_123 *)d = *(const u64_RemoteStorageFileShareResult_t_123 *)s; } },
     { 1307, 122, 16, 16, []( void *d, const void *s ){ *(w32_RemoteStorageFileShareResult_t_111x *)d = *(const u64_RemoteStorageFileShareResult_t_111x *)s; } },
     { 1308, 116, 40, 40, []( void *d, const void *s ){ *(w32_RemoteStorageDownloadUGCResult_t_111x *)d = *(const u64_RemoteStorageDownloadUGCResult_t_111x *)s; } },
-    { 1309, 163, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStoragePublishFileResult_t_125 *)d = *(const u64_RemoteStoragePublishFileResult_t_125 *)s; } },
+    { 1309, 164, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStoragePublishFileResult_t_125 *)d = *(const u64_RemoteStoragePublishFileResult_t_125 *)s; } },
     { 1309, 124, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStoragePublishFileResult_t_123 *)d = *(const u64_RemoteStoragePublishFileResult_t_123 *)s; } },
     { 1309, 122, 16, 16, []( void *d, const void *s ){ *(w32_RemoteStoragePublishFileResult_t_116x *)d = *(const u64_RemoteStoragePublishFileResult_t_116x *)s; } },
     { 1310, 117, 1744, 1744, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedFileDetailsResult_t_116x *)d = *(const u64_RemoteStorageGetPublishedFileDetailsResult_t_116x *)s; } },
-    { 1311, 163, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageDeletePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageDeletePublishedFileResult_t_123 *)s; } },
+    { 1311, 164, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageDeletePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageDeletePublishedFileResult_t_123 *)s; } },
     { 1311, 122, 16, 16, []( void *d, const void *s ){ *(w32_RemoteStorageDeletePublishedFileResult_t_116x *)d = *(const u64_RemoteStorageDeletePublishedFileResult_t_116x *)s; } },
-    { 1312, 163, 416, 412, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)s; } },
+    { 1312, 164, 416, 412, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)s; } },
     { 1312, 122, 416, 416, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserPublishedFilesResult_t_116x *)d = *(const u64_RemoteStorageEnumerateUserPublishedFilesResult_t_116x *)s; } },
-    { 1313, 163, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageSubscribePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageSubscribePublishedFileResult_t_123 *)s; } },
+    { 1313, 164, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageSubscribePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageSubscribePublishedFileResult_t_123 *)s; } },
     { 1313, 122, 4, 4, []( void *d, const void *s ){ *(w32_RemoteStorageSubscribePublishedFileResult_t_116x *)d = *(const u64_RemoteStorageSubscribePublishedFileResult_t_116x *)s; } },
-    { 1314, 163, 616, 612, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)s; } },
+    { 1314, 164, 616, 612, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)s; } },
     { 1314, 122, 616, 616, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x *)d = *(const u64_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x *)s; } },
-    { 1315, 163, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageUnsubscribePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageUnsubscribePublishedFileResult_t_123 *)s; } },
+    { 1315, 164, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageUnsubscribePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageUnsubscribePublishedFileResult_t_123 *)s; } },
     { 1315, 122, 4, 4, []( void *d, const void *s ){ *(w32_RemoteStorageUnsubscribePublishedFileResult_t_116x *)d = *(const u64_RemoteStorageUnsubscribePublishedFileResult_t_116x *)s; } },
-    { 1316, 163, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStorageUpdatePublishedFileResult_t_125 *)d = *(const u64_RemoteStorageUpdatePublishedFileResult_t_125 *)s; } },
+    { 1316, 164, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStorageUpdatePublishedFileResult_t_125 *)d = *(const u64_RemoteStorageUpdatePublishedFileResult_t_125 *)s; } },
     { 1316, 124, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageUpdatePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageUpdatePublishedFileResult_t_123 *)s; } },
     { 1316, 122, 16, 16, []( void *d, const void *s ){ *(w32_RemoteStorageUpdatePublishedFileResult_t_116x *)d = *(const u64_RemoteStorageUpdatePublishedFileResult_t_116x *)s; } },
-    { 1317, 163, 296, 288, []( void *d, const void *s ){ *(w32_RemoteStorageDownloadUGCResult_t_123 *)d = *(const u64_RemoteStorageDownloadUGCResult_t_123 *)s; } },
+    { 1317, 164, 296, 288, []( void *d, const void *s ){ *(w32_RemoteStorageDownloadUGCResult_t_123 *)d = *(const u64_RemoteStorageDownloadUGCResult_t_123 *)s; } },
     { 1317, 122, 296, 296, []( void *d, const void *s ){ *(w32_RemoteStorageDownloadUGCResult_t_116x *)d = *(const u64_RemoteStorageDownloadUGCResult_t_116x *)s; } },
-    { 1318, 163, 9760, 9748, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedFileDetailsResult_t_126 *)d = *(const u64_RemoteStorageGetPublishedFileDetailsResult_t_126 *)s; } },
+    { 1318, 164, 9760, 9748, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedFileDetailsResult_t_126 *)d = *(const u64_RemoteStorageGetPublishedFileDetailsResult_t_126 *)s; } },
     { 1318, 125, 9752, 9744, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedFileDetailsResult_t_123 *)d = *(const u64_RemoteStorageGetPublishedFileDetailsResult_t_123 *)s; } },
     { 1318, 122, 9752, 9752, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedFileDetailsResult_t_119x *)d = *(const u64_RemoteStorageGetPublishedFileDetailsResult_t_119x *)s; } },
     /*{ 1318, 119, 9752, 9752 },*/
     { 1318, 118, 9496, 9496, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedFileDetailsResult_t_118 *)d = *(const u64_RemoteStorageGetPublishedFileDetailsResult_t_118 *)s; } },
-    { 1319, 163, 624, 620, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)d = *(const u64_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)s; } },
+    { 1319, 164, 624, 620, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)d = *(const u64_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)s; } },
     { 1319, 124, 616, 612, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateWorkshopFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateWorkshopFilesResult_t_123 *)s; } },
     { 1319, 122, 616, 616, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateWorkshopFilesResult_t_119 *)d = *(const u64_RemoteStorageEnumerateWorkshopFilesResult_t_119 *)s; } },
-    { 1320, 163, 32, 28, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)d = *(const u64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)s; } },
+    { 1320, 164, 32, 28, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)d = *(const u64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)s; } },
     { 1320, 122, 32, 32, []( void *d, const void *s ){ *(w32_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 *)d = *(const u64_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 *)s; } },
-    { 1324, 163, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)d = *(const u64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)s; } },
+    { 1324, 164, 16, 12, []( void *d, const void *s ){ *(w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)d = *(const u64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)s; } },
     { 1324, 122, 16, 16, []( void *d, const void *s ){ *(w32_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 *)d = *(const u64_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 *)s; } },
-    { 1325, 163, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStorageUserVoteDetails_t_123 *)d = *(const u64_RemoteStorageUserVoteDetails_t_123 *)s; } },
+    { 1325, 164, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStorageUserVoteDetails_t_123 *)d = *(const u64_RemoteStorageUserVoteDetails_t_123 *)s; } },
     { 1325, 122, 24, 24, []( void *d, const void *s ){ *(w32_RemoteStorageUserVoteDetails_t_119 *)d = *(const u64_RemoteStorageUserVoteDetails_t_119 *)s; } },
-    { 1326, 163, 416, 412, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)s; } },
+    { 1326, 164, 416, 412, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)s; } },
     { 1326, 122, 416, 416, []( void *d, const void *s ){ *(w32_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 *)d = *(const u64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 *)s; } },
-    { 1327, 163, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStorageSetUserPublishedFileActionResult_t_123 *)d = *(const u64_RemoteStorageSetUserPublishedFileActionResult_t_123 *)s; } },
+    { 1327, 164, 24, 16, []( void *d, const void *s ){ *(w32_RemoteStorageSetUserPublishedFileActionResult_t_123 *)d = *(const u64_RemoteStorageSetUserPublishedFileActionResult_t_123 *)s; } },
     { 1327, 122, 24, 24, []( void *d, const void *s ){ *(w32_RemoteStorageSetUserPublishedFileActionResult_t_119 *)d = *(const u64_RemoteStorageSetUserPublishedFileActionResult_t_119 *)s; } },
-    { 1330, 163, 24, 20, []( void *d, const void *s ){ *(w32_RemoteStoragePublishedFileUpdated_t *)d = *(const u64_RemoteStoragePublishedFileUpdated_t *)s; } },
-    { 2101, 163, 32, 24, []( void *d, const void *s ){ *(w32_HTTPRequestCompleted_t_132x *)d = *(const u64_HTTPRequestCompleted_t_132x *)s; } },
+    { 1330, 164, 24, 20, []( void *d, const void *s ){ *(w32_RemoteStoragePublishedFileUpdated_t *)d = *(const u64_RemoteStoragePublishedFileUpdated_t *)s; } },
+    { 2101, 164, 32, 24, []( void *d, const void *s ){ *(w32_HTTPRequestCompleted_t_132x *)d = *(const u64_HTTPRequestCompleted_t_132x *)s; } },
     { 2101, 132, 24, 20, []( void *d, const void *s ){ *(w32_HTTPRequestCompleted_t_123 *)d = *(const u64_HTTPRequestCompleted_t_123 *)s; } },
     { 2101, 122, 24, 24, []( void *d, const void *s ){ *(w32_HTTPRequestCompleted_t_115 *)d = *(const u64_HTTPRequestCompleted_t_115 *)s; } },
-    { 2102, 163, 16, 12, []( void *d, const void *s ){ *(w32_HTTPRequestHeadersReceived_t_123 *)d = *(const u64_HTTPRequestHeadersReceived_t_123 *)s; } },
+    { 2102, 164, 16, 12, []( void *d, const void *s ){ *(w32_HTTPRequestHeadersReceived_t_123 *)d = *(const u64_HTTPRequestHeadersReceived_t_123 *)s; } },
     { 2102, 122, 16, 16, []( void *d, const void *s ){ *(w32_HTTPRequestHeadersReceived_t_121x *)d = *(const u64_HTTPRequestHeadersReceived_t_121x *)s; } },
-    { 2103, 163, 24, 20, []( void *d, const void *s ){ *(w32_HTTPRequestDataReceived_t_123 *)d = *(const u64_HTTPRequestDataReceived_t_123 *)s; } },
+    { 2103, 164, 24, 20, []( void *d, const void *s ){ *(w32_HTTPRequestDataReceived_t_123 *)d = *(const u64_HTTPRequestDataReceived_t_123 *)s; } },
     { 2103, 122, 24, 24, []( void *d, const void *s ){ *(w32_HTTPRequestDataReceived_t_121x *)d = *(const u64_HTTPRequestDataReceived_t_121x *)s; } },
-    { 2803, 163, 40, 32, []( void *d, const void *s ){ *(w32_SteamInputConfigurationLoaded_t *)d = *(const u64_SteamInputConfigurationLoaded_t *)s; } },
-    { 2804, 163, 32, 24, []( void *d, const void *s ){ *(w32_SteamInputGamepadSlotChange_t *)d = *(const u64_SteamInputGamepadSlotChange_t *)s; } },
-    { 3402, 163, 9792, 9776, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_160 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_160 *)s; } },
+    { 2803, 164, 40, 32, []( void *d, const void *s ){ *(w32_SteamInputConfigurationLoaded_t *)d = *(const u64_SteamInputConfigurationLoaded_t *)s; } },
+    { 2804, 164, 32, 24, []( void *d, const void *s ){ *(w32_SteamInputGamepadSlotChange_t *)d = *(const u64_SteamInputGamepadSlotChange_t *)s; } },
+    { 3402, 164, 9792, 9776, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_160 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_160 *)s; } },
     { 3402, 159, 9784, 9768, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_128x *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_128x *)s; } },
     { 3402, 129, 9776, 9764, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_129 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_129 *)s; } },
     { 3402, 128, 9768, 9760, []( void *d, const void *s ){ *(w32_SteamUGCRequestUGCDetailsResult_t_126 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_126 *)s; } },
-    { 3403, 163, 24, 16, []( void *d, const void *s ){ *(w32_CreateItemResult_t *)d = *(const u64_CreateItemResult_t *)s; } },
-    { 3405, 163, 32, 28, []( void *d, const void *s ){ *(w32_ItemInstalled_t_160 *)d = *(const u64_ItemInstalled_t_160 *)s; } },
+    { 3403, 164, 24, 16, []( void *d, const void *s ){ *(w32_CreateItemResult_t *)d = *(const u64_CreateItemResult_t *)s; } },
+    { 3405, 164, 32, 28, []( void *d, const void *s ){ *(w32_ItemInstalled_t_160 *)d = *(const u64_ItemInstalled_t_160 *)s; } },
     { 3405, 159, 16, 12, []( void *d, const void *s ){ *(w32_ItemInstalled_t_130 *)d = *(const u64_ItemInstalled_t_130 *)s; } },
-    { 3406, 163, 24, 16, []( void *d, const void *s ){ *(w32_DownloadItemResult_t *)d = *(const u64_DownloadItemResult_t *)s; } },
-    { 3412, 163, 24, 20, []( void *d, const void *s ){ *(w32_AddUGCDependencyResult_t *)d = *(const u64_AddUGCDependencyResult_t *)s; } },
-    { 3413, 163, 24, 20, []( void *d, const void *s ){ *(w32_RemoveUGCDependencyResult_t *)d = *(const u64_RemoveUGCDependencyResult_t *)s; } },
-    { 3414, 163, 24, 16, []( void *d, const void *s ){ *(w32_AddAppDependencyResult_t *)d = *(const u64_AddAppDependencyResult_t *)s; } },
-    { 3415, 163, 24, 16, []( void *d, const void *s ){ *(w32_RemoveAppDependencyResult_t *)d = *(const u64_RemoveAppDependencyResult_t *)s; } },
-    { 3416, 163, 152, 148, []( void *d, const void *s ){ *(w32_GetAppDependenciesResult_t *)d = *(const u64_GetAppDependenciesResult_t *)s; } },
-    { 3417, 163, 16, 12, []( void *d, const void *s ){ *(w32_DeleteItemResult_t *)d = *(const u64_DeleteItemResult_t *)s; } },
-    { 4502, 163, 48, 52, []( void *d, const void *s ){ *(w32_HTML_NeedsPaint_t *)d = *(const u64_HTML_NeedsPaint_t *)s; } },
-    { 4503, 163, 20, 32, []( void *d, const void *s ){ *(w32_HTML_StartRequest_t *)d = *(const u64_HTML_StartRequest_t *)s; } },
-    { 4505, 163, 24, 36, []( void *d, const void *s ){ *(w32_HTML_URLChanged_t *)d = *(const u64_HTML_URLChanged_t *)s; } },
-    { 4506, 163, 12, 20, []( void *d, const void *s ){ *(w32_HTML_FinishedRequest_t *)d = *(const u64_HTML_FinishedRequest_t *)s; } },
-    { 4507, 163, 8, 12, []( void *d, const void *s ){ *(w32_HTML_OpenLinkInNewTab_t *)d = *(const u64_HTML_OpenLinkInNewTab_t *)s; } },
-    { 4508, 163, 8, 12, []( void *d, const void *s ){ *(w32_HTML_ChangedTitle_t *)d = *(const u64_HTML_ChangedTitle_t *)s; } },
-    { 4513, 163, 20, 24, []( void *d, const void *s ){ *(w32_HTML_LinkAtPosition_t *)d = *(const u64_HTML_LinkAtPosition_t *)s; } },
-    { 4514, 163, 8, 12, []( void *d, const void *s ){ *(w32_HTML_JSAlert_t *)d = *(const u64_HTML_JSAlert_t *)s; } },
-    { 4515, 163, 8, 12, []( void *d, const void *s ){ *(w32_HTML_JSConfirm_t *)d = *(const u64_HTML_JSConfirm_t *)s; } },
-    { 4516, 163, 12, 20, []( void *d, const void *s ){ *(w32_HTML_FileOpenDialog_t *)d = *(const u64_HTML_FileOpenDialog_t *)s; } },
+    { 3406, 164, 24, 16, []( void *d, const void *s ){ *(w32_DownloadItemResult_t *)d = *(const u64_DownloadItemResult_t *)s; } },
+    { 3412, 164, 24, 20, []( void *d, const void *s ){ *(w32_AddUGCDependencyResult_t *)d = *(const u64_AddUGCDependencyResult_t *)s; } },
+    { 3413, 164, 24, 20, []( void *d, const void *s ){ *(w32_RemoveUGCDependencyResult_t *)d = *(const u64_RemoveUGCDependencyResult_t *)s; } },
+    { 3414, 164, 24, 16, []( void *d, const void *s ){ *(w32_AddAppDependencyResult_t *)d = *(const u64_AddAppDependencyResult_t *)s; } },
+    { 3415, 164, 24, 16, []( void *d, const void *s ){ *(w32_RemoveAppDependencyResult_t *)d = *(const u64_RemoveAppDependencyResult_t *)s; } },
+    { 3416, 164, 152, 148, []( void *d, const void *s ){ *(w32_GetAppDependenciesResult_t *)d = *(const u64_GetAppDependenciesResult_t *)s; } },
+    { 3417, 164, 16, 12, []( void *d, const void *s ){ *(w32_DeleteItemResult_t *)d = *(const u64_DeleteItemResult_t *)s; } },
+    { 4502, 164, 48, 52, []( void *d, const void *s ){ *(w32_HTML_NeedsPaint_t *)d = *(const u64_HTML_NeedsPaint_t *)s; } },
+    { 4503, 164, 20, 32, []( void *d, const void *s ){ *(w32_HTML_StartRequest_t *)d = *(const u64_HTML_StartRequest_t *)s; } },
+    { 4505, 164, 24, 36, []( void *d, const void *s ){ *(w32_HTML_URLChanged_t *)d = *(const u64_HTML_URLChanged_t *)s; } },
+    { 4506, 164, 12, 20, []( void *d, const void *s ){ *(w32_HTML_FinishedRequest_t *)d = *(const u64_HTML_FinishedRequest_t *)s; } },
+    { 4507, 164, 8, 12, []( void *d, const void *s ){ *(w32_HTML_OpenLinkInNewTab_t *)d = *(const u64_HTML_OpenLinkInNewTab_t *)s; } },
+    { 4508, 164, 8, 12, []( void *d, const void *s ){ *(w32_HTML_ChangedTitle_t *)d = *(const u64_HTML_ChangedTitle_t *)s; } },
+    { 4513, 164, 20, 24, []( void *d, const void *s ){ *(w32_HTML_LinkAtPosition_t *)d = *(const u64_HTML_LinkAtPosition_t *)s; } },
+    { 4514, 164, 8, 12, []( void *d, const void *s ){ *(w32_HTML_JSAlert_t *)d = *(const u64_HTML_JSAlert_t *)s; } },
+    { 4515, 164, 8, 12, []( void *d, const void *s ){ *(w32_HTML_JSConfirm_t *)d = *(const u64_HTML_JSConfirm_t *)s; } },
+    { 4516, 164, 12, 20, []( void *d, const void *s ){ *(w32_HTML_FileOpenDialog_t *)d = *(const u64_HTML_FileOpenDialog_t *)s; } },
     { 4517, 132, 16, 20, []( void *d, const void *s ){ *(w32_HTML_ComboNeedsPaint_t *)d = *(const u64_HTML_ComboNeedsPaint_t *)s; } },
-    { 4521, 163, 28, 32, []( void *d, const void *s ){ *(w32_HTML_NewWindow_t_132x *)d = *(const u64_HTML_NewWindow_t_132x *)s; } },
+    { 4521, 164, 28, 32, []( void *d, const void *s ){ *(w32_HTML_NewWindow_t_132x *)d = *(const u64_HTML_NewWindow_t_132x *)s; } },
     { 4521, 132, 24, 28, []( void *d, const void *s ){ *(w32_HTML_NewWindow_t_130x *)d = *(const u64_HTML_NewWindow_t_130x *)s; } },
-    { 4523, 163, 8, 12, []( void *d, const void *s ){ *(w32_HTML_StatusText_t *)d = *(const u64_HTML_StatusText_t *)s; } },
-    { 4524, 163, 8, 12, []( void *d, const void *s ){ *(w32_HTML_ShowToolTip_t *)d = *(const u64_HTML_ShowToolTip_t *)s; } },
-    { 4525, 163, 8, 12, []( void *d, const void *s ){ *(w32_HTML_UpdateToolTip_t *)d = *(const u64_HTML_UpdateToolTip_t *)s; } },
-    { 4704, 163, 24, 20, []( void *d, const void *s ){ *(w32_SteamInventoryStartPurchaseResult_t *)d = *(const u64_SteamInventoryStartPurchaseResult_t *)s; } },
+    { 4523, 164, 8, 12, []( void *d, const void *s ){ *(w32_HTML_StatusText_t *)d = *(const u64_HTML_StatusText_t *)s; } },
+    { 4524, 164, 8, 12, []( void *d, const void *s ){ *(w32_HTML_ShowToolTip_t *)d = *(const u64_HTML_ShowToolTip_t *)s; } },
+    { 4525, 164, 8, 12, []( void *d, const void *s ){ *(w32_HTML_UpdateToolTip_t *)d = *(const u64_HTML_UpdateToolTip_t *)s; } },
+    { 4704, 164, 24, 20, []( void *d, const void *s ){ *(w32_SteamInventoryStartPurchaseResult_t *)d = *(const u64_SteamInventoryStartPurchaseResult_t *)s; } },
     { 5211, 162, 16, 12, []( void *d, const void *s ){ *(w32_RequestPlayersForGameProgressCallback_t *)d = *(const u64_RequestPlayersForGameProgressCallback_t *)s; } },
     { 5212, 162, 64, 56, []( void *d, const void *s ){ *(w32_RequestPlayersForGameResultCallback_t *)d = *(const u64_RequestPlayersForGameResultCallback_t *)s; } },
     { 5213, 162, 24, 20, []( void *d, const void *s ){ *(w32_RequestPlayersForGameFinalResultCallback_t *)d = *(const u64_RequestPlayersForGameFinalResultCallback_t *)s; } },
     { 5214, 162, 24, 20, []( void *d, const void *s ){ *(w32_SubmitPlayerResultResultCallback_t *)d = *(const u64_SubmitPlayerResultResultCallback_t *)s; } },
     { 5215, 162, 16, 12, []( void *d, const void *s ){ *(w32_EndGameResultCallback_t *)d = *(const u64_EndGameResultCallback_t *)s; } },
-    { 5301, 163, 280, 276, []( void *d, const void *s ){ *(w32_JoinPartyCallback_t *)d = *(const u64_JoinPartyCallback_t *)s; } },
-    { 5302, 163, 16, 12, []( void *d, const void *s ){ *(w32_CreateBeaconCallback_t *)d = *(const u64_CreateBeaconCallback_t *)s; } },
+    { 5301, 164, 280, 276, []( void *d, const void *s ){ *(w32_JoinPartyCallback_t *)d = *(const u64_JoinPartyCallback_t *)s; } },
+    { 5302, 164, 16, 12, []( void *d, const void *s ){ *(w32_CreateBeaconCallback_t *)d = *(const u64_CreateBeaconCallback_t *)s; } },
 };
 const struct callback_def callback_data[] =
 {
-    { 152, 163, 24, 16, []( void *d, const void *s ){ *(w64_MicroTxnAuthorizationResponse_t_123 *)d = *(const u64_MicroTxnAuthorizationResponse_t_123 *)s; } },
+    { 152, 164, 24, 16, []( void *d, const void *s ){ *(w64_MicroTxnAuthorizationResponse_t_123 *)d = *(const u64_MicroTxnAuthorizationResponse_t_123 *)s; } },
     { 152, 122, 24, 24, []( void *d, const void *s ){ *(w64_MicroTxnAuthorizationResponse_t_109 *)d = *(const u64_MicroTxnAuthorizationResponse_t_109 *)s; } },
-    { 209, 163, 40, 32, []( void *d, const void *s ){ *(w64_GSReputation_t_123 *)d = *(const u64_GSReputation_t_123 *)s; } },
+    { 209, 164, 40, 32, []( void *d, const void *s ){ *(w64_GSReputation_t_123 *)d = *(const u64_GSReputation_t_123 *)s; } },
     { 209, 122, 40, 40, []( void *d, const void *s ){ *(w64_GSReputation_t_108 *)d = *(const u64_GSReputation_t_108 *)s; } },
-    { 513, 163, 16, 12, []( void *d, const void *s ){ *(w64_LobbyCreated_t_123 *)d = *(const u64_LobbyCreated_t_123 *)s; } },
+    { 513, 164, 16, 12, []( void *d, const void *s ){ *(w64_LobbyCreated_t_123 *)d = *(const u64_LobbyCreated_t_123 *)s; } },
     { 513, 122, 16, 16, []( void *d, const void *s ){ *(w64_LobbyCreated_t_099u *)d = *(const u64_LobbyCreated_t_099u *)s; } },
-    { 1023, 163, 40, 36, []( void *d, const void *s ){ *(w64_FileDetailsResult_t *)d = *(const u64_FileDetailsResult_t *)s; } },
-    { 1106, 163, 32, 28, []( void *d, const void *s ){ *(w64_LeaderboardScoreUploaded_t_123 *)d = *(const u64_LeaderboardScoreUploaded_t_123 *)s; } },
+    { 1023, 164, 40, 36, []( void *d, const void *s ){ *(w64_FileDetailsResult_t *)d = *(const u64_FileDetailsResult_t *)s; } },
+    { 1106, 164, 32, 28, []( void *d, const void *s ){ *(w64_LeaderboardScoreUploaded_t_123 *)d = *(const u64_LeaderboardScoreUploaded_t_123 *)s; } },
     { 1106, 122, 32, 32, []( void *d, const void *s ){ *(w64_LeaderboardScoreUploaded_t_104 *)d = *(const u64_LeaderboardScoreUploaded_t_104 *)s; } },
-    { 1111, 163, 16, 12, []( void *d, const void *s ){ *(w64_LeaderboardUGCSet_t_123 *)d = *(const u64_LeaderboardUGCSet_t_123 *)s; } },
+    { 1111, 164, 16, 12, []( void *d, const void *s ){ *(w64_LeaderboardUGCSet_t_123 *)d = *(const u64_LeaderboardUGCSet_t_123 *)s; } },
     { 1111, 122, 16, 16, []( void *d, const void *s ){ *(w64_LeaderboardUGCSet_t_111x *)d = *(const u64_LeaderboardUGCSet_t_111x *)s; } },
     { 1112, 161, 24, 20, []( void *d, const void *s ){ *(w64_PS3TrophiesInstalled_t_123 *)d = *(const u64_PS3TrophiesInstalled_t_123 *)s; } },
     { 1112, 122, 24, 24, []( void *d, const void *s ){ *(w64_PS3TrophiesInstalled_t_112x *)d = *(const u64_PS3TrophiesInstalled_t_112x *)s; } },
-    { 1221, 163, 712, 704, []( void *d, const void *s ){ *(w64_SteamNetConnectionStatusChangedCallback_t_153a *)d = *(const u64_SteamNetConnectionStatusChangedCallback_t_153a *)s; } },
+    { 1221, 164, 712, 704, []( void *d, const void *s ){ *(w64_SteamNetConnectionStatusChangedCallback_t_153a *)d = *(const u64_SteamNetConnectionStatusChangedCallback_t_153a *)s; } },
     /*{ 1221, 152, 712, 704 },*/
     { 1221, 151, 584, 576, []( void *d, const void *s ){ *(w64_SteamNetConnectionStatusChangedCallback_t_151 *)d = *(const u64_SteamNetConnectionStatusChangedCallback_t_151 *)s; } },
     { 1303, 151, 288, 280, []( void *d, const void *s ){ *(w64_RemoteStorageAppSyncProgress_t_123 *)d = *(const u64_RemoteStorageAppSyncProgress_t_123 *)s; } },
     { 1303, 122, 288, 288, []( void *d, const void *s ){ *(w64_RemoteStorageAppSyncProgress_t_111x *)d = *(const u64_RemoteStorageAppSyncProgress_t_111x *)s; } },
-    { 1307, 163, 280, 272, []( void *d, const void *s ){ *(w64_RemoteStorageFileShareResult_t_128x *)d = *(const u64_RemoteStorageFileShareResult_t_128x *)s; } },
+    { 1307, 164, 280, 272, []( void *d, const void *s ){ *(w64_RemoteStorageFileShareResult_t_128x *)d = *(const u64_RemoteStorageFileShareResult_t_128x *)s; } },
     { 1307, 128, 16, 12, []( void *d, const void *s ){ *(w64_RemoteStorageFileShareResult_t_123 *)d = *(const u64_RemoteStorageFileShareResult_t_123 *)s; } },
     { 1307, 122, 16, 16, []( void *d, const void *s ){ *(w64_RemoteStorageFileShareResult_t_111x *)d = *(const u64_RemoteStorageFileShareResult_t_111x *)s; } },
     { 1308, 116, 40, 40, []( void *d, const void *s ){ *(w64_RemoteStorageDownloadUGCResult_t_111x *)d = *(const u64_RemoteStorageDownloadUGCResult_t_111x *)s; } },
-    { 1309, 163, 24, 16, []( void *d, const void *s ){ *(w64_RemoteStoragePublishFileResult_t_125 *)d = *(const u64_RemoteStoragePublishFileResult_t_125 *)s; } },
+    { 1309, 164, 24, 16, []( void *d, const void *s ){ *(w64_RemoteStoragePublishFileResult_t_125 *)d = *(const u64_RemoteStoragePublishFileResult_t_125 *)s; } },
     { 1309, 124, 16, 12, []( void *d, const void *s ){ *(w64_RemoteStoragePublishFileResult_t_123 *)d = *(const u64_RemoteStoragePublishFileResult_t_123 *)s; } },
     { 1309, 122, 16, 16, []( void *d, const void *s ){ *(w64_RemoteStoragePublishFileResult_t_116x *)d = *(const u64_RemoteStoragePublishFileResult_t_116x *)s; } },
     { 1310, 117, 1744, 1744, []( void *d, const void *s ){ *(w64_RemoteStorageGetPublishedFileDetailsResult_t_116x *)d = *(const u64_RemoteStorageGetPublishedFileDetailsResult_t_116x *)s; } },
-    { 1311, 163, 16, 12, []( void *d, const void *s ){ *(w64_RemoteStorageDeletePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageDeletePublishedFileResult_t_123 *)s; } },
+    { 1311, 164, 16, 12, []( void *d, const void *s ){ *(w64_RemoteStorageDeletePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageDeletePublishedFileResult_t_123 *)s; } },
     { 1311, 122, 16, 16, []( void *d, const void *s ){ *(w64_RemoteStorageDeletePublishedFileResult_t_116x *)d = *(const u64_RemoteStorageDeletePublishedFileResult_t_116x *)s; } },
-    { 1312, 163, 416, 412, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)s; } },
+    { 1312, 164, 416, 412, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateUserPublishedFilesResult_t_123 *)s; } },
     { 1312, 122, 416, 416, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateUserPublishedFilesResult_t_116x *)d = *(const u64_RemoteStorageEnumerateUserPublishedFilesResult_t_116x *)s; } },
-    { 1313, 163, 16, 12, []( void *d, const void *s ){ *(w64_RemoteStorageSubscribePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageSubscribePublishedFileResult_t_123 *)s; } },
+    { 1313, 164, 16, 12, []( void *d, const void *s ){ *(w64_RemoteStorageSubscribePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageSubscribePublishedFileResult_t_123 *)s; } },
     { 1313, 122, 4, 4, []( void *d, const void *s ){ *(w64_RemoteStorageSubscribePublishedFileResult_t_116x *)d = *(const u64_RemoteStorageSubscribePublishedFileResult_t_116x *)s; } },
-    { 1314, 163, 616, 612, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)s; } },
+    { 1314, 164, 616, 612, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateUserSubscribedFilesResult_t_123 *)s; } },
     { 1314, 122, 616, 616, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x *)d = *(const u64_RemoteStorageEnumerateUserSubscribedFilesResult_t_116x *)s; } },
-    { 1315, 163, 16, 12, []( void *d, const void *s ){ *(w64_RemoteStorageUnsubscribePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageUnsubscribePublishedFileResult_t_123 *)s; } },
+    { 1315, 164, 16, 12, []( void *d, const void *s ){ *(w64_RemoteStorageUnsubscribePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageUnsubscribePublishedFileResult_t_123 *)s; } },
     { 1315, 122, 4, 4, []( void *d, const void *s ){ *(w64_RemoteStorageUnsubscribePublishedFileResult_t_116x *)d = *(const u64_RemoteStorageUnsubscribePublishedFileResult_t_116x *)s; } },
-    { 1316, 163, 24, 16, []( void *d, const void *s ){ *(w64_RemoteStorageUpdatePublishedFileResult_t_125 *)d = *(const u64_RemoteStorageUpdatePublishedFileResult_t_125 *)s; } },
+    { 1316, 164, 24, 16, []( void *d, const void *s ){ *(w64_RemoteStorageUpdatePublishedFileResult_t_125 *)d = *(const u64_RemoteStorageUpdatePublishedFileResult_t_125 *)s; } },
     { 1316, 124, 16, 12, []( void *d, const void *s ){ *(w64_RemoteStorageUpdatePublishedFileResult_t_123 *)d = *(const u64_RemoteStorageUpdatePublishedFileResult_t_123 *)s; } },
     { 1316, 122, 16, 16, []( void *d, const void *s ){ *(w64_RemoteStorageUpdatePublishedFileResult_t_116x *)d = *(const u64_RemoteStorageUpdatePublishedFileResult_t_116x *)s; } },
-    { 1317, 163, 296, 288, []( void *d, const void *s ){ *(w64_RemoteStorageDownloadUGCResult_t_123 *)d = *(const u64_RemoteStorageDownloadUGCResult_t_123 *)s; } },
+    { 1317, 164, 296, 288, []( void *d, const void *s ){ *(w64_RemoteStorageDownloadUGCResult_t_123 *)d = *(const u64_RemoteStorageDownloadUGCResult_t_123 *)s; } },
     { 1317, 122, 296, 296, []( void *d, const void *s ){ *(w64_RemoteStorageDownloadUGCResult_t_116x *)d = *(const u64_RemoteStorageDownloadUGCResult_t_116x *)s; } },
-    { 1318, 163, 9760, 9748, []( void *d, const void *s ){ *(w64_RemoteStorageGetPublishedFileDetailsResult_t_126 *)d = *(const u64_RemoteStorageGetPublishedFileDetailsResult_t_126 *)s; } },
+    { 1318, 164, 9760, 9748, []( void *d, const void *s ){ *(w64_RemoteStorageGetPublishedFileDetailsResult_t_126 *)d = *(const u64_RemoteStorageGetPublishedFileDetailsResult_t_126 *)s; } },
     { 1318, 125, 9752, 9744, []( void *d, const void *s ){ *(w64_RemoteStorageGetPublishedFileDetailsResult_t_123 *)d = *(const u64_RemoteStorageGetPublishedFileDetailsResult_t_123 *)s; } },
     { 1318, 122, 9752, 9752, []( void *d, const void *s ){ *(w64_RemoteStorageGetPublishedFileDetailsResult_t_119x *)d = *(const u64_RemoteStorageGetPublishedFileDetailsResult_t_119x *)s; } },
     /*{ 1318, 119, 9752, 9752 },*/
     { 1318, 118, 9496, 9496, []( void *d, const void *s ){ *(w64_RemoteStorageGetPublishedFileDetailsResult_t_118 *)d = *(const u64_RemoteStorageGetPublishedFileDetailsResult_t_118 *)s; } },
-    { 1319, 163, 624, 620, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)d = *(const u64_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)s; } },
+    { 1319, 164, 624, 620, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)d = *(const u64_RemoteStorageEnumerateWorkshopFilesResult_t_125 *)s; } },
     { 1319, 124, 616, 612, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateWorkshopFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateWorkshopFilesResult_t_123 *)s; } },
     { 1319, 122, 616, 616, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateWorkshopFilesResult_t_119 *)d = *(const u64_RemoteStorageEnumerateWorkshopFilesResult_t_119 *)s; } },
-    { 1320, 163, 32, 28, []( void *d, const void *s ){ *(w64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)d = *(const u64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)s; } },
+    { 1320, 164, 32, 28, []( void *d, const void *s ){ *(w64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)d = *(const u64_RemoteStorageGetPublishedItemVoteDetailsResult_t_123 *)s; } },
     { 1320, 122, 32, 32, []( void *d, const void *s ){ *(w64_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 *)d = *(const u64_RemoteStorageGetPublishedItemVoteDetailsResult_t_119 *)s; } },
-    { 1324, 163, 16, 12, []( void *d, const void *s ){ *(w64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)d = *(const u64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)s; } },
+    { 1324, 164, 16, 12, []( void *d, const void *s ){ *(w64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)d = *(const u64_RemoteStorageUpdateUserPublishedItemVoteResult_t_123 *)s; } },
     { 1324, 122, 16, 16, []( void *d, const void *s ){ *(w64_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 *)d = *(const u64_RemoteStorageUpdateUserPublishedItemVoteResult_t_119 *)s; } },
-    { 1325, 163, 24, 16, []( void *d, const void *s ){ *(w64_RemoteStorageUserVoteDetails_t_123 *)d = *(const u64_RemoteStorageUserVoteDetails_t_123 *)s; } },
+    { 1325, 164, 24, 16, []( void *d, const void *s ){ *(w64_RemoteStorageUserVoteDetails_t_123 *)d = *(const u64_RemoteStorageUserVoteDetails_t_123 *)s; } },
     { 1325, 122, 24, 24, []( void *d, const void *s ){ *(w64_RemoteStorageUserVoteDetails_t_119 *)d = *(const u64_RemoteStorageUserVoteDetails_t_119 *)s; } },
-    { 1326, 163, 416, 412, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)s; } },
+    { 1326, 164, 416, 412, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)d = *(const u64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_123 *)s; } },
     { 1326, 122, 416, 416, []( void *d, const void *s ){ *(w64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 *)d = *(const u64_RemoteStorageEnumerateUserSharedWorkshopFilesResult_t_119 *)s; } },
-    { 1327, 163, 24, 16, []( void *d, const void *s ){ *(w64_RemoteStorageSetUserPublishedFileActionResult_t_123 *)d = *(const u64_RemoteStorageSetUserPublishedFileActionResult_t_123 *)s; } },
+    { 1327, 164, 24, 16, []( void *d, const void *s ){ *(w64_RemoteStorageSetUserPublishedFileActionResult_t_123 *)d = *(const u64_RemoteStorageSetUserPublishedFileActionResult_t_123 *)s; } },
     { 1327, 122, 24, 24, []( void *d, const void *s ){ *(w64_RemoteStorageSetUserPublishedFileActionResult_t_119 *)d = *(const u64_RemoteStorageSetUserPublishedFileActionResult_t_119 *)s; } },
-    { 1330, 163, 24, 20, []( void *d, const void *s ){ *(w64_RemoteStoragePublishedFileUpdated_t *)d = *(const u64_RemoteStoragePublishedFileUpdated_t *)s; } },
-    { 2101, 163, 32, 24, []( void *d, const void *s ){ *(w64_HTTPRequestCompleted_t_132x *)d = *(const u64_HTTPRequestCompleted_t_132x *)s; } },
+    { 1330, 164, 24, 20, []( void *d, const void *s ){ *(w64_RemoteStoragePublishedFileUpdated_t *)d = *(const u64_RemoteStoragePublishedFileUpdated_t *)s; } },
+    { 2101, 164, 32, 24, []( void *d, const void *s ){ *(w64_HTTPRequestCompleted_t_132x *)d = *(const u64_HTTPRequestCompleted_t_132x *)s; } },
     { 2101, 132, 24, 20, []( void *d, const void *s ){ *(w64_HTTPRequestCompleted_t_123 *)d = *(const u64_HTTPRequestCompleted_t_123 *)s; } },
     { 2101, 122, 24, 24, []( void *d, const void *s ){ *(w64_HTTPRequestCompleted_t_115 *)d = *(const u64_HTTPRequestCompleted_t_115 *)s; } },
-    { 2102, 163, 16, 12, []( void *d, const void *s ){ *(w64_HTTPRequestHeadersReceived_t_123 *)d = *(const u64_HTTPRequestHeadersReceived_t_123 *)s; } },
+    { 2102, 164, 16, 12, []( void *d, const void *s ){ *(w64_HTTPRequestHeadersReceived_t_123 *)d = *(const u64_HTTPRequestHeadersReceived_t_123 *)s; } },
     { 2102, 122, 16, 16, []( void *d, const void *s ){ *(w64_HTTPRequestHeadersReceived_t_121x *)d = *(const u64_HTTPRequestHeadersReceived_t_121x *)s; } },
-    { 2103, 163, 24, 20, []( void *d, const void *s ){ *(w64_HTTPRequestDataReceived_t_123 *)d = *(const u64_HTTPRequestDataReceived_t_123 *)s; } },
+    { 2103, 164, 24, 20, []( void *d, const void *s ){ *(w64_HTTPRequestDataReceived_t_123 *)d = *(const u64_HTTPRequestDataReceived_t_123 *)s; } },
     { 2103, 122, 24, 24, []( void *d, const void *s ){ *(w64_HTTPRequestDataReceived_t_121x *)d = *(const u64_HTTPRequestDataReceived_t_121x *)s; } },
-    { 2803, 163, 40, 32, []( void *d, const void *s ){ *(w64_SteamInputConfigurationLoaded_t *)d = *(const u64_SteamInputConfigurationLoaded_t *)s; } },
-    { 2804, 163, 32, 24, []( void *d, const void *s ){ *(w64_SteamInputGamepadSlotChange_t *)d = *(const u64_SteamInputGamepadSlotChange_t *)s; } },
-    { 3402, 163, 9792, 9776, []( void *d, const void *s ){ *(w64_SteamUGCRequestUGCDetailsResult_t_160 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_160 *)s; } },
+    { 2803, 164, 40, 32, []( void *d, const void *s ){ *(w64_SteamInputConfigurationLoaded_t *)d = *(const u64_SteamInputConfigurationLoaded_t *)s; } },
+    { 2804, 164, 32, 24, []( void *d, const void *s ){ *(w64_SteamInputGamepadSlotChange_t *)d = *(const u64_SteamInputGamepadSlotChange_t *)s; } },
+    { 3402, 164, 9792, 9776, []( void *d, const void *s ){ *(w64_SteamUGCRequestUGCDetailsResult_t_160 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_160 *)s; } },
     { 3402, 159, 9784, 9768, []( void *d, const void *s ){ *(w64_SteamUGCRequestUGCDetailsResult_t_128x *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_128x *)s; } },
     { 3402, 129, 9776, 9764, []( void *d, const void *s ){ *(w64_SteamUGCRequestUGCDetailsResult_t_129 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_129 *)s; } },
     { 3402, 128, 9768, 9760, []( void *d, const void *s ){ *(w64_SteamUGCRequestUGCDetailsResult_t_126 *)d = *(const u64_SteamUGCRequestUGCDetailsResult_t_126 *)s; } },
-    { 3403, 163, 24, 16, []( void *d, const void *s ){ *(w64_CreateItemResult_t *)d = *(const u64_CreateItemResult_t *)s; } },
-    { 3405, 163, 32, 28, []( void *d, const void *s ){ *(w64_ItemInstalled_t_160 *)d = *(const u64_ItemInstalled_t_160 *)s; } },
+    { 3403, 164, 24, 16, []( void *d, const void *s ){ *(w64_CreateItemResult_t *)d = *(const u64_CreateItemResult_t *)s; } },
+    { 3405, 164, 32, 28, []( void *d, const void *s ){ *(w64_ItemInstalled_t_160 *)d = *(const u64_ItemInstalled_t_160 *)s; } },
     { 3405, 159, 16, 12, []( void *d, const void *s ){ *(w64_ItemInstalled_t_130 *)d = *(const u64_ItemInstalled_t_130 *)s; } },
-    { 3406, 163, 24, 16, []( void *d, const void *s ){ *(w64_DownloadItemResult_t *)d = *(const u64_DownloadItemResult_t *)s; } },
-    { 3412, 163, 24, 20, []( void *d, const void *s ){ *(w64_AddUGCDependencyResult_t *)d = *(const u64_AddUGCDependencyResult_t *)s; } },
-    { 3413, 163, 24, 20, []( void *d, const void *s ){ *(w64_RemoveUGCDependencyResult_t *)d = *(const u64_RemoveUGCDependencyResult_t *)s; } },
-    { 3414, 163, 24, 16, []( void *d, const void *s ){ *(w64_AddAppDependencyResult_t *)d = *(const u64_AddAppDependencyResult_t *)s; } },
-    { 3415, 163, 24, 16, []( void *d, const void *s ){ *(w64_RemoveAppDependencyResult_t *)d = *(const u64_RemoveAppDependencyResult_t *)s; } },
-    { 3416, 163, 152, 148, []( void *d, const void *s ){ *(w64_GetAppDependenciesResult_t *)d = *(const u64_GetAppDependenciesResult_t *)s; } },
-    { 3417, 163, 16, 12, []( void *d, const void *s ){ *(w64_DeleteItemResult_t *)d = *(const u64_DeleteItemResult_t *)s; } },
-    { 4502, 163, 56, 52, []( void *d, const void *s ){ *(w64_HTML_NeedsPaint_t *)d = *(const u64_HTML_NeedsPaint_t *)s; } },
-    { 4503, 163, 40, 32, []( void *d, const void *s ){ *(w64_HTML_StartRequest_t *)d = *(const u64_HTML_StartRequest_t *)s; } },
-    { 4505, 163, 48, 36, []( void *d, const void *s ){ *(w64_HTML_URLChanged_t *)d = *(const u64_HTML_URLChanged_t *)s; } },
-    { 4506, 163, 24, 20, []( void *d, const void *s ){ *(w64_HTML_FinishedRequest_t *)d = *(const u64_HTML_FinishedRequest_t *)s; } },
-    { 4507, 163, 16, 12, []( void *d, const void *s ){ *(w64_HTML_OpenLinkInNewTab_t *)d = *(const u64_HTML_OpenLinkInNewTab_t *)s; } },
-    { 4508, 163, 16, 12, []( void *d, const void *s ){ *(w64_HTML_ChangedTitle_t *)d = *(const u64_HTML_ChangedTitle_t *)s; } },
-    { 4513, 163, 32, 24, []( void *d, const void *s ){ *(w64_HTML_LinkAtPosition_t *)d = *(const u64_HTML_LinkAtPosition_t *)s; } },
-    { 4514, 163, 16, 12, []( void *d, const void *s ){ *(w64_HTML_JSAlert_t *)d = *(const u64_HTML_JSAlert_t *)s; } },
-    { 4515, 163, 16, 12, []( void *d, const void *s ){ *(w64_HTML_JSConfirm_t *)d = *(const u64_HTML_JSConfirm_t *)s; } },
-    { 4516, 163, 24, 20, []( void *d, const void *s ){ *(w64_HTML_FileOpenDialog_t *)d = *(const u64_HTML_FileOpenDialog_t *)s; } },
+    { 3406, 164, 24, 16, []( void *d, const void *s ){ *(w64_DownloadItemResult_t *)d = *(const u64_DownloadItemResult_t *)s; } },
+    { 3412, 164, 24, 20, []( void *d, const void *s ){ *(w64_AddUGCDependencyResult_t *)d = *(const u64_AddUGCDependencyResult_t *)s; } },
+    { 3413, 164, 24, 20, []( void *d, const void *s ){ *(w64_RemoveUGCDependencyResult_t *)d = *(const u64_RemoveUGCDependencyResult_t *)s; } },
+    { 3414, 164, 24, 16, []( void *d, const void *s ){ *(w64_AddAppDependencyResult_t *)d = *(const u64_AddAppDependencyResult_t *)s; } },
+    { 3415, 164, 24, 16, []( void *d, const void *s ){ *(w64_RemoveAppDependencyResult_t *)d = *(const u64_RemoveAppDependencyResult_t *)s; } },
+    { 3416, 164, 152, 148, []( void *d, const void *s ){ *(w64_GetAppDependenciesResult_t *)d = *(const u64_GetAppDependenciesResult_t *)s; } },
+    { 3417, 164, 16, 12, []( void *d, const void *s ){ *(w64_DeleteItemResult_t *)d = *(const u64_DeleteItemResult_t *)s; } },
+    { 4502, 164, 56, 52, []( void *d, const void *s ){ *(w64_HTML_NeedsPaint_t *)d = *(const u64_HTML_NeedsPaint_t *)s; } },
+    { 4503, 164, 40, 32, []( void *d, const void *s ){ *(w64_HTML_StartRequest_t *)d = *(const u64_HTML_StartRequest_t *)s; } },
+    { 4505, 164, 48, 36, []( void *d, const void *s ){ *(w64_HTML_URLChanged_t *)d = *(const u64_HTML_URLChanged_t *)s; } },
+    { 4506, 164, 24, 20, []( void *d, const void *s ){ *(w64_HTML_FinishedRequest_t *)d = *(const u64_HTML_FinishedRequest_t *)s; } },
+    { 4507, 164, 16, 12, []( void *d, const void *s ){ *(w64_HTML_OpenLinkInNewTab_t *)d = *(const u64_HTML_OpenLinkInNewTab_t *)s; } },
+    { 4508, 164, 16, 12, []( void *d, const void *s ){ *(w64_HTML_ChangedTitle_t *)d = *(const u64_HTML_ChangedTitle_t *)s; } },
+    { 4513, 164, 32, 24, []( void *d, const void *s ){ *(w64_HTML_LinkAtPosition_t *)d = *(const u64_HTML_LinkAtPosition_t *)s; } },
+    { 4514, 164, 16, 12, []( void *d, const void *s ){ *(w64_HTML_JSAlert_t *)d = *(const u64_HTML_JSAlert_t *)s; } },
+    { 4515, 164, 16, 12, []( void *d, const void *s ){ *(w64_HTML_JSConfirm_t *)d = *(const u64_HTML_JSConfirm_t *)s; } },
+    { 4516, 164, 24, 20, []( void *d, const void *s ){ *(w64_HTML_FileOpenDialog_t *)d = *(const u64_HTML_FileOpenDialog_t *)s; } },
     { 4517, 132, 24, 20, []( void *d, const void *s ){ *(w64_HTML_ComboNeedsPaint_t *)d = *(const u64_HTML_ComboNeedsPaint_t *)s; } },
-    { 4521, 163, 40, 32, []( void *d, const void *s ){ *(w64_HTML_NewWindow_t_132x *)d = *(const u64_HTML_NewWindow_t_132x *)s; } },
+    { 4521, 164, 40, 32, []( void *d, const void *s ){ *(w64_HTML_NewWindow_t_132x *)d = *(const u64_HTML_NewWindow_t_132x *)s; } },
     { 4521, 132, 32, 28, []( void *d, const void *s ){ *(w64_HTML_NewWindow_t_130x *)d = *(const u64_HTML_NewWindow_t_130x *)s; } },
-    { 4523, 163, 16, 12, []( void *d, const void *s ){ *(w64_HTML_StatusText_t *)d = *(const u64_HTML_StatusText_t *)s; } },
-    { 4524, 163, 16, 12, []( void *d, const void *s ){ *(w64_HTML_ShowToolTip_t *)d = *(const u64_HTML_ShowToolTip_t *)s; } },
-    { 4525, 163, 16, 12, []( void *d, const void *s ){ *(w64_HTML_UpdateToolTip_t *)d = *(const u64_HTML_UpdateToolTip_t *)s; } },
-    { 4704, 163, 24, 20, []( void *d, const void *s ){ *(w64_SteamInventoryStartPurchaseResult_t *)d = *(const u64_SteamInventoryStartPurchaseResult_t *)s; } },
+    { 4523, 164, 16, 12, []( void *d, const void *s ){ *(w64_HTML_StatusText_t *)d = *(const u64_HTML_StatusText_t *)s; } },
+    { 4524, 164, 16, 12, []( void *d, const void *s ){ *(w64_HTML_ShowToolTip_t *)d = *(const u64_HTML_ShowToolTip_t *)s; } },
+    { 4525, 164, 16, 12, []( void *d, const void *s ){ *(w64_HTML_UpdateToolTip_t *)d = *(const u64_HTML_UpdateToolTip_t *)s; } },
+    { 4704, 164, 24, 20, []( void *d, const void *s ){ *(w64_SteamInventoryStartPurchaseResult_t *)d = *(const u64_SteamInventoryStartPurchaseResult_t *)s; } },
     { 5211, 162, 16, 12, []( void *d, const void *s ){ *(w64_RequestPlayersForGameProgressCallback_t *)d = *(const u64_RequestPlayersForGameProgressCallback_t *)s; } },
     { 5212, 162, 64, 56, []( void *d, const void *s ){ *(w64_RequestPlayersForGameResultCallback_t *)d = *(const u64_RequestPlayersForGameResultCallback_t *)s; } },
     { 5213, 162, 24, 20, []( void *d, const void *s ){ *(w64_RequestPlayersForGameFinalResultCallback_t *)d = *(const u64_RequestPlayersForGameFinalResultCallback_t *)s; } },
     { 5214, 162, 24, 20, []( void *d, const void *s ){ *(w64_SubmitPlayerResultResultCallback_t *)d = *(const u64_SubmitPlayerResultResultCallback_t *)s; } },
     { 5215, 162, 16, 12, []( void *d, const void *s ){ *(w64_EndGameResultCallback_t *)d = *(const u64_EndGameResultCallback_t *)s; } },
-    { 5301, 163, 280, 276, []( void *d, const void *s ){ *(w64_JoinPartyCallback_t *)d = *(const u64_JoinPartyCallback_t *)s; } },
-    { 5302, 163, 16, 12, []( void *d, const void *s ){ *(w64_CreateBeaconCallback_t *)d = *(const u64_CreateBeaconCallback_t *)s; } },
+    { 5301, 164, 280, 276, []( void *d, const void *s ){ *(w64_JoinPartyCallback_t *)d = *(const u64_JoinPartyCallback_t *)s; } },
+    { 5302, 164, 16, 12, []( void *d, const void *s ){ *(w64_CreateBeaconCallback_t *)d = *(const u64_CreateBeaconCallback_t *)s; } },
 };
 #endif
 const unsigned int wow64_callback_data_size = ARRAY_SIZE(wow64_callback_data);

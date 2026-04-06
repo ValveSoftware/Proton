@@ -1765,3 +1765,57 @@ NTSTATUS wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_SetSubscriptionsLoadOrder
 }
 #endif
 
+NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused( void *args )
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused_params *params = (struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused_params *)args;
+    struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *)params->u_iface;
+    params->_ret = iface->MarkDownloadedItemAsUnused( params->nPublishedFileID );
+    return 0;
+}
+
+#if defined(__x86_64__) || defined(__aarch64__)
+NTSTATUS wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused( void *args )
+{
+    struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused_params *params = (struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_MarkDownloadedItemAsUnused_params *)args;
+    struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *)params->u_iface;
+    params->_ret = iface->MarkDownloadedItemAsUnused( params->nPublishedFileID );
+    return 0;
+}
+#endif
+
+NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems( void *args )
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems_params *params = (struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems_params *)args;
+    struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *)params->u_iface;
+    params->_ret = iface->GetNumDownloadedItems(  );
+    return 0;
+}
+
+#if defined(__x86_64__) || defined(__aarch64__)
+NTSTATUS wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems( void *args )
+{
+    struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems_params *params = (struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetNumDownloadedItems_params *)args;
+    struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *)params->u_iface;
+    params->_ret = iface->GetNumDownloadedItems(  );
+    return 0;
+}
+#endif
+
+NTSTATUS ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems( void *args )
+{
+    struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems_params *params = (struct ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems_params *)args;
+    struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *)params->u_iface;
+    params->_ret = iface->GetDownloadedItems( params->pvecPublishedFileIDs, params->cMaxEntries );
+    return 0;
+}
+
+#if defined(__x86_64__) || defined(__aarch64__)
+NTSTATUS wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems( void *args )
+{
+    struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems_params *params = (struct wow64_ISteamUGC_STEAMUGC_INTERFACE_VERSION021_GetDownloadedItems_params *)args;
+    struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *iface = (struct u_ISteamUGC_STEAMUGC_INTERFACE_VERSION021 *)params->u_iface;
+    params->_ret = iface->GetDownloadedItems( params->pvecPublishedFileIDs, params->cMaxEntries );
+    return 0;
+}
+#endif
+
