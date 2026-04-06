@@ -703,11 +703,11 @@ $(eval $(call rules-makedep,vrclient,x86_64))
 $(eval $(call rules-makedep,vrclient,aarch64))
 
 $(OBJ)/.vrclient-x86_64-post-build:
-	cp -a $(VRCLIENT_x86_64_DST)/lib/wine/x86_64-unix/vrclient_x64.so $(DST_DIR)/lib/wine/x86_64-unix/vrclient.so
+	cp -fa $(VRCLIENT_x86_64_DST)/lib/wine/x86_64-unix/vrclient_x64.so $(DST_DIR)/lib/wine/x86_64-unix/vrclient.so
 	touch $@
 
 $(OBJ)/.vrclient-aarch64-post-build:
-	cp -a $(VRCLIENT_aarch64_DST)/lib/wine/aarch64-unix/vrclient_x64.so $(DST_DIR)/lib/wine/aarch64-unix/vrclient.so
+	cp -fa $(VRCLIENT_aarch64_DST)/lib/wine/aarch64-unix/vrclient_x64.so $(DST_DIR)/lib/wine/aarch64-unix/vrclient.so
 	touch $@
 
 
