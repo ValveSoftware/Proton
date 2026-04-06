@@ -8,7 +8,7 @@
 
 #ifndef ISTEAMAPPTICKET_H
 #define ISTEAMAPPTICKET_H
-#pragma once
+#include "steamtypes.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: hand out a reasonable "future proof" view of an app ownership ticket
