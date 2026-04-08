@@ -1,2 +1,9 @@
 // Fixes applied to Xalia's main.gudl for Proton. Update these in xalia-fixups.gudl.
 
+if (class_name == "GameNxApp") {
+    application_supports_gamepad: true;
+}
+
+dialog (parent.is_root and root.child_matches(class_name == "GameNxApp").pid == pid) {
+    application_supports_gamepad: true;
+}
