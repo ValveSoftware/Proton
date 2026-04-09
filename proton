@@ -1813,6 +1813,7 @@ class Session:
                 "4249100",
                 "4249110",
                 "4249130",
+                "4249150",
                 ]:
             self.dlloverrides["ddraw"] = "n,b"
 
