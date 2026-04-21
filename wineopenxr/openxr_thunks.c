@@ -3,7 +3,7 @@
  * This file is generated from Vulkan xr.xml file covered
  * by the following copyright and permission notice:
  *
- * Copyright (c) 2017-2025 The Khronos Group Inc.
+ * Copyright (c) 2017-2026 The Khronos Group Inc.
  *
  * SPDX-License-Identifier: Apache-2.0 OR MIT
  *
@@ -91,6 +91,18 @@ static NTSTATUS thunk64_xrAcquireSwapchainImage(void *args)
     TRACE("%p, %p, %p\n", params->swapchain, params->acquireInfo, params->index);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrAcquireSwapchainImage(wine_swapchain_from_handle(params->swapchain)->host_swapchain, params->acquireInfo, params->index);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrAddTrackableImageDatabaseANDROID(void *args)
+{
+    struct xrAddTrackableImageDatabaseANDROID_params *params = args;
+
+    TRACE("%p, %p\n", params->tracker, params->database);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrAddTrackableImageDatabaseANDROID(params->tracker, params->database);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -408,6 +420,30 @@ static NTSTATUS thunk64_xrCreateEnvironmentDepthSwapchainMETA(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrCreateEnvironmentRaycasterAsyncMETA(void *args)
+{
+    struct xrCreateEnvironmentRaycasterAsyncMETA_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->session, params->info, params->future);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateEnvironmentRaycasterAsyncMETA(wine_session_from_handle(params->session)->host_session, params->info, params->future);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateEnvironmentRaycasterCompleteMETA(void *args)
+{
+    struct xrCreateEnvironmentRaycasterCompleteMETA_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->session, params->future, params->completion);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateEnvironmentRaycasterCompleteMETA(wine_session_from_handle(params->session)->host_session, params->future, params->completion);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrCreateExportedLocalizationMapML(void *args)
 {
     struct xrCreateExportedLocalizationMapML_params *params = args;
@@ -439,6 +475,30 @@ static NTSTATUS thunk64_xrCreateFaceTracker2FB(void *args)
     TRACE("%p, %p, %p\n", params->session, params->createInfo, params->faceTracker);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrCreateFaceTracker2FB(wine_session_from_handle(params->session)->host_session, params->createInfo, params->faceTracker);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateFaceTrackerANDROID(void *args)
+{
+    struct xrCreateFaceTrackerANDROID_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->session, params->createInfo, params->faceTracker);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateFaceTrackerANDROID(wine_session_from_handle(params->session)->host_session, params->createInfo, params->faceTracker);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateFaceTrackerBD(void *args)
+{
+    struct xrCreateFaceTrackerBD_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->session, params->createInfo, params->tracker);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateFaceTrackerBD(wine_session_from_handle(params->session)->host_session, params->createInfo, params->tracker);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -630,6 +690,18 @@ static NTSTATUS thunk64_xrCreatePassthroughHTC(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrCreatePassthroughLayerANDROID(void *args)
+{
+    struct xrCreatePassthroughLayerANDROID_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->session, params->createInfo, params->layer);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreatePassthroughLayerANDROID(wine_session_from_handle(params->session)->host_session, params->createInfo, params->layer);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrCreatePassthroughLayerFB(void *args)
 {
     struct xrCreatePassthroughLayerFB_params *params = args;
@@ -726,6 +798,30 @@ static NTSTATUS thunk64_xrCreateSceneMSFT(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrCreateSceneMeshSnapshotANDROID(void *args)
+{
+    struct xrCreateSceneMeshSnapshotANDROID_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->tracker, params->createInfo, params->outSnapshotCreationResult);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateSceneMeshSnapshotANDROID(params->tracker, params->createInfo, params->outSnapshotCreationResult);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateSceneMeshingTrackerANDROID(void *args)
+{
+    struct xrCreateSceneMeshingTrackerANDROID_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->session, params->createInfo, params->tracker);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateSceneMeshingTrackerANDROID(wine_session_from_handle(params->session)->host_session, params->createInfo, params->tracker);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrCreateSceneObserverMSFT(void *args)
 {
     struct xrCreateSceneObserverMSFT_params *params = args;
@@ -757,6 +853,54 @@ static NTSTATUS thunk64_xrCreateSession(void *args)
     TRACE("%p, %p, %p\n", params->instance, params->createInfo, params->session);
 
     params->result = wine_xrCreateSession(params->instance, params->createInfo, params->session);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateSoundFieldBD(void *args)
+{
+    struct xrCreateSoundFieldBD_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->renderer, params->config, params->soundField);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateSoundFieldBD(params->renderer, params->config, params->soundField);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateSoundObjectBD(void *args)
+{
+    struct xrCreateSoundObjectBD_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->renderer, params->config, params->soundObject);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateSoundObjectBD(params->renderer, params->config, params->soundObject);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateSoundObstacleBD(void *args)
+{
+    struct xrCreateSoundObstacleBD_params *params = args;
+
+    TRACE("%p, %p, %p, %p\n", params->renderer, params->config, params->mesh, params->soundObstacle);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateSoundObstacleBD(params->renderer, params->config, params->mesh, params->soundObstacle);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateSoundObstacleMaterialBD(void *args)
+{
+    struct xrCreateSoundObstacleMaterialBD_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->renderer, params->config, params->material);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateSoundObstacleMaterialBD(params->renderer, params->config, params->material);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -858,6 +1002,30 @@ static NTSTATUS thunk64_xrCreateSpatialAnchorMSFT(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrCreateSpatialAnchorSpaceANDROID(void *args)
+{
+    struct xrCreateSpatialAnchorSpaceANDROID_params *params = args;
+
+    TRACE("%p, %p, %p, %p, %p\n", params->session, params->spatialContext, params->createInfo, params->anchorEntityId, params->anchorSpace);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateSpatialAnchorSpaceANDROID(wine_session_from_handle(params->session)->host_session, params->spatialContext, params->createInfo, params->anchorEntityId, params->anchorSpace);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateSpatialAnchorSpaceFromIdANDROID(void *args)
+{
+    struct xrCreateSpatialAnchorSpaceFromIdANDROID_params *params = args;
+
+    TRACE("%p, %p, %p, %p\n", params->session, params->spatialContext, params->createInfo, params->anchorSpace);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateSpatialAnchorSpaceFromIdANDROID(wine_session_from_handle(params->session)->host_session, params->spatialContext, params->createInfo, params->anchorSpace);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrCreateSpatialAnchorSpaceMSFT(void *args)
 {
     struct xrCreateSpatialAnchorSpaceMSFT_params *params = args;
@@ -913,6 +1081,18 @@ static NTSTATUS thunk64_xrCreateSpatialAnchorsStorageML(void *args)
     TRACE("%p, %p, %p\n", params->session, params->createInfo, params->storage);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrCreateSpatialAnchorsStorageML(wine_session_from_handle(params->session)->host_session, params->createInfo, params->storage);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateSpatialAudioRendererBD(void *args)
+{
+    struct xrCreateSpatialAudioRendererBD_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->session, params->createInfo, params->renderer);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateSpatialAudioRendererBD(wine_session_from_handle(params->session)->host_session, params->createInfo, params->renderer);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -1026,6 +1206,18 @@ static NTSTATUS thunk64_xrCreateSpatialPersistenceContextCompleteEXT(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrCreateSpatialRaycastSnapshotANDROID(void *args)
+{
+    struct xrCreateSpatialRaycastSnapshotANDROID_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->spatialContext, params->createInfo, params->snapshot);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateSpatialRaycastSnapshotANDROID(params->spatialContext, params->createInfo, params->snapshot);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrCreateSpatialUpdateSnapshotEXT(void *args)
 {
     struct xrCreateSpatialUpdateSnapshotEXT_params *params = args;
@@ -1045,6 +1237,30 @@ static NTSTATUS thunk64_xrCreateSwapchain(void *args)
     TRACE("%p, %p, %p\n", params->session, params->createInfo, params->swapchain);
 
     params->result = wine_xrCreateSwapchain(params->session, params->createInfo, params->swapchain);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateTrackableImageDatabaseAsyncANDROID(void *args)
+{
+    struct xrCreateTrackableImageDatabaseAsyncANDROID_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->session, params->createInfo, params->future);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateTrackableImageDatabaseAsyncANDROID(wine_session_from_handle(params->session)->host_session, params->createInfo, params->future);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateTrackableImageDatabaseCompleteANDROID(void *args)
+{
+    struct xrCreateTrackableImageDatabaseCompleteANDROID_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->session, params->future, params->completion);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateTrackableImageDatabaseCompleteANDROID(wine_session_from_handle(params->session)->host_session, params->future, params->completion);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -1254,6 +1470,18 @@ static NTSTATUS thunk64_xrDestroyEnvironmentDepthSwapchainMETA(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrDestroyEnvironmentRaycasterMETA(void *args)
+{
+    struct xrDestroyEnvironmentRaycasterMETA_params *params = args;
+
+    TRACE("%p\n", params->environmentRaycaster);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroyEnvironmentRaycasterMETA(params->environmentRaycaster);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrDestroyExportedLocalizationMapML(void *args)
 {
     struct xrDestroyExportedLocalizationMapML_params *params = args;
@@ -1285,6 +1513,30 @@ static NTSTATUS thunk64_xrDestroyFaceTracker2FB(void *args)
     TRACE("%p\n", params->faceTracker);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrDestroyFaceTracker2FB(params->faceTracker);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrDestroyFaceTrackerANDROID(void *args)
+{
+    struct xrDestroyFaceTrackerANDROID_params *params = args;
+
+    TRACE("%p\n", params->faceTracker);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroyFaceTrackerANDROID(params->faceTracker);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrDestroyFaceTrackerBD(void *args)
+{
+    struct xrDestroyFaceTrackerBD_params *params = args;
+
+    TRACE("%p\n", params->tracker);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroyFaceTrackerBD(params->tracker);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -1422,6 +1674,18 @@ static NTSTATUS thunk64_xrDestroyPassthroughHTC(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrDestroyPassthroughLayerANDROID(void *args)
+{
+    struct xrDestroyPassthroughLayerANDROID_params *params = args;
+
+    TRACE("%p\n", params->layer);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroyPassthroughLayerANDROID(params->layer);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrDestroyPassthroughLayerFB(void *args)
 {
     struct xrDestroyPassthroughLayerFB_params *params = args;
@@ -1482,6 +1746,30 @@ static NTSTATUS thunk64_xrDestroySceneMSFT(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrDestroySceneMeshSnapshotANDROID(void *args)
+{
+    struct xrDestroySceneMeshSnapshotANDROID_params *params = args;
+
+    TRACE("%p\n", params->snapshot);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroySceneMeshSnapshotANDROID(params->snapshot);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrDestroySceneMeshingTrackerANDROID(void *args)
+{
+    struct xrDestroySceneMeshingTrackerANDROID_params *params = args;
+
+    TRACE("%p\n", params->tracker);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroySceneMeshingTrackerANDROID(params->tracker);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrDestroySceneObserverMSFT(void *args)
 {
     struct xrDestroySceneObserverMSFT_params *params = args;
@@ -1525,6 +1813,54 @@ static NTSTATUS thunk64_xrDestroySession(void *args)
     TRACE("%p\n", params->session);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrDestroySession(wine_session_from_handle(params->session)->host_session);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrDestroySoundFieldBD(void *args)
+{
+    struct xrDestroySoundFieldBD_params *params = args;
+
+    TRACE("%p\n", params->soundField);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroySoundFieldBD(params->soundField);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrDestroySoundObjectBD(void *args)
+{
+    struct xrDestroySoundObjectBD_params *params = args;
+
+    TRACE("%p\n", params->soundObject);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroySoundObjectBD(params->soundObject);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrDestroySoundObstacleBD(void *args)
+{
+    struct xrDestroySoundObstacleBD_params *params = args;
+
+    TRACE("%p\n", params->soundObstacle);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroySoundObstacleBD(params->soundObstacle);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrDestroySoundObstacleMaterialBD(void *args)
+{
+    struct xrDestroySoundObstacleMaterialBD_params *params = args;
+
+    TRACE("%p\n", params->material);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroySoundObstacleMaterialBD(params->material);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -1585,6 +1921,18 @@ static NTSTATUS thunk64_xrDestroySpatialAnchorsStorageML(void *args)
     TRACE("%p\n", params->storage);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrDestroySpatialAnchorsStorageML(params->storage);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrDestroySpatialAudioRendererBD(void *args)
+{
+    struct xrDestroySpatialAudioRendererBD_params *params = args;
+
+    TRACE("%p\n", params->renderer);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroySpatialAudioRendererBD(params->renderer);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -1657,6 +2005,18 @@ static NTSTATUS thunk64_xrDestroySwapchain(void *args)
     TRACE("%p\n", params->swapchain);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrDestroySwapchain(wine_swapchain_from_handle(params->swapchain)->host_swapchain);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrDestroyTrackableImageDatabaseANDROID(void *args)
+{
+    struct xrDestroyTrackableImageDatabaseANDROID_params *params = args;
+
+    TRACE("%p\n", params->database);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroyTrackableImageDatabaseANDROID(params->database);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -1770,6 +2130,18 @@ static NTSTATUS thunk64_xrEnableUserCalibrationEventsML(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrEndAudioPeriodBD(void *args)
+{
+    struct xrEndAudioPeriodBD_params *params = args;
+
+    TRACE("%p\n", params->renderer);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrEndAudioPeriodBD(params->renderer);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrEndFrame(void *args)
 {
     struct xrEndFrame_params *params = args;
@@ -1878,6 +2250,18 @@ static NTSTATUS thunk64_xrEnumerateExternalCamerasOCULUS(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrEnumerateFacialSimulationModesBD(void *args)
+{
+    struct xrEnumerateFacialSimulationModesBD_params *params = args;
+
+    TRACE("%p, %u, %p, %p\n", params->session, params->modeCapacityInput, params->modeCountOutput, params->modes);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateFacialSimulationModesBD(wine_session_from_handle(params->session)->host_session, params->modeCapacityInput, params->modeCountOutput, params->modes);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrEnumerateInstanceExtensionProperties(void *args)
 {
     struct xrEnumerateInstanceExtensionProperties_params *params = args;
@@ -1897,6 +2281,18 @@ static NTSTATUS thunk64_xrEnumerateInteractionRenderModelIdsEXT(void *args)
     TRACE("%p, %p, %u, %p, %p\n", params->session, params->getInfo, params->renderModelIdCapacityInput, params->renderModelIdCountOutput, params->renderModelIds);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateInteractionRenderModelIdsEXT(wine_session_from_handle(params->session)->host_session, params->getInfo, params->renderModelIdCapacityInput, params->renderModelIdCountOutput, params->renderModelIds);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrEnumeratePerformanceMetricsCounterPathsANDROID(void *args)
+{
+    struct xrEnumeratePerformanceMetricsCounterPathsANDROID_params *params = args;
+
+    TRACE("%p, %u, %p, %p\n", params->instance, params->counterPathCapacityInput, params->counterPathCountOutput, params->counterPaths);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumeratePerformanceMetricsCounterPathsANDROID(wine_instance_from_handle(params->instance)->host_instance, params->counterPathCapacityInput, params->counterPathCountOutput, params->counterPaths);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -2022,6 +2418,18 @@ static NTSTATUS thunk64_xrEnumerateSpaceSupportedComponentsFB(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrEnumerateSpatialAnchorAttachableComponentsANDROID(void *args)
+{
+    struct xrEnumerateSpatialAnchorAttachableComponentsANDROID_params *params = args;
+
+    TRACE("%p, 0x%s, %u, %p, %p\n", params->instance, wine_dbgstr_longlong(params->systemId), params->attachableComponentCapacityInput, params->attachableComponentCountOutput, params->attachableComponents);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateSpatialAnchorAttachableComponentsANDROID(wine_instance_from_handle(params->instance)->host_instance, params->systemId, params->attachableComponentCapacityInput, params->attachableComponentCountOutput, params->attachableComponents);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrEnumerateSpatialCapabilitiesEXT(void *args)
 {
     struct xrEnumerateSpatialCapabilitiesEXT_params *params = args;
@@ -2094,6 +2502,18 @@ static NTSTATUS thunk64_xrEnumerateSupportedAnchorTrackableTypesANDROID(void *ar
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrEnumerateSupportedAudioSampleRateBD(void *args)
+{
+    struct xrEnumerateSupportedAudioSampleRateBD_params *params = args;
+
+    TRACE("%p, %u, %p, %p\n", params->session, params->sampleRateCapacityInput, params->sampleRateCountOutput, params->sampleRates);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateSupportedAudioSampleRateBD(wine_session_from_handle(params->session)->host_session, params->sampleRateCapacityInput, params->sampleRateCountOutput, params->sampleRates);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrEnumerateSupportedPersistenceAnchorTypesANDROID(void *args)
 {
     struct xrEnumerateSupportedPersistenceAnchorTypesANDROID_params *params = args;
@@ -2101,6 +2521,18 @@ static NTSTATUS thunk64_xrEnumerateSupportedPersistenceAnchorTypesANDROID(void *
     TRACE("%p, 0x%s, %u, %p, %p\n", params->instance, wine_dbgstr_longlong(params->systemId), params->trackableTypeCapacityInput, params->trackableTypeCountOutput, params->trackableTypes);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateSupportedPersistenceAnchorTypesANDROID(wine_instance_from_handle(params->instance)->host_instance, params->systemId, params->trackableTypeCapacityInput, params->trackableTypeCountOutput, params->trackableTypes);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrEnumerateSupportedSemanticLabelSetsANDROID(void *args)
+{
+    struct xrEnumerateSupportedSemanticLabelSetsANDROID_params *params = args;
+
+    TRACE("%p, 0x%s, %u, %p, %p\n", params->instance, wine_dbgstr_longlong(params->systemId), params->supportedSemanticLabelSetsInputCapacity, params->supportedSemanticLabelSetsOutputCount, params->supportedSemanticLabelSets);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateSupportedSemanticLabelSetsANDROID(wine_instance_from_handle(params->instance)->host_instance, params->systemId, params->supportedSemanticLabelSetsInputCapacity, params->supportedSemanticLabelSetsOutputCount, params->supportedSemanticLabelSets);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -2269,6 +2701,18 @@ static NTSTATUS thunk64_xrGetActionStateVector2f(void *args)
     TRACE("%p, %p, %p\n", params->session, params->getInfo, params->state);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrGetActionStateVector2f(wine_session_from_handle(params->session)->host_session, params->getInfo, params->state);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrGetAllSubmeshStatesANDROID(void *args)
+{
+    struct xrGetAllSubmeshStatesANDROID_params *params = args;
+
+    TRACE("%p, %u, %p, %p\n", params->snapshot, params->submeshStateCapacityInput, params->submeshStateCountOutput, params->submeshStates);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetAllSubmeshStatesANDROID(params->snapshot, params->submeshStateCapacityInput, params->submeshStateCountOutput, params->submeshStates);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -2466,6 +2910,18 @@ static NTSTATUS thunk64_xrGetEyeGazesFB(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrGetFaceCalibrationStateANDROID(void *args)
+{
+    struct xrGetFaceCalibrationStateANDROID_params *params = args;
+
+    TRACE("%p, %p\n", params->faceTracker, params->faceIsCalibratedOutput);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetFaceCalibrationStateANDROID(params->faceTracker, params->faceIsCalibratedOutput);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrGetFaceExpressionWeights2FB(void *args)
 {
     struct xrGetFaceExpressionWeights2FB_params *params = args;
@@ -2485,6 +2941,18 @@ static NTSTATUS thunk64_xrGetFaceExpressionWeightsFB(void *args)
     TRACE("%p, %p, %p\n", params->faceTracker, params->expressionInfo, params->expressionWeights);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrGetFaceExpressionWeightsFB(params->faceTracker, params->expressionInfo, params->expressionWeights);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrGetFaceStateANDROID(void *args)
+{
+    struct xrGetFaceStateANDROID_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->faceTracker, params->getInfo, params->faceStateOutput);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetFaceStateANDROID(params->faceTracker, params->getInfo, params->faceStateOutput);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -2514,6 +2982,30 @@ static NTSTATUS thunk64_xrGetFacialExpressionsHTC(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrGetFacialSimulationDataBD(void *args)
+{
+    struct xrGetFacialSimulationDataBD_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->tracker, params->info, params->facialData);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetFacialSimulationDataBD(params->tracker, params->info, params->facialData);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrGetFacialSimulationModeBD(void *args)
+{
+    struct xrGetFacialSimulationModeBD_params *params = args;
+
+    TRACE("%p, %p\n", params->tracker, params->mode);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetFacialSimulationModeBD(params->tracker, params->mode);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrGetFoveationEyeTrackedStateMETA(void *args)
 {
     struct xrGetFoveationEyeTrackedStateMETA_params *params = args;
@@ -2521,6 +3013,18 @@ static NTSTATUS thunk64_xrGetFoveationEyeTrackedStateMETA(void *args)
     TRACE("%p, %p\n", params->session, params->foveationState);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrGetFoveationEyeTrackedStateMETA(wine_session_from_handle(params->session)->host_session, params->foveationState);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrGetHandGestureQCOM(void *args)
+{
+    struct xrGetHandGestureQCOM_params *params = args;
+
+    TRACE("%p, 0x%s, %p\n", params->handTracker, wine_dbgstr_longlong(params->time), params->handGesture);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetHandGestureQCOM(params->handTracker, params->time, params->handGesture);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -2677,6 +3181,18 @@ static NTSTATUS thunk64_xrGetPassthroughPreferencesMETA(void *args)
     TRACE("%p, %p\n", params->session, params->preferences);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrGetPassthroughPreferencesMETA(wine_session_from_handle(params->session)->host_session, params->preferences);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrGetPerformanceMetricsStateANDROID(void *args)
+{
+    struct xrGetPerformanceMetricsStateANDROID_params *params = args;
+
+    TRACE("%p, %p\n", params->session, params->state);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetPerformanceMetricsStateANDROID(wine_session_from_handle(params->session)->host_session, params->state);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -3186,6 +3702,18 @@ static NTSTATUS thunk64_xrGetSpatialGraphNodeBindingPropertiesMSFT(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrGetSubmeshDataANDROID(void *args)
+{
+    struct xrGetSubmeshDataANDROID_params *params = args;
+
+    TRACE("%p, %u, %p\n", params->snapshot, params->submeshDataCount, params->inoutSubmeshData);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetSubmeshDataANDROID(params->snapshot, params->submeshDataCount, params->inoutSubmeshData);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrGetSwapchainStateFB(void *args)
 {
     struct xrGetSwapchainStateFB_params *params = args;
@@ -3222,6 +3750,18 @@ static NTSTATUS thunk64_xrGetSystemProperties(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrGetTrackableImageANDROID(void *args)
+{
+    struct xrGetTrackableImageANDROID_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->tracker, params->getInfo, params->trackable);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetTrackableImageANDROID(params->tracker, params->getInfo, params->trackable);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrGetTrackableMarkerANDROID(void *args)
 {
     struct xrGetTrackableMarkerANDROID_params *params = args;
@@ -3253,6 +3793,18 @@ static NTSTATUS thunk64_xrGetTrackablePlaneANDROID(void *args)
     TRACE("%p, %p, %p\n", params->trackableTracker, params->getInfo, params->planeOutput);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrGetTrackablePlaneANDROID(params->trackableTracker, params->getInfo, params->planeOutput);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrGetTrackableQrCodeANDROID(void *args)
+{
+    struct xrGetTrackableQrCodeANDROID_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->tracker, params->getInfo, params->qrCodeOutput);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetTrackableQrCodeANDROID(params->tracker, params->getInfo, params->qrCodeOutput);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -3666,6 +4218,18 @@ static NTSTATUS thunk64_xrPerfSettingsSetPerformanceLevelEXT(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrPerformEnvironmentRaycastMETA(void *args)
+{
+    struct xrPerformEnvironmentRaycastMETA_params *params = args;
+
+    TRACE("%p, %p, %p\n", params->environmentRaycaster, params->info, params->hitPoint);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrPerformEnvironmentRaycastMETA(params->environmentRaycaster, params->info, params->hitPoint);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrPersistAnchorANDROID(void *args)
 {
     struct xrPersistAnchorANDROID_params *params = args;
@@ -3786,6 +4350,18 @@ static NTSTATUS thunk64_xrPublishSpatialAnchorsCompleteML(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrQueryFramesPerBufferRangeBD(void *args)
+{
+    struct xrQueryFramesPerBufferRangeBD_params *params = args;
+
+    TRACE("%p, %#x, %p, %p\n", params->session, params->sampleRate, params->min, params->max);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrQueryFramesPerBufferRangeBD(wine_session_from_handle(params->session)->host_session, params->sampleRate, params->min, params->max);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrQueryLocalizationMapsML(void *args)
 {
     struct xrQueryLocalizationMapsML_params *params = args;
@@ -3793,6 +4369,18 @@ static NTSTATUS thunk64_xrQueryLocalizationMapsML(void *args)
     TRACE("%p, %p, %u, %p, %p\n", params->session, params->queryInfo, params->mapCapacityInput, params->mapCountOutput, params->maps);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrQueryLocalizationMapsML(wine_session_from_handle(params->session)->host_session, params->queryInfo, params->mapCapacityInput, params->mapCountOutput, params->maps);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrQueryPerformanceMetricsCounterANDROID(void *args)
+{
+    struct xrQueryPerformanceMetricsCounterANDROID_params *params = args;
+
+    TRACE("%p, 0x%s, %p\n", params->session, wine_dbgstr_longlong(params->counterPath), params->counter);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrQueryPerformanceMetricsCounterANDROID(wine_session_from_handle(params->session)->host_session, params->counterPath, params->counter);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -3913,6 +4501,30 @@ static NTSTATUS thunk64_xrReleaseSwapchainImage(void *args)
     TRACE("%p, %p\n", params->swapchain, params->releaseInfo);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrReleaseSwapchainImage(wine_swapchain_from_handle(params->swapchain)->host_swapchain, params->releaseInfo);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrRemoveTrackableImageDatabaseANDROID(void *args)
+{
+    struct xrRemoveTrackableImageDatabaseANDROID_params *params = args;
+
+    TRACE("%p, %p\n", params->tracker, params->database);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrRemoveTrackableImageDatabaseANDROID(params->tracker, params->database);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrRequestBodyTrackingFidelityMETA(void *args)
+{
+    struct xrRequestBodyTrackingFidelityMETA_params *params = args;
+
+    TRACE("%p, %#x\n", params->bodyTracker, params->fidelity);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrRequestBodyTrackingFidelityMETA(params->bodyTracker, params->fidelity);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -4170,6 +4782,18 @@ static NTSTATUS thunk64_xrSetEnvironmentDepthHandRemovalMETA(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrSetFacialSimulationModeBD(void *args)
+{
+    struct xrSetFacialSimulationModeBD_params *params = args;
+
+    TRACE("%p, %#x\n", params->tracker, params->mode);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrSetFacialSimulationModeBD(params->tracker, params->mode);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrSetInputDeviceActiveEXT(void *args)
 {
     struct xrSetInputDeviceActiveEXT_params *params = args;
@@ -4266,6 +4890,30 @@ static NTSTATUS thunk64_xrSetMarkerTrackingVARJO(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrSetPassthroughLayerMeshANDROID(void *args)
+{
+    struct xrSetPassthroughLayerMeshANDROID_params *params = args;
+
+    TRACE("%p, %p\n", params->layer, params->mesh);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrSetPassthroughLayerMeshANDROID(params->layer, params->mesh);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrSetPerformanceMetricsStateANDROID(void *args)
+{
+    struct xrSetPerformanceMetricsStateANDROID_params *params = args;
+
+    TRACE("%p, %p\n", params->session, params->state);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrSetPerformanceMetricsStateANDROID(wine_session_from_handle(params->session)->host_session, params->state);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrSetPerformanceMetricsStateMETA(void *args)
 {
     struct xrSetPerformanceMetricsStateMETA_params *params = args;
@@ -4297,6 +4945,18 @@ static NTSTATUS thunk64_xrSetSystemNotificationsML(void *args)
     TRACE("%p, %p\n", params->instance, params->info);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrSetSystemNotificationsML(wine_instance_from_handle(params->instance)->host_instance, params->info);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrSetTilePropertiesHintMETA(void *args)
+{
+    struct xrSetTilePropertiesHintMETA_params *params = args;
+
+    TRACE("%p, %p\n", params->session, params->properties);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrSetTilePropertiesHintMETA(wine_session_from_handle(params->session)->host_session, params->properties);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -4554,6 +5214,30 @@ static NTSTATUS thunk64_xrStructureTypeToString2KHR(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrSubmitSoundFieldBufferBD(void *args)
+{
+    struct xrSubmitSoundFieldBufferBD_params *params = args;
+
+    TRACE("%p, %p\n", params->soundField, params->buffer);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrSubmitSoundFieldBufferBD(params->soundField, params->buffer);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrSubmitSoundObjectBufferBD(void *args)
+{
+    struct xrSubmitSoundObjectBufferBD_params *params = args;
+
+    TRACE("%p, %p\n", params->soundObject, params->buffer);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrSubmitSoundObjectBufferBD(params->soundObject, params->buffer);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrSuggestBodyTrackingCalibrationOverrideMETA(void *args)
 {
     struct xrSuggestBodyTrackingCalibrationOverrideMETA_params *params = args;
@@ -4794,6 +5478,54 @@ static NTSTATUS thunk64_xrUpdatePassthroughColorLutMETA(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrUpdateSoundFieldConfigBD(void *args)
+{
+    struct xrUpdateSoundFieldConfigBD_params *params = args;
+
+    TRACE("%p, %p, 0x%s\n", params->soundField, params->config, wine_dbgstr_longlong(params->flags));
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrUpdateSoundFieldConfigBD(params->soundField, params->config, params->flags);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrUpdateSoundObjectConfigBD(void *args)
+{
+    struct xrUpdateSoundObjectConfigBD_params *params = args;
+
+    TRACE("%p, %p, 0x%s\n", params->soundObject, params->config, wine_dbgstr_longlong(params->flags));
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrUpdateSoundObjectConfigBD(params->soundObject, params->config, params->flags);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrUpdateSoundObstacleConfigBD(void *args)
+{
+    struct xrUpdateSoundObstacleConfigBD_params *params = args;
+
+    TRACE("%p, %p, %p, 0x%s\n", params->soundObstacle, params->config, params->mesh, wine_dbgstr_longlong(params->flags));
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrUpdateSoundObstacleConfigBD(params->soundObstacle, params->config, params->mesh, params->flags);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrUpdateSoundObstacleMaterialConfigBD(void *args)
+{
+    struct xrUpdateSoundObstacleMaterialConfigBD_params *params = args;
+
+    TRACE("%p, %p\n", params->material, params->config);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrUpdateSoundObstacleMaterialConfigBD(params->material, params->config);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrUpdateSpatialAnchorsExpirationAsyncML(void *args)
 {
     struct xrUpdateSpatialAnchorsExpirationAsyncML_params *params = args;
@@ -4830,6 +5562,18 @@ static NTSTATUS thunk64_xrUpdateSwapchainFB(void *args)
 #endif /* _WIN64 */
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrWaitAudioPeriodBD(void *args)
+{
+    struct xrWaitAudioPeriodBD_params *params = args;
+
+    TRACE("%p, 0x%s\n", params->renderer, wine_dbgstr_longlong(params->timeout));
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrWaitAudioPeriodBD(params->renderer, params->timeout);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrWaitFrame(void *args)
 {
     struct xrWaitFrame_params *params = args;
@@ -4856,21 +5600,37 @@ static NTSTATUS thunk64_xrWaitSwapchainImage(void *args)
 static const char * const xr_extensions[] =
 {
     "XR_ALMALENCE_digital_lens_control",
+    "XR_ANDROID_composition_layer_passthrough_mesh",
     "XR_ANDROID_device_anchor_persistence",
+    "XR_ANDROID_face_tracking",
+    "XR_ANDROID_mouse_interaction",
     "XR_ANDROID_passthrough_camera_state",
+    "XR_ANDROID_performance_metrics",
     "XR_ANDROID_raycast",
+    "XR_ANDROID_scene_meshing",
+    "XR_ANDROID_spatial_anchor_space",
+    "XR_ANDROID_spatial_component_subsumed_by",
+    "XR_ANDROID_spatial_discovery_raycast",
+    "XR_ANDROID_spatial_entity_bound_anchor",
+    "XR_ANDROID_spatial_object_tracking",
     "XR_ANDROID_trackables",
+    "XR_ANDROID_trackables_image",
     "XR_ANDROID_trackables_marker",
     "XR_ANDROID_trackables_object",
+    "XR_ANDROID_trackables_qr_code",
+    "XR_ANDROID_unbounded_reference_space",
     "XR_BD_body_tracking",
     "XR_BD_controller_interaction",
+    "XR_BD_facial_simulation",
     "XR_BD_future_progress",
     "XR_BD_spatial_anchor",
     "XR_BD_spatial_anchor_sharing",
+    "XR_BD_spatial_audio_rendering",
     "XR_BD_spatial_mesh",
     "XR_BD_spatial_plane",
     "XR_BD_spatial_scene",
     "XR_BD_spatial_sensing",
+    "XR_BD_ultra_controller_interaction",
     "XR_EPIC_view_configuration_fov",
     "XR_EXTX_overlay",
     "XR_EXT_active_action_set_priority",
@@ -4885,6 +5645,7 @@ static const char * const xr_extensions[] =
     "XR_EXT_hand_tracking",
     "XR_EXT_hand_tracking_data_source",
     "XR_EXT_hp_mixed_reality_controller",
+    "XR_EXT_interaction_profile_battery_state_display",
     "XR_EXT_interaction_render_model",
     "XR_EXT_loader_init_properties",
     "XR_EXT_local_floor",
@@ -4903,6 +5664,7 @@ static const char * const xr_extensions[] =
     "XR_EXT_user_presence",
     "XR_EXT_uuid",
     "XR_EXT_view_configuration_depth_range",
+    "XR_EXT_view_configuration_views_change",
     "XR_EXT_win32_appcontainer_compatible",
     "XR_FB_body_tracking",
     "XR_FB_color_space",
@@ -4975,10 +5737,12 @@ static const char * const xr_extensions[] =
     "XR_LOGITECH_mx_ink_stylus_interaction",
     "XR_META_automatic_layer_filter",
     "XR_META_body_tracking_calibration",
+    "XR_META_body_tracking_fidelity",
     "XR_META_body_tracking_full_body",
     "XR_META_colocation_discovery",
     "XR_META_detached_controllers",
     "XR_META_environment_depth",
+    "XR_META_environment_raycast",
     "XR_META_foveation_eye_tracked",
     "XR_META_hand_tracking_microgestures",
     "XR_META_headset_id",
@@ -4993,7 +5757,9 @@ static const char * const xr_extensions[] =
     "XR_META_spatial_entity_group_sharing",
     "XR_META_spatial_entity_mesh",
     "XR_META_spatial_entity_persistence",
+    "XR_META_spatial_entity_semantic_label",
     "XR_META_spatial_entity_sharing",
+    "XR_META_tile_properties_hint",
     "XR_META_touch_controller_plus",
     "XR_META_virtual_keyboard",
     "XR_META_vulkan_swapchain_create_info",
@@ -5030,6 +5796,7 @@ static const char * const xr_extensions[] =
     "XR_OCULUS_audio_device_guid",
     "XR_OCULUS_external_camera",
     "XR_OPPO_controller_interaction",
+    "XR_QCOM_hand_tracking_gesture",
     "XR_QCOM_tracking_optimization_settings",
     "XR_ULTRALEAP_hand_tracking_forearm",
     "XR_VALVE_analog_threshold",
@@ -5070,6 +5837,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     is_available_instance_function_openxr,
     thunk64_xrAcquireEnvironmentDepthImageMETA,
     thunk64_xrAcquireSwapchainImage,
+    thunk64_xrAddTrackableImageDatabaseANDROID,
     thunk64_xrAllocateWorldMeshBufferML,
     thunk64_xrApplyForceFeedbackCurlMNDX,
     thunk64_xrApplyHapticFeedback,
@@ -5096,9 +5864,13 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrCreateDeviceAnchorPersistenceANDROID,
     thunk64_xrCreateEnvironmentDepthProviderMETA,
     thunk64_xrCreateEnvironmentDepthSwapchainMETA,
+    thunk64_xrCreateEnvironmentRaycasterAsyncMETA,
+    thunk64_xrCreateEnvironmentRaycasterCompleteMETA,
     thunk64_xrCreateExportedLocalizationMapML,
     thunk64_xrCreateEyeTrackerFB,
     thunk64_xrCreateFaceTracker2FB,
+    thunk64_xrCreateFaceTrackerANDROID,
+    thunk64_xrCreateFaceTrackerBD,
     thunk64_xrCreateFaceTrackerFB,
     thunk64_xrCreateFacialExpressionClientML,
     thunk64_xrCreateFacialTrackerHTC,
@@ -5114,6 +5886,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrCreatePassthroughColorLutMETA,
     thunk64_xrCreatePassthroughFB,
     thunk64_xrCreatePassthroughHTC,
+    thunk64_xrCreatePassthroughLayerANDROID,
     thunk64_xrCreatePassthroughLayerFB,
     thunk64_xrCreatePersistedAnchorSpaceANDROID,
     thunk64_xrCreatePlaneDetectorEXT,
@@ -5122,9 +5895,15 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrCreateRenderModelEXT,
     thunk64_xrCreateRenderModelSpaceEXT,
     thunk64_xrCreateSceneMSFT,
+    thunk64_xrCreateSceneMeshSnapshotANDROID,
+    thunk64_xrCreateSceneMeshingTrackerANDROID,
     thunk64_xrCreateSceneObserverMSFT,
     thunk64_xrCreateSenseDataProviderBD,
     thunk64_xrCreateSession,
+    thunk64_xrCreateSoundFieldBD,
+    thunk64_xrCreateSoundObjectBD,
+    thunk64_xrCreateSoundObstacleBD,
+    thunk64_xrCreateSoundObstacleMaterialBD,
     thunk64_xrCreateSpaceUserFB,
     thunk64_xrCreateSpatialAnchorAsyncBD,
     thunk64_xrCreateSpatialAnchorCompleteBD,
@@ -5133,11 +5912,14 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrCreateSpatialAnchorFromPersistedNameMSFT,
     thunk64_xrCreateSpatialAnchorHTC,
     thunk64_xrCreateSpatialAnchorMSFT,
+    thunk64_xrCreateSpatialAnchorSpaceANDROID,
+    thunk64_xrCreateSpatialAnchorSpaceFromIdANDROID,
     thunk64_xrCreateSpatialAnchorSpaceMSFT,
     thunk64_xrCreateSpatialAnchorStoreConnectionMSFT,
     thunk64_xrCreateSpatialAnchorsAsyncML,
     thunk64_xrCreateSpatialAnchorsCompleteML,
     thunk64_xrCreateSpatialAnchorsStorageML,
+    thunk64_xrCreateSpatialAudioRendererBD,
     thunk64_xrCreateSpatialContextAsyncEXT,
     thunk64_xrCreateSpatialContextCompleteEXT,
     thunk64_xrCreateSpatialDiscoverySnapshotAsyncEXT,
@@ -5147,8 +5929,11 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrCreateSpatialGraphNodeSpaceMSFT,
     thunk64_xrCreateSpatialPersistenceContextAsyncEXT,
     thunk64_xrCreateSpatialPersistenceContextCompleteEXT,
+    thunk64_xrCreateSpatialRaycastSnapshotANDROID,
     thunk64_xrCreateSpatialUpdateSnapshotEXT,
     thunk64_xrCreateSwapchain,
+    thunk64_xrCreateTrackableImageDatabaseAsyncANDROID,
+    thunk64_xrCreateTrackableImageDatabaseCompleteANDROID,
     thunk64_xrCreateTrackableTrackerANDROID,
     thunk64_xrCreateTriangleMeshFB,
     thunk64_xrCreateVirtualKeyboardMETA,
@@ -5166,9 +5951,12 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrDestroyDeviceAnchorPersistenceANDROID,
     thunk64_xrDestroyEnvironmentDepthProviderMETA,
     thunk64_xrDestroyEnvironmentDepthSwapchainMETA,
+    thunk64_xrDestroyEnvironmentRaycasterMETA,
     thunk64_xrDestroyExportedLocalizationMapML,
     thunk64_xrDestroyEyeTrackerFB,
     thunk64_xrDestroyFaceTracker2FB,
+    thunk64_xrDestroyFaceTrackerANDROID,
+    thunk64_xrDestroyFaceTrackerBD,
     thunk64_xrDestroyFaceTrackerFB,
     thunk64_xrDestroyFacialExpressionClientML,
     thunk64_xrDestroyFacialTrackerHTC,
@@ -5180,26 +5968,35 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrDestroyPassthroughColorLutMETA,
     thunk64_xrDestroyPassthroughFB,
     thunk64_xrDestroyPassthroughHTC,
+    thunk64_xrDestroyPassthroughLayerANDROID,
     thunk64_xrDestroyPassthroughLayerFB,
     thunk64_xrDestroyPlaneDetectorEXT,
     thunk64_xrDestroyRenderModelAssetEXT,
     thunk64_xrDestroyRenderModelEXT,
     thunk64_xrDestroySceneMSFT,
+    thunk64_xrDestroySceneMeshSnapshotANDROID,
+    thunk64_xrDestroySceneMeshingTrackerANDROID,
     thunk64_xrDestroySceneObserverMSFT,
     thunk64_xrDestroySenseDataProviderBD,
     thunk64_xrDestroySenseDataSnapshotBD,
     thunk64_xrDestroySession,
+    thunk64_xrDestroySoundFieldBD,
+    thunk64_xrDestroySoundObjectBD,
+    thunk64_xrDestroySoundObstacleBD,
+    thunk64_xrDestroySoundObstacleMaterialBD,
     thunk64_xrDestroySpace,
     thunk64_xrDestroySpaceUserFB,
     thunk64_xrDestroySpatialAnchorMSFT,
     thunk64_xrDestroySpatialAnchorStoreConnectionMSFT,
     thunk64_xrDestroySpatialAnchorsStorageML,
+    thunk64_xrDestroySpatialAudioRendererBD,
     thunk64_xrDestroySpatialContextEXT,
     thunk64_xrDestroySpatialEntityEXT,
     thunk64_xrDestroySpatialGraphNodeBindingMSFT,
     thunk64_xrDestroySpatialPersistenceContextEXT,
     thunk64_xrDestroySpatialSnapshotEXT,
     thunk64_xrDestroySwapchain,
+    thunk64_xrDestroyTrackableImageDatabaseANDROID,
     thunk64_xrDestroyTrackableTrackerANDROID,
     thunk64_xrDestroyTriangleMeshFB,
     thunk64_xrDestroyVirtualKeyboardMETA,
@@ -5209,6 +6006,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrDownloadSharedSpatialAnchorCompleteBD,
     thunk64_xrEnableLocalizationEventsML,
     thunk64_xrEnableUserCalibrationEventsML,
+    thunk64_xrEndAudioPeriodBD,
     thunk64_xrEndFrame,
     thunk64_xrEndSession,
     thunk64_xrEnumerateApiLayerProperties,
@@ -5218,8 +6016,10 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrEnumerateEnvironmentBlendModes,
     thunk64_xrEnumerateEnvironmentDepthSwapchainImagesMETA,
     thunk64_xrEnumerateExternalCamerasOCULUS,
+    thunk64_xrEnumerateFacialSimulationModesBD,
     thunk64_xrEnumerateInstanceExtensionProperties,
     thunk64_xrEnumerateInteractionRenderModelIdsEXT,
+    thunk64_xrEnumeratePerformanceMetricsCounterPathsANDROID,
     thunk64_xrEnumeratePerformanceMetricsCounterPathsMETA,
     thunk64_xrEnumeratePersistedAnchorsANDROID,
     thunk64_xrEnumeratePersistedSpatialAnchorNamesMSFT,
@@ -5230,13 +6030,16 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrEnumerateReprojectionModesMSFT,
     thunk64_xrEnumerateSceneComputeFeaturesMSFT,
     thunk64_xrEnumerateSpaceSupportedComponentsFB,
+    thunk64_xrEnumerateSpatialAnchorAttachableComponentsANDROID,
     thunk64_xrEnumerateSpatialCapabilitiesEXT,
     thunk64_xrEnumerateSpatialCapabilityComponentTypesEXT,
     thunk64_xrEnumerateSpatialCapabilityFeaturesEXT,
     thunk64_xrEnumerateSpatialEntityComponentTypesBD,
     thunk64_xrEnumerateSpatialPersistenceScopesEXT,
     thunk64_xrEnumerateSupportedAnchorTrackableTypesANDROID,
+    thunk64_xrEnumerateSupportedAudioSampleRateBD,
     thunk64_xrEnumerateSupportedPersistenceAnchorTypesANDROID,
+    thunk64_xrEnumerateSupportedSemanticLabelSetsANDROID,
     thunk64_xrEnumerateSupportedTrackableTypesANDROID,
     thunk64_xrEnumerateSwapchainFormats,
     thunk64_xrEnumerateSwapchainImages,
@@ -5251,6 +6054,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrGetActionStateFloat,
     thunk64_xrGetActionStatePose,
     thunk64_xrGetActionStateVector2f,
+    thunk64_xrGetAllSubmeshStatesANDROID,
     thunk64_xrGetAllTrackablesANDROID,
     thunk64_xrGetAnchorPersistStateANDROID,
     thunk64_xrGetAnchorUuidBD,
@@ -5267,11 +6071,16 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrGetEnvironmentDepthSwapchainStateMETA,
     thunk64_xrGetExportedLocalizationMapDataML,
     thunk64_xrGetEyeGazesFB,
+    thunk64_xrGetFaceCalibrationStateANDROID,
     thunk64_xrGetFaceExpressionWeights2FB,
     thunk64_xrGetFaceExpressionWeightsFB,
+    thunk64_xrGetFaceStateANDROID,
     thunk64_xrGetFacialExpressionBlendShapePropertiesML,
     thunk64_xrGetFacialExpressionsHTC,
+    thunk64_xrGetFacialSimulationDataBD,
+    thunk64_xrGetFacialSimulationModeBD,
     thunk64_xrGetFoveationEyeTrackedStateMETA,
+    thunk64_xrGetHandGestureQCOM,
     thunk64_xrGetHandMeshFB,
     thunk64_xrGetInputSourceLocalizedName,
     thunk64_xrGetInstanceProperties,
@@ -5285,6 +6094,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrGetOpenGLGraphicsRequirementsKHR,
     thunk64_xrGetPassthroughCameraStateANDROID,
     thunk64_xrGetPassthroughPreferencesMETA,
+    thunk64_xrGetPerformanceMetricsStateANDROID,
     thunk64_xrGetPerformanceMetricsStateMETA,
     thunk64_xrGetPlaneDetectionStateEXT,
     thunk64_xrGetPlaneDetectionsEXT,
@@ -5327,12 +6137,15 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrGetSpatialEntityComponentDataBD,
     thunk64_xrGetSpatialEntityUuidBD,
     thunk64_xrGetSpatialGraphNodeBindingPropertiesMSFT,
+    thunk64_xrGetSubmeshDataANDROID,
     thunk64_xrGetSwapchainStateFB,
     thunk64_xrGetSystem,
     thunk64_xrGetSystemProperties,
+    thunk64_xrGetTrackableImageANDROID,
     thunk64_xrGetTrackableMarkerANDROID,
     thunk64_xrGetTrackableObjectANDROID,
     thunk64_xrGetTrackablePlaneANDROID,
+    thunk64_xrGetTrackableQrCodeANDROID,
     thunk64_xrGetViewConfigurationProperties,
     thunk64_xrGetVirtualKeyboardDirtyTexturesMETA,
     thunk64_xrGetVirtualKeyboardModelAnimationStatesMETA,
@@ -5367,6 +6180,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrPathToString,
     thunk64_xrPauseSimultaneousHandsAndControllersTrackingMETA,
     thunk64_xrPerfSettingsSetPerformanceLevelEXT,
+    thunk64_xrPerformEnvironmentRaycastMETA,
     thunk64_xrPersistAnchorANDROID,
     thunk64_xrPersistSpatialAnchorAsyncBD,
     thunk64_xrPersistSpatialAnchorCompleteBD,
@@ -5377,7 +6191,9 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrPollFutureEXT,
     thunk64_xrPublishSpatialAnchorsAsyncML,
     thunk64_xrPublishSpatialAnchorsCompleteML,
+    thunk64_xrQueryFramesPerBufferRangeBD,
     thunk64_xrQueryLocalizationMapsML,
+    thunk64_xrQueryPerformanceMetricsCounterANDROID,
     thunk64_xrQueryPerformanceMetricsCounterMETA,
     thunk64_xrQuerySenseDataAsyncBD,
     thunk64_xrQuerySenseDataCompleteBD,
@@ -5388,6 +6204,8 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrQuerySystemTrackedKeyboardFB,
     thunk64_xrRaycastANDROID,
     thunk64_xrReleaseSwapchainImage,
+    thunk64_xrRemoveTrackableImageDatabaseANDROID,
+    thunk64_xrRequestBodyTrackingFidelityMETA,
     thunk64_xrRequestDisplayRefreshRateFB,
     thunk64_xrRequestExitSession,
     thunk64_xrRequestMapLocalizationML,
@@ -5409,6 +6227,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrSetDigitalLensControlALMALENCE,
     thunk64_xrSetEnvironmentDepthEstimationVARJO,
     thunk64_xrSetEnvironmentDepthHandRemovalMETA,
+    thunk64_xrSetFacialSimulationModeBD,
     thunk64_xrSetInputDeviceActiveEXT,
     thunk64_xrSetInputDeviceLocationEXT,
     thunk64_xrSetInputDeviceStateBoolEXT,
@@ -5417,9 +6236,12 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrSetMarkerTrackingPredictionVARJO,
     thunk64_xrSetMarkerTrackingTimeoutVARJO,
     thunk64_xrSetMarkerTrackingVARJO,
+    thunk64_xrSetPassthroughLayerMeshANDROID,
+    thunk64_xrSetPerformanceMetricsStateANDROID,
     thunk64_xrSetPerformanceMetricsStateMETA,
     thunk64_xrSetSpaceComponentStatusFB,
     thunk64_xrSetSystemNotificationsML,
+    thunk64_xrSetTilePropertiesHintMETA,
     thunk64_xrSetTrackingOptimizationSettingsHintQCOM,
     thunk64_xrSetViewOffsetVARJO,
     thunk64_xrSetVirtualKeyboardModelVisibilityMETA,
@@ -5441,6 +6263,8 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrStringToPath,
     thunk64_xrStructureTypeToString,
     thunk64_xrStructureTypeToString2KHR,
+    thunk64_xrSubmitSoundFieldBufferBD,
+    thunk64_xrSubmitSoundObjectBufferBD,
     thunk64_xrSuggestBodyTrackingCalibrationOverrideMETA,
     thunk64_xrSuggestInteractionProfileBindings,
     thunk64_xrSuggestVirtualKeyboardLocationMETA,
@@ -5461,9 +6285,14 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrUnpersistSpatialEntityCompleteEXT,
     thunk64_xrUpdateHandMeshMSFT,
     thunk64_xrUpdatePassthroughColorLutMETA,
+    thunk64_xrUpdateSoundFieldConfigBD,
+    thunk64_xrUpdateSoundObjectConfigBD,
+    thunk64_xrUpdateSoundObstacleConfigBD,
+    thunk64_xrUpdateSoundObstacleMaterialConfigBD,
     thunk64_xrUpdateSpatialAnchorsExpirationAsyncML,
     thunk64_xrUpdateSpatialAnchorsExpirationCompleteML,
     thunk64_xrUpdateSwapchainFB,
+    thunk64_xrWaitAudioPeriodBD,
     thunk64_xrWaitFrame,
     thunk64_xrWaitSwapchainImage,
 };
