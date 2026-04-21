@@ -3,7 +3,7 @@
  * This file is generated from Vulkan xr.xml file covered
  * by the following copyright and permission notice:
  *
- * Copyright (c) 2017-2025 The Khronos Group Inc.
+ * Copyright (c) 2017-2026 The Khronos Group Inc.
  *
  * SPDX-License-Identifier: Apache-2.0 OR MIT
  *
@@ -28,6 +28,7 @@ enum unix_call
     unix_is_available_instance_function,
     unix_xrAcquireEnvironmentDepthImageMETA,
     unix_xrAcquireSwapchainImage,
+    unix_xrAddTrackableImageDatabaseANDROID,
     unix_xrAllocateWorldMeshBufferML,
     unix_xrApplyForceFeedbackCurlMNDX,
     unix_xrApplyHapticFeedback,
@@ -54,9 +55,13 @@ enum unix_call
     unix_xrCreateDeviceAnchorPersistenceANDROID,
     unix_xrCreateEnvironmentDepthProviderMETA,
     unix_xrCreateEnvironmentDepthSwapchainMETA,
+    unix_xrCreateEnvironmentRaycasterAsyncMETA,
+    unix_xrCreateEnvironmentRaycasterCompleteMETA,
     unix_xrCreateExportedLocalizationMapML,
     unix_xrCreateEyeTrackerFB,
     unix_xrCreateFaceTracker2FB,
+    unix_xrCreateFaceTrackerANDROID,
+    unix_xrCreateFaceTrackerBD,
     unix_xrCreateFaceTrackerFB,
     unix_xrCreateFacialExpressionClientML,
     unix_xrCreateFacialTrackerHTC,
@@ -72,6 +77,7 @@ enum unix_call
     unix_xrCreatePassthroughColorLutMETA,
     unix_xrCreatePassthroughFB,
     unix_xrCreatePassthroughHTC,
+    unix_xrCreatePassthroughLayerANDROID,
     unix_xrCreatePassthroughLayerFB,
     unix_xrCreatePersistedAnchorSpaceANDROID,
     unix_xrCreatePlaneDetectorEXT,
@@ -80,9 +86,15 @@ enum unix_call
     unix_xrCreateRenderModelEXT,
     unix_xrCreateRenderModelSpaceEXT,
     unix_xrCreateSceneMSFT,
+    unix_xrCreateSceneMeshSnapshotANDROID,
+    unix_xrCreateSceneMeshingTrackerANDROID,
     unix_xrCreateSceneObserverMSFT,
     unix_xrCreateSenseDataProviderBD,
     unix_xrCreateSession,
+    unix_xrCreateSoundFieldBD,
+    unix_xrCreateSoundObjectBD,
+    unix_xrCreateSoundObstacleBD,
+    unix_xrCreateSoundObstacleMaterialBD,
     unix_xrCreateSpaceUserFB,
     unix_xrCreateSpatialAnchorAsyncBD,
     unix_xrCreateSpatialAnchorCompleteBD,
@@ -91,11 +103,14 @@ enum unix_call
     unix_xrCreateSpatialAnchorFromPersistedNameMSFT,
     unix_xrCreateSpatialAnchorHTC,
     unix_xrCreateSpatialAnchorMSFT,
+    unix_xrCreateSpatialAnchorSpaceANDROID,
+    unix_xrCreateSpatialAnchorSpaceFromIdANDROID,
     unix_xrCreateSpatialAnchorSpaceMSFT,
     unix_xrCreateSpatialAnchorStoreConnectionMSFT,
     unix_xrCreateSpatialAnchorsAsyncML,
     unix_xrCreateSpatialAnchorsCompleteML,
     unix_xrCreateSpatialAnchorsStorageML,
+    unix_xrCreateSpatialAudioRendererBD,
     unix_xrCreateSpatialContextAsyncEXT,
     unix_xrCreateSpatialContextCompleteEXT,
     unix_xrCreateSpatialDiscoverySnapshotAsyncEXT,
@@ -105,8 +120,11 @@ enum unix_call
     unix_xrCreateSpatialGraphNodeSpaceMSFT,
     unix_xrCreateSpatialPersistenceContextAsyncEXT,
     unix_xrCreateSpatialPersistenceContextCompleteEXT,
+    unix_xrCreateSpatialRaycastSnapshotANDROID,
     unix_xrCreateSpatialUpdateSnapshotEXT,
     unix_xrCreateSwapchain,
+    unix_xrCreateTrackableImageDatabaseAsyncANDROID,
+    unix_xrCreateTrackableImageDatabaseCompleteANDROID,
     unix_xrCreateTrackableTrackerANDROID,
     unix_xrCreateTriangleMeshFB,
     unix_xrCreateVirtualKeyboardMETA,
@@ -124,9 +142,12 @@ enum unix_call
     unix_xrDestroyDeviceAnchorPersistenceANDROID,
     unix_xrDestroyEnvironmentDepthProviderMETA,
     unix_xrDestroyEnvironmentDepthSwapchainMETA,
+    unix_xrDestroyEnvironmentRaycasterMETA,
     unix_xrDestroyExportedLocalizationMapML,
     unix_xrDestroyEyeTrackerFB,
     unix_xrDestroyFaceTracker2FB,
+    unix_xrDestroyFaceTrackerANDROID,
+    unix_xrDestroyFaceTrackerBD,
     unix_xrDestroyFaceTrackerFB,
     unix_xrDestroyFacialExpressionClientML,
     unix_xrDestroyFacialTrackerHTC,
@@ -138,26 +159,35 @@ enum unix_call
     unix_xrDestroyPassthroughColorLutMETA,
     unix_xrDestroyPassthroughFB,
     unix_xrDestroyPassthroughHTC,
+    unix_xrDestroyPassthroughLayerANDROID,
     unix_xrDestroyPassthroughLayerFB,
     unix_xrDestroyPlaneDetectorEXT,
     unix_xrDestroyRenderModelAssetEXT,
     unix_xrDestroyRenderModelEXT,
     unix_xrDestroySceneMSFT,
+    unix_xrDestroySceneMeshSnapshotANDROID,
+    unix_xrDestroySceneMeshingTrackerANDROID,
     unix_xrDestroySceneObserverMSFT,
     unix_xrDestroySenseDataProviderBD,
     unix_xrDestroySenseDataSnapshotBD,
     unix_xrDestroySession,
+    unix_xrDestroySoundFieldBD,
+    unix_xrDestroySoundObjectBD,
+    unix_xrDestroySoundObstacleBD,
+    unix_xrDestroySoundObstacleMaterialBD,
     unix_xrDestroySpace,
     unix_xrDestroySpaceUserFB,
     unix_xrDestroySpatialAnchorMSFT,
     unix_xrDestroySpatialAnchorStoreConnectionMSFT,
     unix_xrDestroySpatialAnchorsStorageML,
+    unix_xrDestroySpatialAudioRendererBD,
     unix_xrDestroySpatialContextEXT,
     unix_xrDestroySpatialEntityEXT,
     unix_xrDestroySpatialGraphNodeBindingMSFT,
     unix_xrDestroySpatialPersistenceContextEXT,
     unix_xrDestroySpatialSnapshotEXT,
     unix_xrDestroySwapchain,
+    unix_xrDestroyTrackableImageDatabaseANDROID,
     unix_xrDestroyTrackableTrackerANDROID,
     unix_xrDestroyTriangleMeshFB,
     unix_xrDestroyVirtualKeyboardMETA,
@@ -167,6 +197,7 @@ enum unix_call
     unix_xrDownloadSharedSpatialAnchorCompleteBD,
     unix_xrEnableLocalizationEventsML,
     unix_xrEnableUserCalibrationEventsML,
+    unix_xrEndAudioPeriodBD,
     unix_xrEndFrame,
     unix_xrEndSession,
     unix_xrEnumerateApiLayerProperties,
@@ -176,8 +207,10 @@ enum unix_call
     unix_xrEnumerateEnvironmentBlendModes,
     unix_xrEnumerateEnvironmentDepthSwapchainImagesMETA,
     unix_xrEnumerateExternalCamerasOCULUS,
+    unix_xrEnumerateFacialSimulationModesBD,
     unix_xrEnumerateInstanceExtensionProperties,
     unix_xrEnumerateInteractionRenderModelIdsEXT,
+    unix_xrEnumeratePerformanceMetricsCounterPathsANDROID,
     unix_xrEnumeratePerformanceMetricsCounterPathsMETA,
     unix_xrEnumeratePersistedAnchorsANDROID,
     unix_xrEnumeratePersistedSpatialAnchorNamesMSFT,
@@ -188,13 +221,16 @@ enum unix_call
     unix_xrEnumerateReprojectionModesMSFT,
     unix_xrEnumerateSceneComputeFeaturesMSFT,
     unix_xrEnumerateSpaceSupportedComponentsFB,
+    unix_xrEnumerateSpatialAnchorAttachableComponentsANDROID,
     unix_xrEnumerateSpatialCapabilitiesEXT,
     unix_xrEnumerateSpatialCapabilityComponentTypesEXT,
     unix_xrEnumerateSpatialCapabilityFeaturesEXT,
     unix_xrEnumerateSpatialEntityComponentTypesBD,
     unix_xrEnumerateSpatialPersistenceScopesEXT,
     unix_xrEnumerateSupportedAnchorTrackableTypesANDROID,
+    unix_xrEnumerateSupportedAudioSampleRateBD,
     unix_xrEnumerateSupportedPersistenceAnchorTypesANDROID,
+    unix_xrEnumerateSupportedSemanticLabelSetsANDROID,
     unix_xrEnumerateSupportedTrackableTypesANDROID,
     unix_xrEnumerateSwapchainFormats,
     unix_xrEnumerateSwapchainImages,
@@ -209,6 +245,7 @@ enum unix_call
     unix_xrGetActionStateFloat,
     unix_xrGetActionStatePose,
     unix_xrGetActionStateVector2f,
+    unix_xrGetAllSubmeshStatesANDROID,
     unix_xrGetAllTrackablesANDROID,
     unix_xrGetAnchorPersistStateANDROID,
     unix_xrGetAnchorUuidBD,
@@ -225,11 +262,16 @@ enum unix_call
     unix_xrGetEnvironmentDepthSwapchainStateMETA,
     unix_xrGetExportedLocalizationMapDataML,
     unix_xrGetEyeGazesFB,
+    unix_xrGetFaceCalibrationStateANDROID,
     unix_xrGetFaceExpressionWeights2FB,
     unix_xrGetFaceExpressionWeightsFB,
+    unix_xrGetFaceStateANDROID,
     unix_xrGetFacialExpressionBlendShapePropertiesML,
     unix_xrGetFacialExpressionsHTC,
+    unix_xrGetFacialSimulationDataBD,
+    unix_xrGetFacialSimulationModeBD,
     unix_xrGetFoveationEyeTrackedStateMETA,
+    unix_xrGetHandGestureQCOM,
     unix_xrGetHandMeshFB,
     unix_xrGetInputSourceLocalizedName,
     unix_xrGetInstanceProperties,
@@ -243,6 +285,7 @@ enum unix_call
     unix_xrGetOpenGLGraphicsRequirementsKHR,
     unix_xrGetPassthroughCameraStateANDROID,
     unix_xrGetPassthroughPreferencesMETA,
+    unix_xrGetPerformanceMetricsStateANDROID,
     unix_xrGetPerformanceMetricsStateMETA,
     unix_xrGetPlaneDetectionStateEXT,
     unix_xrGetPlaneDetectionsEXT,
@@ -285,12 +328,15 @@ enum unix_call
     unix_xrGetSpatialEntityComponentDataBD,
     unix_xrGetSpatialEntityUuidBD,
     unix_xrGetSpatialGraphNodeBindingPropertiesMSFT,
+    unix_xrGetSubmeshDataANDROID,
     unix_xrGetSwapchainStateFB,
     unix_xrGetSystem,
     unix_xrGetSystemProperties,
+    unix_xrGetTrackableImageANDROID,
     unix_xrGetTrackableMarkerANDROID,
     unix_xrGetTrackableObjectANDROID,
     unix_xrGetTrackablePlaneANDROID,
+    unix_xrGetTrackableQrCodeANDROID,
     unix_xrGetViewConfigurationProperties,
     unix_xrGetVirtualKeyboardDirtyTexturesMETA,
     unix_xrGetVirtualKeyboardModelAnimationStatesMETA,
@@ -325,6 +371,7 @@ enum unix_call
     unix_xrPathToString,
     unix_xrPauseSimultaneousHandsAndControllersTrackingMETA,
     unix_xrPerfSettingsSetPerformanceLevelEXT,
+    unix_xrPerformEnvironmentRaycastMETA,
     unix_xrPersistAnchorANDROID,
     unix_xrPersistSpatialAnchorAsyncBD,
     unix_xrPersistSpatialAnchorCompleteBD,
@@ -335,7 +382,9 @@ enum unix_call
     unix_xrPollFutureEXT,
     unix_xrPublishSpatialAnchorsAsyncML,
     unix_xrPublishSpatialAnchorsCompleteML,
+    unix_xrQueryFramesPerBufferRangeBD,
     unix_xrQueryLocalizationMapsML,
+    unix_xrQueryPerformanceMetricsCounterANDROID,
     unix_xrQueryPerformanceMetricsCounterMETA,
     unix_xrQuerySenseDataAsyncBD,
     unix_xrQuerySenseDataCompleteBD,
@@ -346,6 +395,8 @@ enum unix_call
     unix_xrQuerySystemTrackedKeyboardFB,
     unix_xrRaycastANDROID,
     unix_xrReleaseSwapchainImage,
+    unix_xrRemoveTrackableImageDatabaseANDROID,
+    unix_xrRequestBodyTrackingFidelityMETA,
     unix_xrRequestDisplayRefreshRateFB,
     unix_xrRequestExitSession,
     unix_xrRequestMapLocalizationML,
@@ -367,6 +418,7 @@ enum unix_call
     unix_xrSetDigitalLensControlALMALENCE,
     unix_xrSetEnvironmentDepthEstimationVARJO,
     unix_xrSetEnvironmentDepthHandRemovalMETA,
+    unix_xrSetFacialSimulationModeBD,
     unix_xrSetInputDeviceActiveEXT,
     unix_xrSetInputDeviceLocationEXT,
     unix_xrSetInputDeviceStateBoolEXT,
@@ -375,9 +427,12 @@ enum unix_call
     unix_xrSetMarkerTrackingPredictionVARJO,
     unix_xrSetMarkerTrackingTimeoutVARJO,
     unix_xrSetMarkerTrackingVARJO,
+    unix_xrSetPassthroughLayerMeshANDROID,
+    unix_xrSetPerformanceMetricsStateANDROID,
     unix_xrSetPerformanceMetricsStateMETA,
     unix_xrSetSpaceComponentStatusFB,
     unix_xrSetSystemNotificationsML,
+    unix_xrSetTilePropertiesHintMETA,
     unix_xrSetTrackingOptimizationSettingsHintQCOM,
     unix_xrSetViewOffsetVARJO,
     unix_xrSetVirtualKeyboardModelVisibilityMETA,
@@ -399,6 +454,8 @@ enum unix_call
     unix_xrStringToPath,
     unix_xrStructureTypeToString,
     unix_xrStructureTypeToString2KHR,
+    unix_xrSubmitSoundFieldBufferBD,
+    unix_xrSubmitSoundObjectBufferBD,
     unix_xrSuggestBodyTrackingCalibrationOverrideMETA,
     unix_xrSuggestInteractionProfileBindings,
     unix_xrSuggestVirtualKeyboardLocationMETA,
@@ -419,9 +476,14 @@ enum unix_call
     unix_xrUnpersistSpatialEntityCompleteEXT,
     unix_xrUpdateHandMeshMSFT,
     unix_xrUpdatePassthroughColorLutMETA,
+    unix_xrUpdateSoundFieldConfigBD,
+    unix_xrUpdateSoundObjectConfigBD,
+    unix_xrUpdateSoundObstacleConfigBD,
+    unix_xrUpdateSoundObstacleMaterialConfigBD,
     unix_xrUpdateSpatialAnchorsExpirationAsyncML,
     unix_xrUpdateSpatialAnchorsExpirationCompleteML,
     unix_xrUpdateSwapchainFB,
+    unix_xrWaitAudioPeriodBD,
     unix_xrWaitFrame,
     unix_xrWaitSwapchainImage,
     unix_count,
@@ -440,6 +502,13 @@ struct xrAcquireSwapchainImage_params
     XrSwapchain swapchain;
     const XrSwapchainImageAcquireInfo *acquireInfo;
     uint32_t *index;
+    XrResult result;
+};
+
+struct xrAddTrackableImageDatabaseANDROID_params
+{
+    XrTrackableTrackerANDROID tracker;
+    XrTrackableImageDatabaseANDROID database;
     XrResult result;
 };
 
@@ -641,6 +710,22 @@ struct xrCreateEnvironmentDepthSwapchainMETA_params
     XrResult result;
 };
 
+struct xrCreateEnvironmentRaycasterAsyncMETA_params
+{
+    XrSession session;
+    const XrEnvironmentRaycasterCreateInfoMETA *info;
+    XrFutureEXT *future;
+    XrResult result;
+};
+
+struct xrCreateEnvironmentRaycasterCompleteMETA_params
+{
+    XrSession session;
+    XrFutureEXT future;
+    XrEnvironmentRaycasterCreateCompletionMETA *completion;
+    XrResult result;
+};
+
 struct xrCreateExportedLocalizationMapML_params
 {
     XrSession session;
@@ -662,6 +747,22 @@ struct xrCreateFaceTracker2FB_params
     XrSession session;
     const XrFaceTrackerCreateInfo2FB *createInfo;
     XrFaceTracker2FB *faceTracker;
+    XrResult result;
+};
+
+struct xrCreateFaceTrackerANDROID_params
+{
+    XrSession session;
+    const XrFaceTrackerCreateInfoANDROID *createInfo;
+    XrFaceTrackerANDROID *faceTracker;
+    XrResult result;
+};
+
+struct xrCreateFaceTrackerBD_params
+{
+    XrSession session;
+    const XrFaceTrackerCreateInfoBD *createInfo;
+    XrFaceTrackerBD *tracker;
     XrResult result;
 };
 
@@ -784,6 +885,14 @@ struct xrCreatePassthroughHTC_params
     XrResult result;
 };
 
+struct xrCreatePassthroughLayerANDROID_params
+{
+    XrSession session;
+    const XrPassthroughLayerCreateInfoANDROID *createInfo;
+    XrPassthroughLayerANDROID *layer;
+    XrResult result;
+};
+
 struct xrCreatePassthroughLayerFB_params
 {
     XrSession session;
@@ -848,6 +957,22 @@ struct xrCreateSceneMSFT_params
     XrResult result;
 };
 
+struct xrCreateSceneMeshSnapshotANDROID_params
+{
+    XrSceneMeshingTrackerANDROID tracker;
+    const XrSceneMeshSnapshotCreateInfoANDROID *createInfo;
+    XrSceneMeshSnapshotCreationResultANDROID *outSnapshotCreationResult;
+    XrResult result;
+};
+
+struct xrCreateSceneMeshingTrackerANDROID_params
+{
+    XrSession session;
+    const XrSceneMeshingTrackerCreateInfoANDROID *createInfo;
+    XrSceneMeshingTrackerANDROID *tracker;
+    XrResult result;
+};
+
 struct xrCreateSceneObserverMSFT_params
 {
     XrSession session;
@@ -869,6 +994,39 @@ struct xrCreateSession_params
     XrInstance instance;
     const XrSessionCreateInfo *createInfo;
     XrSession *session;
+    XrResult result;
+};
+
+struct xrCreateSoundFieldBD_params
+{
+    XrSpatialAudioRendererBD renderer;
+    const XrSoundFieldConfigBD *config;
+    XrSoundFieldBD *soundField;
+    XrResult result;
+};
+
+struct xrCreateSoundObjectBD_params
+{
+    XrSpatialAudioRendererBD renderer;
+    const XrSoundObjectConfigBD *config;
+    XrSoundObjectBD *soundObject;
+    XrResult result;
+};
+
+struct xrCreateSoundObstacleBD_params
+{
+    XrSpatialAudioRendererBD renderer;
+    const XrSoundObstacleConfigBD *config;
+    const XrSoundTriangleMeshBD *mesh;
+    XrSoundObstacleBD *soundObstacle;
+    XrResult result;
+};
+
+struct xrCreateSoundObstacleMaterialBD_params
+{
+    XrSpatialAudioRendererBD renderer;
+    const XrSoundObstacleMaterialConfigBD *config;
+    XrSoundObstacleMaterialBD *material;
     XrResult result;
 };
 
@@ -937,6 +1095,25 @@ struct xrCreateSpatialAnchorMSFT_params
     XrResult result;
 };
 
+struct xrCreateSpatialAnchorSpaceANDROID_params
+{
+    XrSession session;
+    XrSpatialContextEXT spatialContext;
+    const XrSpatialAnchorCreateInfoEXT *createInfo;
+    XrSpatialEntityIdEXT *anchorEntityId;
+    XrSpace *anchorSpace;
+    XrResult result;
+};
+
+struct xrCreateSpatialAnchorSpaceFromIdANDROID_params
+{
+    XrSession session;
+    XrSpatialContextEXT spatialContext;
+    const XrSpatialAnchorSpaceFromIdCreateInfoANDROID *createInfo;
+    XrSpace *anchorSpace;
+    XrResult result;
+};
+
 struct xrCreateSpatialAnchorSpaceMSFT_params
 {
     XrSession session;
@@ -973,6 +1150,14 @@ struct xrCreateSpatialAnchorsStorageML_params
     XrSession session;
     const XrSpatialAnchorsCreateStorageInfoML *createInfo;
     XrSpatialAnchorsStorageML *storage;
+    XrResult result;
+};
+
+struct xrCreateSpatialAudioRendererBD_params
+{
+    XrSession session;
+    const XrSpatialAudioRendererCreateInfoBD *createInfo;
+    XrSpatialAudioRendererBD *renderer;
     XrResult result;
 };
 
@@ -1048,6 +1233,14 @@ struct xrCreateSpatialPersistenceContextCompleteEXT_params
     XrResult result;
 };
 
+struct xrCreateSpatialRaycastSnapshotANDROID_params
+{
+    XrSpatialContextEXT spatialContext;
+    const XrSpatialRaycastSnapshotCreateInfoANDROID *createInfo;
+    XrSpatialSnapshotEXT *snapshot;
+    XrResult result;
+};
+
 struct xrCreateSpatialUpdateSnapshotEXT_params
 {
     XrSpatialContextEXT spatialContext;
@@ -1061,6 +1254,22 @@ struct xrCreateSwapchain_params
     XrSession session;
     const XrSwapchainCreateInfo *createInfo;
     XrSwapchain *swapchain;
+    XrResult result;
+};
+
+struct xrCreateTrackableImageDatabaseAsyncANDROID_params
+{
+    XrSession session;
+    const XrTrackableImageDatabaseCreateInfoANDROID *createInfo;
+    XrFutureEXT *future;
+    XrResult result;
+};
+
+struct xrCreateTrackableImageDatabaseCompleteANDROID_params
+{
+    XrSession session;
+    XrFutureEXT future;
+    XrCreateTrackableImageDatabaseCompletionANDROID *completion;
     XrResult result;
 };
 
@@ -1182,6 +1391,12 @@ struct xrDestroyEnvironmentDepthSwapchainMETA_params
     XrResult result;
 };
 
+struct xrDestroyEnvironmentRaycasterMETA_params
+{
+    XrEnvironmentRaycasterMETA environmentRaycaster;
+    XrResult result;
+};
+
 struct xrDestroyExportedLocalizationMapML_params
 {
     XrExportedLocalizationMapML map;
@@ -1197,6 +1412,18 @@ struct xrDestroyEyeTrackerFB_params
 struct xrDestroyFaceTracker2FB_params
 {
     XrFaceTracker2FB faceTracker;
+    XrResult result;
+};
+
+struct xrDestroyFaceTrackerANDROID_params
+{
+    XrFaceTrackerANDROID faceTracker;
+    XrResult result;
+};
+
+struct xrDestroyFaceTrackerBD_params
+{
+    XrFaceTrackerBD tracker;
     XrResult result;
 };
 
@@ -1266,6 +1493,12 @@ struct xrDestroyPassthroughHTC_params
     XrResult result;
 };
 
+struct xrDestroyPassthroughLayerANDROID_params
+{
+    XrPassthroughLayerANDROID layer;
+    XrResult result;
+};
+
 struct xrDestroyPassthroughLayerFB_params
 {
     XrPassthroughLayerFB layer;
@@ -1296,6 +1529,18 @@ struct xrDestroySceneMSFT_params
     XrResult result;
 };
 
+struct xrDestroySceneMeshSnapshotANDROID_params
+{
+    XrSceneMeshSnapshotANDROID snapshot;
+    XrResult result;
+};
+
+struct xrDestroySceneMeshingTrackerANDROID_params
+{
+    XrSceneMeshingTrackerANDROID tracker;
+    XrResult result;
+};
+
 struct xrDestroySceneObserverMSFT_params
 {
     XrSceneObserverMSFT sceneObserver;
@@ -1317,6 +1562,30 @@ struct xrDestroySenseDataSnapshotBD_params
 struct xrDestroySession_params
 {
     XrSession session;
+    XrResult result;
+};
+
+struct xrDestroySoundFieldBD_params
+{
+    XrSoundFieldBD soundField;
+    XrResult result;
+};
+
+struct xrDestroySoundObjectBD_params
+{
+    XrSoundObjectBD soundObject;
+    XrResult result;
+};
+
+struct xrDestroySoundObstacleBD_params
+{
+    XrSoundObstacleBD soundObstacle;
+    XrResult result;
+};
+
+struct xrDestroySoundObstacleMaterialBD_params
+{
+    XrSoundObstacleMaterialBD material;
     XrResult result;
 };
 
@@ -1347,6 +1616,12 @@ struct xrDestroySpatialAnchorStoreConnectionMSFT_params
 struct xrDestroySpatialAnchorsStorageML_params
 {
     XrSpatialAnchorsStorageML storage;
+    XrResult result;
+};
+
+struct xrDestroySpatialAudioRendererBD_params
+{
+    XrSpatialAudioRendererBD renderer;
     XrResult result;
 };
 
@@ -1383,6 +1658,12 @@ struct xrDestroySpatialSnapshotEXT_params
 struct xrDestroySwapchain_params
 {
     XrSwapchain swapchain;
+    XrResult result;
+};
+
+struct xrDestroyTrackableImageDatabaseANDROID_params
+{
+    XrTrackableImageDatabaseANDROID database;
     XrResult result;
 };
 
@@ -1445,6 +1726,12 @@ struct xrEnableUserCalibrationEventsML_params
 {
     XrInstance instance;
     const XrUserCalibrationEnableEventsInfoML *enableInfo;
+    XrResult result;
+};
+
+struct xrEndAudioPeriodBD_params
+{
+    XrSpatialAudioRendererBD renderer;
     XrResult result;
 };
 
@@ -1526,6 +1813,15 @@ struct xrEnumerateExternalCamerasOCULUS_params
     XrResult result;
 };
 
+struct xrEnumerateFacialSimulationModesBD_params
+{
+    XrSession session;
+    uint32_t modeCapacityInput;
+    uint32_t *modeCountOutput;
+    XrFacialSimulationModeBD *modes;
+    XrResult result;
+};
+
 struct xrEnumerateInstanceExtensionProperties_params
 {
     const char *layerName;
@@ -1542,6 +1838,15 @@ struct xrEnumerateInteractionRenderModelIdsEXT_params
     uint32_t renderModelIdCapacityInput;
     uint32_t *renderModelIdCountOutput;
     XrRenderModelIdEXT *renderModelIds;
+    XrResult result;
+};
+
+struct xrEnumeratePerformanceMetricsCounterPathsANDROID_params
+{
+    XrInstance instance;
+    uint32_t counterPathCapacityInput;
+    uint32_t *counterPathCountOutput;
+    XrPath *counterPaths;
     XrResult result;
 };
 
@@ -1640,6 +1945,16 @@ struct xrEnumerateSpaceSupportedComponentsFB_params
     XrResult result;
 };
 
+struct xrEnumerateSpatialAnchorAttachableComponentsANDROID_params
+{
+    XrInstance instance;
+    XrSystemId systemId;
+    uint32_t attachableComponentCapacityInput;
+    uint32_t *attachableComponentCountOutput;
+    XrSpatialComponentTypeEXT *attachableComponents;
+    XrResult result;
+};
+
 struct xrEnumerateSpatialCapabilitiesEXT_params
 {
     XrInstance instance;
@@ -1700,6 +2015,15 @@ struct xrEnumerateSupportedAnchorTrackableTypesANDROID_params
     XrResult result;
 };
 
+struct xrEnumerateSupportedAudioSampleRateBD_params
+{
+    XrSession session;
+    uint32_t sampleRateCapacityInput;
+    uint32_t *sampleRateCountOutput;
+    XrAudioSampleRateBD *sampleRates;
+    XrResult result;
+};
+
 struct xrEnumerateSupportedPersistenceAnchorTypesANDROID_params
 {
     XrInstance instance;
@@ -1707,6 +2031,16 @@ struct xrEnumerateSupportedPersistenceAnchorTypesANDROID_params
     uint32_t trackableTypeCapacityInput;
     uint32_t *trackableTypeCountOutput;
     XrTrackableTypeANDROID *trackableTypes;
+    XrResult result;
+};
+
+struct xrEnumerateSupportedSemanticLabelSetsANDROID_params
+{
+    XrInstance instance;
+    XrSystemId systemId;
+    uint32_t supportedSemanticLabelSetsInputCapacity;
+    uint32_t *supportedSemanticLabelSetsOutputCount;
+    XrSceneMeshSemanticLabelSetANDROID *supportedSemanticLabelSets;
     XrResult result;
 };
 
@@ -1827,6 +2161,15 @@ struct xrGetActionStateVector2f_params
     XrSession session;
     const XrActionStateGetInfo *getInfo;
     XrActionStateVector2f *state;
+    XrResult result;
+};
+
+struct xrGetAllSubmeshStatesANDROID_params
+{
+    XrSceneMeshSnapshotANDROID snapshot;
+    uint32_t submeshStateCapacityInput;
+    uint32_t *submeshStateCountOutput;
+    XrSceneSubmeshStateANDROID *submeshStates;
     XrResult result;
 };
 
@@ -1955,6 +2298,13 @@ struct xrGetEyeGazesFB_params
     XrResult result;
 };
 
+struct xrGetFaceCalibrationStateANDROID_params
+{
+    XrFaceTrackerANDROID faceTracker;
+    XrBool32 *faceIsCalibratedOutput;
+    XrResult result;
+};
+
 struct xrGetFaceExpressionWeights2FB_params
 {
     XrFaceTracker2FB faceTracker;
@@ -1968,6 +2318,14 @@ struct xrGetFaceExpressionWeightsFB_params
     XrFaceTrackerFB faceTracker;
     const XrFaceExpressionInfoFB *expressionInfo;
     XrFaceExpressionWeightsFB *expressionWeights;
+    XrResult result;
+};
+
+struct xrGetFaceStateANDROID_params
+{
+    XrFaceTrackerANDROID faceTracker;
+    const XrFaceStateGetInfoANDROID *getInfo;
+    XrFaceStateANDROID *faceStateOutput;
     XrResult result;
 };
 
@@ -1987,10 +2345,33 @@ struct xrGetFacialExpressionsHTC_params
     XrResult result;
 };
 
+struct xrGetFacialSimulationDataBD_params
+{
+    XrFaceTrackerBD tracker;
+    const XrFacialSimulationDataGetInfoBD *info;
+    XrFacialSimulationDataBD *facialData;
+    XrResult result;
+};
+
+struct xrGetFacialSimulationModeBD_params
+{
+    XrFaceTrackerBD tracker;
+    XrFacialSimulationModeBD *mode;
+    XrResult result;
+};
+
 struct xrGetFoveationEyeTrackedStateMETA_params
 {
     XrSession session;
     XrFoveationEyeTrackedStateMETA *foveationState;
+    XrResult result;
+};
+
+struct xrGetHandGestureQCOM_params
+{
+    XrHandTrackerEXT handTracker;
+    XrTime time;
+    XrHandGestureQCOM *handGesture;
     XrResult result;
 };
 
@@ -2096,6 +2477,13 @@ struct xrGetPassthroughPreferencesMETA_params
 {
     XrSession session;
     XrPassthroughPreferencesMETA *preferences;
+    XrResult result;
+};
+
+struct xrGetPerformanceMetricsStateANDROID_params
+{
+    XrSession session;
+    XrPerformanceMetricsStateANDROID *state;
     XrResult result;
 };
 
@@ -2448,6 +2836,14 @@ struct xrGetSpatialGraphNodeBindingPropertiesMSFT_params
     XrResult result;
 };
 
+struct xrGetSubmeshDataANDROID_params
+{
+    XrSceneMeshSnapshotANDROID snapshot;
+    uint32_t submeshDataCount;
+    XrSceneSubmeshDataANDROID *inoutSubmeshData;
+    XrResult result;
+};
+
 struct xrGetSwapchainStateFB_params
 {
     XrSwapchain swapchain;
@@ -2468,6 +2864,14 @@ struct xrGetSystemProperties_params
     XrInstance instance;
     XrSystemId systemId;
     XrSystemProperties *properties;
+    XrResult result;
+};
+
+struct xrGetTrackableImageANDROID_params
+{
+    XrTrackableTrackerANDROID tracker;
+    const XrTrackableGetInfoANDROID *getInfo;
+    XrTrackableImageANDROID *trackable;
     XrResult result;
 };
 
@@ -2492,6 +2896,14 @@ struct xrGetTrackablePlaneANDROID_params
     XrTrackableTrackerANDROID trackableTracker;
     const XrTrackableGetInfoANDROID *getInfo;
     XrTrackablePlaneANDROID *planeOutput;
+    XrResult result;
+};
+
+struct xrGetTrackableQrCodeANDROID_params
+{
+    XrTrackableTrackerANDROID tracker;
+    const XrTrackableGetInfoANDROID *getInfo;
+    XrTrackableQrCodeANDROID *qrCodeOutput;
     XrResult result;
 };
 
@@ -2771,6 +3183,14 @@ struct xrPerfSettingsSetPerformanceLevelEXT_params
     XrResult result;
 };
 
+struct xrPerformEnvironmentRaycastMETA_params
+{
+    XrEnvironmentRaycasterMETA environmentRaycaster;
+    const XrEnvironmentRaycastHitGetInfoMETA *info;
+    XrEnvironmentRaycastHitMETA *hitPoint;
+    XrResult result;
+};
+
 struct xrPersistAnchorANDROID_params
 {
     XrDeviceAnchorPersistenceANDROID handle;
@@ -2849,6 +3269,15 @@ struct xrPublishSpatialAnchorsCompleteML_params
     XrResult result;
 };
 
+struct xrQueryFramesPerBufferRangeBD_params
+{
+    XrSession session;
+    XrAudioSampleRateBD sampleRate;
+    uint32_t *min;
+    uint32_t *max;
+    XrResult result;
+};
+
 struct xrQueryLocalizationMapsML_params
 {
     XrSession session;
@@ -2856,6 +3285,14 @@ struct xrQueryLocalizationMapsML_params
     uint32_t mapCapacityInput;
     uint32_t *mapCountOutput;
     XrLocalizationMapML *maps;
+    XrResult result;
+};
+
+struct xrQueryPerformanceMetricsCounterANDROID_params
+{
+    XrSession session;
+    XrPath counterPath;
+    XrPerformanceMetricsCounterANDROID *counter;
     XrResult result;
 };
 
@@ -2935,6 +3372,20 @@ struct xrReleaseSwapchainImage_params
 {
     XrSwapchain swapchain;
     const XrSwapchainImageReleaseInfo *releaseInfo;
+    XrResult result;
+};
+
+struct xrRemoveTrackableImageDatabaseANDROID_params
+{
+    XrTrackableTrackerANDROID tracker;
+    XrTrackableImageDatabaseANDROID database;
+    XrResult result;
+};
+
+struct xrRequestBodyTrackingFidelityMETA_params
+{
+    XrBodyTrackerFB bodyTracker;
+    XrBodyTrackingFidelityMETA fidelity;
     XrResult result;
 };
 
@@ -3097,6 +3548,13 @@ struct xrSetEnvironmentDepthHandRemovalMETA_params
     XrResult result;
 };
 
+struct xrSetFacialSimulationModeBD_params
+{
+    XrFaceTrackerBD tracker;
+    XrFacialSimulationModeBD mode;
+    XrResult result;
+};
+
 struct xrSetInputDeviceActiveEXT_params
 {
     XrSession session;
@@ -3166,6 +3624,20 @@ struct xrSetMarkerTrackingVARJO_params
     XrResult result;
 };
 
+struct xrSetPassthroughLayerMeshANDROID_params
+{
+    XrPassthroughLayerANDROID layer;
+    const XrPassthroughLayerMeshANDROID *mesh;
+    XrResult result;
+};
+
+struct xrSetPerformanceMetricsStateANDROID_params
+{
+    XrSession session;
+    const XrPerformanceMetricsStateANDROID *state;
+    XrResult result;
+};
+
 struct xrSetPerformanceMetricsStateMETA_params
 {
     XrSession session;
@@ -3185,6 +3657,13 @@ struct xrSetSystemNotificationsML_params
 {
     XrInstance instance;
     const XrSystemNotificationsSetInfoML *info;
+    XrResult result;
+};
+
+struct xrSetTilePropertiesHintMETA_params
+{
+    XrSession session;
+    const XrTilePropertiesHintMETA *properties;
     XrResult result;
 };
 
@@ -3346,6 +3825,20 @@ struct xrStructureTypeToString2KHR_params
     XrResult result;
 };
 
+struct xrSubmitSoundFieldBufferBD_params
+{
+    XrSoundFieldBD soundField;
+    const XrAudioBufferBD *buffer;
+    XrResult result;
+};
+
+struct xrSubmitSoundObjectBufferBD_params
+{
+    XrSoundObjectBD soundObject;
+    const XrAudioBufferBD *buffer;
+    XrResult result;
+};
+
 struct xrSuggestBodyTrackingCalibrationOverrideMETA_params
 {
     XrBodyTrackerFB bodyTracker;
@@ -3494,6 +3987,38 @@ struct xrUpdatePassthroughColorLutMETA_params
     XrResult result;
 };
 
+struct xrUpdateSoundFieldConfigBD_params
+{
+    XrSoundFieldBD soundField;
+    const XrSoundFieldConfigBD *config;
+    XrSoundFieldFlagsBD DECLSPEC_ALIGN(8) flags;
+    XrResult result;
+};
+
+struct xrUpdateSoundObjectConfigBD_params
+{
+    XrSoundObjectBD soundObject;
+    const XrSoundObjectConfigBD *config;
+    XrSoundObjectFlagsBD DECLSPEC_ALIGN(8) flags;
+    XrResult result;
+};
+
+struct xrUpdateSoundObstacleConfigBD_params
+{
+    XrSoundObstacleBD soundObstacle;
+    const XrSoundObstacleConfigBD *config;
+    const XrSoundTriangleMeshBD *mesh;
+    XrSoundObstacleFlagsBD DECLSPEC_ALIGN(8) flags;
+    XrResult result;
+};
+
+struct xrUpdateSoundObstacleMaterialConfigBD_params
+{
+    XrSoundObstacleMaterialBD material;
+    const XrSoundObstacleMaterialConfigBD *config;
+    XrResult result;
+};
+
 struct xrUpdateSpatialAnchorsExpirationAsyncML_params
 {
     XrSpatialAnchorsStorageML storage;
@@ -3514,6 +4039,13 @@ struct xrUpdateSwapchainFB_params
 {
     XrSwapchain swapchain;
     const XrSwapchainStateBaseHeaderFB *state;
+    XrResult result;
+};
+
+struct xrWaitAudioPeriodBD_params
+{
+    XrSpatialAudioRendererBD renderer;
+    XrDuration timeout;
     XrResult result;
 };
 
