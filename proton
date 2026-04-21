@@ -1467,6 +1467,7 @@ default_cpu_limit = {
     "286810"    :  30,  # Hard Truck Apocalypse: Rise of Clans / Ex Machina: Meridian 113
     "70000"     :  28,  # Dino D-Day
     "115320"    :  8,   # Prototype 2
+    "1245620"   :  27,  # Elden Ring
 }
 
 class Session:
