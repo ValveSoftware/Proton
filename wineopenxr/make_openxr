@@ -64,7 +64,7 @@ from enum import Enum
 LOGGER = logging.Logger("openxr")
 LOGGER.addHandler(logging.StreamHandler())
 
-XR_XML_VERSION = "1.1.52"
+XR_XML_VERSION = "1.1.58"
 WINE_XR_VERSION = (1, 1)
 
 # Filenames to create.
