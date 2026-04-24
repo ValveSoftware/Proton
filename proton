@@ -35,6 +35,12 @@ from ctypes import c_void_p
 from ctypes import c_size_t
 from ctypes import c_ssize_t
 
+# PYTHONSAFEPATH might be set, so add the script directory to the path for relative imports
+try:
+    sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+except NameError:
+    pass
+
 from filelock import FileLock
 from random import randrange
 
