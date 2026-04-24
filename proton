@@ -1830,9 +1830,6 @@ class Session:
         if "vkd3dbindlesstb" in self.compat_config:
             append_to_env_str(self.env, "VKD3D_CONFIG", "force_bindless_texel_buffer", ",")
 
-        if os.environ.get("SteamGameId", 0) == "3321460":
-            append_to_env_str(self.env, "VKD3D_CONFIG", "enable_experimental_features", ",")
-
         if "vkd3dfl12" in self.compat_config:
             if "VKD3D_FEATURE_LEVEL" not in self.env:
                 self.env["VKD3D_FEATURE_LEVEL"] = "12_0"
