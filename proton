@@ -1404,6 +1404,7 @@ def default_compat_config():
                 "3280350", #DEATH STRANDING 2: ON THE BEACH
                 "3513350", #Wuthering Waves
                 "3837340", #FINAL FANTASY VII
+                "337000", #Deus Ex: Mankind Divided
                 ]:
             ret.add("noxalia")
 
