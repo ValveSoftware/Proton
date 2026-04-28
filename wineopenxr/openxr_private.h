@@ -115,3 +115,8 @@ extern XrResult load_host_openxr_loader(void);
 extern void register_dispatchable_handle(uint64_t handle, struct openxr_instance_funcs *funcs);
 extern void unregister_dispatchable_handle(uint64_t handle);
 extern struct openxr_instance_funcs *get_dispatch_table(uint64_t handle);
+
+static inline BOOL is_d3d_session(const wine_XrSession *session)
+{
+    return session->session_type == SESSION_TYPE_D3D11 || session->session_type == SESSION_TYPE_D3D12;
+}

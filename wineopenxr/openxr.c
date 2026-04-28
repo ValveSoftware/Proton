@@ -84,11 +84,11 @@ substitute_extensions[] =
     {"XR_KHR_win32_convert_performance_counter_time", "XR_KHR_convert_timespec_time", TRUE, TRUE},
 };
 
-static char *wineopenxr_strdup(const char *src)
+static char *strdupA(const char *s)
 {
-    const size_t l = strlen(src) + 1;
+    size_t l = strlen(s) + 1;
     char *r = heap_alloc(l);
-    strcpy(r, src);
+    memcpy(r, s, l);
     return r;
 }
 
@@ -848,7 +848,7 @@ XrResult WINAPI wine_xrCreateInstance(const XrInstanceCreateInfo *createInfo, Xr
             }
         }
         if (ext_name)
-            new_list[count++] = wineopenxr_strdup(ext_name);
+            new_list[count++] = strdupA(ext_name);
     }
 
     our_createInfo = *createInfo;
@@ -1166,6 +1166,12 @@ XrResult WINAPI wine_xrDestroySession(XrSession session)
         WINE_WARN("xrDestroySession failed: %d\n", res);
         return res;
     }
+
+    EnterCriticalSection(&session_list_lock);
+
+    list_remove(&wine_session->entry);
+
+    LeaveCriticalSection(&session_list_lock);
 
     heap_free(wine_session->projection_views);
     heap_free(wine_session->view_infos);
