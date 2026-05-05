@@ -1885,6 +1885,8 @@ class Session:
         if "__GLVND_DISALLOW_PATCHING" not in self.env:
             self.env["__GLVND_DISALLOW_PATCHING"] = "1"
 
+        self.env.setdefault("WINE_MONO_HIDETYPES", "0")
+
         # NVIDIA software may check for the "DriverStore" by querying the
         # NGXCore\NGXPath registry key via `D3DDDI_QUERYREGISTRY_SERVICEKEY` for
         # a given adapter. In the case where this path cannot be found, the
