@@ -565,6 +565,12 @@ static void setup_steam_registry( u_ISteamClient_SteamClient017 *client, int pip
 
     /* HACK: Bug 23597 Granado Espada Japan (1219160) launcher needs Japanese locale to display correctly */
     if (appid == 1219160) locale = "ja_JP.UTF-8";
+    /* HACK: Bug 26267 Worms Armageddon (217200) Game Set-Up Does Not Respond to Language Preference on Proton
+     * The game reports only English in ISteamApps::GetCurrentGameLanguage() and ISteamApps::GetAvailableGameLanguages().
+     * So LC_MESSAGES is always set to English. Not setting LC_MESSAGES causes the game to use that from the host.
+     * That allows the game to detect the host language settings for the "Create a new team" settings in game.
+     * The "Create a new team" setting is affected by Settings->Time & Language->Region->Country or Region on Windows 10. */
+    else if (appid == 217200) locale = NULL;
 
     if (locale)
     {
