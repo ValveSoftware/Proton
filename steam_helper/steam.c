@@ -361,6 +361,59 @@ static BOOL try_recover_eadesktop_symlink(void)
     return FALSE;
 }
 
+static WCHAR *fixup_cmdline_paths( WCHAR *cmdline )
+{
+    const WCHAR argname[] = L"-game";
+    WCHAR *p, *next, *dos_path, *ret;
+    unsigned int i, len, path_len;
+    char *unix_path;
+
+    if (!wcsstr( cmdline, L"\\Source SDK Base" )) return cmdline;
+    p = cmdline;
+    if (*p != '\"') return cmdline;
+    ++p;
+    while (*p && *p != '\"') ++p;
+    if (!*p) return cmdline;
+    ++p;
+    while (*p)
+    {
+        while (iswspace(*p)) ++p;
+        if (!wcsncmp( p, argname, ARRAY_SIZE(argname) - 1 ) && iswspace(p[ARRAY_SIZE(argname) - 1]))
+        {
+            p += ARRAY_SIZE(argname) - 1;
+            while (iswspace(*p)) ++p;
+            if (*p != '/') continue;
+
+            TRACE( "found path %s.\n", debugstr_w(p) );
+            next = p + 1;
+            while (*next && !iswspace(*next)) ++next;
+            unix_path = malloc( next - p + 1 );
+            for (i = 0; p + i != next; ++i)
+                unix_path[i] = p[i];
+            unix_path[i] = 0;
+            dos_path = wine_get_dos_file_name( unix_path );
+            free( unix_path );
+            if (!dos_path)
+            {
+                TRACE( "Failed to convert unix path to NT.\n" );
+                p = next;
+                continue;
+            }
+            TRACE( "dos path %s.\n", debugstr_w(dos_path) );
+            path_len = wcslen( dos_path );
+            len = wcslen( cmdline ) + 1;
+            ret = malloc( (len + path_len - (next - p)) * sizeof(*ret) );
+            memcpy( ret, cmdline, (p - cmdline) * sizeof(*ret) );
+            memcpy( ret + (p - cmdline), dos_path, path_len * sizeof(*ret) );
+            memcpy( ret + (p - cmdline) + path_len, next, (len - (next - cmdline)) * sizeof(*ret) );
+            HeapFree( GetProcessHeap(), 0, dos_path );
+            return ret;
+        }
+        while (*p && !iswspace(*p)) ++p;
+    }
+    return cmdline;
+}
+
 static HANDLE run_process(BOOL *should_await, BOOL game_process)
 {
     WCHAR *cmdline = GetCommandLineW();
@@ -573,18 +626,20 @@ run:
     }
     else
     {
+        WCHAR *new_cmdline = fixup_cmdline_paths(cmdline);
+
         if (hide_window)
         {
             si.dwFlags |= STARTF_USESHOWWINDOW;
             si.wShowWindow = SW_HIDE;
         }
 
-        if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, flags, NULL, NULL, &si, &pi))
+        if (!CreateProcessW(NULL, new_cmdline, NULL, NULL, FALSE, flags, NULL, NULL, &si, &pi))
         {
             WINE_ERR("Failed to create process %s: %lu\n", wine_dbgstr_w(cmdline), GetLastError());
             return INVALID_HANDLE_VALUE;
         }
-
+        if (new_cmdline != cmdline) free(new_cmdline);
         CloseHandle(pi.hThread);
 
         return pi.hProcess;
