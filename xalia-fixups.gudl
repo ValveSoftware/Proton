@@ -1,2 +1,5 @@
 // Fixes applied to Xalia's main.gudl for Proton. Update these in xalia-fixups.gudl.
 
+if (class_name == "BmLauncher.FormControls") {
+    supported: not child_matches(not supported);
+}
