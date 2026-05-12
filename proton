@@ -1358,6 +1358,7 @@ def default_compat_config():
                 "2067160", #Simulakros
                 "2621010", #Simulakros Demo
                 "368500", #Assassin's Creed Syndicate
+                "1524630", #KeepUp Survival
                 ]:
             try:
                 with open('/proc/modules') as f:
