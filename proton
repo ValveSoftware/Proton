@@ -1106,6 +1106,12 @@ class CompatData:
                         os.makedirs(os.path.dirname(dstvdf), exist_ok=True)
                         shutil.copyfile(srcvdf, dstvdf)
 
+                # Diablo II: Resurrected – Infernal Edition initially needs a ClientSdk directory to not hang on error:
+                # You have not been online in the last 30 days. Please start the game while online to check for any login agreements.
+                if os.environ.get("SteamGameId", 0) == "2536520":
+                    diablo2_clientsdk_dir = "/drive_c/users/steamuser/AppData/Local/Blizzard Entertainment/ClientSdk"
+                    makedirs(self.prefix_dir + diablo2_clientsdk_dir)
+
                 #copy openvr files into place
                 makedirs(self.prefix_dir + "/drive_c/vrclient/bin")
                 try_copy(g_proton.arch_pe_dir("wine", True) + "vrclient.dll", "drive_c/vrclient/bin",
