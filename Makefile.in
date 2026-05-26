@@ -287,7 +287,8 @@ GST_BAD_MESON_ARGS := \
 	-Dauto_features=disabled \
 	-Dvideoparsers=enabled \
 	-Dhls=enabled \
-	-Dmpegtsdemux=enabled
+	-Dmpegtsdemux=enabled \
+	-Daudiobuffersplit=enabled
 
 GST_BAD_DEPENDS = gst_orc gstreamer gst_base
 
