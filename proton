@@ -1493,6 +1493,7 @@ class Session:
 
         if "WINE_DISABLE_GAMESCOPE_MAX_SIZE_HACK" not in self.env and appid in [
                     "3754990",
+                    "3495730"
                 ]:
             self.env["WINE_DISABLE_GAMESCOPE_MAX_SIZE_HACK"] = "1"
 
