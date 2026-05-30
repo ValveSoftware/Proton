@@ -87,7 +87,10 @@ def do_restore(path, manifest):
 
     for file_ in no_write_paths:
         this_file = os.path.join(path, file_)
-        stat_result = os.lstat(this_file)
+        try:
+            stat_result = os.lstat(this_file)
+        except FileNotFoundError:
+            continue
         os.chmod(this_file,
                 stat_result.st_mode & ~(stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH))
 
