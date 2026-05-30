@@ -578,8 +578,13 @@ class Proton:
                             f.write(new_fixup_mtime + "\n")
 
     def missing_default_prefix(self):
-        '''Check if the default prefix dir is missing. Returns true if missing, false if present'''
-        return not os.path.isdir(self.default_pfx_dir)
+        '''Check if the default prefix dir is missing or incomplete. Returns true if missing, false if present'''
+        required_paths = (
+            self.default_pfx_dir + "system.reg",
+            self.default_pfx_dir + "drive_c/windows/system32/d3d8.dll",
+            self.default_pfx_dir + "drive_c/windows/syswow64/d3d8.dll",
+        )
+        return any(not os.path.isfile(path) for path in required_paths)
 
     def make_default_prefix(self):
         with self.dist_lock:
