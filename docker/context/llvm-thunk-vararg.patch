@@ -1,0 +1,190 @@
+From 280a43b6e66c78c640989ac17966adeaccded5c0 Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Tue, 3 Feb 2026 20:40:38 +0100
+Subject: [PATCH] [CodeGen][ARM64EC] Pass variadic arguments on the stack in
+ ARM64EC exit thunks
+
+For variadic functions, the remaining arguments need to be passed on the
+stack. Allocate stack space for them and emit a memcpy call to copy
+arguments passed via x4/x5.
+
+This matches what MSVC does, except MSVC does not use x4. Instead, it
+assumes the arguments can be accessed from the stack pointer and uses that,
+together with x5, for the memcpy call.
+---
+ .../AArch64/AArch64Arm64ECCallLowering.cpp    | 37 ++++++++++----
+ .../CodeGen/AArch64/arm64ec-exit-thunks.ll    | 48 +++++++++++++++----
+ .../AArch64/arm64ec-hybrid-patchable.ll       | 20 ++++----
+ 3 files changed, 77 insertions(+), 28 deletions(-)
+
+diff --git a/llvm/lib/Target/AArch64/AArch64Arm64ECCallLowering.cpp b/llvm/lib/Target/AArch64/AArch64Arm64ECCallLowering.cpp
+index c27a693ceecc..4bed4e8ec513 100644
+--- a/llvm/lib/Target/AArch64/AArch64Arm64ECCallLowering.cpp
++++ b/llvm/lib/Target/AArch64/AArch64Arm64ECCallLowering.cpp
+@@ -160,7 +160,8 @@ void AArch64Arm64ECCallLowering::getThunkArgTypes(
+     // x4 is the address of the arguments on the stack.
+     // x5 is the size of the arguments on the stack.
+     //
+-    // On the x64 side, it's the same except that x5 isn't set.
++    // On the x64 side, x4 and x5 are not set, and the remaining variadic
++    // arguments are passed on the stack.
+     //
+     // If both the ARM and X64 sides are sret, there are only three
+     // arguments in registers.
+@@ -179,16 +180,12 @@ void AArch64Arm64ECCallLowering::getThunkArgTypes(
+ 
+     // x4
+     Arm64ArgTypes.push_back(PtrTy);
+-    X64ArgTypes.push_back(PtrTy);
+-    ArgTranslations.push_back(ThunkArgTranslation::Direct);
+-    // x5
+-    Arm64ArgTypes.push_back(I64Ty);
+-    if (TT != Arm64ECThunkType::Entry) {
+-      // FIXME: x5 isn't actually used by the x64 side; revisit once we
+-      // have proper isel for varargs
+-      X64ArgTypes.push_back(I64Ty);
++    if (TT == Arm64ECThunkType::Entry) {
++      X64ArgTypes.push_back(PtrTy);
+       ArgTranslations.push_back(ThunkArgTranslation::Direct);
+     }
++    // x5
++    Arm64ArgTypes.push_back(I64Ty);
+     return;
+   }
+ 
+@@ -453,7 +450,8 @@ Function *AArch64Arm64ECCallLowering::buildExitThunk(FunctionType *FT,
+   }
+ 
+   for (auto [Arg, X64ArgType, ArgTranslation] : llvm::zip_equal(
+-           make_range(F->arg_begin() + 1, F->arg_end()),
++           make_range(F->arg_begin() + 1,
++                      F->arg_begin() + 1 + ArgTranslations.size()),
+            make_range(X64Ty->param_begin() + X64TyOffset, X64Ty->param_end()),
+            ArgTranslations)) {
+     // Translate arguments from AArch64 calling convention to x86 calling
+@@ -485,6 +483,25 @@ Function *AArch64Arm64ECCallLowering::buildExitThunk(FunctionType *FT,
+     }
+     assert(Args.back()->getType() == X64ArgType);
+   }
++
++  // For variadic functions, the remaining arguments need to be passed on the
++  // stack. Allocate stack space for them and emit a memcpy call to copy
++  // arguments passed via x4/x5.
++  //
++  // This matches what MSVC does, except MSVC does not use x4. Instead, it
++  // assumes the arguments can be accessed from the stack pointer and uses that,
++  // together with x5, for the memcpy call.
++  //
++  // FIXME: We assume here that the argument memory will be at the top of the
++  // stack when performing the call. This assumption holds in practice, but it
++  // is not expressed in IR.
++  if (FT->isVarArg()) {
++    Value *SizeVal = F->getArg(6);
++    Value *VarArgs =
++        IRB.CreateAlloca(Type::getInt8Ty(M->getContext()), SizeVal);
++    IRB.CreateMemCpy(VarArgs, Align(1), F->getArg(5), Align(1), SizeVal);
++  }
++
+   // FIXME: Transfer necessary attributes? sret? anything else?
+ 
+   CallInst *Call = IRB.CreateCall(X64Ty, Callee, Args);
+diff --git a/llvm/test/CodeGen/AArch64/arm64ec-exit-thunks.ll b/llvm/test/CodeGen/AArch64/arm64ec-exit-thunks.ll
+index 6fba6a397457..eb695017a5e2 100644
+--- a/llvm/test/CodeGen/AArch64/arm64ec-exit-thunks.ll
++++ b/llvm/test/CodeGen/AArch64/arm64ec-exit-thunks.ll
+@@ -144,22 +144,52 @@ declare void @has_varargs(...) nounwind;
+ ; CHECK-LABEL:    .def    $iexit_thunk$cdecl$v$varargs;
+ ; CHECK:          .section        .wowthk$aa,"xr",discard,$iexit_thunk$cdecl$v$varargs
+ ; CHECK:          // %bb.0:
+-; CHECK-NEXT:     sub     sp, sp, #64
+-; CHECK-NEXT:     .seh_stackalloc 64
++; CHECK-NEXT:     stp     x19, x20, [sp, #-64]!           // 16-byte Folded Spill
++; CHECK-NEXT:     .seh_save_regp_x x19, 64
++; CHECK-NEXT:     stp     x21, x22, [sp, #16]             // 16-byte Folded Spill
++; CHECK-NEXT:     .seh_save_regp x21, 16
++; CHECK-NEXT:     stp     x25, x26, [sp, #32]             // 16-byte Folded Spill
++; CHECK-NEXT:     .seh_save_regp x25, 32
+ ; CHECK-NEXT:     stp     x29, x30, [sp, #48]             // 16-byte Folded Spill
+-; CHECK-NEXT:     .seh_save_fplr  48
++; CHECK-NEXT:     .seh_save_fplr 48
+ ; CHECK-NEXT:     add     x29, sp, #48
+-; CHECK-NEXT:     .seh_add_fp     48
++; CHECK-NEXT:     .seh_add_fp 48
+ ; CHECK-NEXT:     .seh_endprologue
+ ; CHECK-NEXT:     adrp    x8, __os_arm64x_dispatch_call_no_redirect
+-; CHECK-NEXT:     stp     x4, x5, [sp, #32]
+-; CHECK-NEXT:     ldr     x16, [x8, :lo12:__os_arm64x_dispatch_call_no_redirect]
++; CHECK-NEXT:     mov     x19, x3
++; CHECK-NEXT:     mov     x20, x2
++; CHECK-NEXT:     ldr     x25, [x8, :lo12:__os_arm64x_dispatch_call_no_redirect]
++; CHECK-NEXT:     add     x8, x5, #15
++; CHECK-NEXT:     mov     x21, x1
++; CHECK-NEXT:     lsr     x15, x8, #4
++; CHECK-NEXT:     mov     x22, x0
++; CHECK-NEXT:     mov     x26, x9
++; CHECK-NEXT:     bl      "#__chkstk_arm64ec"
++; CHECK-NEXT:     sub     x0, sp, x15, lsl #4
++; CHECK-NEXT:     mov     sp, x0
++; CHECK-NEXT:     mov     x1, x4
++; CHECK-NEXT:     mov     x2, x5
++; CHECK-NEXT:     bl      "#memcpy"
++; CHECK-NEXT:     sub     sp, sp, #32
++; CHECK-NEXT:     mov     x9, x26
++; CHECK-NEXT:     mov     x0, x22
++; CHECK-NEXT:     mov     x1, x21
++; CHECK-NEXT:     mov     x2, x20
++; CHECK-NEXT:     mov     x3, x19
++; CHECK-NEXT:     mov     x16, x25
+ ; CHECK-NEXT:     blr     x16
++; CHECK-NEXT:     add     sp, sp, #32
+ ; CHECK-NEXT:     .seh_startepilogue
++; CHECK-NEXT:     sub     sp, x29, #48
++; CHECK-NEXT:     .seh_add_fp 48
+ ; CHECK-NEXT:     ldp     x29, x30, [sp, #48]             // 16-byte Folded Reload
+-; CHECK-NEXT:     .seh_save_fplr  48
+-; CHECK-NEXT:     add     sp, sp, #64
+-; CHECK-NEXT:     .seh_stackalloc 64
++; CHECK-NEXT:     .seh_save_fplr 48
++; CHECK-NEXT:     ldp     x25, x26, [sp, #32]             // 16-byte Folded Reload
++; CHECK-NEXT:     .seh_save_regp x25, 32
++; CHECK-NEXT:     ldp     x21, x22, [sp, #16]             // 16-byte Folded Reload
++; CHECK-NEXT:     .seh_save_regp x21, 16
++; CHECK-NEXT:     ldp     x19, x20, [sp], #64             // 16-byte Folded Reload
++; CHECK-NEXT:     .seh_save_regp_x x19, 64
+ ; CHECK-NEXT:     .seh_endepilogue
+ ; CHECK-NEXT:     ret
+ ; CHECK-NEXT:     .seh_endfunclet
+diff --git a/llvm/test/CodeGen/AArch64/arm64ec-hybrid-patchable.ll b/llvm/test/CodeGen/AArch64/arm64ec-hybrid-patchable.ll
+index 7c77832a9d9a..b6599e63e69d 100644
+--- a/llvm/test/CodeGen/AArch64/arm64ec-hybrid-patchable.ll
++++ b/llvm/test/CodeGen/AArch64/arm64ec-hybrid-patchable.ll
+@@ -321,15 +321,17 @@ define dso_local void @caller() nounwind {
+ ; SYM:      [122](sec  0)(fl 0x00)(ty   0)(scl  69) (nx 1) 0x00000000 has_varargs
+ ; SYM-NEXT: AUX indx 124 srch 3
+ ; SYM-NEXT: [124](sec  0)(fl 0x00)(ty  20)(scl   2) (nx 0) 0x00000000 EXP+#has_varargs
+-; SYM-NEXT: [125](sec  0)(fl 0x00)(ty   0)(scl  69) (nx 1) 0x00000000 has_sret
+-; SYM-NEXT: AUX indx 127 srch 3
+-; SYM-NEXT: [127](sec  0)(fl 0x00)(ty  20)(scl   2) (nx 0) 0x00000000 EXP+#has_sret
+-; SYM-NEXT: [128](sec  0)(fl 0x00)(ty   0)(scl  69) (nx 1) 0x00000000 exp
+-; SYM-NEXT: AUX indx 130 srch 3
+-; SYM-NEXT: [130](sec  0)(fl 0x00)(ty  20)(scl   2) (nx 0) 0x00000000 EXP+#exp
+-; SYM-NEXT: [131](sec  0)(fl 0x00)(ty   0)(scl  69) (nx 1) 0x00000000 #has_varargs
++; SYM-NEXT: [125](sec  0)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 #__chkstk_arm64ec
++; SYM-NEXT: [126](sec  0)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 #memcpy
++; SYM-NEXT: [127](sec  0)(fl 0x00)(ty   0)(scl  69) (nx 1) 0x00000000 has_sret
++; SYM-NEXT: AUX indx 129 srch 3
++; SYM-NEXT: [129](sec  0)(fl 0x00)(ty  20)(scl   2) (nx 0) 0x00000000 EXP+#has_sret
++; SYM-NEXT: [130](sec  0)(fl 0x00)(ty   0)(scl  69) (nx 1) 0x00000000 exp
++; SYM-NEXT: AUX indx 132 srch 3
++; SYM-NEXT: [132](sec  0)(fl 0x00)(ty  20)(scl   2) (nx 0) 0x00000000 EXP+#exp
++; SYM-NEXT: [133](sec  0)(fl 0x00)(ty   0)(scl  69) (nx 1) 0x00000000 #has_varargs
+ ; SYM-NEXT: AUX indx 58 srch 3
+-; SYM-NEXT: [133](sec  0)(fl 0x00)(ty   0)(scl  69) (nx 1) 0x00000000 #has_sret
++; SYM-NEXT: [135](sec  0)(fl 0x00)(ty   0)(scl  69) (nx 1) 0x00000000 #has_sret
+ ; SYM-NEXT: AUX indx 68 srch 3
+-; SYM-NEXT: [135](sec  0)(fl 0x00)(ty   0)(scl  69) (nx 1) 0x00000000 #exp
++; SYM-NEXT: [137](sec  0)(fl 0x00)(ty   0)(scl  69) (nx 1) 0x00000000 #exp
+ ; SYM-NEXT: AUX indx 78 srch 3
+-- 
+2.52.0
+
