@@ -1419,25 +1419,26 @@ def default_compat_config():
     return ret
 
 default_cpu_limit = {
-    "19900"     :  16,  # Far Cry 2
-    "298110"    :  16,  # Far Cry 4
-    "20920"     :  16,  # The Witcher 2: Assassins of Kings Enchanced Edition
-    "35130"     :  16,  # Lara Croft and the Guardian of Light
-    "55150"     :  16,  # Warhammer 40,000: Space Marine
-    "204450"    :  16,  # Call of Juarez: Gunslinger
-    "15620"     :  8,   # Warhammer 40,000: Dawn of War II
-    "20570"     :  8,   # Warhammer 40,000: Dawn of War II - Chaos Rising
-    "56400"     :  8,   # Warhammer 40,000: Dawn of War II - Retribution
-    "618970"    :  4,   # Outcast - Second Contact
-    "10150"     :  8,   # Prototype
-    "2229830"   :  1,   # Command & Conquer and The Covert Operations
-    "259170"    :  8,   # Alone in the Dark (2008)
-    "11440"     :  4,   # DiRT
-    "316260"    :  16,  # Disney Universe
-    "286810"    :  30,  # Hard Truck Apocalypse: Rise of Clans / Ex Machina: Meridian 113
-    "70000"     :  28,  # Dino D-Day
-    "115320"    :  8,   # Prototype 2
-    "65540"     :  16,  # Gothic 1 Classic
+    "19900"     :  "16",  # Far Cry 2
+    "298110"    :  "16",  # Far Cry 4
+    "20920"     :  "16",  # The Witcher 2: Assassins of Kings Enchanced Edition
+    "35130"     :  "16",  # Lara Croft and the Guardian of Light
+    "55150"     :  "16",  # Warhammer 40,000: Space Marine
+    "204450"    :  "16",  # Call of Juarez: Gunslinger
+    "15620"     :  "8",   # Warhammer 40,000: Dawn of War II
+    "20570"     :  "8",   # Warhammer 40,000: Dawn of War II - Chaos Rising
+    "56400"     :  "8",   # Warhammer 40,000: Dawn of War II - Retribution
+    "618970"    :  "4",   # Outcast - Second Contact
+    "10150"     :  "8",   # Prototype
+    "2229830"   :  "1",   # Command & Conquer and The Covert Operations
+    "259170"    :  "8",   # Alone in the Dark (2008)
+    "11440"     :  "4",   # DiRT
+    "316260"    :  "16",  # Disney Universe
+    "286810"    :  "30",  # Hard Truck Apocalypse: Rise of Clans / Ex Machina: Meridian 113
+    "70000"     :  "28",  # Dino D-Day
+    "115320"    :  "8",   # Prototype 2
+    "65540"     :  "16",  # Gothic 1 Classic
+    "1038250"   :  "P",   # DIRT 5
 }
 
 class Session:
@@ -1485,7 +1486,7 @@ class Session:
         if "PROTON_CPU_TOPOLOGY" in self.env:
             self.env["WINE_CPU_TOPOLOGY"] = self.env["PROTON_CPU_TOPOLOGY"]
         elif appid in default_cpu_limit:
-            self.env["WINE_CPU_TOPOLOGY"] = str(default_cpu_limit[appid])
+            self.env["WINE_CPU_TOPOLOGY"] = default_cpu_limit[appid]
 
         if "WINE_HIDE_AMD_GPU" not in self.env and appid in [
                     "1282690",
