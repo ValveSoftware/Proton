@@ -331,8 +331,11 @@ def setup_openvr_paths():
     if not openvr_paths or not file_exists(openvr_paths, follow_symlinks=True):
         return
 
-    with open(openvr_paths, 'r') as file:
-        contents = json.load(file)
+    try:
+        with open(openvr_paths, 'r') as file:
+            contents = json.load(file)
+    except json.decoder.JSONDecodeError:
+        return
 
     if 'runtime' not in contents or type(contents['runtime']) != list:
         contents['runtime'] = []
