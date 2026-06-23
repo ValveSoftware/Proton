@@ -1808,6 +1808,7 @@ class Session:
                     "814380", #Sekiro: Shadows Die Twice
                     "374320", #DARK SOULS III
                     "357190", #Ultimate Marvel vs Capcom 3
+                    "730830", #Escape from Monkey Island
                     ]:
                 self.env["PROTON_LIMIT_RESOLUTIONS"] = "32"
 
