@@ -29,7 +29,7 @@ TARGET_ARCH ?= x86_64
 ifeq ($(TARGET_ARCH),x86_64)
 	STEAMRT_IMAGE ?= registry.gitlab.steamos.cloud/proton/steamrt4/sdk/x86_64:4.0.20260331.220802-0
 else ifeq ($(TARGET_ARCH),arm64)
-	STEAMRT_IMAGE ?= registry.gitlab.steamos.cloud/proton/steamrt4/sdk/arm64-llvm:4.0.20260331.220802-0
+	STEAMRT_IMAGE ?= registry.gitlab.steamos.cloud/proton/steamrt4/sdk/arm64-llvm:4.0.20260331.220802-2
 else
 	ARCHS := $(error Unknown TARGET_ARCH=$(TARGET_ARCH))
 endif
