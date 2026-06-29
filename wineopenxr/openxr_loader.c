@@ -718,6 +718,12 @@ XrResult WINAPI xrDestroySession(XrSession session) {
     return params.result;
   }
 
+  EnterCriticalSection(&session_list_lock);
+
+  list_remove(&wine_session->entry);
+
+  LeaveCriticalSection(&session_list_lock);
+
   free(wine_session);
   return XR_SUCCESS;
 }
