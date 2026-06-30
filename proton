@@ -1402,7 +1402,10 @@ def default_compat_config():
             ret.add("fnad3d11")
 
     #options to also be enabled for prerequisite setup steps
-    ret.add("gamedrive")
+    if appid not in [
+                "4920",
+            ]:
+        ret.add("gamedrive")
 
     if "STEAM_COMPAT_APP_ID" in os.environ:
         appid = os.environ["STEAM_COMPAT_APP_ID"]
