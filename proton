@@ -1422,6 +1422,11 @@ def default_compat_config():
                 ]:
             ret.add("nohardwarescheduling")
 
+        if appid in [
+                    "4920",
+                ]:
+            ret.discard("gamedrive")
+
     return ret
 
 default_cpu_limit = {
