@@ -1397,6 +1397,7 @@ def default_compat_config():
                 "287240", # Eterium Demo
                 "280200", # Eterium
                 "312530", # Duck Game
+                "448230", # AsteroidsHD
                 "1072860", # Real Scary
                 ]:
             ret.add("fnad3d11")
