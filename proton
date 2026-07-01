@@ -1403,10 +1403,7 @@ def default_compat_config():
             ret.add("fnad3d11")
 
     #options to also be enabled for prerequisite setup steps
-    if appid not in [
-                "4920",
-            ]:
-        ret.add("gamedrive")
+    ret.add("gamedrive")
 
     if "STEAM_COMPAT_APP_ID" in os.environ:
         appid = os.environ["STEAM_COMPAT_APP_ID"]
@@ -1425,6 +1422,11 @@ def default_compat_config():
                 "2012840", #Portal with RTX
                 ]:
             ret.add("nohardwarescheduling")
+
+        if appid in [
+                    "4920",
+                ]:
+            ret.discard("gamedrive")
 
     return ret
 
