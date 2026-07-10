@@ -1399,6 +1399,7 @@ def default_compat_config():
                 "312530", # Duck Game
                 "448230", # AsteroidsHD
                 "1072860", # Real Scary
+                "512490", # Zombie Estate 2
                 ]:
             ret.add("fnad3d11")
 
