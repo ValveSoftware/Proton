@@ -1,0 +1,216 @@
+From 340d28363ca403e33eb175b8220bb76468eea2c0 Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Tue, 28 Jul 2026 23:13:04 +0200
+Subject: [PATCH 13/13] [LLD][COFF] Emit ARM64X relocations for TLS directory
+
+The current behavior of merging EC and native chunks to have a single TLS
+directory for both views matches the MSVC linker, but it has its shortcomings.
+In addition to merging, that solution requires all TLS callbacks to use
+-arm64xsameaddress, leaving it to the CRT to handle. If the appropriate EC
+object files are not pulled in by linked EC code and thus never have a chance
+to mark the callback with -arm64xsameaddress, this may lead to an invalid image
+that crashes at runtime.
+
+This patch avoids the entire problem by using entirely separate TLS directories
+for EC and native views along with the standard ARM64X dynamic relocation
+mechanism. Since callback lists are now separate, a missing -arm64xsameaddress
+is no longer a problem.
+
+Also, mingw-w64-crt currently doesn't mark its TLS callbacks with
+-arm64xsameaddress. That could be changed if needed, but with this change, it is
+no longer necessary.
+---
+ lld/COFF/Driver.cpp        |  5 +--
+ lld/COFF/Writer.cpp        | 26 ++++++++++++---
+ lld/test/COFF/arm64x-tls.s | 66 ++++++++++++++++++++++++++++++++------
+ 3 files changed, 79 insertions(+), 18 deletions(-)
+
+diff --git a/lld/COFF/Driver.cpp b/lld/COFF/Driver.cpp
+index e17913e416cb..370f332637ab 100644
+--- a/lld/COFF/Driver.cpp
++++ b/lld/COFF/Driver.cpp
+@@ -2836,8 +2836,7 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
+ 
+   if (ctx.hybridSymtab) {
+     // On ARM64X, merge tls chunks, there may be only one true _tls_start and
+-    // _tls_end chunk. Additionally, both views use the same _tls_used and
+-    // _tls_index.
++    // _tls_end chunk.
+     auto maybeReplaceWithNative = [&](StringRef name) {
+       auto nativeSym = dyn_cast_or_null<DefinedRegular>(
+           ctx.hybridSymtab->findUnderscore(name));
+@@ -2847,8 +2846,6 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
+               dyn_cast_or_null<DefinedRegular>(ctx.symtab.findUnderscore(name)))
+         nativeSym->getChunk()->replace(ecSym->getChunk());
+     };
+-    maybeReplaceWithNative("_tls_used");
+-    maybeReplaceWithNative("_tls_index");
+     maybeReplaceWithNative("_tls_start");
+     maybeReplaceWithNative("_tls_end");
+   }
+diff --git a/lld/COFF/Writer.cpp b/lld/COFF/Writer.cpp
+index 3ac26681541b..39f9136b6f8b 100644
+--- a/lld/COFF/Writer.cpp
++++ b/lld/COFF/Writer.cpp
+@@ -266,7 +266,7 @@ private:
+   void sortBySectionOrder(std::vector<Chunk *> &chunks);
+   void fixPartialSectionChars(StringRef name, uint32_t chars);
+   bool fixGnuImportChunks();
+-  void fixTlsAlignment();
++  void fixTlsAlignment(SymbolTable &symtab);
+   PartialSection *createPartialSection(StringRef name, uint32_t outChars);
+   PartialSection *findPartialSection(StringRef name, uint32_t outChars);
+ 
+@@ -814,7 +814,7 @@ void Writer::run() {
+     // Fix up the alignment in the TLS Directory's characteristic field,
+     // if a specific alignment value is needed
+     if (tlsAlignment)
+-      fixTlsAlignment();
++      ctx.forEachSymtab([&](SymbolTable &symtab) { fixTlsAlignment(symtab); });
+   }
+ 
+   if (!ctx.config.pdbPath.empty() && ctx.config.debug) {
+@@ -2914,6 +2914,24 @@ void Writer::createDynamicRelocs() {
+                              LOAD_CONFIG_TABLE * sizeof(data_directory) +
+                              offsetof(data_directory, Size),
+                          ctx.symtab.loadConfigSize);
++
++  auto nativeTlsUsed =
++      dyn_cast_or_null<Defined>(ctx.hybridSymtab->findUnderscore("_tls_used"));
++  auto ecTlsUsed =
++      dyn_cast_or_null<Defined>(ctx.symtab.findUnderscore("_tls_used"));
++  if (nativeTlsUsed || ecTlsUsed) {
++    ctx.dynamicRelocs->add(IMAGE_DVRT_ARM64X_FIXUP_TYPE_VALUE, sizeof(uint32_t),
++                           dataDirOffset64 +
++                               TLS_TABLE * sizeof(data_directory) +
++                               offsetof(data_directory, RelativeVirtualAddress),
++                           Arm64XRelocVal(ecTlsUsed));
++    if (!nativeTlsUsed || !ecTlsUsed)
++      ctx.dynamicRelocs->add(
++          IMAGE_DVRT_ARM64X_FIXUP_TYPE_VALUE, sizeof(uint32_t),
++          dataDirOffset64 + TLS_TABLE * sizeof(data_directory) +
++              offsetof(data_directory, Size),
++          ecTlsUsed ? sizeof(coff_tls_directory64) : 0);
++  }
+ }
+ 
+ PartialSection *Writer::createPartialSection(StringRef name,
+@@ -2932,9 +2950,9 @@ PartialSection *Writer::findPartialSection(StringRef name, uint32_t outChars) {
+   return nullptr;
+ }
+ 
+-void Writer::fixTlsAlignment() {
++void Writer::fixTlsAlignment(SymbolTable &symtab) {
+   Defined *tlsSym =
+-      dyn_cast_or_null<Defined>(ctx.symtab.findUnderscore("_tls_used"));
++      dyn_cast_or_null<Defined>(symtab.findUnderscore("_tls_used"));
+   if (!tlsSym)
+     return;
+ 
+diff --git a/lld/test/COFF/arm64x-tls.s b/lld/test/COFF/arm64x-tls.s
+index 608604fab2fb..4a900edcee67 100644
+--- a/lld/test/COFF/arm64x-tls.s
++++ b/lld/test/COFF/arm64x-tls.s
+@@ -12,7 +12,7 @@
+ // RUN: llvm-lib -machine:arm64x -out:tls.lib tls-aarch64.obj tls-arm64ec.obj loadconfig-arm64ec.obj loadconfig-arm64.obj
+ // RUN: lld-link -machine:arm64x -dll -noentry aarch64.obj arm64ec.obj tls.lib -out:out.dll
+ 
+-// Check that we're using native _tls_index and _tls_used for both views.
++// Check that we're using the right _tls_index and _tls_used for both views.
+ 
+ // RUN: llvm-readobj --coff-tls-directory --hex-dump=.ec --hex-dump=.a64 out.dll | FileCheck %s
+ // CHECK:      Format: COFF-ARM64X
+@@ -20,13 +20,13 @@
+ // CHECK-NEXT: AddressSize: 64bit
+ // CHECK-EMPTY:
+ // CHECK-NEXT: Hex dump of section '.a64':
+-// CHECK-NEXT: 0x180004000 00500000 04500000 00700000 01700000
++// CHECK-NEXT: 0x180004000 00500000 04500000 00800000 01800000
+ // CHECK-EMPTY:
+ // CHECK-NEXT: Hex dump of section '.ec':
+-// CHECK-NEXT: 0x180006000 00500000 04500000 00700000 01700000
++// CHECK-NEXT: 0x180007000 00600000 04600000 00800000 01800000
+ // CHECK-NEXT: TLSDirectory {
+-// CHECK-NEXT:   StartAddressOfRawData: 0x180007000
+-// CHECK-NEXT:   EndAddressOfRawData: 0x180007001
++// CHECK-NEXT:   StartAddressOfRawData: 0x180008000
++// CHECK-NEXT:   EndAddressOfRawData: 0x180008001
+ // CHECK-NEXT:   AddressOfIndex: 0x180005000
+ // CHECK-NEXT:   AddressOfCallBacks: 0x0
+ // CHECK-NEXT:   SizeOfZeroFill: 0x0
+@@ -40,14 +40,14 @@
+ // CHECK-NEXT:   AddressSize: 64bit
+ // CHECK-EMPTY:
+ // CHECK-NEXT:   Hex dump of section '.a64':
+-// CHECK-NEXT:   0x180004000 00500000 04500000 00700000 01700000
++// CHECK-NEXT:   0x180004000 00500000 04500000 00800000 01800000
+ // CHECK-EMPTY:
+ // CHECK-NEXT:   Hex dump of section '.ec':
+-// CHECK-NEXT:   0x180006000 00500000 04500000 00700000 01700000
++// CHECK-NEXT:   0x180007000 00600000 04600000 00800000 01800000
+ // CHECK-NEXT:   TLSDirectory {
+-// CHECK-NEXT:     StartAddressOfRawData: 0x180007000
+-// CHECK-NEXT:     EndAddressOfRawData: 0x180007001
+-// CHECK-NEXT:     AddressOfIndex: 0x180005000
++// CHECK-NEXT:     StartAddressOfRawData: 0x180008000
++// CHECK-NEXT:     EndAddressOfRawData: 0x180008001
++// CHECK-NEXT:     AddressOfIndex: 0x180006000
+ // CHECK-NEXT:     AddressOfCallBacks: 0x0
+ // CHECK-NEXT:     SizeOfZeroFill: 0x0
+ // CHECK-NEXT:     Characteristics [ (0x100000)
+@@ -56,6 +56,52 @@
+ // CHECK-NEXT:   }
+ // CHECK-NEXT: }
+ 
++// RUN: lld-link -machine:arm64x -dll -noentry arm64ec.obj tls.lib -out:out-ec.dll
++// RUN: llvm-readobj --coff-tls-directory out-ec.dll | FileCheck --check-prefix=EC-ONLY %s
++// EC-ONLY:      Format: COFF-ARM64X
++// EC-ONLY-NEXT: Arch: aarch64
++// EC-ONLY-NEXT: AddressSize: 64bit
++// EC-ONLY-NEXT: TLSDirectory {
++// EC-ONLY-NEXT: }
++// EC-ONLY-NEXT: HybridObject {
++// EC-ONLY-NEXT:   Format: COFF-ARM64EC
++// EC-ONLY-NEXT:   Arch: aarch64
++// EC-ONLY-NEXT:   AddressSize: 64bit
++// EC-ONLY-NEXT:   TLSDirectory {
++// EC-ONLY-NEXT:     StartAddressOfRawData: 0x180006000
++// EC-ONLY-NEXT:     EndAddressOfRawData: 0x180006001
++// EC-ONLY-NEXT:     AddressOfIndex: 0x180004000
++// EC-ONLY-NEXT:     AddressOfCallBacks: 0x0
++// EC-ONLY-NEXT:     SizeOfZeroFill: 0x0
++// EC-ONLY-NEXT:     Characteristics [ (0x100000)
++// EC-ONLY-NEXT:       IMAGE_SCN_ALIGN_1BYTES (0x100000)
++// EC-ONLY-NEXT:     ]
++// EC-ONLY-NEXT:   }
++// EC-ONLY-NEXT: }
++
++// RUN: lld-link -machine:arm64x -dll -noentry aarch64.obj tls.lib -out:out-native.dll
++// RUN: llvm-readobj --coff-tls-directory out-native.dll | FileCheck --check-prefix=NATIVE-ONLY %s
++// NATIVE-ONLY:      Format: COFF-ARM64X
++// NATIVE-ONLY-NEXT: Arch: aarch64
++// NATIVE-ONLY-NEXT: AddressSize: 64bit
++// NATIVE-ONLY-NEXT: TLSDirectory {
++// NATIVE-ONLY-NEXT:   StartAddressOfRawData: 0x180006000
++// NATIVE-ONLY-NEXT:   EndAddressOfRawData: 0x180006001
++// NATIVE-ONLY-NEXT:   AddressOfIndex: 0x180005000
++// NATIVE-ONLY-NEXT:   AddressOfCallBacks: 0x0
++// NATIVE-ONLY-NEXT:   SizeOfZeroFill: 0x0
++// NATIVE-ONLY-NEXT:   Characteristics [ (0x100000)
++// NATIVE-ONLY-NEXT:     IMAGE_SCN_ALIGN_1BYTES (0x100000)
++// NATIVE-ONLY-NEXT:   ]
++// NATIVE-ONLY-NEXT: }
++// NATIVE-ONLY-NEXT: HybridObject {
++// NATIVE-ONLY-NEXT:   Format: COFF-ARM64EC
++// NATIVE-ONLY-NEXT:   Arch: aarch64
++// NATIVE-ONLY-NEXT:   AddressSize: 64bit
++// NATIVE-ONLY-NEXT:   TLSDirectory {
++// NATIVE-ONLY-NEXT:   }
++// NATIVE-ONLY-NEXT: }
++
+ #--- tls-aarch64.s
+         .section .defa64,"dr",discard,_tls_index
+         .globl _tls_index
+-- 
+2.53.0
+
