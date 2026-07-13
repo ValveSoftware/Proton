@@ -1,0 +1,615 @@
+From 9e91e648a253586d727c648bba69be4af334cb8e Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Tue, 7 Jul 2026 00:58:41 +0200
+Subject: [PATCH 7/9] [Archive][COFF] Split hybrid COFF files when adding them
+ to an archive (#205160)
+
+Create a separate member for the embedded hybrid object so that it's
+properly reflected in the archive's symbol map and can be correctly
+processed by tools unaware of multi-arch object files. Prefix the
+embedded member name with 'obj.arm64x/' to avoid name collisions.
+
+The split is performed only when targeting COFF archive format.
+
+(cherry picked from commit 6e0311f077601350d5cc70e59c49432d985ca631)
+---
+ llvm/include/llvm/Object/COFF.h               |   1 +
+ llvm/lib/Object/ArchiveWriter.cpp             |  82 ++++++--
+ llvm/lib/Object/COFFObjectFile.cpp            |  67 +++++++
+ llvm/test/tools/llvm-ar/arm64x-hybridobj.yaml |  58 ++++++
+ llvm/test/tools/llvm-ar/arm64x-split.yaml     | 184 ++++++++++++++++++
+ .../test/tools/llvm-lib/arm64x-hybridobj.yaml |  49 +++++
+ 6 files changed, 420 insertions(+), 21 deletions(-)
+ create mode 100644 llvm/test/tools/llvm-ar/arm64x-hybridobj.yaml
+ create mode 100644 llvm/test/tools/llvm-ar/arm64x-split.yaml
+ create mode 100644 llvm/test/tools/llvm-lib/arm64x-hybridobj.yaml
+
+diff --git a/llvm/include/llvm/Object/COFF.h b/llvm/include/llvm/Object/COFF.h
+index dea922553ca3..02efa1ea5561 100644
+--- a/llvm/include/llvm/Object/COFF.h
++++ b/llvm/include/llvm/Object/COFF.h
+@@ -1103,6 +1103,7 @@ public:
+   }
+   std::unique_ptr<MemoryBuffer> getHybridObjectView() const;
+   std::optional<MemoryBufferRef> findHybridObjectSection() const;
++  std::unique_ptr<MemoryBuffer> stripHybridSection() const;
+ 
+   import_directory_iterator import_directory_begin() const;
+   import_directory_iterator import_directory_end() const;
+diff --git a/llvm/lib/Object/ArchiveWriter.cpp b/llvm/lib/Object/ArchiveWriter.cpp
+index 74c0f243d7cf..ebafed49a759 100644
+--- a/llvm/lib/Object/ArchiveWriter.cpp
++++ b/llvm/lib/Object/ArchiveWriter.cpp
+@@ -299,24 +299,24 @@ static bool is64BitKind(object::Archive::Kind Kind) {
+ static void
+ printMemberHeader(raw_ostream &Out, uint64_t Pos, raw_ostream &StringTable,
+                   StringMap<uint64_t> &MemberNames, object::Archive::Kind Kind,
+-                  bool Thin, const NewArchiveMember &M,
++                  bool Thin, const NewArchiveMember &M, StringRef MemberName,
+                   sys::TimePoint<std::chrono::seconds> ModTime, uint64_t Size) {
+   if (isBSDLike(Kind))
+-    return printBSDMemberHeader(Out, Pos, M.MemberName, ModTime, M.UID, M.GID,
++    return printBSDMemberHeader(Out, Pos, MemberName, ModTime, M.UID, M.GID,
+                                 M.Perms, Size);
+-  if (!useStringTable(Thin, M.MemberName))
+-    return printGNUSmallMemberHeader(Out, M.MemberName, ModTime, M.UID, M.GID,
++  if (!useStringTable(Thin, MemberName))
++    return printGNUSmallMemberHeader(Out, MemberName, ModTime, M.UID, M.GID,
+                                      M.Perms, Size);
+   Out << '/';
+   uint64_t NamePos;
+   if (Thin) {
+     NamePos = StringTable.tell();
+-    StringTable << M.MemberName << "/\n";
++    StringTable << MemberName << "/\n";
+   } else {
+-    auto Insertion = MemberNames.insert({M.MemberName, uint64_t(0)});
++    auto Insertion = MemberNames.insert({MemberName, uint64_t(0)});
+     if (Insertion.second) {
+       Insertion.first->second = StringTable.tell();
+-      StringTable << M.MemberName;
++      StringTable << MemberName;
+       if (isCOFFArchive(Kind))
+         StringTable << '\0';
+       else
+@@ -336,6 +336,8 @@ struct MemberData {
+   StringRef Padding;
+   uint64_t PreHeadPadSize = 0;
+   std::unique_ptr<SymbolicFile> SymFile = nullptr;
++  std::string HybridName = "";
++  std::unique_ptr<MemoryBuffer> NativeBuf = nullptr;
+ };
+ } // namespace
+ 
+@@ -844,6 +846,7 @@ computeMemberData(raw_ostream &StringTable, raw_ostream &SymNames,
+ 
+   for (const NewArchiveMember &M : NewMembers) {
+     MemberData &D = Ret.emplace_back();
++    D.Data = M.Buf->getBuffer();
+ 
+     if (NeedSymbols != SymtabWritingMode::NoSymtab || isAIXBigArchive(Kind)) {
+       Expected<std::unique_ptr<SymbolicFile>> SymFileOrErr = getSymbolicFile(
+@@ -853,6 +856,35 @@ computeMemberData(raw_ostream &StringTable, raw_ostream &SymNames,
+       if (!SymFileOrErr)
+         return createFileError(M.MemberName, SymFileOrErr.takeError());
+       D.SymFile = std::move(*SymFileOrErr);
++
++      if (SymMap && D.SymFile.get()) {
++        auto COFFObj = dyn_cast<COFFObjectFile>(D.SymFile.get());
++        std::optional<MemoryBufferRef> HybridView;
++        if (COFFObj && (HybridView = COFFObj->findHybridObjectSection())) {
++          // Strip the hybrid section.
++          D.NativeBuf = COFFObj->stripHybridSection();
++          D.Data = D.NativeBuf->getBuffer();
++
++          // Create a separate archive member for the hybrid ARM64X object.
++          MemberData &ECData = Ret.emplace_back();
++          ECData.Data = HybridView->getBuffer();
++
++          SymFileOrErr =
++              getSymbolicFile(*HybridView, Context, Kind, [&](Error Err) {
++                Warn(createFileError(M.MemberName, std::move(Err)));
++              });
++          if (!SymFileOrErr)
++            return createFileError(M.MemberName, SymFileOrErr.takeError());
++          ECData.SymFile = std::move(*SymFileOrErr);
++
++          // Use obj.arm64ec subdirectory for the hybrid object name.
++          size_t Pos = M.MemberName.find_last_of("/\\");
++          Pos = Pos == StringRef::npos ? 0 : Pos + 1;
++          ECData.HybridName = (M.MemberName.substr(0, Pos) + "obj.arm64ec/" +
++                               M.MemberName.substr(Pos))
++                                  .str();
++        }
++      }
+     }
+   }
+ 
+@@ -885,13 +917,19 @@ computeMemberData(raw_ostream &StringTable, raw_ostream &SymNames,
+   uint64_t PrevOffset = 0;
+   uint64_t NextMemHeadPadSize = 0;
+ 
+-  for (uint32_t Index = 0; Index < Ret.size(); ++Index) {
++  for (uint32_t Index = 0, MemberIndex = 0; Index < Ret.size(); ++Index) {
+     MemberData &D = Ret[Index];
+-    const NewArchiveMember *M = &NewMembers[Index];
++    const NewArchiveMember *M = &NewMembers[MemberIndex];
++    // Native COFF members (resulting from stripping a hybrid object section)
++    // are followed by an extracted hybrid object member, using the same
++    // NewArchiveMember.
++    if (!D.NativeBuf.get())
++      ++MemberIndex;
+     raw_string_ostream Out(D.Header);
+ 
+-    MemoryBufferRef Buf = M->Buf->getMemBufferRef();
+-    D.Data = Thin ? "" : Buf.getBuffer();
++    uint64_t Size = D.Data.size();
++    if (Thin)
++      D.Data = "";
+ 
+     // ld64 expects the members to be 8-byte aligned for 64-bit content and at
+     // least 4-byte aligned for 32-bit content.  Opt for the larger encoding
+@@ -903,17 +941,19 @@ computeMemberData(raw_ostream &StringTable, raw_ostream &SymNames,
+         offsetToAlignment(D.Data.size() + MemberPadding, Align(2));
+     D.Padding = StringRef(PaddingData, MemberPadding + TailPadding);
+ 
++    StringRef MemberName = D.HybridName.size() ? D.HybridName : M->MemberName;
++
+     sys::TimePoint<std::chrono::seconds> ModTime;
+     if (UniqueTimestamps)
+       // Increment timestamp for each file of a given name.
+-      ModTime = sys::toTimePoint(FilenameCount[M->MemberName]++);
++      ModTime = sys::toTimePoint(FilenameCount[MemberName]++);
+     else
+       ModTime = M->ModTime;
+ 
+-    uint64_t Size = Buf.getBufferSize() + MemberPadding;
++    Size += MemberPadding;
+     if (Size > object::Archive::MaxMemberSize) {
+       std::string StringMsg =
+-          "File " + M->MemberName.str() + " exceeds size limit";
++          "File " + MemberName.str() + " exceeds size limit";
+       return make_error<object::GenericBinaryError>(
+           std::move(StringMsg), object::object_error::parse_failed);
+     }
+@@ -921,8 +961,8 @@ computeMemberData(raw_ostream &StringTable, raw_ostream &SymNames,
+     // In the big archive file format, we need to calculate and include the next
+     // member offset and previous member offset in the file member header.
+     if (isAIXBigArchive(Kind)) {
+-      uint64_t OffsetToMemData = Pos + sizeof(object::BigArMemHdrType) +
+-                                 alignTo(M->MemberName.size(), 2);
++      uint64_t OffsetToMemData =
++          Pos + sizeof(object::BigArMemHdrType) + alignTo(MemberName.size(), 2);
+ 
+       if (Index == 0)
+         NextMemHeadPadSize =
+@@ -933,26 +973,26 @@ computeMemberData(raw_ostream &StringTable, raw_ostream &SymNames,
+       D.PreHeadPadSize = NextMemHeadPadSize;
+       Pos += D.PreHeadPadSize;
+       uint64_t NextOffset = Pos + sizeof(object::BigArMemHdrType) +
+-                            alignTo(M->MemberName.size(), 2) + alignTo(Size, 2);
++                            alignTo(MemberName.size(), 2) + alignTo(Size, 2);
+ 
+       // If there is another member file after this, we need to calculate the
+       // padding before the header.
+       if (Index + 1 != Ret.size()) {
+         uint64_t OffsetToNextMemData =
+             NextOffset + sizeof(object::BigArMemHdrType) +
+-            alignTo(NewMembers[Index + 1].MemberName.size(), 2);
++            alignTo(NewMembers[MemberIndex].MemberName.size(), 2);
+         NextMemHeadPadSize =
+             alignToPowerOf2(OffsetToNextMemData,
+                             getMemberAlignment(Ret[Index + 1].SymFile.get())) -
+             OffsetToNextMemData;
+         NextOffset += NextMemHeadPadSize;
+       }
+-      printBigArchiveMemberHeader(Out, M->MemberName, ModTime, M->UID, M->GID,
++      printBigArchiveMemberHeader(Out, MemberName, ModTime, M->UID, M->GID,
+                                   M->Perms, Size, PrevOffset, NextOffset);
+       PrevOffset = Pos;
+     } else {
+       printMemberHeader(Out, Pos, StringTable, MemberNames, Kind, Thin, *M,
+-                        ModTime, Size);
++                        MemberName, ModTime, Size);
+     }
+     Out.flush();
+ 
+@@ -960,7 +1000,7 @@ computeMemberData(raw_ostream &StringTable, raw_ostream &SymNames,
+       Expected<std::vector<unsigned>> SymbolsOrErr =
+           getSymbols(D.SymFile.get(), Index + 1, SymNames, SymMap);
+       if (!SymbolsOrErr)
+-        return createFileError(M->MemberName, SymbolsOrErr.takeError());
++        return createFileError(MemberName, SymbolsOrErr.takeError());
+       D.Symbols = std::move(*SymbolsOrErr);
+       if (D.SymFile)
+         HasObject = true;
+diff --git a/llvm/lib/Object/COFFObjectFile.cpp b/llvm/lib/Object/COFFObjectFile.cpp
+index 819aedb55a9c..2c1cd477201e 100644
+--- a/llvm/lib/Object/COFFObjectFile.cpp
++++ b/llvm/lib/Object/COFFObjectFile.cpp
+@@ -1580,6 +1580,73 @@ std::optional<MemoryBufferRef> COFFObjectFile::findHybridObjectSection() const {
+   return std::nullopt;
+ }
+ 
++std::unique_ptr<MemoryBuffer> COFFObjectFile::stripHybridSection() const {
++  if (getDOSHeader() || getMachine() != COFF::IMAGE_FILE_MACHINE_ARM64)
++    return nullptr;
++
++  for (SectionRef S : sections()) {
++    Expected<StringRef> Name = S.getName();
++    if (errorToBool(Name.takeError()) || *Name != kArm64ECSectionName)
++      continue;
++
++    const coff_section *HybridSec = getCOFFSection(S);
++    if (!HybridSec->SizeOfRawData)
++      continue;
++
++    // Copy the original buffer, skipping the hybrid section content.
++    // The section itself is still present in the COFF headers, so section
++    // indices are not affected by the change, but its size is reduced
++    // to 0.
++    std::unique_ptr<WritableMemoryBuffer> NativeView =
++        WritableMemoryBuffer::getNewUninitMemBuffer(Data.getBufferSize() -
++                                                    HybridSec->SizeOfRawData);
++    uint32_t HybridEnd = HybridSec->PointerToRawData + HybridSec->SizeOfRawData;
++    memcpy(NativeView->getBufferStart(), Data.getBufferStart(),
++           HybridSec->PointerToRawData);
++    memcpy(NativeView->getBufferStart() + HybridSec->PointerToRawData,
++           Data.getBufferStart() + HybridEnd, Data.getBufferSize() - HybridEnd);
++
++    auto getTargetPtr = [&](const void *Ptr) {
++      return NativeView->getBufferStart() +
++             (reinterpret_cast<const char *>(Ptr) - Data.getBufferStart());
++    };
++
++    // Adjust the COFF header, if necessary.
++    if (COFFHeader) {
++      auto Header =
++          reinterpret_cast<coff_file_header *>(getTargetPtr(COFFHeader));
++      if (Header->PointerToSymbolTable >= HybridEnd)
++        Header->PointerToSymbolTable -= HybridSec->SizeOfRawData;
++    } else {
++      auto Header = reinterpret_cast<coff_bigobj_file_header *>(
++          getTargetPtr(COFFBigObjHeader));
++      if (Header->PointerToSymbolTable >= HybridEnd)
++        Header->PointerToSymbolTable -= HybridSec->SizeOfRawData;
++    }
++
++    // Adjust section headers.
++    auto COFFSec = reinterpret_cast<coff_section *>(getTargetPtr(HybridSec));
++    COFFSec->VirtualSize = 0;
++    COFFSec->PointerToRawData = 0;
++    COFFSec->SizeOfRawData = 0;
++
++    for (SectionRef Sec : sections()) {
++      COFFSec =
++          reinterpret_cast<coff_section *>(getTargetPtr(getCOFFSection(Sec)));
++      if (COFFSec->PointerToRawData >= HybridEnd)
++        COFFSec->PointerToRawData -= HybridSec->SizeOfRawData;
++      if (COFFSec->PointerToRelocations >= HybridEnd)
++        COFFSec->PointerToRelocations -= HybridSec->SizeOfRawData;
++      if (COFFSec->PointerToLinenumbers >= HybridEnd)
++        COFFSec->PointerToLinenumbers -= HybridSec->SizeOfRawData;
++    }
++
++    return NativeView;
++  }
++
++  return nullptr;
++}
++
+ bool ImportDirectoryEntryRef::
+ operator==(const ImportDirectoryEntryRef &Other) const {
+   return ImportTable == Other.ImportTable && Index == Other.Index;
+diff --git a/llvm/test/tools/llvm-ar/arm64x-hybridobj.yaml b/llvm/test/tools/llvm-ar/arm64x-hybridobj.yaml
+new file mode 100644
+index 000000000000..89d6fb508846
+--- /dev/null
++++ b/llvm/test/tools/llvm-ar/arm64x-hybridobj.yaml
+@@ -0,0 +1,58 @@
++## Create a hybrid ARM64/ARM64EC object file and verify that it is split when added to an archive.
++# RUN: yaml2obj -DMACHINE=IMAGE_FILE_MACHINE_ARM64 %s -o %t-aarch64.o
++# RUN: yaml2obj -DMACHINE=IMAGE_FILE_MACHINE_ARM64EC %s -o %t-arm64ec.o
++# RUN: llvm-objcopy --add-section=.obj.arm64ec=%t-arm64ec.o --set-section-flags=.obj.arm64ec=debug %t-aarch64.o %t.o
++# RUN: rm -f %t.lib %t-s.lib
++# RUN: llvm-ar rc %t.lib %t.o
++# RUN: llvm-nm --print-armap %t.lib | FileCheck %s
++
++## Check that the object file is split when creating a symbol table.
++# RUN: llvm-ar rcS %t-s.lib %t.o
++# RUN: llvm-nm --print-armap %t-s.lib | FileCheck --check-prefix=NOSPLIT %s
++# NOSPLIT-NOT: obj.arm64ec
++# RUN: llvm-ar s %t-s.lib
++# RUN: llvm-nm --print-armap %t-s.lib | FileCheck %s
++
++# CHECK:      Archive map
++# CHECK-NEXT: sym in arm64x-hybridobj.yaml.tmp.o
++# CHECK-EMPTY:
++# CHECK-NEXT: Archive EC map
++# CHECK-NEXT: sym in obj.arm64ec/arm64x-hybridobj.yaml.tmp.o
++# CHECK-EMPTY:
++# CHECK-EMPTY:
++# CHECK-NEXT: arm64x-hybridobj.yaml.tmp.o:
++# CHECK-NEXT: 00000000 D sym
++# CHECK-EMPTY:
++# CHECK-NEXT: obj.arm64ec/arm64x-hybridobj.yaml.tmp.o:
++# CHECK-NEXT: 00000000 D sym
++
++--- !COFF
++header:
++  Machine:         [[MACHINE]]
++  Characteristics: [  ]
++sections:
++  - Name:            .data
++    Characteristics: [ IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM_READ, IMAGE_SCN_MEM_WRITE ]
++    Alignment:       4
++    SectionData:     '00000000'
++    SizeOfRawData:   4
++symbols:
++  - Name:            .data
++    Value:           0
++    SectionNumber:   1
++    SimpleType:      IMAGE_SYM_TYPE_NULL
++    ComplexType:     IMAGE_SYM_DTYPE_NULL
++    StorageClass:    IMAGE_SYM_CLASS_STATIC
++    SectionDefinition:
++      Length:          4
++      NumberOfRelocations: 0
++      NumberOfLinenumbers: 0
++      CheckSum:        0
++      Number:          2
++  - Name:            sym
++    Value:           0
++    SectionNumber:   1
++    SimpleType:      IMAGE_SYM_TYPE_NULL
++    ComplexType:     IMAGE_SYM_DTYPE_NULL
++    StorageClass:    IMAGE_SYM_CLASS_EXTERNAL
++...
+diff --git a/llvm/test/tools/llvm-ar/arm64x-split.yaml b/llvm/test/tools/llvm-ar/arm64x-split.yaml
+new file mode 100644
+index 000000000000..607d6f3d9954
+--- /dev/null
++++ b/llvm/test/tools/llvm-ar/arm64x-split.yaml
+@@ -0,0 +1,184 @@
++## Test splitting a hybrid ARM64X object file with a .obj.arm64ec section that is not the
++## last section, thereby requiring more fixups.
++
++# RUN: yaml2obj %s -o %t.o
++# RUN: rm -f %t.lib
++# RUN: llvm-ar cr %t.lib %t.o
++# RUN: llvm-readobj --sections --symbols --relocations --hex-dump=.data %t.lib | FileCheck %s
++
++# CHECK:      File: {{.*}}(arm64x-split.yaml.tmp.o)
++# CHECK-NEXT: Format: COFF-ARM64
++# CHECK-NEXT: Arch: aarch64
++# CHECK-NEXT: AddressSize: 64bit
++# CHECK-NEXT: Sections [
++# CHECK-NEXT:   Section {
++# CHECK-NEXT:     Number: 1
++# CHECK-NEXT:     Name: .obj.arm64ec (2F 34 00 00 00 00 00 00)
++# CHECK-NEXT:     VirtualSize: 0x0
++# CHECK-NEXT:     VirtualAddress: 0x0
++# CHECK-NEXT:     RawDataSize: 0
++# CHECK-NEXT:     PointerToRawData: 0x0
++# CHECK-NEXT:     PointerToRelocations: 0x0
++# CHECK-NEXT:     PointerToLineNumbers: 0x0
++# CHECK-NEXT:     RelocationCount: 0
++# CHECK-NEXT:     LineNumberCount: 0
++# CHECK-NEXT:     Characteristics [ (0xC2000040)
++# CHECK-NEXT:       IMAGE_SCN_CNT_INITIALIZED_DATA (0x40)
++# CHECK-NEXT:       IMAGE_SCN_MEM_DISCARDABLE (0x2000000)
++# CHECK-NEXT:       IMAGE_SCN_MEM_READ (0x40000000)
++# CHECK-NEXT:       IMAGE_SCN_MEM_WRITE (0x80000000)
++# CHECK-NEXT:     ]
++# CHECK-NEXT:   }
++# CHECK-NEXT:   Section {
++# CHECK-NEXT:     Number: 2
++# CHECK-NEXT:     Name: .data (2E 64 61 74 61 00 00 00)
++# CHECK-NEXT:     VirtualSize: 0x0
++# CHECK-NEXT:     VirtualAddress: 0x0
++# CHECK-NEXT:     RawDataSize: 4
++# CHECK-NEXT:     PointerToRawData: 0x66
++# CHECK-NEXT:     PointerToRelocations: 0x6A
++# CHECK-NEXT:     PointerToLineNumbers: 0x0
++# CHECK-NEXT:     RelocationCount: 1
++# CHECK-NEXT:     LineNumberCount: 0
++# CHECK-NEXT:     Characteristics [ (0xC0300040)
++# CHECK-NEXT:       IMAGE_SCN_ALIGN_4BYTES (0x300000)
++# CHECK-NEXT:       IMAGE_SCN_CNT_INITIALIZED_DATA (0x40)
++# CHECK-NEXT:       IMAGE_SCN_MEM_READ (0x40000000)
++# CHECK-NEXT:       IMAGE_SCN_MEM_WRITE (0x80000000)
++# CHECK-NEXT:     ]
++# CHECK-NEXT:   }
++# CHECK-NEXT: ]
++# CHECK-NEXT: Relocations [
++# CHECK-NEXT:   Section (2) .data {
++# CHECK-NEXT:     0x0 IMAGE_REL_ARM64_PAGEBASE_REL21 sym (2)
++# CHECK-NEXT:   }
++# CHECK-NEXT: ]
++# CHECK-NEXT: Symbols [
++# CHECK-NEXT:   Symbol {
++# CHECK-NEXT:     Name: .data
++# CHECK-NEXT:     Value: 0
++# CHECK-NEXT:     Section: .data (2)
++# CHECK-NEXT:     BaseType: Null (0x0)
++# CHECK-NEXT:     ComplexType: Null (0x0)
++# CHECK-NEXT:     StorageClass: Static (0x3)
++# CHECK-NEXT:     AuxSymbolCount: 1
++# CHECK-NEXT:     AuxSectionDef {
++# CHECK-NEXT:       Length: 4
++# CHECK-NEXT:       RelocationCount: 0
++# CHECK-NEXT:       LineNumberCount: 0
++# CHECK-NEXT:       Checksum: 0x0
++# CHECK-NEXT:       Number: 1
++# CHECK-NEXT:       Selection: 0x0
++# CHECK-NEXT:     }
++# CHECK-NEXT:   }
++# CHECK-NEXT:   Symbol {
++# CHECK-NEXT:     Name: sym
++# CHECK-NEXT:     Value: 0
++# CHECK-NEXT:     Section: .data (2)
++# CHECK-NEXT:     BaseType: Null (0x0)
++# CHECK-NEXT:     ComplexType: Null (0x0)
++# CHECK-NEXT:     StorageClass: External (0x2)
++# CHECK-NEXT:     AuxSymbolCount: 0
++# CHECK-NEXT:   }
++# CHECK-NEXT: ]
++# CHECK-EMPTY:
++# CHECK-NEXT: Hex dump of section '.data':
++# CHECK-NEXT: 0x00000000 12345678                            .4Vx
++# CHECK-EMPTY:
++# CHECK-NEXT: File: {{.*}}(obj.arm64ec/arm64x-split.yaml.tmp.o)
++# CHECK-NEXT: Format: COFF-ARM64EC
++# CHECK-NEXT: Arch: aarch64
++# CHECK-NEXT: AddressSize: 64bit
++# CHECK-NEXT: Sections [
++# CHECK-NEXT:   Section {
++# CHECK-NEXT:     Number: 1
++# CHECK-NEXT:     Name: .data (2E 64 61 74 61 00 00 00)
++# CHECK-NEXT:     VirtualSize: 0x0
++# CHECK-NEXT:     VirtualAddress: 0x0
++# CHECK-NEXT:     RawDataSize: 4
++# CHECK-NEXT:     PointerToRawData: 0x3C
++# CHECK-NEXT:     PointerToRelocations: 0x0
++# CHECK-NEXT:     PointerToLineNumbers: 0x0
++# CHECK-NEXT:     RelocationCount: 0
++# CHECK-NEXT:     LineNumberCount: 0
++# CHECK-NEXT:     Characteristics [ (0xC0300040)
++# CHECK-NEXT:       IMAGE_SCN_ALIGN_4BYTES (0x300000)
++# CHECK-NEXT:       IMAGE_SCN_CNT_INITIALIZED_DATA (0x40)
++# CHECK-NEXT:       IMAGE_SCN_MEM_READ (0x40000000)
++# CHECK-NEXT:       IMAGE_SCN_MEM_WRITE (0x80000000)
++# CHECK-NEXT:     ]
++# CHECK-NEXT:   }
++# CHECK-NEXT: ]
++# CHECK-NEXT: Relocations [
++# CHECK-NEXT: ]
++# CHECK-NEXT: Symbols [
++# CHECK-NEXT:   Symbol {
++# CHECK-NEXT:     Name: .data
++# CHECK-NEXT:     Value: 0
++# CHECK-NEXT:     Section: .data (1)
++# CHECK-NEXT:     BaseType: Null (0x0)
++# CHECK-NEXT:     ComplexType: Null (0x0)
++# CHECK-NEXT:     StorageClass: Static (0x3)
++# CHECK-NEXT:     AuxSymbolCount: 1
++# CHECK-NEXT:     AuxSectionDef {
++# CHECK-NEXT:       Length: 4
++# CHECK-NEXT:       RelocationCount: 0
++# CHECK-NEXT:       LineNumberCount: 0
++# CHECK-NEXT:       Checksum: 0x0
++# CHECK-NEXT:       Number: 2
++# CHECK-NEXT:       Selection: 0x0
++# CHECK-NEXT:     }
++# CHECK-NEXT:   }
++# CHECK-NEXT:   Symbol {
++# CHECK-NEXT:     Name: sym
++# CHECK-NEXT:     Value: 0
++# CHECK-NEXT:     Section: .data (1)
++# CHECK-NEXT:     BaseType: Null (0x0)
++# CHECK-NEXT:     ComplexType: Null (0x0)
++# CHECK-NEXT:     StorageClass: External (0x2)
++# CHECK-NEXT:     AuxSymbolCount: 0
++# CHECK-NEXT:   }
++# CHECK-NEXT: ]
++# CHECK-EMPTY:
++# CHECK-NEXT: Hex dump of section '.data':
++# CHECK-NEXT: 0x00000000 12345678                            .4Vx
++
++--- !COFF
++header:
++  Machine:         IMAGE_FILE_MACHINE_ARM64
++  Characteristics: [  ]
++sections:
++  - Name:            .obj.arm64ec
++    Characteristics: [ IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM_DISCARDABLE, IMAGE_SCN_MEM_READ, IMAGE_SCN_MEM_WRITE ]
++    VirtualSize:     122
++    SectionData:     41A60100000000004000000003000000000000002E646174610000000000000000000000040000003C000000000000000000000000000000400030C0123456782E646174610000000000000001000000030104000000000000000000000002000000000073796D00000000000000000001000000020004000000
++    SizeOfRawData:   122
++  - Name:            .data
++    Characteristics: [ IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM_READ, IMAGE_SCN_MEM_WRITE ]
++    Alignment:       4
++    SectionData:     '12345678'
++    SizeOfRawData:   4
++    Relocations:
++      - VirtualAddress: 0
++        SymbolName: sym
++        Type: IMAGE_REL_ARM64_PAGEBASE_REL21
++symbols:
++  - Name:            .data
++    Value:           0
++    SectionNumber:   2
++    SimpleType:      IMAGE_SYM_TYPE_NULL
++    ComplexType:     IMAGE_SYM_DTYPE_NULL
++    StorageClass:    IMAGE_SYM_CLASS_STATIC
++    SectionDefinition:
++      Length:          4
++      NumberOfRelocations: 0
++      NumberOfLinenumbers: 0
++      CheckSum:        0
++      Number:          1
++  - Name:            sym
++    Value:           0
++    SectionNumber:   2
++    SimpleType:      IMAGE_SYM_TYPE_NULL
++    ComplexType:     IMAGE_SYM_DTYPE_NULL
++    StorageClass:    IMAGE_SYM_CLASS_EXTERNAL
++...
+diff --git a/llvm/test/tools/llvm-lib/arm64x-hybridobj.yaml b/llvm/test/tools/llvm-lib/arm64x-hybridobj.yaml
+new file mode 100644
+index 000000000000..52ca0c599003
+--- /dev/null
++++ b/llvm/test/tools/llvm-lib/arm64x-hybridobj.yaml
+@@ -0,0 +1,49 @@
++# RUN: yaml2obj -DMACHINE=IMAGE_FILE_MACHINE_ARM64 %s -o %t-aarch64.o
++# RUN: yaml2obj -DMACHINE=IMAGE_FILE_MACHINE_ARM64EC %s -o %t-arm64ec.o
++# RUN: llvm-objcopy --add-section=.obj.arm64ec=%t-arm64ec.o --set-section-flags=.obj.arm64ec=debug %t-aarch64.o %t.o
++# RUN: llvm-lib -machine:arm64x -out:%t.lib %t.o
++# RUN: llvm-nm --print-armap %t.lib | FileCheck %s
++
++# CHECK:      Archive map
++# CHECK-NEXT: sym in {{.*}}arm64x-hybridobj.yaml.tmp.o
++# CHECK-EMPTY:
++# CHECK-NEXT: Archive EC map
++# CHECK-NEXT: sym in {{.*}}obj.arm64ec/arm64x-hybridobj.yaml.tmp.o
++# CHECK-EMPTY:
++# CHECK-EMPTY:
++# CHECK-NEXT: {{.*}}arm64x-hybridobj.yaml.tmp.o:
++# CHECK-NEXT: 00000000 D sym
++# CHECK-EMPTY:
++# CHECK-NEXT: {{.*}}obj.arm64ec/arm64x-hybridobj.yaml.tmp.o:
++# CHECK-NEXT: 00000000 D sym
++
++--- !COFF
++header:
++  Machine:         [[MACHINE]]
++  Characteristics: [  ]
++sections:
++  - Name:            .data
++    Characteristics: [ IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM_READ, IMAGE_SCN_MEM_WRITE ]
++    Alignment:       4
++    SectionData:     '00000000'
++    SizeOfRawData:   4
++symbols:
++  - Name:            .data
++    Value:           0
++    SectionNumber:   1
++    SimpleType:      IMAGE_SYM_TYPE_NULL
++    ComplexType:     IMAGE_SYM_DTYPE_NULL
++    StorageClass:    IMAGE_SYM_CLASS_STATIC
++    SectionDefinition:
++      Length:          4
++      NumberOfRelocations: 0
++      NumberOfLinenumbers: 0
++      CheckSum:        0
++      Number:          2
++  - Name:            sym
++    Value:           0
++    SectionNumber:   1
++    SimpleType:      IMAGE_SYM_TYPE_NULL
++    ComplexType:     IMAGE_SYM_DTYPE_NULL
++    StorageClass:    IMAGE_SYM_CLASS_EXTERNAL
++...
+-- 
+2.53.0
+

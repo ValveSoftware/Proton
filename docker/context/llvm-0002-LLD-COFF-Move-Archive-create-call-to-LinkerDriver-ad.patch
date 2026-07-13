@@ -1,0 +1,88 @@
+From b39dfdac4136feade937d5cffd322e43535694a0 Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Wed, 29 Apr 2026 11:47:12 +0200
+Subject: [PATCH 2/9] [LLD][COFF] Move Archive::create call to
+ LinkerDriver::addBuffer (NFC) (#194346)
+
+This allows an upcoming change to Archive::create() to make decisions
+based on the archive type.
+
+(cherry picked from commit a39ba6ed4c58a83a7e8f95e643282e6b17503e05)
+---
+ lld/COFF/Driver.cpp     |  9 +++++----
+ lld/COFF/InputFiles.cpp | 10 +++++-----
+ lld/COFF/InputFiles.h   |  3 ++-
+ 3 files changed, 12 insertions(+), 10 deletions(-)
+
+diff --git a/lld/COFF/Driver.cpp b/lld/COFF/Driver.cpp
+index ec1875638030..e6afbc345b5c 100644
+--- a/lld/COFF/Driver.cpp
++++ b/lld/COFF/Driver.cpp
+@@ -290,10 +290,10 @@ void LinkerDriver::addBuffer(std::unique_ptr<MemoryBuffer> mb,
+   case file_magic::windows_resource:
+     resources.push_back(mbref);
+     break;
+-  case file_magic::archive:
++  case file_magic::archive: {
++    std::unique_ptr<Archive> file =
++        CHECK(Archive::create(mbref), filename + ": failed to parse archive");
+     if (wholeArchive) {
+-      std::unique_ptr<Archive> file =
+-          CHECK(Archive::create(mbref), filename + ": failed to parse archive");
+       Archive *archive = file.get();
+       make<std::unique_ptr<Archive>>(std::move(file)); // take ownership
+ 
+@@ -307,8 +307,9 @@ void LinkerDriver::addBuffer(std::unique_ptr<MemoryBuffer> mb,
+ 
+       return;
+     }
+-    addFile(make<ArchiveFile>(ctx, mbref));
++    addFile(make<ArchiveFile>(ctx, mbref, file));
+     break;
++  }
+   case file_magic::bitcode:
+     addFile(BitcodeFile::create(ctx, mbref, "", 0, lazy));
+     break;
+diff --git a/lld/COFF/InputFiles.cpp b/lld/COFF/InputFiles.cpp
+index 0cc3aaeba41e..b46d55d7271b 100644
+--- a/lld/COFF/InputFiles.cpp
++++ b/lld/COFF/InputFiles.cpp
+@@ -141,16 +141,16 @@ static bool fixupDllMain(COFFLinkerContext &ctx, llvm::object::Archive *file,
+   return false;
+ }
+ 
+-ArchiveFile::ArchiveFile(COFFLinkerContext &ctx, MemoryBufferRef m)
+-    : InputFile(ctx.symtab, ArchiveKind, m) {}
++ArchiveFile::ArchiveFile(COFFLinkerContext &ctx, MemoryBufferRef m,
++                         std::unique_ptr<Archive> &f)
++    : InputFile(ctx.symtab, ArchiveKind, m) {
++  file.swap(f);
++}
+ 
+ void ArchiveFile::parse() {
+   COFFLinkerContext &ctx = symtab.ctx;
+   SymbolTable *archiveSymtab = &symtab;
+ 
+-  // Parse a MemoryBufferRef as an archive file.
+-  file = CHECK(Archive::create(mb), this);
+-
+   // Try to read symbols from ECSYMBOLS section on ARM64EC.
+   if (ctx.symtab.isEC()) {
+     iterator_range<Archive::symbol_iterator> symbols =
+diff --git a/lld/COFF/InputFiles.h b/lld/COFF/InputFiles.h
+index 21b9aeef21d4..ce8bc6705e48 100644
+--- a/lld/COFF/InputFiles.h
++++ b/lld/COFF/InputFiles.h
+@@ -118,7 +118,8 @@ public:
+ // .lib or .a file.
+ class ArchiveFile : public InputFile {
+ public:
+-  explicit ArchiveFile(COFFLinkerContext &ctx, MemoryBufferRef m);
++  explicit ArchiveFile(COFFLinkerContext &ctx, MemoryBufferRef mb,
++                       std::unique_ptr<Archive> &f);
+   static bool classof(const InputFile *f) { return f->kind() == ArchiveKind; }
+   void parse() override;
+ 
+-- 
+2.53.0
+

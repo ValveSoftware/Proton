@@ -1,0 +1,96 @@
+From e09432bfeda673d2b220fe3070dc4f4af681686e Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Fri, 17 Jul 2026 00:17:00 +0200
+Subject: [PATCH 10/13] [clang][mingw] Try both native and ARM64EC triples when
+ looking for a sysroot on the ARM64EC target (#210017)
+
+Similarly to MSVC, a MinGW toolchain may provide support for both ARM64
+and ARM64EC in a single sysroot. Structuring the toolchain this way has
+the additional advantage of seamlessly supporting linking ARM64X images.
+
+Support this configuration in findClangRelativeSysroot.
+
+(cherry picked from commit 205a66201235c03b892e075ae548d6ea12f024a3)
+---
+ clang/lib/Driver/ToolChains/MinGW.cpp | 15 +++++++++++++++
+ clang/test/Driver/mingw-sysroot.cpp   | 20 ++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
+
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index d935f1b8a91c..6125edabc0d4 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -472,11 +472,26 @@ findClangRelativeSysroot(const Driver &D, const llvm::Triple &LiteralTriple,
+                          const llvm::Triple &T, std::string &SubdirName) {
+   llvm::SmallVector<llvm::SmallString<32>, 4> Subdirs;
+   Subdirs.emplace_back(LiteralTriple.str());
++  // On ARM64EC targets, also try native aarch64 sysroot, which may contain
++  // support for both targets.
++  if (LiteralTriple.isWindowsArm64EC()) {
++    llvm::Triple NativeTriple(LiteralTriple);
++    NativeTriple.setArchName("aarch64");
++    Subdirs.emplace_back(NativeTriple.str());
++  }
+   Subdirs.emplace_back(T.str());
+   Subdirs.emplace_back(T.getArchName());
+   Subdirs.back() += "-w64-mingw32";
+   Subdirs.emplace_back(T.getArchName());
+   Subdirs.back() += "-w64-mingw32ucrt";
++  if (T.isWindowsArm64EC()) {
++    llvm::Triple NativeTriple(T);
++    NativeTriple.setArchName("aarch64");
++    Subdirs.emplace_back(NativeTriple.str());
++
++    Subdirs.emplace_back("aarch64-w64-mingw32");
++    Subdirs.emplace_back("aarch64-w64-mingw32ucrt");
++  }
+   StringRef ClangRoot = llvm::sys::path::parent_path(D.Dir);
+   StringRef Sep = llvm::sys::path::get_separator();
+   for (StringRef CandidateSubdir : Subdirs) {
+diff --git a/clang/test/Driver/mingw-sysroot.cpp b/clang/test/Driver/mingw-sysroot.cpp
+index 8e46d23c1782..372df0509c8d 100644
+--- a/clang/test/Driver/mingw-sysroot.cpp
++++ b/clang/test/Driver/mingw-sysroot.cpp
+@@ -10,8 +10,11 @@
+ // RUN: rm -rf %t.dir/testroot-clang
+ // RUN: mkdir -p %t.dir/testroot-clang/bin
+ // RUN: ln -s %clang %t.dir/testroot-clang/bin/x86_64-w64-mingw32-clang
++// RUN: ln -s %clang %t.dir/testroot-clang/bin/aarch64-w64-mingw32-clang
++// RUN: ln -s %clang %t.dir/testroot-clang/bin/arm64ec-w64-mingw32-clang
+ // RUN: ln -s %S/Inputs/mingw_ubuntu_posix_tree/usr/x86_64-w64-mingw32 %t.dir/testroot-clang/x86_64-w64-mingw32
+ // RUN: ln -s %S/Inputs/mingw_arch_tree/usr/i686-w64-mingw32 %t.dir/testroot-clang/i686-w64-mingw32
++// RUN: ln -s %S/Inputs/mingw_ubuntu_posix_tree/usr/x86_64-w64-mingw32 %t.dir/testroot-clang/aarch64-w64-mingw32
+ 
+ // RUN: rm -rf %t.dir/testroot-clang-native
+ // RUN: mkdir -p %t.dir/testroot-clang-native/bin
+@@ -23,6 +26,7 @@
+ // RUN: mkdir -p %t.dir/testroot-custom-triple/bin
+ // RUN: ln -s %clang %t.dir/testroot-custom-triple/bin/clang
+ // RUN: ln -s %S/Inputs/mingw_ubuntu_posix_tree/usr/x86_64-w64-mingw32 %t.dir/testroot-custom-triple/x86_64-w64-mingw32foo
++// RUN: ln -s %S/Inputs/mingw_ubuntu_posix_tree/usr/x86_64-w64-mingw32 %t.dir/testroot-custom-triple/aarch64-w64-mingw32foo
+ 
+ // If we find a gcc in the path with the right triplet prefix, pick that as
+ // sysroot:
+@@ -103,3 +107,19 @@
+ 
+ // RUN: %t.dir/testroot-custom-triple/bin/clang -no-canonical-prefixes --target=x86_64-w64-mingw32foo -rtlib=compiler-rt -stdlib=libstdc++ --sysroot="" -c -### %s 2>&1 | FileCheck -check-prefix=CHECK_TESTROOT_CUSTOM_TRIPLE %s
+ // CHECK_TESTROOT_CUSTOM_TRIPLE: "{{[^"]+}}/testroot-custom-triple{{/|\\\\}}x86_64-w64-mingw32foo{{/|\\\\}}include"
++
++// Check that the arm64ec target uses the aarch64 sysroot if a separate arm64ec sysroot is not found.
++
++// RUN: %t.dir/testroot-clang/bin/aarch64-w64-mingw32-clang -no-canonical-prefixes --target=aarch64-w64-mingw32 -rtlib=compiler-rt -stdlib=libstdc++ --sysroot="" -c -### %s 2>&1 | FileCheck -check-prefix=CHECK_TESTROOT_CLANG_AARCH64 %s
++// RUN: %t.dir/testroot-clang/bin/arm64ec-w64-mingw32-clang -no-canonical-prefixes --target=arm64ec-w64-mingw32 -rtlib=compiler-rt -stdlib=libstdc++ --sysroot="" -c -### %s 2>&1 | FileCheck -check-prefix=CHECK_TESTROOT_CLANG_AARCH64 %s
++// CHECK_TESTROOT_CLANG_AARCH64: "{{[^"]+}}/testroot-clang{{/|\\\\}}aarch64-w64-mingw32{{/|\\\\}}include"
++
++// RUN: %t.dir/testroot-custom-triple/bin/clang -no-canonical-prefixes --target=aarch64-w64-mingw32foo -rtlib=compiler-rt -stdlib=libstdc++ --sysroot="" -c -### %s 2>&1 | FileCheck -check-prefix=CHECK_TESTROOT_CUSTOM_TRIPLE_AARCH64 %s
++// RUN: %t.dir/testroot-custom-triple/bin/clang -no-canonical-prefixes --target=arm64ec-w64-mingw32foo -rtlib=compiler-rt -stdlib=libstdc++ --sysroot="" -c -### %s 2>&1 | FileCheck -check-prefix=CHECK_TESTROOT_CUSTOM_TRIPLE_AARCH64 %s
++// CHECK_TESTROOT_CUSTOM_TRIPLE_AARCH64: "{{[^"]+}}/testroot-custom-triple{{/|\\\\}}aarch64-w64-mingw32foo{{/|\\\\}}include"
++
++// Check that the arm64ec sysroot is still preferred when available.
++
++// RUN: ln -s %S/Inputs/mingw_ubuntu_posix_tree/usr/x86_64-w64-mingw32 %t.dir/testroot-custom-triple/arm64ec-w64-mingw32foo
++// RUN: %t.dir/testroot-custom-triple/bin/clang -no-canonical-prefixes --target=arm64ec-w64-mingw32foo -rtlib=compiler-rt -stdlib=libstdc++ --sysroot="" -c -### %s 2>&1 | FileCheck -check-prefix=CHECK_TESTROOT_CUSTOM_TRIPLE_ARM64EC %s
++// CHECK_TESTROOT_CUSTOM_TRIPLE_ARM64EC: "{{[^"]+}}/testroot-custom-triple{{/|\\\\}}arm64ec-w64-mingw32foo{{/|\\\\}}include"
+-- 
+2.53.0
+

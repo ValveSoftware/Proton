@@ -1,0 +1,100 @@
+From 1f6e37814b7c23294b908518e3073e3c86086e7b Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Thu, 23 Apr 2026 10:57:05 +0200
+Subject: [PATCH 1/9] [LLD][MinGW] Introduce --native-def argument (#193598)
+
+This is the MinGW counterpart of -defarm64native.
+
+When --native-def is not specified, pass the input def file as
+-defarm64native on the ARM64X target as well. This reflects the most
+common intent when providing a def file for ARM64X and, since the
+regular def file is already passed as an input file, it feels consistent
+to allow a proper build without requiring additional arguments. This can
+be overridden by passing an empty value with --native-def= if using only
+the EC def file is desired.
+
+(cherry picked from commit 2aadaae9a0ba8d4858897e8453ceb891cd27a4c1)
+---
+ lld/MinGW/Driver.cpp       | 14 ++++++++++++--
+ lld/MinGW/Options.td       |  3 +++
+ lld/test/MinGW/driver.test | 16 ++++++++++++++++
+ 3 files changed, 31 insertions(+), 2 deletions(-)
+
+diff --git a/lld/MinGW/Driver.cpp b/lld/MinGW/Driver.cpp
+index 70639573b397..513c83403b39 100644
+--- a/lld/MinGW/Driver.cpp
++++ b/lld/MinGW/Driver.cpp
+@@ -351,6 +351,12 @@ bool link(ArrayRef<const char *> argsArr, llvm::raw_ostream &stdoutOS,
+       add("-functionpadmin:" + v);
+   }
+ 
++  if (auto *a = args.getLastArg(OPT_native_def)) {
++    StringRef v = a->getValue();
++    if (!v.empty())
++      add("-defarm64native:" + v);
++  }
++
+   if (args.hasFlag(OPT_fatal_warnings, OPT_no_fatal_warnings, false))
+     add("-WX");
+   else
+@@ -573,10 +579,14 @@ bool link(ArrayRef<const char *> argsArr, llvm::raw_ostream &stdoutOS,
+   for (auto *a : args) {
+     switch (a->getOption().getID()) {
+     case OPT_INPUT:
+-      if (StringRef(a->getValue()).ends_with_insensitive(".def"))
++      if (StringRef(a->getValue()).ends_with_insensitive(".def")) {
+         add("-def:" + StringRef(a->getValue()));
+-      else
++        if (args.getLastArgValue(OPT_m) == "arm64xpe" &&
++            !args.hasArg(OPT_native_def))
++          add("-defarm64native:" + StringRef(a->getValue()));
++      } else {
+         add(prefix + StringRef(a->getValue()));
++      }
+       break;
+     case OPT_l:
+       add(prefix +
+diff --git a/lld/MinGW/Options.td b/lld/MinGW/Options.td
+index 66643be562d3..e6626b582bcd 100644
+--- a/lld/MinGW/Options.td
++++ b/lld/MinGW/Options.td
+@@ -229,6 +229,9 @@ def : F<"build-id">, Alias<build_id>, HelpText<"Alias for --build-id=">;
+ def functionpadmin: J<"functionpadmin=">, HelpText<"Prepares an image for hotpatching">,
+   MetaVarName<"<arg>">;
+ def : F<"functionpadmin">, Alias<functionpadmin>, HelpText<"Alias for --functionpadmin=">;
++defm native_def
++    : EEq<"native-def",
++          "Use a module-definition file for the native view in a hybrid image">;
+ 
+ // Alias
+ def alias_Bdynamic_call_shared: Flag<["-"], "call_shared">, Alias<Bdynamic>;
+diff --git a/lld/test/MinGW/driver.test b/lld/test/MinGW/driver.test
+index e3332a456c2a..2d723f68255e 100644
+--- a/lld/test/MinGW/driver.test
++++ b/lld/test/MinGW/driver.test
+@@ -55,6 +55,22 @@ DEF1: -def:foo.def
+ RUN: ld.lld -### foo.o -m i386pep -shared FOO.DEF 2>&1 | FileCheck -check-prefix=DEF2 %s
+ DEF2: -def:FOO.DEF
+ 
++RUN: ld.lld -### foo.o -m arm64xpe -shared foo.def 2>&1 | FileCheck -check-prefix=ARM64XDEF %s
++ARM64XDEF:      -def:foo.def
++ARM64XDEF-SAME: -defarm64native:foo.def
++
++RUN: ld.lld -### foo.o -m arm64xpe -shared foo.def --native-def=bar.def 2>&1 | FileCheck -check-prefix=ARM64XDEF2 %s
++ARM64XDEF2: -defarm64native:bar.def
++ARM64XDEF2-SAME:      -def:foo.def
++
++RUN: ld.lld -### foo.o -m arm64xpe -shared foo.def --native-def= 2>&1 | FileCheck -check-prefix=ARM64XDEF3 %s
++ARM64XDEF3-NOT: -defarm64native
++ARM64XDEF3:     -def:foo.def
++
++RUN: ld.lld -### foo.o -m arm64xpe -shared --native-def=foo.def 2>&1 | FileCheck -check-prefix=ARM64XDEF4 %s
++ARM64XDEF4-NOT: -def:
++ARM64XDEF4:     -defarm64native:foo.def
++
+ RUN: ld.lld -### foo.o -m i386pep -obar.exe 2>&1 | FileCheck -check-prefix=OUT %s
+ RUN: ld.lld -### foo.o -m i386pep -o bar.exe 2>&1 | FileCheck -check-prefix=OUT %s
+ OUT: -out:bar.exe
+-- 
+2.53.0
+

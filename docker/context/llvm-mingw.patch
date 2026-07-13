@@ -1,0 +1,362 @@
+diff --git a/Dockerfile.dev b/Dockerfile.dev
+index 989078e..bdb0588 100644
+--- a/Dockerfile.dev
++++ b/Dockerfile.dev
+@@ -148,5 +148,8 @@ RUN cd test && \
+ 
+ RUN cd test && \
+     for arch in $TOOLCHAIN_ARCHS; do \
++        case $arch in
++        arm64ec) continue ;;
++        esac
+         cp $TOOLCHAIN_PREFIX/$arch-w64-mingw32/bin/*.dll $arch || exit 1; \
+     done
+diff --git a/build-compiler-rt.sh b/build-compiler-rt.sh
+index 98b424c..0352fa5 100755
+--- a/build-compiler-rt.sh
++++ b/build-compiler-rt.sh
+@@ -134,7 +134,26 @@ if [ -n "$NATIVE" ]; then
+     exit 0
+ fi
+ 
++ARM64X_FLAGS=""
++if [ -z "$SANITIZERS" ]; then
++    for arch in $ARCHS; do
++        case $arch in
++        arm64ec) ARM64X_FLAGS="-marm64x" ;;
++        esac
++    done
++fi
++
+ for arch in $ARCHS; do
++    FLAGS=""
++    case $arch in
++    aarch64)
++        FLAGS=$ARM64X_FLAGS
++        ;;
++    arm64ec)
++        continue
++        ;;
++    esac
++
+     [ -z "$CLEAN" ] || rm -rf build-$arch$BUILD_SUFFIX
+     mkdir -p build-$arch$BUILD_SUFFIX
+     cd build-$arch$BUILD_SUFFIX
+@@ -160,17 +179,12 @@ for arch in $ARCHS; do
+         -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
+         -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ONLY \
+         -DSANITIZER_CXX_ABI=libc++ \
+-        -DCMAKE_C_FLAGS_INIT="$CFGUARD_CFLAGS" \
+-        -DCMAKE_CXX_FLAGS_INIT="$CFGUARD_CFLAGS" \
++        -DCMAKE_C_FLAGS_INIT="$CFGUARD_CFLAGS $FLAGS" \
++        -DCMAKE_CXX_FLAGS_INIT="$CFGUARD_CFLAGS $FLAGS" \
++        -DCMAKE_ASM_FLAGS_INIT="$FLAGS" \
+         $SRC_DIR
+     cmake --build . ${CORES:+-j${CORES}}
+ 
+-    # Skip install on arm64ec, we merge archives instead.
+-    if [ "$arch" = "arm64ec" ]; then
+-        cd ..
+-        continue
+-    fi
+-
+     cmake --install . --prefix "$INSTALL_PREFIX"
+     mkdir -p "$PREFIX/$arch-w64-mingw32/bin"
+     if [ -n "$SANITIZERS" ]; then
+@@ -198,20 +212,6 @@ for arch in $ARCHS; do
+     cd ..
+ done
+ 
+-# Clang expects the aarch64 compiler-rt name on ARM64EC. While this could be adjusted
+-# in Clang, the current approach mirrors MSVC, where the core CRT is provided as
+-# archives containing both EC and native support. Ideally, the LLVM build system would
+-# handle this automatically, but for now we can merge it here.
+-for arch in $ARCHS; do
+-    if [ "$arch" = "arm64ec" ]; then
+-        rm -f "$INSTALL_PREFIX/lib/windows/libclang_rt.builtins-aarch64.a" \
+-              "$INSTALL_PREFIX/lib/windows/libclang_rt.builtins-arm64ec.a"
+-        "$PREFIX/bin/llvm-lib" -machine:arm64ec "-out:$INSTALL_PREFIX/lib/windows/libclang_rt.builtins-aarch64.a" \
+-                               build-aarch64/lib/windows/libclang_rt.builtins-aarch64.a \
+-                               build-arm64ec/lib/windows/libclang_rt.builtins-arm64ec.a
+-    fi
+-done
+-
+ if [ "$INSTALL_PREFIX" != "$CLANG_RESOURCE_DIR" ]; then
+     # symlink to system headers - skip copy
+     rm -rf "$INSTALL_PREFIX/include"
+diff --git a/build-libcxx.sh b/build-libcxx.sh
+index dcf4332..c8160dd 100755
+--- a/build-libcxx.sh
++++ b/build-libcxx.sh
+@@ -72,6 +72,12 @@ else
+     esac
+ fi
+ 
++for arch in $ARCHS; do
++    case $arch in
++    arm64ec) ARM64X_FLAGS="-marm64x" ;;
++    esac
++done
++
+ for arch in $ARCHS; do
+     [ -z "$CLEAN" ] || rm -rf build-$arch
+     mkdir -p build-$arch
+@@ -79,12 +85,20 @@ for arch in $ARCHS; do
+     [ -n "$NO_RECONF" ] || rm -rf CMake*
+ 
+     EXTRA_CFLAGS=""
++    EXTRA_LDFLAGS=""
+     case $arch in
+     i686|x86_64)
+         # Force using the mingw stdio functions, for correct long double
+         # printing.
+         EXTRA_CFLAGS="-D__USE_MINGW_ANSI_STDIO=1"
+         ;;
++    aarch64)
++        EXTRA_CFLAGS=$ARM64X_FLAGS
++        EXTRA_LDFLAGS=$ARM64X_FLAGS
++        ;;
++    arm64ec)
++        continue
++        ;;
+     esac
+ 
+     cmake \
+@@ -119,6 +133,8 @@ for arch in $ARCHS; do
+         -DLIBCXXABI_LIBDIR_SUFFIX="" \
+         -DCMAKE_C_FLAGS_INIT="$CFGUARD_CFLAGS $EXTRA_CFLAGS" \
+         -DCMAKE_CXX_FLAGS_INIT="$CFGUARD_CFLAGS $EXTRA_CFLAGS" \
++        -DCMAKE_ASM_FLAGS_INIT="$EXTRA_CFLAGS" \
++        -DCMAKE_SHARED_LINKER_FLAGS="$EXTRA_LDFLAGS" \
+         ..
+ 
+     cmake --build . ${CORES:+-j${CORES}}
+diff --git a/build-mingw-w64-libraries.sh b/build-mingw-w64-libraries.sh
+index 6923558..8ba39a8 100755
+--- a/build-mingw-w64-libraries.sh
++++ b/build-mingw-w64-libraries.sh
+@@ -55,18 +55,36 @@ if command -v gmake >/dev/null; then
+     MAKE=gmake
+ fi
+ 
++ARM64X_FLAGS=""
++for arch in $ARCHS; do
++    case $arch in
++    arm64ec) ARM64X_FLAGS="-marm64x" ;;
++    esac
++done
++
+ cd mingw-w64/mingw-w64-libraries
+ for lib in winpthreads winstorecompat; do
+     cd $lib
++    FLAGS=""
+     for arch in $ARCHS; do
++        case $arch in
++        aarch64)
++            FLAGS=$ARM64X_FLAGS
++            ;;
++        arm64ec)
++            continue
++            ;;
++        esac
++
+         [ -z "$CLEAN" ] || rm -rf build-$arch
+         mkdir -p build-$arch
+         cd build-$arch
+         arch_prefix="$PREFIX/$arch-w64-mingw32"
+         ../configure --host=$arch-w64-mingw32 --prefix="$arch_prefix" --libdir="$arch_prefix/lib" \
+             --enable-silent-rules \
+-            CFLAGS="$USE_CFLAGS" \
+-            CXXFLAGS="$USE_CFLAGS"
++            CFLAGS="$USE_CFLAGS $FLAGS" \
++            CXXFLAGS="$USE_CFLAGS $FLAGS" \
++            LDFLAGS="$FLAGS"
+         $MAKE -j$CORES
+         $MAKE install
+         cd ..
+diff --git a/build-mingw-w64.sh b/build-mingw-w64.sh
+index e5f3916..82cc577 100755
+--- a/build-mingw-w64.sh
++++ b/build-mingw-w64.sh
+@@ -105,6 +105,10 @@ $MAKE install
+ cd ../..
+ if [ -z "$SKIP_INCLUDE_TRIPLET_PREFIX" ]; then
+     for arch in $ARCHS; do
++        case $arch in
++        arm64ec) continue ;;
++        esac
++
+         mkdir -p "$PREFIX/$arch-w64-mingw32"
+         if [ ! -e "$PREFIX/$arch-w64-mingw32/include" ]; then
+             ln -sfn ../generic-w64-mingw32/include "$PREFIX/$arch-w64-mingw32/include"
+@@ -112,17 +116,24 @@ if [ -z "$SKIP_INCLUDE_TRIPLET_PREFIX" ]; then
+     done
+ fi
+ 
++ARM64X_FLAGS=""
++for arch in $ARCHS; do
++    case $arch in
++    arm64ec) ARM64X_FLAGS=" --enable-arm64x" ;;
++    esac
++done
++
+ cd mingw-w64-crt
+ for arch in $ARCHS; do
+-    [ -z "$CLEAN" ] || rm -rf build-$arch
+-    mkdir -p build-$arch
+-    cd build-$arch
+     case $arch in
+     armv7)
+         FLAGS="--disable-lib32 --disable-lib64 --enable-libarm32"
+         ;;
+-    aarch64|arm64ec)
+-        FLAGS="--disable-lib32 --disable-lib64 --enable-libarm64"
++    aarch64)
++        FLAGS="--disable-lib32 --disable-lib64 --enable-libarm64$ARM64X_FLAGS"
++        ;;
++    arm64ec)
++        continue
+         ;;
+     i686)
+         FLAGS="--enable-lib32 --disable-lib64"
+@@ -133,6 +144,9 @@ for arch in $ARCHS; do
+     esac
+     FLAGS="$FLAGS --with-default-msvcrt=$DEFAULT_MSVCRT"
+     FLAGS="$FLAGS --enable-silent-rules"
++    [ -z "$CLEAN" ] || rm -rf build-$arch
++    mkdir -p build-$arch
++    cd build-$arch
+     ../configure --host=$arch-w64-mingw32 --prefix="$PREFIX/$arch-w64-mingw32" $FLAGS $CFGUARD_FLAGS $CRT_CONFIG_FLAGS
+     $MAKE -j$CORES
+     $MAKE install
+@@ -141,6 +155,10 @@ done
+ cd ..
+ 
+ for arch in $ARCHS; do
++    case $arch in
++    arm64ec) continue ;;
++    esac
++
+     if [ ! -f $PREFIX/$arch-w64-mingw32/lib/libssp.a ]; then
+         # Create empty dummy archives, to avoid failing when the compiler
+         # driver adds "-lssp -lssh_nonshared" when linking.
+diff --git a/build-openmp.sh b/build-openmp.sh
+index db69533..94fd5dd 100755
+--- a/build-openmp.sh
++++ b/build-openmp.sh
+@@ -66,10 +66,14 @@ fi
+ 
+ for arch in $ARCHS; do
+     CMAKEFLAGS=""
++    FLAGS=""
+     case $arch in
+     x86_64)
+         CMAKEFLAGS="$CMAKEFLAGS -DLIBOMP_ASMFLAGS=-m64"
+         ;;
++    arm64ec)
++        continue
++        ;;
+     esac
+ 
+     [ -z "$CLEAN" ] || rm -rf build-openmp-$arch
+@@ -90,8 +94,9 @@ for arch in $ARCHS; do
+         -DCMAKE_RANLIB="$PREFIX/bin/llvm-ranlib" \
+         -DLLVM_ENABLE_RUNTIMES="openmp" \
+         -DLIBOMP_ENABLE_SHARED=TRUE \
+-        -DCMAKE_C_FLAGS_INIT="$CFGUARD_CFLAGS" \
+-        -DCMAKE_CXX_FLAGS_INIT="$CFGUARD_CFLAGS" \
++        -DCMAKE_C_FLAGS_INIT="$CFGUARD_CFLAGS $FLAGS" \
++        -DCMAKE_CXX_FLAGS_INIT="$CFGUARD_CFLAGS $FLAGS" \
++        -DCMAKE_SHARED_LINKER_FLAGS="$FLAGS" \
+         $CMAKEFLAGS \
+         ..
+     cmake --build . ${CORES:+-j${CORES}}
+diff --git a/pgo-training.sh b/pgo-training.sh
+index 0b279c5..107a94b 100755
+--- a/pgo-training.sh
++++ b/pgo-training.sh
+@@ -54,6 +54,20 @@ if [ ! -d $SQLITE ]; then
+     unzip sqlite-amalgamation-$SQLITE_VERSION.zip
+ fi
+ 
++# pgo-training.make uses an explicit --sysroot pointing to the top of the llvm-mingw
++# installation (rather than the specific target prefix). This is currently not
++# supported by the Clang driver for arm64ec, which cannot use the arm64x prefix in
++# this configuration. Ideally, this should be fixed in Clang, but arm64ec provides
++# little additional profiling data compared to aarch64 anyway, so disable it for now.
++ORIG_ARCHS=$ARCHS
++ARCHS=""
++for arch in $ORIG_ARCHS; do
++    case $arch in
++        arm64ec) continue ;;
++        *) ARCHS="$ARCHS $arch" ;;
++    esac
++done
++
+ rm -rf "$LLVM_PROFILE_DATA_DIR"
+ export ARCHS
+ $MAKE -f pgo-training.make PREFIX=$PREFIX STAGE1=$STAGE1 SQLITE=$SQLITE clean
+diff --git a/prepare-cross-toolchain-unix.sh b/prepare-cross-toolchain-unix.sh
+index 7834e6d..1ef4969 100755
+--- a/prepare-cross-toolchain-unix.sh
++++ b/prepare-cross-toolchain-unix.sh
+@@ -51,6 +51,10 @@ rm -rf $DEST/lib/clang/*/lib/linux
+ 
+ # Copy all arch-specific subdirectories plus the "generic" one, as is.
+ for arch in generic $ARCHS; do
++    case $arch in
++    arm64ec) continue ;;
++    esac
++
+     rm -rf $DEST/$arch-w64-mingw32
+     cp -a $SRC/$arch-w64-mingw32 $DEST/$arch-w64-mingw32
+ done
+diff --git a/prepare-cross-toolchain.sh b/prepare-cross-toolchain.sh
+index cfbcf6f..724ce15 100755
+--- a/prepare-cross-toolchain.sh
++++ b/prepare-cross-toolchain.sh
+@@ -61,6 +61,10 @@ mkdir -p $DEST/include
+ # individual architectures.
+ cp -a $SRC/generic-w64-mingw32/include/. $DEST/include
+ for arch in $ARCHS; do
++    case $arch in
++    arm64ec) continue ;;
++    esac
++
+     mkdir -p $DEST/$arch-w64-mingw32
+     for subdir in bin lib share; do
+         cp -a $SRC/$arch-w64-mingw32/$subdir $DEST/$arch-w64-mingw32
+diff --git a/run-tests.sh b/run-tests.sh
+index abf9994..be3d67b 100755
+--- a/run-tests.sh
++++ b/run-tests.sh
+@@ -210,6 +210,7 @@ for arch in $ARCHS; do
+     unset HAVE_ASAN
+     HAVE_UBSAN=1
+     HAVE_OPENMP=1
++    prefix_arch=$arch
+     case $arch in
+     i686)
+         RUN="$RUN_I686"
+@@ -242,6 +243,7 @@ for arch in $ARCHS; do
+         RUN="$RUN_ARM64EC"
+         COPY="$COPY_ARM64EC"
+         NATIVE="$NATIVE_ARM64EC"
++        prefix_arch="aarch64"
+         ;;
+     esac
+ 
+@@ -261,8 +263,11 @@ for arch in $ARCHS; do
+     [ -z "$CLEAN" ] || rm -rf $TEST_DIR
+     mkdir -p $TEST_DIR
+     cd $TEST_DIR
+-    $MAKE -f ../Makefile ARCH=$arch HAVE_UWP=$HAVE_UWP HAVE_CFGUARD=$HAVE_CFGUARD HAVE_ASAN=$HAVE_ASAN HAVE_UBSAN=$HAVE_UBSAN HAVE_OPENMP=$HAVE_OPENMP NATIVE=$NATIVE RUNTIMES_SRC=$PREFIX/$arch-w64-mingw32/bin clean
+-    $MAKE -f ../Makefile ARCH=$arch HAVE_UWP=$HAVE_UWP HAVE_CFGUARD=$HAVE_CFGUARD HAVE_ASAN=$HAVE_ASAN HAVE_UBSAN=$HAVE_UBSAN HAVE_OPENMP=$HAVE_OPENMP NATIVE=$NATIVE RUNTIMES_SRC=$PREFIX/$arch-w64-mingw32/bin RUN="$RUN" $COPYARG $MAKEOPTS -j$CORES $TARGET
++    $MAKE -f ../Makefile ARCH=$arch HAVE_UWP=$HAVE_UWP HAVE_CFGUARD=$HAVE_CFGUARD HAVE_ASAN=$HAVE_ASAN HAVE_UBSAN=$HAVE_UBSAN HAVE_OPENMP=$HAVE_OPENMP NATIVE=$NATIVE RUNTIMES_SRC=$PREFIX/$prefix_arch-w64-mingw32/bin clean
++    $MAKE -f ../Makefile ARCH=$arch HAVE_UWP=$HAVE_UWP HAVE_CFGUARD=$HAVE_CFGUARD HAVE_ASAN=$HAVE_ASAN HAVE_UBSAN=$HAVE_UBSAN HAVE_OPENMP=$HAVE_OPENMP NATIVE=$NATIVE $COPYARG $MAKEOPTS -j$CORES all
++    if [ "$TARGET" != "all" ]; then
++        $MAKE -f ../Makefile ARCH=$arch HAVE_UWP=$HAVE_UWP HAVE_CFGUARD=$HAVE_CFGUARD HAVE_ASAN=$HAVE_ASAN HAVE_UBSAN=$HAVE_UBSAN HAVE_OPENMP=$HAVE_OPENMP NATIVE=$NATIVE RUNTIMES_SRC=$PREFIX/$prefix_arch-w64-mingw32/bin RUN="$RUN" $COPYARG $MAKEOPTS -j$CORES $TARGET
++    fi
+     cd ..
+ done
+ echo All tests succeeded

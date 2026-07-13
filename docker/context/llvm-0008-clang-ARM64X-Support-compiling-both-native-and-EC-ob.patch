@@ -1,0 +1,309 @@
+From 419faf0456e0d2bcdc5a9ba065f45d7e85da3e7d Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Wed, 8 Jul 2026 00:41:21 +0200
+Subject: [PATCH 8/9] [clang][ARM64X] Support compiling both native and EC
+ objects with -marm64x (#207612)
+
+When -marm64x is used during the assembly phase, construct jobs for both
+native and EC targets and merge their outputs using llvm-objcopy.
+
+Allow passing ArchName to computeTargetTriple on non-Darwin targets to
+enable BindArchAction on other platforms. Additionally, allow passing
+multiple inputs to ObjcopyJobAction and use this capability to construct
+ARM64X merge jobs.
+
+(cherry picked from commit 73867dce09789f8de6d38edcfa8101f2ae2138e4)
+---
+ clang/include/clang/Driver/Action.h    |  2 +-
+ clang/include/clang/Options/Options.td |  2 +-
+ clang/lib/Driver/Action.cpp            |  4 +--
+ clang/lib/Driver/Driver.cpp            | 33 ++++++++++++++++-------
+ clang/lib/Driver/ToolChains/MSVC.cpp   | 36 ++++++++++++++++++++++++++
+ clang/lib/Driver/ToolChains/MSVC.h     | 16 ++++++++++++
+ clang/lib/Driver/ToolChains/MinGW.cpp  |  4 +++
+ clang/lib/Driver/ToolChains/MinGW.h    |  2 ++
+ clang/test/Driver/arm64x.c             |  8 ++++++
+ clang/test/Driver/msvc-link.c          |  2 +-
+ 10 files changed, 95 insertions(+), 14 deletions(-)
+ create mode 100644 clang/test/Driver/arm64x.c
+
+diff --git a/clang/include/clang/Driver/Action.h b/clang/include/clang/Driver/Action.h
+index dbf1187da4db..6b657ba9e7e7 100644
+--- a/clang/include/clang/Driver/Action.h
++++ b/clang/include/clang/Driver/Action.h
+@@ -692,7 +692,7 @@ class ObjcopyJobAction : public JobAction {
+   void anchor() override;
+ 
+ public:
+-  ObjcopyJobAction(Action *Input, types::ID Type);
++  ObjcopyJobAction(ActionList &Inputs, types::ID Type);
+ 
+   static bool classof(const Action *A) {
+     return A->getKind() == ObjcopyJobClass;
+diff --git a/clang/include/clang/Options/Options.td b/clang/include/clang/Options/Options.td
+index b2b8dc5d44a5..dfb4989b44eb 100644
+--- a/clang/include/clang/Options/Options.td
++++ b/clang/include/clang/Options/Options.td
+@@ -5168,7 +5168,7 @@ def municode : Joined<["-"], "municode">, Group<m_Group>;
+ def mthreads : Joined<["-"], "mthreads">, Group<m_Group>;
+ def marm64x : Joined<["-"], "marm64x">, Group<m_Group>,
+   Visibility<[ClangOption, CLOption]>,
+-  HelpText<"Link as a hybrid ARM64X image">;
++  HelpText<"Build as a hybrid ARM64X object/image">;
+ def mguard_EQ : Joined<["-"], "mguard=">, Group<m_Group>,
+   HelpText<"Enable or disable Control Flow Guard checks and guard tables emission">,
+   Values<"none,cf,cf-nochecks">;
+diff --git a/clang/lib/Driver/Action.cpp b/clang/lib/Driver/Action.cpp
+index 72a42a6f957e..01045a97930f 100644
+--- a/clang/lib/Driver/Action.cpp
++++ b/clang/lib/Driver/Action.cpp
+@@ -472,5 +472,5 @@ BinaryTranslatorJobAction::BinaryTranslatorJobAction(Action *Input,
+ 
+ void ObjcopyJobAction::anchor() {}
+ 
+-ObjcopyJobAction::ObjcopyJobAction(Action *Input, types::ID Type)
+-    : JobAction(ObjcopyJobClass, Input, Type) {}
++ObjcopyJobAction::ObjcopyJobAction(ActionList &Inputs, types::ID Type)
++    : JobAction(ObjcopyJobClass, Inputs, Type) {}
+diff --git a/clang/lib/Driver/Driver.cpp b/clang/lib/Driver/Driver.cpp
+index eb3f9cbea284..e4af167ecdaf 100644
+--- a/clang/lib/Driver/Driver.cpp
++++ b/clang/lib/Driver/Driver.cpp
+@@ -608,10 +608,9 @@ static void setZosTargetVersion(const Driver &D, llvm::Triple &Target,
+ ///
+ /// This routine provides the logic to compute a target triple from various
+ /// args passed to the driver and the default triple string.
+-static llvm::Triple computeTargetTriple(const Driver &D,
+-                                        StringRef TargetTriple,
++static llvm::Triple computeTargetTriple(const Driver &D, StringRef TargetTriple,
+                                         const ArgList &Args,
+-                                        StringRef DarwinArchName = "") {
++                                        StringRef ArchName = "") {
+   // FIXME: Already done in Compilation *Driver::BuildCompilation
+   if (const Arg *A = Args.getLastArg(options::OPT_target))
+     TargetTriple = A->getValue();
+@@ -627,9 +626,8 @@ static llvm::Triple computeTargetTriple(const Driver &D,
+   // Handle Apple-specific options available here.
+   if (Target.isOSBinFormatMachO()) {
+     // If an explicit Darwin arch name is given, that trumps all.
+-    if (!DarwinArchName.empty()) {
+-      tools::darwin::setTripleTypeForMachOArchName(Target, DarwinArchName,
+-                                                   Args);
++    if (!ArchName.empty()) {
++      tools::darwin::setTripleTypeForMachOArchName(Target, ArchName, Args);
+       return Target;
+     }
+ 
+@@ -638,6 +636,9 @@ static llvm::Triple computeTargetTriple(const Driver &D,
+       StringRef ArchName = A->getValue();
+       tools::darwin::setTripleTypeForMachOArchName(Target, ArchName, Args);
+     }
++  } else if (!ArchName.empty()) {
++    Target.setArchName(ArchName);
++    return Target;
+   }
+ 
+   // Handle pseudo-target flags '-mlittle-endian'/'-EL' and
+@@ -4629,9 +4630,11 @@ void Driver::BuildActions(Compilation &C, DerivedArgList &Args,
+     if (TC.requiresObjcopy(Args)) {
+       Action *LastAction = Actions.back();
+       // llvm-objcopy expects an unvalidated DXIL container (TY_OBJECT).
+-      if (LastAction->getType() == types::TY_Object)
++      if (LastAction->getType() == types::TY_Object) {
++        ActionList ObjcopyActions({LastAction});
+         Actions.push_back(
+-            C.MakeAction<ObjcopyJobAction>(LastAction, types::TY_Object));
++            C.MakeAction<ObjcopyJobAction>(ObjcopyActions, types::TY_Object));
++      }
+     }
+ 
+     // Call validator for dxil when -Vd not in Args.
+@@ -5252,6 +5255,17 @@ Action *Driver::ConstructPhaseAction(
+     return C.MakeAction<BackendJobAction>(Input, types::TY_PP_Asm);
+   }
+   case phases::Assemble:
++    // When -marm64x is used, construct jobs for the EC and native targets and
++    // merge them into an archive with llvm-objcopy.
++    const llvm::Triple Target(llvm::Triple::normalize(TargetTriple));
++    if (Target.isOSWindows() && Args.hasArg(options::OPT_marm64x)) {
++      Action *Act =
++          C.MakeAction<AssembleJobAction>(std::move(Input), types::TY_Object);
++      ActionList Inputs;
++      Inputs.push_back(C.MakeAction<BindArchAction>(Act, "aarch64"));
++      Inputs.push_back(C.MakeAction<BindArchAction>(Act, "arm64ec"));
++      return C.MakeAction<ObjcopyJobAction>(Inputs, types::TY_Object);
++    }
+     return C.MakeAction<AssembleJobAction>(std::move(Input), types::TY_Object);
+   }
+ 
+@@ -5340,7 +5354,8 @@ void Driver::BuildJobs(Compilation &C) const {
+     BuildJobsForAction(C, A, &C.getDefaultToolChain(),
+                        /*BoundArch*/ StringRef(),
+                        /*AtTopLevel*/ true,
+-                       /*MultipleArchs*/ ArchNames.size() > 1,
++                       /*MultipleArchs*/ ArchNames.size() > 1 ||
++                           C.getArgs().hasArgNoClaim(options::OPT_marm64x),
+                        /*LinkingOutput*/ LinkingOutput, CachedResults,
+                        /*TargetDeviceOffloadKind*/ Action::OFK_None);
+   }
+diff --git a/clang/lib/Driver/ToolChains/MSVC.cpp b/clang/lib/Driver/ToolChains/MSVC.cpp
+index fcae5b7a18f3..340e4b3d533e 100644
+--- a/clang/lib/Driver/ToolChains/MSVC.cpp
++++ b/clang/lib/Driver/ToolChains/MSVC.cpp
+@@ -429,6 +429,31 @@ void visualstudio::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+   C.addCommand(std::move(LinkCmd));
+ }
+ 
++void tools::ARM64XObjcopy::ConstructJob(Compilation &C, const JobAction &JA,
++                                        const InputInfo &Output,
++                                        const InputInfoList &Inputs,
++                                        const ArgList &Args,
++                                        const char *LinkingOutput) const {
++  // Assume llvm-objcopy is only used for hybrid ARM64X object files.
++  if (Inputs.size() != 2)
++    return;
++
++  std::string ObjcopyPath = getToolChain().GetProgramPath("llvm-objcopy");
++  const char *Exec = Args.MakeArgString(ObjcopyPath);
++
++  // Embed the hybrid object in the .obj.arm64ec section.
++  ArgStringList CmdArgs;
++  CmdArgs.push_back(Args.MakeArgString("--add-section=.obj.arm64ec=" +
++                                       Twine(Inputs[1].getFilename())));
++  // Mark the .obj.arm64ec section as discardable.
++  CmdArgs.push_back("--set-section-flags=.obj.arm64ec=exclude");
++  CmdArgs.push_back(Inputs[0].getFilename());
++  CmdArgs.push_back(Output.getFilename());
++
++  C.addCommand(std::make_unique<Command>(JA, *this, ResponseFileSupport::None(),
++                                         Exec, CmdArgs, Inputs, Output));
++}
++
+ MSVCToolChain::MSVCToolChain(const Driver &D, const llvm::Triple &Triple,
+                              const ArgList &Args)
+     : ToolChain(D, Triple, Args), CudaInstallation(D, Triple, Args),
+@@ -460,6 +485,17 @@ MSVCToolChain::MSVCToolChain(const Driver &D, const llvm::Triple &Triple,
+       llvm::findVCToolChainViaRegistry(VCToolChainPath, VSLayout);
+ }
+ 
++Tool *MSVCToolChain::getTool(Action::ActionClass AC) const {
++  switch (AC) {
++  case Action::ObjcopyJobClass:
++    if (!Objcopy)
++      Objcopy.reset(new tools::ARM64XObjcopy(*this));
++    return Objcopy.get();
++  default:
++    return ToolChain::getTool(AC);
++  }
++}
++
+ Tool *MSVCToolChain::buildLinker() const {
+   return new tools::visualstudio::Linker(*this);
+ }
+diff --git a/clang/lib/Driver/ToolChains/MSVC.h b/clang/lib/Driver/ToolChains/MSVC.h
+index 5c17edce087c..73ab1d2785f7 100644
+--- a/clang/lib/Driver/ToolChains/MSVC.h
++++ b/clang/lib/Driver/ToolChains/MSVC.h
+@@ -39,6 +39,19 @@ public:
+ };
+ } // end namespace visualstudio
+ 
++class LLVM_LIBRARY_VISIBILITY ARM64XObjcopy : public Tool {
++public:
++  ARM64XObjcopy(const ToolChain &TC)
++      : Tool("ARM64XObjcopy", "llvm-objcopy", TC) {}
++
++  bool hasIntegratedCPP() const override { return false; }
++
++  void ConstructJob(Compilation &C, const JobAction &JA,
++                    const InputInfo &Output, const InputInfoList &Inputs,
++                    const llvm::opt::ArgList &TCArgs,
++                    const char *LinkingOutput) const override;
++};
++
+ } // end namespace tools
+ 
+ namespace toolchains {
+@@ -134,8 +147,10 @@ protected:
+                                      const Twine &subfolder2 = "",
+                                      const Twine &subfolder3 = "") const;
+ 
++  Tool *getTool(Action::ActionClass AC) const override;
+   Tool *buildLinker() const override;
+   Tool *buildAssembler() const override;
++
+ private:
+   std::optional<llvm::StringRef> WinSdkDir, WinSdkVersion, WinSysRoot;
+   std::string VCToolChainPath;
+@@ -143,6 +158,7 @@ private:
+   LazyDetector<CudaInstallationDetector> CudaInstallation;
+   LazyDetector<RocmInstallationDetector> RocmInstallation;
+   LazyDetector<SYCLInstallationDetector> SYCLInstallation;
++  mutable std::unique_ptr<tools::ARM64XObjcopy> Objcopy;
+ };
+ 
+ } // end namespace toolchains
+diff --git a/clang/lib/Driver/ToolChains/MinGW.cpp b/clang/lib/Driver/ToolChains/MinGW.cpp
+index 2c9a174069f7..d935f1b8a91c 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.cpp
++++ b/clang/lib/Driver/ToolChains/MinGW.cpp
+@@ -569,6 +569,10 @@ Tool *toolchains::MinGW::getTool(Action::ActionClass AC) const {
+     if (!Compiler)
+       Compiler.reset(new tools::gcc::Compiler(*this));
+     return Compiler.get();
++  case Action::ObjcopyJobClass:
++    if (!Objcopy)
++      Objcopy.reset(new tools::ARM64XObjcopy(*this));
++    return Objcopy.get();
+   default:
+     return ToolChain::getTool(AC);
+   }
+diff --git a/clang/lib/Driver/ToolChains/MinGW.h b/clang/lib/Driver/ToolChains/MinGW.h
+index 1730da48cd43..bf85b83ac4d3 100644
+--- a/clang/lib/Driver/ToolChains/MinGW.h
++++ b/clang/lib/Driver/ToolChains/MinGW.h
+@@ -11,6 +11,7 @@
+ 
+ #include "Cuda.h"
+ #include "Gnu.h"
++#include "MSVC.h"
+ #include "clang/Driver/CudaInstallationDetector.h"
+ #include "clang/Driver/LazyDetector.h"
+ #include "clang/Driver/RocmInstallationDetector.h"
+@@ -115,6 +116,7 @@ private:
+   std::string TripleDirName;
+   mutable std::unique_ptr<tools::gcc::Preprocessor> Preprocessor;
+   mutable std::unique_ptr<tools::gcc::Compiler> Compiler;
++  mutable std::unique_ptr<tools::ARM64XObjcopy> Objcopy;
+   void findGccLibDir(const llvm::Triple &LiteralTriple);
+ 
+   bool NativeLLVMSupport;
+diff --git a/clang/test/Driver/arm64x.c b/clang/test/Driver/arm64x.c
+new file mode 100644
+index 000000000000..f2c187cc1cfc
+--- /dev/null
++++ b/clang/test/Driver/arm64x.c
+@@ -0,0 +1,8 @@
++// RUN: %clang -c -marm64x  --target=arm64ec-pc-windows-msvc -### %s 2>&1 | FileCheck %s
++// RUN: %clang -c -marm64x  --target=arm64ec-pc-windows-gnu -### %s 2>&1 | FileCheck %s
++// RUN: %clang -c -marm64x  --target=aarch64-pc-windows-msvc -### %s 2>&1 | FileCheck %s
++// RUN: %clang -c -marm64x  --target=aarch64-pc-windows-gnu -### %s 2>&1 | FileCheck %s
++
++// CHECK:      "-cc1" "-triple" "aarch64-pc-windows-{{.*}}" "-emit-obj"
++// CHECK-NEXT: "-cc1" "-triple" "arm64ec-pc-windows-{{.*}}" "-emit-obj"
++// CHECK-NEXT: llvm-objcopy" "--add-section=.obj.arm64ec={{.*}}arm64x-arm64ec-{{.*}}.o" "--set-section-flags=.obj.arm64ec=exclude" "{{.*}}arm64x-aarch64-{{.*}}.o" "arm64x.o"
+diff --git a/clang/test/Driver/msvc-link.c b/clang/test/Driver/msvc-link.c
+index 82659cbb9b49..ad4e5c0b5e3f 100644
+--- a/clang/test/Driver/msvc-link.c
++++ b/clang/test/Driver/msvc-link.c
+@@ -48,6 +48,6 @@
+ // RUN: not %clang --target=x86_64-linux-gnu -marm64x -### %s 2>&1 | FileCheck --check-prefix=HYBRID-ERR %s
+ // HYBRID-ERR: error: unsupported option '-marm64x' for target 'x86_64-linux-gnu'
+ 
+-// RUN: %clang -c -marm64x  --target=arm64ec-pc-windows-msvc -fuse-ld=link -### %s 2>&1 | \
++// RUN: %clang -S -marm64x  --target=arm64ec-pc-windows-msvc -fuse-ld=link -### %s 2>&1 | \
+ // RUN:        FileCheck --check-prefix=HYBRID-WARN %s
+ // HYBRID-WARN: warning: argument unused during compilation: '-marm64x' [-Wunused-command-line-argument]
+-- 
+2.53.0
+
