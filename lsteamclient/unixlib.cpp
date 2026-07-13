@@ -704,6 +704,14 @@ static NTSTATUS steamclient_init_registry( Params *params, bool wow64 )
     return 0;
 }
 
+static void sync_env_var( const char *name, bool unset, const char *val )
+{
+    const char *s = getenv( name );
+
+    if (unset && s)                           unsetenv( name );
+    else if (val && (!s || strcmp( s, val ))) setenv( name, val, 1 );
+}
+
 template< typename Params >
 static NTSTATUS steamclient_init( Params *params, bool wow64 )
 {
@@ -712,10 +720,8 @@ static NTSTATUS steamclient_init( Params *params, bool wow64 )
 
     g_tmppath = params->g_tmppath;
 
-    if (params->steam_app_id_unset) unsetenv( "SteamAppId" );
-    else if (params->steam_app_id) setenv( "SteamAppId", params->steam_app_id, TRUE );
-    if (params->ignore_child_processes_unset) unsetenv( "IgnoreChildProcesses" );
-    else if (params->ignore_child_processes) setenv( "IgnoreChildProcesses", params->ignore_child_processes, TRUE );
+    sync_env_var( "SteamAppId", params->steam_app_id_unset, params->steam_app_id );
+    sync_env_var( "IgnoreChildProcesses", params->ignore_child_processes_unset, params->ignore_child_processes );
 
     if (steamclient) return 0;
 
