@@ -1,0 +1,166 @@
+From 4ba5cc30914ad12d793c9180c97604fffef2a090 Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Thu, 2 Jul 2026 14:20:52 +0200
+Subject: [PATCH 6/9] [LLD][COFF] Factor out addObjectFile (NFC) (#206811)
+
+Avoid parsing the input COFF file twice: first, implicitly, in
+findBitcodeInObject and later when creating the ObjFile instance. Create
+the COFFObjectFile earlier and use it for both the findBitcodeInObject
+call and ObjFile creation. It's also preparation for handling hybrid
+ARM64X object files.
+
+(cherry picked from commit e8e379ef1ebc67cd2a307db0de8f5ad45cb81101)
+---
+ lld/COFF/Driver.cpp     | 28 +++++++++++++++++-----------
+ lld/COFF/Driver.h       |  4 ++++
+ lld/COFF/InputFiles.cpp | 17 +++++++++++------
+ lld/COFF/InputFiles.h   | 10 +++++++++-
+ 4 files changed, 41 insertions(+), 18 deletions(-)
+
+diff --git a/lld/COFF/Driver.cpp b/lld/COFF/Driver.cpp
+index 5dfb93a81b43..8d9ae99578b9 100644
+--- a/lld/COFF/Driver.cpp
++++ b/lld/COFF/Driver.cpp
+@@ -261,21 +261,27 @@ MemoryBufferRef LinkerDriver::takeBuffer(std::unique_ptr<MemoryBuffer> mb) {
+   return mbref;
+ }
+ 
+-static InputFile *tryCreateFatLTOFile(COFFLinkerContext &ctx,
+-                                      MemoryBufferRef mb, StringRef archiveName,
+-                                      uint64_t offsetInArchive, bool lazy) {
++InputFile *LinkerDriver::addObjectFile(COFFLinkerContext &ctx,
++                                       MemoryBufferRef mb,
++                                       StringRef archiveName,
++                                       uint64_t offsetInArchive, bool lazy) {
++  std::unique_ptr<COFFObjectFile> coffObj = ObjFile::createCOFFObject(ctx, mb);
++  InputFile *obj = nullptr;
++
+   if (ctx.config.fatLTOObjects) {
+     Expected<MemoryBufferRef> fatLTOData =
+-        IRObjectFile::findBitcodeInMemBuffer(mb);
++        IRObjectFile::findBitcodeInObject(*coffObj);
+ 
+     if (!errorToBool(fatLTOData.takeError())) {
+-      return BitcodeFile::create(ctx, *fatLTOData, archiveName, offsetInArchive,
+-                                 lazy);
++      obj = BitcodeFile::create(ctx, *fatLTOData, archiveName, offsetInArchive,
++                                lazy);
+     }
+   }
+ 
+-  InputFile *obj = ObjFile::create(ctx, mb, lazy);
++  if (!obj)
++    obj = ObjFile::create(ctx, coffObj.release(), lazy);
+   obj->parentName = archiveName;
++  addFile(obj);
+   return obj;
+ }
+ 
+@@ -322,7 +328,7 @@ void LinkerDriver::addBuffer(std::unique_ptr<MemoryBuffer> mb,
+     addFile(BitcodeFile::create(ctx, mbref, "", 0, lazy));
+     break;
+   case file_magic::coff_object: {
+-    addFile(tryCreateFatLTOFile(ctx, mbref, "", 0, lazy));
++    addObjectFile(ctx, mbref, "", 0, lazy);
+     break;
+   }
+   case file_magic::coff_import_library:
+@@ -436,9 +442,11 @@ void LinkerDriver::addArchiveBuffer(MemoryBufferRef mb, StringRef symName,
+ 
+   InputFile *obj;
+   if (magic == file_magic::coff_object) {
+-    obj = tryCreateFatLTOFile(ctx, mb, parentName, offsetInArchive, lazy);
++    obj = addObjectFile(ctx, mb, parentName, offsetInArchive, lazy);
+   } else if (magic == file_magic::bitcode) {
+     obj = BitcodeFile::create(ctx, mb, parentName, offsetInArchive, lazy);
++    obj->parentName = parentName;
++    addFile(obj);
+   } else if (magic == file_magic::coff_cl_gl_object) {
+     Err(ctx) << mb.getBufferIdentifier()
+              << ": is not a native COFF file. Recompile without /GL?";
+@@ -448,8 +456,6 @@ void LinkerDriver::addArchiveBuffer(MemoryBufferRef mb, StringRef symName,
+     return;
+   }
+ 
+-  obj->parentName = parentName;
+-  addFile(obj);
+   Log(ctx) << "Loaded " << obj << " for " << symName;
+ }
+ 
+diff --git a/lld/COFF/Driver.h b/lld/COFF/Driver.h
+index e7a7acebc6e4..7eea9aee279a 100644
+--- a/lld/COFF/Driver.h
++++ b/lld/COFF/Driver.h
+@@ -125,6 +125,10 @@ private:
+ 
+   bool isDecorated(StringRef sym);
+ 
++  InputFile *addObjectFile(COFFLinkerContext &ctx, MemoryBufferRef mb,
++                           StringRef archiveName, uint64_t offsetInArchive,
++                           bool lazy);
++
+   std::string getMapFile(const llvm::opt::InputArgList &args,
+                          llvm::opt::OptSpecifier os,
+                          llvm::opt::OptSpecifier osFile);
+diff --git a/lld/COFF/InputFiles.cpp b/lld/COFF/InputFiles.cpp
+index b46d55d7271b..b1bb027c3434 100644
+--- a/lld/COFF/InputFiles.cpp
++++ b/lld/COFF/InputFiles.cpp
+@@ -270,19 +270,24 @@ ObjFile::ObjFile(SymbolTable &symtab, COFFObjectFile *coffObj, bool lazy)
+     : InputFile(symtab, ObjectKind, coffObj->getMemoryBufferRef(), lazy),
+       coffObj(coffObj) {}
+ 
+-ObjFile *ObjFile::create(COFFLinkerContext &ctx, MemoryBufferRef m, bool lazy) {
++std::unique_ptr<COFFObjectFile>
++ObjFile::createCOFFObject(COFFLinkerContext &ctx, MemoryBufferRef m) {
+   // Parse a memory buffer as a COFF file.
+   Expected<std::unique_ptr<Binary>> bin = createBinary(m);
+   if (!bin)
+     Fatal(ctx) << "Could not parse " << m.getBufferIdentifier();
+ 
+-  auto *obj = dyn_cast<COFFObjectFile>(bin->get());
+-  if (!obj)
++  std::unique_ptr<COFFObjectFile> obj(dyn_cast<COFFObjectFile>(bin->release()));
++  if (!obj.get())
+     Fatal(ctx) << m.getBufferIdentifier() << " is not a COFF file";
+ 
+-  bin->release();
+-  return make<ObjFile>(ctx.getSymtab(MachineTypes(obj->getMachine())), obj,
+-                       lazy);
++  return obj;
++}
++
++ObjFile *ObjFile::create(COFFLinkerContext &ctx, COFFObjectFile *coffObj,
++                         bool lazy) {
++  return make<ObjFile>(ctx.getSymtab(MachineTypes(coffObj->getMachine())),
++                       coffObj, lazy);
+ }
+ 
+ void ObjFile::parseLazy() {
+diff --git a/lld/COFF/InputFiles.h b/lld/COFF/InputFiles.h
+index ce8bc6705e48..b8a2acf6e1b4 100644
+--- a/lld/COFF/InputFiles.h
++++ b/lld/COFF/InputFiles.h
+@@ -136,10 +136,18 @@ private:
+ // .obj or .o file. This may be a member of an archive file.
+ class ObjFile : public InputFile {
+ public:
+-  static ObjFile *create(COFFLinkerContext &ctx, MemoryBufferRef mb,
++  static ObjFile *create(COFFLinkerContext &ctx, COFFObjectFile *coffObj,
+                          bool lazy = false);
++  static ObjFile *create(COFFLinkerContext &ctx, MemoryBufferRef mb,
++                         bool lazy = false) {
++    return ObjFile::create(ctx, ObjFile::createCOFFObject(ctx, mb).release(),
++                           lazy);
++  }
+   explicit ObjFile(SymbolTable &symtab, COFFObjectFile *coffObj, bool lazy);
+ 
++  static std::unique_ptr<COFFObjectFile>
++  createCOFFObject(COFFLinkerContext &ctx, MemoryBufferRef mb);
++
+   static bool classof(const InputFile *f) { return f->kind() == ObjectKind; }
+   void parse() override;
+   void parseLazy();
+-- 
+2.53.0
+

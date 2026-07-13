@@ -1,0 +1,206 @@
+From 53073551cb762f181c4e40fa1c2d827cdfb26d0d Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Tue, 30 Jun 2026 12:06:40 +0200
+Subject: [PATCH 5/9] [Object][COFF] Introduce the .obj.arm64ec section
+ (#205156)
+
+Introduce a new extension section allowing the embedding of ARM64EC
+object files inside native ARM64 object files. Its content consists of
+an entire, valid ARM64EC COFF object file.
+
+(cherry picked from commit 9066c66061c523a096eb9a8a9c0c7cc3c8c1bba7)
+---
+ llvm/include/llvm/Object/COFF.h               |   3 +
+ llvm/lib/Object/COFFObjectFile.cpp            |  20 ++++
+ .../llvm-readobj/COFF/arm64x-hybridobj.yaml   | 102 ++++++++++++++++++
+ llvm/tools/llvm-readobj/llvm-readobj.cpp      |  11 +-
+ 4 files changed, 133 insertions(+), 3 deletions(-)
+ create mode 100644 llvm/test/tools/llvm-readobj/COFF/arm64x-hybridobj.yaml
+
+diff --git a/llvm/include/llvm/Object/COFF.h b/llvm/include/llvm/Object/COFF.h
+index ed2addbc6948..dea922553ca3 100644
+--- a/llvm/include/llvm/Object/COFF.h
++++ b/llvm/include/llvm/Object/COFF.h
+@@ -877,6 +877,8 @@ struct coff_dynamic_relocation64_v2 {
+   support::ulittle32_t Flags;
+ };
+ 
++static constexpr StringLiteral kArm64ECSectionName = ".obj.arm64ec";
++
+ class LLVM_ABI COFFObjectFile : public ObjectFile {
+ private:
+   COFFObjectFile(MemoryBufferRef Object);
+@@ -1100,6 +1102,7 @@ public:
+     return SubtargetFeatures();
+   }
+   std::unique_ptr<MemoryBuffer> getHybridObjectView() const;
++  std::optional<MemoryBufferRef> findHybridObjectSection() const;
+ 
+   import_directory_iterator import_directory_begin() const;
+   import_directory_iterator import_directory_end() const;
+diff --git a/llvm/lib/Object/COFFObjectFile.cpp b/llvm/lib/Object/COFFObjectFile.cpp
+index 242c123665f7..819aedb55a9c 100644
+--- a/llvm/lib/Object/COFFObjectFile.cpp
++++ b/llvm/lib/Object/COFFObjectFile.cpp
+@@ -1560,6 +1560,26 @@ std::unique_ptr<MemoryBuffer> COFFObjectFile::getHybridObjectView() const {
+   return HybridView;
+ }
+ 
++std::optional<MemoryBufferRef> COFFObjectFile::findHybridObjectSection() const {
++  if (getDOSHeader() || getMachine() != COFF::IMAGE_FILE_MACHINE_ARM64)
++    return std::nullopt;
++
++  // Search for the .obj.arm64ec section, which may be used to embed a full
++  // ARM64EC object file into an ARM64 object file.
++  for (SectionRef S : sections()) {
++    Expected<StringRef> Name = S.getName();
++    if (errorToBool(Name.takeError()) || *Name != kArm64ECSectionName)
++      continue;
++
++    Expected<StringRef> ContentsOrErr = S.getContents();
++    if (errorToBool(ContentsOrErr.takeError()) || ContentsOrErr->empty())
++      continue;
++    return MemoryBufferRef(*ContentsOrErr, getFileName());
++  }
++
++  return std::nullopt;
++}
++
+ bool ImportDirectoryEntryRef::
+ operator==(const ImportDirectoryEntryRef &Other) const {
+   return ImportTable == Other.ImportTable && Index == Other.Index;
+diff --git a/llvm/test/tools/llvm-readobj/COFF/arm64x-hybridobj.yaml b/llvm/test/tools/llvm-readobj/COFF/arm64x-hybridobj.yaml
+new file mode 100644
+index 000000000000..a63b56e679b8
+--- /dev/null
++++ b/llvm/test/tools/llvm-readobj/COFF/arm64x-hybridobj.yaml
+@@ -0,0 +1,102 @@
++# RUN: yaml2obj -DMACHINE=IMAGE_FILE_MACHINE_ARM64 %s -o %t-aarch64.o
++# RUN: yaml2obj -DMACHINE=IMAGE_FILE_MACHINE_ARM64EC %s -o %t-arm64ec.o
++# RUN: llvm-objcopy --add-section=.obj.arm64ec=%t-arm64ec.o --set-section-flags=.obj.arm64ec=debug %t-aarch64.o %t.o
++# RUN: llvm-readobj --sections %t.o | FileCheck %s
++
++# CHECK:      Format: COFF-ARM64
++# CHECK-NEXT: Arch: aarch64
++# CHECK-NEXT: AddressSize: 64bit
++# CHECK-NEXT: Sections [
++# CHECK-NEXT:   Section {
++# CHECK-NEXT:     Number: 1
++# CHECK-NEXT:     Name: .data (2E 64 61 74 61 00 00 00)
++# CHECK-NEXT:     VirtualSize: 0x0
++# CHECK-NEXT:     VirtualAddress: 0x0
++# CHECK-NEXT:     RawDataSize: 4
++# CHECK-NEXT:     PointerToRawData: 0x64
++# CHECK-NEXT:     PointerToRelocations: 0x0
++# CHECK-NEXT:     PointerToLineNumbers: 0x0
++# CHECK-NEXT:     RelocationCount: 0
++# CHECK-NEXT:     LineNumberCount: 0
++# CHECK-NEXT:     Characteristics [ (0xC0300040)
++# CHECK-NEXT:       IMAGE_SCN_ALIGN_4BYTES (0x300000)
++# CHECK-NEXT:       IMAGE_SCN_CNT_INITIALIZED_DATA (0x40)
++# CHECK-NEXT:       IMAGE_SCN_MEM_READ (0x40000000)
++# CHECK-NEXT:       IMAGE_SCN_MEM_WRITE (0x80000000)
++# CHECK-NEXT:     ]
++# CHECK-NEXT:   }
++# CHECK-NEXT:   Section {
++# CHECK-NEXT:     Number: 2
++# CHECK-NEXT:     Name: .obj.arm64ec (2F 34 00 00 00 00 00 00)
++# CHECK-NEXT:     VirtualSize: 0x7A
++# CHECK-NEXT:     VirtualAddress: 0x0
++# CHECK-NEXT:     RawDataSize: 122
++# CHECK-NEXT:     PointerToRawData: 0x68
++# CHECK-NEXT:     PointerToRelocations: 0x0
++# CHECK-NEXT:     PointerToLineNumbers: 0x0
++# CHECK-NEXT:     RelocationCount: 0
++# CHECK-NEXT:     LineNumberCount: 0
++# CHECK-NEXT:     Characteristics [ (0xC2000040)
++# CHECK-NEXT:       IMAGE_SCN_CNT_INITIALIZED_DATA (0x40)
++# CHECK-NEXT:       IMAGE_SCN_MEM_DISCARDABLE (0x2000000)
++# CHECK-NEXT:       IMAGE_SCN_MEM_READ (0x40000000)
++# CHECK-NEXT:       IMAGE_SCN_MEM_WRITE (0x80000000)
++# CHECK-NEXT:     ]
++# CHECK-NEXT:   }
++# CHECK-NEXT: ]
++# CHECK-NEXT: HybridObject {
++# CHECK:        Format: COFF-ARM64EC
++# CHECK-NEXT:   Arch: aarch64
++# CHECK-NEXT:   AddressSize: 64bit
++# CHECK-NEXT:   Sections [
++# CHECK-NEXT:     Section {
++# CHECK-NEXT:       Number: 1
++# CHECK-NEXT:       Name: .data (2E 64 61 74 61 00 00 00)
++# CHECK-NEXT:       VirtualSize: 0x0
++# CHECK-NEXT:       VirtualAddress: 0x0
++# CHECK-NEXT:       RawDataSize: 4
++# CHECK-NEXT:       PointerToRawData: 0x3C
++# CHECK-NEXT:       PointerToRelocations: 0x0
++# CHECK-NEXT:       PointerToLineNumbers: 0x0
++# CHECK-NEXT:       RelocationCount: 0
++# CHECK-NEXT:       LineNumberCount: 0
++# CHECK-NEXT:       Characteristics [ (0xC0300040)
++# CHECK-NEXT:         IMAGE_SCN_ALIGN_4BYTES (0x300000)
++# CHECK-NEXT:         IMAGE_SCN_CNT_INITIALIZED_DATA (0x40)
++# CHECK-NEXT:         IMAGE_SCN_MEM_READ (0x40000000)
++# CHECK-NEXT:         IMAGE_SCN_MEM_WRITE (0x80000000)
++# CHECK-NEXT:       ]
++# CHECK-NEXT:     }
++# CHECK-NEXT:   ]
++# CHECK-NEXT: }
++
++--- !COFF
++header:
++  Machine:         [[MACHINE]]
++  Characteristics: [  ]
++sections:
++  - Name:            .data
++    Characteristics: [ IMAGE_SCN_CNT_INITIALIZED_DATA, IMAGE_SCN_MEM_READ, IMAGE_SCN_MEM_WRITE ]
++    Alignment:       4
++    SectionData:     '00000000'
++    SizeOfRawData:   4
++symbols:
++  - Name:            .data
++    Value:           0
++    SectionNumber:   1
++    SimpleType:      IMAGE_SYM_TYPE_NULL
++    ComplexType:     IMAGE_SYM_DTYPE_NULL
++    StorageClass:    IMAGE_SYM_CLASS_STATIC
++    SectionDefinition:
++      Length:          4
++      NumberOfRelocations: 0
++      NumberOfLinenumbers: 0
++      CheckSum:        0
++      Number:          2
++  - Name:            sym
++    Value:           0
++    SectionNumber:   1
++    SimpleType:      IMAGE_SYM_TYPE_NULL
++    ComplexType:     IMAGE_SYM_DTYPE_NULL
++    StorageClass:    IMAGE_SYM_CLASS_EXTERNAL
++...
+diff --git a/llvm/tools/llvm-readobj/llvm-readobj.cpp b/llvm/tools/llvm-readobj/llvm-readobj.cpp
+index 532773180501..9c97ea5fe5b3 100644
+--- a/llvm/tools/llvm-readobj/llvm-readobj.cpp
++++ b/llvm/tools/llvm-readobj/llvm-readobj.cpp
+@@ -598,11 +598,16 @@ static void dumpCOFFObject(COFFObjectFile *Obj, ScopedPrinter &Writer) {
+   dumpObject(*Obj, Writer);
+ 
+   // Dump a hybrid object when available.
+-  std::unique_ptr<MemoryBuffer> HybridView = Obj->getHybridObjectView();
+-  if (!HybridView)
++  MemoryBufferRef HybridView;
++  std::unique_ptr<MemoryBuffer> HybridViewBuf;
++  if (std::optional<MemoryBufferRef> HybridSec = Obj->findHybridObjectSection())
++    HybridView = *HybridSec;
++  else if ((HybridViewBuf = Obj->getHybridObjectView()))
++    HybridView = HybridViewBuf->getMemBufferRef();
++  else
+     return;
+   Expected<std::unique_ptr<COFFObjectFile>> HybridObjOrErr =
+-      COFFObjectFile::create(*HybridView);
++      COFFObjectFile::create(HybridView);
+   if (!HybridObjOrErr)
+     reportError(HybridObjOrErr.takeError(), Obj->getFileName().str());
+   DictScope D(Writer, "HybridObject");
+-- 
+2.53.0
+
