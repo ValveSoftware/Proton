@@ -1,6 +1,21 @@
 FROM @BASE_IMAGE@ AS base
 
-COPY llvm-thunk-vararg.patch /tmp
+COPY llvm-thunk-vararg.patch \
+     llvm-0001-LLD-MinGW-Introduce-native-def-argument-193598.patch \
+     llvm-0002-LLD-COFF-Move-Archive-create-call-to-LinkerDriver-ad.patch \
+     llvm-0003-LLD-COFF-Use-lazy-object-mechanism-instead-of-relyin.patch \
+     llvm-0004-Object-ArchiveWriter-Factor-out-MemberData-allocatio.patch \
+     llvm-0005-Object-COFF-Introduce-the-.obj.arm64ec-section-20515.patch \
+     llvm-0006-LLD-COFF-Factor-out-addObjectFile-NFC-206811.patch \
+     llvm-0007-Archive-COFF-Split-hybrid-COFF-files-when-adding-the.patch \
+     llvm-0008-clang-ARM64X-Support-compiling-both-native-and-EC-ob.patch \
+     llvm-0009-LLD-COFF-Add-support-for-multi-arch-ARM64X-object-fi.patch \
+     llvm-0010-clang-mingw-Try-both-native-and-ARM64EC-triples-when.patch \
+     llvm-0011-LLD-COFF-Fix-linking-directly-against-an-ARM64X-DLL-.patch \
+     llvm-0012-LLD-COFF-Replace-ARM64EC-TLS-directory-chunks-with-n.patch \
+     llvm-0013-LLD-COFF-Emit-ARM64X-relocations-for-TLS-directory.patch \
+     llvm-mingw.patch \
+     /tmp/
 
 RUN wget -q @LLVM_URLBASE@/@LLVM_SOURCE@ \
 && echo '@LLVM_SHA256@ @LLVM_SOURCE@' | sha256sum -c - \
@@ -11,12 +26,26 @@ RUN wget -q @LLVM_URLBASE@/@LLVM_SOURCE@ \
 && wget -q @LLVM_MINGW_URLBASE@/@LLVM_MINGW_SOURCE@ \
 && echo '@LLVM_MINGW_SHA256@ @LLVM_MINGW_SOURCE@' | sha256sum -c - \
 && tar xf @LLVM_MINGW_SOURCE@ -C /tmp && rm @LLVM_MINGW_SOURCE@ \
-&& ln -s /tmp/llvm-project-llvmorg-@LLVM_VERSION@ /tmp/llvm-mingw-@LLVM_MINGW_VERSION@/llvm-project \
-&& ln -s /tmp/mingw-w64-v@MINGW_VERSION@ /tmp/llvm-mingw-@LLVM_MINGW_VERSION@/mingw-w64 \
-&& cd /tmp/llvm-project-llvmorg-@LLVM_VERSION@ \
+&& mv /tmp/llvm-project-llvmorg-@LLVM_VERSION@ /tmp/llvm-mingw-@LLVM_MINGW_VERSION@/llvm-project \
+&& mv /tmp/mingw-w64-@MINGW_VERSION@* /tmp/llvm-mingw-@LLVM_MINGW_VERSION@/mingw-w64 \
+&& cd /tmp/llvm-mingw-@LLVM_MINGW_VERSION@/llvm-project \
 && patch -p1 < /tmp/llvm-thunk-vararg.patch \
-&& rm /tmp/llvm-*.patch \
+&& patch -p1 < /tmp/llvm-0001-LLD-MinGW-Introduce-native-def-argument-193598.patch \
+&& patch -p1 < /tmp/llvm-0002-LLD-COFF-Move-Archive-create-call-to-LinkerDriver-ad.patch \
+&& patch -p1 < /tmp/llvm-0003-LLD-COFF-Use-lazy-object-mechanism-instead-of-relyin.patch \
+&& patch -p1 < /tmp/llvm-0004-Object-ArchiveWriter-Factor-out-MemberData-allocatio.patch \
+&& patch -p1 < /tmp/llvm-0005-Object-COFF-Introduce-the-.obj.arm64ec-section-20515.patch \
+&& patch -p1 < /tmp/llvm-0006-LLD-COFF-Factor-out-addObjectFile-NFC-206811.patch \
+&& patch -p1 < /tmp/llvm-0007-Archive-COFF-Split-hybrid-COFF-files-when-adding-the.patch \
+&& patch -p1 < /tmp/llvm-0008-clang-ARM64X-Support-compiling-both-native-and-EC-ob.patch \
+&& patch -p1 < /tmp/llvm-0009-LLD-COFF-Add-support-for-multi-arch-ARM64X-object-fi.patch \
+&& patch -p1 < /tmp/llvm-0010-clang-mingw-Try-both-native-and-ARM64EC-triples-when.patch \
+&& patch -p1 < /tmp/llvm-0011-LLD-COFF-Fix-linking-directly-against-an-ARM64X-DLL-.patch \
+&& patch -p1 < /tmp/llvm-0012-LLD-COFF-Replace-ARM64EC-TLS-directory-chunks-with-n.patch \
+&& patch -p1 < /tmp/llvm-0013-LLD-COFF-Emit-ARM64X-relocations-for-TLS-directory.patch \
 && cd /tmp/llvm-mingw-@LLVM_MINGW_VERSION@ \
+&& patch -p1 < /tmp/llvm-mingw.patch \
+&& rm /tmp/llvm-*.patch \
 && ./build-all.sh /opt/llvm-mingw \
 && rm -rf /opt/usr/share/doc /opt/usr/share/info /opt/usr/share/man \
 && rm -rf /tmp/llvm-mingw-@LLVM_MINGW_VERSION@
