@@ -1425,8 +1425,10 @@ def default_compat_config():
             ret.add("nohardwarescheduling")
 
         if appid in [
-                    "4920",
-                    "552440",
+                    "4920", #Natural Selection 2
+                    "552440", #The Talos Principle VR
+                    "257510", #The Talos Principle
+
                 ]:
             ret.discard("gamedrive")
 
