@@ -1426,6 +1426,7 @@ def default_compat_config():
 
         if appid in [
                     "4920",
+                    "552440",
                 ]:
             ret.discard("gamedrive")
 
