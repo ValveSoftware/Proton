@@ -319,7 +319,7 @@ static NTSTATUS steamclient_Steam_BGetCallback( Params *params, bool wow64 )
         TRACE( "id %d, u_size %d.\n", u_msg->m_iCallback, u_msg->m_cubParam );
         w_msg->m_hSteamUser = u_msg->m_hSteamUser;
         w_msg->m_iCallback = u_msg->m_iCallback;
-        w_msg->m_cubParam = callback_len_utow( u_msg->m_iCallback, u_msg->m_cubParam, false );
+        w_msg->m_cubParam = callback_len_utow( u_msg->m_iCallback, u_msg->m_cubParam, wow64 );
         params->cookie = (UINT_PTR)u_msg;
         params->_ret = true;
     }
@@ -337,7 +337,7 @@ static NTSTATUS steamclient_callback_message_receive( Params *params, bool wow64
 
     convert_callback_utow( u_msg->m_iCallback, (void *)u_msg->m_pubParam,
                            u_msg->m_cubParam, (void *)w_msg->m_pubParam,
-                           w_msg->m_cubParam, false );
+                           w_msg->m_cubParam, wow64 );
     if (w_msg->m_iCallback == 703 /* SteamAPICallCompleted_t::k_iCallback */)
     {
         SteamAPICallCompleted_t_137 *c = (SteamAPICallCompleted_t_137 *)u_msg->m_pubParam;
@@ -347,7 +347,7 @@ static NTSTATUS steamclient_callback_message_receive( Params *params, bool wow64
         {
             int len;
 
-            len = callback_len_utow( c->m_iCallback, c->m_cubParam, false );
+            len = callback_len_utow( c->m_iCallback, c->m_cubParam, wow64 );
             TRACE( "SteamAPICallCompleted_t id %d, size %d -> %d.\n", c->m_iCallback, c->m_cubParam, len );
             w->m_cubParam = len;
         }
@@ -374,14 +374,14 @@ static NTSTATUS steamclient_Steam_GetAPICallResult( Params *params, bool wow64 )
     int u_callback_len = params->w_callback_len;
     void *u_callback;
 
-    if (!(u_callback = alloc_callback_wtou( params->id, params->w_callback, &u_callback_len, false ))) return false;
+    if (!(u_callback = alloc_callback_wtou( params->id, params->w_callback, &u_callback_len, wow64 ))) return false;
 
     params->_ret = p_Steam_GetAPICallResult( params->pipe, params->call, u_callback, u_callback_len,
                                              params->id, params->failed );
 
     if (params->_ret && u_callback != params->w_callback)
     {
-        convert_callback_utow( params->id, u_callback, u_callback_len, params->w_callback, params->w_callback_len, false );
+        convert_callback_utow( params->id, u_callback, u_callback_len, params->w_callback, params->w_callback_len, wow64 );
         free( u_callback );
     }
 
