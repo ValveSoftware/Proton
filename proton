@@ -1457,6 +1457,14 @@ default_cpu_limit = {
     "1038250"   :  "P",   # DIRT 5
 }
 
+fex_application_profiles = {
+    "292030" : { # The Witcher 3: Wild Hunt
+        "setup*": {
+            "X87ReducedPrecision": "0"
+        }
+    }
+}
+
 class Session:
     def __init__(self):
         self.log_file = None
@@ -1661,6 +1669,12 @@ class Session:
 
         if "PROTON_LOG" in self.env:
             app_config["Config"]["SilentLog"] = "0" if self.log_enabled_for("fex", True) else "1"
+
+        if os.environ["SteamGameId"] in fex_application_profiles:
+            try:
+                app_config["AppOverrides"] = fex_application_profiles[os.environ["SteamGameId"]]
+            except (KeyError, ValueError):
+                pass
 
         return app_config
 
