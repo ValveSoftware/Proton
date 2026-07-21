@@ -1835,6 +1835,12 @@ class Session:
                     ]:
                 self.env["PROTON_LIMIT_RESOLUTIONS"] = "32"
 
+        if "PROTON_SPOOF_STEAMINPUT_VIDPID" not in self.env:
+            if os.environ.get("SteamGameId", 0) in [
+                    "939960",
+                    ]:
+                self.env["PROTON_SPOOF_STEAMINPUT_VIDPID"] = "1"
+
         if "forcelgadd" in self.compat_config:
             self.env["WINE_LARGE_ADDRESS_AWARE"] = "1"
         else:
