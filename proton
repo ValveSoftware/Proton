@@ -1674,7 +1674,7 @@ class Session:
         if "PROTON_LOG" in self.env:
             app_config["Config"]["SilentLog"] = "0" if self.log_enabled_for("fex", True) else "1"
 
-        if os.environ["SteamGameId"] in fex_application_profiles:
+        if "SteamGameId" in os.environ and os.environ["SteamGameId"] in fex_application_profiles:
             try:
                 app_config["AppOverrides"] = fex_application_profiles[os.environ["SteamGameId"]]
             except (KeyError, ValueError):
