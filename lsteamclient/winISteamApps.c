@@ -1984,6 +1984,8 @@ DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetDlcConte
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetNumBetas, 12)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetBetaInfo, 36)
 DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetActiveBeta, 8)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting, 8)
+DEFINE_THISCALL_WRAPPER(winISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution, 12)
 
 int8_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION009_BIsSubscribed(struct w_iface *_this)
 {
@@ -2390,6 +2392,29 @@ int8_t __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetActiveBeta(str
     return params._ret;
 }
 
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting(struct w_iface *_this, uint32_t setting)
+{
+    struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting_params params =
+    {
+        .u_iface = _this->u_iface,
+        .setting = setting,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting, &params );
+}
+
+void __thiscall winISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution(struct w_iface *_this, uint32_t unWidth, uint32_t unHeight)
+{
+    struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution_params params =
+    {
+        .u_iface = _this->u_iface,
+        .unWidth = unWidth,
+        .unHeight = unHeight,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution, &params );
+}
+
 extern vtable_ptr winISteamApps_STEAMAPPS_INTERFACE_VERSION009_vtable;
 
 DEFINE_RTTI_DATA0(winISteamApps_STEAMAPPS_INTERFACE_VERSION009, 0, ".?AVISteamApps@@")
@@ -2429,6 +2454,8 @@ __ASM_BLOCK_BEGIN(winISteamApps_STEAMAPPS_INTERFACE_VERSION009_vtables)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetNumBetas)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetBetaInfo)
         VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetActiveBeta)
+        VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting)
+        VTABLE_ADD_FUNC(winISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution)
     );
 __ASM_BLOCK_END
 
@@ -2436,7 +2463,7 @@ struct w_iface *create_winISteamApps_STEAMAPPS_INTERFACE_VERSION009( struct u_if
 {
     struct w_iface *r = alloc_mem_for_iface(sizeof(struct w_iface), "STEAMAPPS_INTERFACE_VERSION009");
     TRACE("-> %p\n", r);
-    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION009_vtable, 33, "STEAMAPPS_INTERFACE_VERSION009");
+    r->vtable = alloc_vtable(&winISteamApps_STEAMAPPS_INTERFACE_VERSION009_vtable, 35, "STEAMAPPS_INTERFACE_VERSION009");
     r->u_iface = u_iface;
     return r;
 }

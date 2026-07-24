@@ -88,11 +88,11 @@ void SteamMatchmakingServerListResponse_106::RefreshComplete( void *hRequest, ui
 struct SteamMatchmakingPingResponse : u_ISteamMatchmakingPingResponse
 {
     struct w_iface *w_iface;
-    virtual void ServerResponded( gameserveritem_t_105 * );
+    virtual void ServerResponded( gameserveritem_t_165 * );
     virtual void ServerFailedToRespond(  );
 };
 
-void SteamMatchmakingPingResponse::ServerResponded( gameserveritem_t_105 *server )
+void SteamMatchmakingPingResponse::ServerResponded( gameserveritem_t_165 *server )
 {
     queue_vtable_callback_0_server_responded( this->w_iface, server );
     TRACE("Deleting this %p, w_iface %p.\n", this, this->w_iface);
@@ -190,6 +190,46 @@ struct u_ISteamMatchmakingRulesResponse *create_LinuxISteamMatchmakingRulesRespo
 
     if (!win) return NULL;
     if (!(ret = new SteamMatchmakingRulesResponse())) return NULL;
+    ret->w_iface = (struct w_iface *)win;
+
+    TRACE("-> %p.\n", ret);
+    return ret;
+}
+
+
+struct SteamMatchmakingServerFriendsResponse : u_ISteamMatchmakingServerFriendsResponse
+{
+    struct w_iface *w_iface;
+    virtual void AddFriendToList( CSteamID steamID, const char *pchName, int8_t bCurrentlyConnected );
+    virtual void FriendsFailedToRespond(  );
+    virtual void FriendsRefreshComplete(  );
+};
+
+void SteamMatchmakingServerFriendsResponse::AddFriendToList( CSteamID steamID, const char *pchName, int8_t bCurrentlyConnected )
+{
+    queue_vtable_callback_0_friends_responded( this->w_iface, steamID, pchName, bCurrentlyConnected );
+}
+
+void SteamMatchmakingServerFriendsResponse::FriendsFailedToRespond(void)
+{
+    queue_vtable_callback( this->w_iface, CALL_IFACE_VTABLE_1_0, 0, 0 );
+    TRACE("Deleting this %p, w_iface %p.\n", this, this->w_iface);
+    free_callback_obj(this);
+}
+
+void SteamMatchmakingServerFriendsResponse::FriendsRefreshComplete(void)
+{
+    queue_vtable_callback( this->w_iface, CALL_IFACE_VTABLE_2_0, 0, 0 );
+    TRACE("Deleting this %p, w_iface %p.\n", this, this->w_iface);
+    free_callback_obj(this);
+}
+
+struct u_ISteamMatchmakingServerFriendsResponse *create_LinuxISteamMatchmakingServerFriendsResponse( void *win )
+{
+    SteamMatchmakingServerFriendsResponse *ret;
+
+    if (!win) return NULL;
+    if (!(ret = new SteamMatchmakingServerFriendsResponse())) return NULL;
     ret->w_iface = (struct w_iface *)win;
 
     TRACE("-> %p.\n", ret);
@@ -383,6 +423,14 @@ static NTSTATUS ISteamMatchmakingServers_PlayerDetails( Iface *iface, Params *pa
 }
 
 template< typename Iface, typename Params >
+static NTSTATUS ISteamMatchmakingServers_ServerFriends( Iface *iface, Params *params, bool wow64 )
+{
+    u_ISteamMatchmakingServerFriendsResponse *u_response = create_LinuxISteamMatchmakingServerFriendsResponse( params->pRequestServersResponse );
+    params->_ret = iface->ServerFriends( params->unIP, params->usPort, u_response );
+    return 0;
+}
+
+template< typename Iface, typename Params >
 static NTSTATUS ISteamMatchmakingServers_ServerRules( Iface *iface, Params *params, bool wow64 )
 {
     u_ISteamMatchmakingRulesResponse *u_response = create_LinuxISteamMatchmakingRulesResponse( params->pRequestServersResponse );
@@ -403,8 +451,14 @@ template< typename Iface, typename Params >
 static NTSTATUS ISteamMatchmakingServers_GetServerDetails( Iface *iface, Params *params, bool wow64 )
 {
     struct w_request *w_request = (struct w_request *)(void *)params->hRequest;
-    gameserveritem_t_105 *item = iface->GetServerDetails( w_request ? (void *)w_request->u_request : nullptr, params->iServer );
-    if (w_request && w_request->details) w_request->details[params->iServer] = *item;
+    auto *item = iface->GetServerDetails( w_request ? (void *)w_request->u_request : nullptr, params->iServer );
+    if (w_request && w_request->details)
+    {
+        /* request->details is array of the latest gameserveritem_t version but so far the newer structures only
+         * have added fields in the end. */
+        memset( &w_request->details[params->iServer], 0, sizeof(w_request->details[params->iServer]) );
+        memcpy( &w_request->details[params->iServer], item, sizeof(*item) );
+    }
     params->_ret = item;
     return 0;
 }
@@ -475,3 +529,21 @@ LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers002, Re
 LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers002, IsRefreshing );
 LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers002, GetServerCount );
 LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers002, RefreshServer );
+
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, RequestInternetServerList );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, RequestLANServerList );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, RequestFriendsServerList );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, RequestFavoritesServerList );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, RequestHistoryServerList );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, RequestSpectatorServerList );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, PingServer );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, PlayerDetails );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, ServerFriends );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, ServerRules );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, ReleaseRequest );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, GetServerDetails );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, CancelQuery );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, RefreshQuery );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, IsRefreshing );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, GetServerCount );
+LSTEAMCLIENT_UNIX_IMPL( ISteamMatchmakingServers, SteamMatchMakingServers003, RefreshServer );
