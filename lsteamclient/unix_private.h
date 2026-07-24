@@ -23,9 +23,10 @@ extern "C"
 
 struct w_iface;
 extern void queue_vtable_callback( struct w_iface *w_iface, enum callback_type type, uint64_t arg0, uint64_t arg1 );
-extern void queue_vtable_callback_0_server_responded( struct w_iface *w_iface, gameserveritem_t_105 *server );
+extern void queue_vtable_callback_0_server_responded( struct w_iface *w_iface, gameserveritem_t_165 *server );
 extern void queue_vtable_callback_0_add_player_to_list( struct w_iface *w_iface, const char *pchName, int nScore, float flTimePlayed );
 extern void queue_vtable_callback_0_rules_responded( struct w_iface *w_iface, const char *pchRule, const char *pchValue );
+extern void queue_vtable_callback_0_friends_responded( struct w_iface *w_iface, CSteamID steamID, const char *pchName, int8_t bCurrentlyConnected );
 
 typedef void (*W_CDECL w_cdecl_func)( void * );
 extern void queue_cdecl_func_callback( w_cdecl_func func, void *data, uint32_t data_size );

@@ -605,3 +605,39 @@ NTSTATUS wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetActiveBeta( void *ar
 }
 #endif
 
+NTSTATUS ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting( void *args )
+{
+    struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting_params *params = (struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting_params *)args;
+    struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION009 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION009 *)params->u_iface;
+    iface->SetGamePerformanceSetting( params->setting );
+    return 0;
+}
+
+#if defined(__x86_64__) || defined(__aarch64__)
+NTSTATUS wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting( void *args )
+{
+    struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting_params *params = (struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting_params *)args;
+    struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION009 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION009 *)params->u_iface;
+    iface->SetGamePerformanceSetting( params->setting );
+    return 0;
+}
+#endif
+
+NTSTATUS ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution( void *args )
+{
+    struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution_params *params = (struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution_params *)args;
+    struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION009 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION009 *)params->u_iface;
+    iface->SetGameRenderResolution( params->unWidth, params->unHeight );
+    return 0;
+}
+
+#if defined(__x86_64__) || defined(__aarch64__)
+NTSTATUS wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution( void *args )
+{
+    struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution_params *params = (struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution_params *)args;
+    struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION009 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION009 *)params->u_iface;
+    iface->SetGameRenderResolution( params->unWidth, params->unHeight );
+    return 0;
+}
+#endif
+

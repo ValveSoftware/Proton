@@ -67,7 +67,7 @@ void queue_vtable_callback( struct w_iface *w_iface, enum callback_type type, ui
     pthread_mutex_unlock( &callbacks_lock );
 }
 
-void queue_vtable_callback_0_server_responded( struct w_iface *w_iface, gameserveritem_t_105 *server )
+void queue_vtable_callback_0_server_responded( struct w_iface *w_iface, gameserveritem_t_165 *server )
 {
     uint32_t size = sizeof(*server);
     struct callback_entry *entry;
@@ -124,6 +124,28 @@ void queue_vtable_callback_0_rules_responded( struct w_iface *w_iface, const cha
     entry->callback.rules_responded.iface = w_iface;
     memcpy( (char *)entry->callback.rules_responded.rule_and_value, pchRule, rule_size );
     memcpy( (char *)entry->callback.rules_responded.rule_and_value + rule_size, pchValue, value_size );
+
+    pthread_mutex_lock( &callbacks_lock );
+    list_add_tail( &callbacks, &entry->entry );
+    pthread_mutex_unlock( &callbacks_lock );
+}
+
+void queue_vtable_callback_0_friends_responded( struct w_iface *w_iface, CSteamID steamID, const char *pchName, int8_t bCurrentlyConnected )
+{
+    uint32_t name_size = strlen( pchName ) + 1, size = name_size;
+    struct callback_entry *entry;
+
+    size += sizeof(struct callback_entry);
+    if (!(entry = (struct callback_entry *)calloc( 1, size ))) return;
+
+    entry->callback.type = CALL_IFACE_VTABLE_0_FRIENDS_RESPONDED;
+    size -= offsetof( struct callback_entry, callback );
+    entry->callback.size = size;
+
+    entry->callback.friends_responded.iface = w_iface;
+    entry->callback.friends_responded.steamid = steamID;
+    entry->callback.friends_responded.connected = bCurrentlyConnected;
+    memcpy( (char *)entry->callback.friends_responded.name, pchName, name_size );
 
     pthread_mutex_lock( &callbacks_lock );
     list_add_tail( &callbacks, &entry->entry );
