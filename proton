@@ -1854,7 +1854,8 @@ class Session:
 
         if "PROTON_SPOOF_STEAMINPUT_VIDPID" not in self.env:
             if os.environ.get("SteamGameId", 0) in [
-                    "939960",
+                    "939960", #Far Cry New Dawn
+                    "250900", #The Binding of Isaac: Rebirth
                     ]:
                 self.env["PROTON_SPOOF_STEAMINPUT_VIDPID"] = "1"
 
