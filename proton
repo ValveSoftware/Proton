@@ -1853,6 +1853,7 @@ class Session:
             if os.environ.get("SteamGameId", 0) in [
                     "939960", #Far Cry New Dawn
                     "250900", #The Binding of Isaac: Rebirth
+                    "297860", #Split/Second
                     ]:
                 self.env["PROTON_SPOOF_STEAMINPUT_VIDPID"] = "1"
 
