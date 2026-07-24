@@ -353,15 +353,28 @@ struct wow64_steamclient_networking_message_release_153a_params
 struct networking_message_pool;
 struct networking_message
 {
-    struct networking_message_pool *pool;
-    void **p_data;
-    uint32_t *p_size;
+    union
+    {
+        struct networking_message_pool *pool;
+        uint64_t pad1;
+    };
+    union
+    {
+        void **p_data;
+        uint64_t pad2;
+    };
+    union
+    {
+        uint32_t *p_size;
+        uint64_t pad3;
+    };
 
     union
     {
         u_SteamNetworkingMessage_t_144 *u_msg_144;
         u_SteamNetworkingMessage_t_147 *u_msg_147;
         u_SteamNetworkingMessage_t_153a *u_msg_153a;
+        uint64_t pad4;
     };
     union
     {
