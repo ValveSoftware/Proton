@@ -45,3 +45,5 @@ LSTEAMCLIENT_UNIX_IMPL( ISteamUtils, SteamUtils008, GetAPICallResult );
 LSTEAMCLIENT_UNIX_IMPL( ISteamUtils, SteamUtils009, GetAPICallResult );
 
 LSTEAMCLIENT_UNIX_IMPL( ISteamUtils, SteamUtils010, GetAPICallResult );
+
+LSTEAMCLIENT_UNIX_IMPL( ISteamUtils, SteamUtils011, GetAPICallResult );

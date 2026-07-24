@@ -2349,6 +2349,678 @@ struct w_iface *create_winISteamInput_SteamInput006( struct u_iface u_iface )
     return r;
 }
 
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_Init, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_Shutdown, 4)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_SetInputActionManifestFilePath, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_RunFrame, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_BWaitForData, 12)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_BNewDataAvailable, 4)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetConnectedControllers, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_EnableDeviceCallbacks, 4)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_EnableActionEventCallbacks, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetActionSetHandle, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_ActivateActionSet, 20)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetCurrentActionSet, 12)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_ActivateActionSetLayer, 20)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_DeactivateActionSetLayer, 20)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_DeactivateAllActionSetLayers, 12)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetActiveActionSetLayers, 16)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetDigitalActionHandle, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetDigitalActionData, 24)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetDigitalActionOrigins, 32)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetStringForDigitalActionName, 12)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetAnalogActionHandle, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetAnalogActionData, 24)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetAnalogActionOrigins, 32)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetGlyphPNGForActionOrigin, 16)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetGlyphSVGForActionOrigin, 12)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetGlyphForActionOrigin_Legacy, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetStringForActionOrigin, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetStringForAnalogActionName, 12)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_StopAnalogActionMomentum, 20)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetMotionData, 16)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_TriggerVibration, 20)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_TriggerVibrationExtended, 28)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_TriggerSimpleHapticEvent, 32)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_SetLEDColor, 28)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_Legacy_TriggerHapticPulse, 20)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_Legacy_TriggerRepeatedHapticPulse, 32)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_ShowBindingPanel, 12)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetInputTypeForHandle, 12)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetControllerForGamepadIndex, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetGamepadIndexForController, 12)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetStringForXboxOrigin, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetGlyphForXboxOrigin, 8)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetActionOriginFromXboxOrigin, 16)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_TranslateActionOrigin, 12)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetDeviceBindingRevision, 20)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetRemotePlaySessionID, 12)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_GetSessionInputConfigurationSettings, 4)
+DEFINE_THISCALL_WRAPPER(winISteamInput_SteamInput007_SetDualSenseTriggerEffect, 16)
+
+int8_t __thiscall winISteamInput_SteamInput007_Init(struct w_iface *_this, int8_t bExplicitlyCallRunFrame)
+{
+    struct ISteamInput_SteamInput007_Init_params params =
+    {
+        .u_iface = _this->u_iface,
+        .bExplicitlyCallRunFrame = bExplicitlyCallRunFrame,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_Init, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamInput_SteamInput007_Shutdown(struct w_iface *_this)
+{
+    struct ISteamInput_SteamInput007_Shutdown_params params =
+    {
+        .u_iface = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_Shutdown, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamInput_SteamInput007_SetInputActionManifestFilePath(struct w_iface *_this, const char *pchInputActionManifestAbsolutePath)
+{
+    struct ISteamInput_SteamInput007_SetInputActionManifestFilePath_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pchInputActionManifestAbsolutePath = pchInputActionManifestAbsolutePath,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pchInputActionManifestAbsolutePath, -1);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_SetInputActionManifestFilePath, &params );
+    return params._ret;
+}
+
+void __thiscall winISteamInput_SteamInput007_RunFrame(struct w_iface *_this, int8_t bReservedValue)
+{
+    struct ISteamInput_SteamInput007_RunFrame_params params =
+    {
+        .u_iface = _this->u_iface,
+        .bReservedValue = bReservedValue,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_RunFrame, &params );
+}
+
+int8_t __thiscall winISteamInput_SteamInput007_BWaitForData(struct w_iface *_this, int8_t bWaitForever, uint32_t unTimeout)
+{
+    struct ISteamInput_SteamInput007_BWaitForData_params params =
+    {
+        .u_iface = _this->u_iface,
+        .bWaitForever = bWaitForever,
+        .unTimeout = unTimeout,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_BWaitForData, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamInput_SteamInput007_BNewDataAvailable(struct w_iface *_this)
+{
+    struct ISteamInput_SteamInput007_BNewDataAvailable_params params =
+    {
+        .u_iface = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_BNewDataAvailable, &params );
+    return params._ret;
+}
+
+int32_t __thiscall winISteamInput_SteamInput007_GetConnectedControllers(struct w_iface *_this, uint64_t *handlesOut)
+{
+    struct ISteamInput_SteamInput007_GetConnectedControllers_params params =
+    {
+        .u_iface = _this->u_iface,
+        .handlesOut = handlesOut,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetConnectedControllers, &params );
+    return params._ret;
+}
+
+void __thiscall winISteamInput_SteamInput007_EnableDeviceCallbacks(struct w_iface *_this)
+{
+    struct ISteamInput_SteamInput007_EnableDeviceCallbacks_params params =
+    {
+        .u_iface = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_EnableDeviceCallbacks, &params );
+}
+
+void __thiscall winISteamInput_SteamInput007_EnableActionEventCallbacks(struct w_iface *_this, void (*W_CDECL pCallback)(SteamInputActionEvent_t *))
+{
+    struct ISteamInput_SteamInput007_EnableActionEventCallbacks_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pCallback = pCallback,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_EnableActionEventCallbacks, &params );
+}
+
+uint64_t __thiscall winISteamInput_SteamInput007_GetActionSetHandle(struct w_iface *_this, const char *pszActionSetName)
+{
+    struct ISteamInput_SteamInput007_GetActionSetHandle_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pszActionSetName = pszActionSetName,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pszActionSetName, -1);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetActionSetHandle, &params );
+    return params._ret;
+}
+
+void __thiscall winISteamInput_SteamInput007_ActivateActionSet(struct w_iface *_this, uint64_t inputHandle, uint64_t actionSetHandle)
+{
+    struct ISteamInput_SteamInput007_ActivateActionSet_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .actionSetHandle = actionSetHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_ActivateActionSet, &params );
+}
+
+uint64_t __thiscall winISteamInput_SteamInput007_GetCurrentActionSet(struct w_iface *_this, uint64_t inputHandle)
+{
+    struct ISteamInput_SteamInput007_GetCurrentActionSet_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetCurrentActionSet, &params );
+    return params._ret;
+}
+
+void __thiscall winISteamInput_SteamInput007_ActivateActionSetLayer(struct w_iface *_this, uint64_t inputHandle, uint64_t actionSetLayerHandle)
+{
+    struct ISteamInput_SteamInput007_ActivateActionSetLayer_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .actionSetLayerHandle = actionSetLayerHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_ActivateActionSetLayer, &params );
+}
+
+void __thiscall winISteamInput_SteamInput007_DeactivateActionSetLayer(struct w_iface *_this, uint64_t inputHandle, uint64_t actionSetLayerHandle)
+{
+    struct ISteamInput_SteamInput007_DeactivateActionSetLayer_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .actionSetLayerHandle = actionSetLayerHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_DeactivateActionSetLayer, &params );
+}
+
+void __thiscall winISteamInput_SteamInput007_DeactivateAllActionSetLayers(struct w_iface *_this, uint64_t inputHandle)
+{
+    struct ISteamInput_SteamInput007_DeactivateAllActionSetLayers_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_DeactivateAllActionSetLayers, &params );
+}
+
+int32_t __thiscall winISteamInput_SteamInput007_GetActiveActionSetLayers(struct w_iface *_this, uint64_t inputHandle, uint64_t *handlesOut)
+{
+    struct ISteamInput_SteamInput007_GetActiveActionSetLayers_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .handlesOut = handlesOut,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetActiveActionSetLayers, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamInput_SteamInput007_GetDigitalActionHandle(struct w_iface *_this, const char *pszActionName)
+{
+    struct ISteamInput_SteamInput007_GetDigitalActionHandle_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pszActionName, -1);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetDigitalActionHandle, &params );
+    return params._ret;
+}
+
+InputDigitalActionData_t * __thiscall winISteamInput_SteamInput007_GetDigitalActionData(struct w_iface *_this, InputDigitalActionData_t *_ret, uint64_t inputHandle, uint64_t digitalActionHandle)
+{
+    struct ISteamInput_SteamInput007_GetDigitalActionData_params params =
+    {
+        .u_iface = _this->u_iface,
+        ._ret = _ret,
+        .inputHandle = inputHandle,
+        .digitalActionHandle = digitalActionHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetDigitalActionData, &params );
+    return params._ret;
+}
+
+int32_t __thiscall winISteamInput_SteamInput007_GetDigitalActionOrigins(struct w_iface *_this, uint64_t inputHandle, uint64_t actionSetHandle, uint64_t digitalActionHandle, uint32_t *originsOut)
+{
+    struct ISteamInput_SteamInput007_GetDigitalActionOrigins_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .actionSetHandle = actionSetHandle,
+        .digitalActionHandle = digitalActionHandle,
+        .originsOut = originsOut,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetDigitalActionOrigins, &params );
+    return params._ret;
+}
+
+const char * __thiscall winISteamInput_SteamInput007_GetStringForDigitalActionName(struct w_iface *_this, uint64_t eActionHandle)
+{
+    struct ISteamInput_SteamInput007_GetStringForDigitalActionName_params params =
+    {
+        .u_iface = _this->u_iface,
+        .eActionHandle = eActionHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetStringForDigitalActionName, &params );
+    return get_unix_buffer( params._ret );
+}
+
+uint64_t __thiscall winISteamInput_SteamInput007_GetAnalogActionHandle(struct w_iface *_this, const char *pszActionName)
+{
+    struct ISteamInput_SteamInput007_GetAnalogActionHandle_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pszActionName = pszActionName,
+    };
+    TRACE("%p\n", _this);
+    IsBadStringPtrA(pszActionName, -1);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetAnalogActionHandle, &params );
+    return params._ret;
+}
+
+InputAnalogActionData_t * __thiscall winISteamInput_SteamInput007_GetAnalogActionData(struct w_iface *_this, InputAnalogActionData_t *_ret, uint64_t inputHandle, uint64_t analogActionHandle)
+{
+    struct ISteamInput_SteamInput007_GetAnalogActionData_params params =
+    {
+        .u_iface = _this->u_iface,
+        ._ret = _ret,
+        .inputHandle = inputHandle,
+        .analogActionHandle = analogActionHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetAnalogActionData, &params );
+    return params._ret;
+}
+
+int32_t __thiscall winISteamInput_SteamInput007_GetAnalogActionOrigins(struct w_iface *_this, uint64_t inputHandle, uint64_t actionSetHandle, uint64_t analogActionHandle, uint32_t *originsOut)
+{
+    struct ISteamInput_SteamInput007_GetAnalogActionOrigins_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .actionSetHandle = actionSetHandle,
+        .analogActionHandle = analogActionHandle,
+        .originsOut = originsOut,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetAnalogActionOrigins, &params );
+    return params._ret;
+}
+
+const char * __thiscall winISteamInput_SteamInput007_GetStringForActionOrigin(struct w_iface *_this, uint32_t eOrigin)
+{
+    struct ISteamInput_SteamInput007_GetStringForActionOrigin_params params =
+    {
+        .u_iface = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetStringForActionOrigin, &params );
+    return get_unix_buffer( params._ret );
+}
+
+const char * __thiscall winISteamInput_SteamInput007_GetStringForAnalogActionName(struct w_iface *_this, uint64_t eActionHandle)
+{
+    struct ISteamInput_SteamInput007_GetStringForAnalogActionName_params params =
+    {
+        .u_iface = _this->u_iface,
+        .eActionHandle = eActionHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetStringForAnalogActionName, &params );
+    return get_unix_buffer( params._ret );
+}
+
+void __thiscall winISteamInput_SteamInput007_StopAnalogActionMomentum(struct w_iface *_this, uint64_t inputHandle, uint64_t eAction)
+{
+    struct ISteamInput_SteamInput007_StopAnalogActionMomentum_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .eAction = eAction,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_StopAnalogActionMomentum, &params );
+}
+
+InputMotionData_t * __thiscall winISteamInput_SteamInput007_GetMotionData(struct w_iface *_this, InputMotionData_t *_ret, uint64_t inputHandle)
+{
+    struct ISteamInput_SteamInput007_GetMotionData_params params =
+    {
+        .u_iface = _this->u_iface,
+        ._ret = _ret,
+        .inputHandle = inputHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetMotionData, &params );
+    return params._ret;
+}
+
+void __thiscall winISteamInput_SteamInput007_TriggerVibration(struct w_iface *_this, uint64_t inputHandle, uint16_t usLeftSpeed, uint16_t usRightSpeed)
+{
+    struct ISteamInput_SteamInput007_TriggerVibration_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .usLeftSpeed = usLeftSpeed,
+        .usRightSpeed = usRightSpeed,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_TriggerVibration, &params );
+}
+
+void __thiscall winISteamInput_SteamInput007_TriggerVibrationExtended(struct w_iface *_this, uint64_t inputHandle, uint16_t usLeftSpeed, uint16_t usRightSpeed, uint16_t usLeftTriggerSpeed, uint16_t usRightTriggerSpeed)
+{
+    struct ISteamInput_SteamInput007_TriggerVibrationExtended_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .usLeftSpeed = usLeftSpeed,
+        .usRightSpeed = usRightSpeed,
+        .usLeftTriggerSpeed = usLeftTriggerSpeed,
+        .usRightTriggerSpeed = usRightTriggerSpeed,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_TriggerVibrationExtended, &params );
+}
+
+void __thiscall winISteamInput_SteamInput007_TriggerSimpleHapticEvent(struct w_iface *_this, uint64_t inputHandle, uint32_t eHapticLocation, uint8_t nIntensity, char nGainDB, uint8_t nOtherIntensity, char nOtherGainDB)
+{
+    struct ISteamInput_SteamInput007_TriggerSimpleHapticEvent_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .eHapticLocation = eHapticLocation,
+        .nIntensity = nIntensity,
+        .nGainDB = nGainDB,
+        .nOtherIntensity = nOtherIntensity,
+        .nOtherGainDB = nOtherGainDB,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_TriggerSimpleHapticEvent, &params );
+}
+
+void __thiscall winISteamInput_SteamInput007_SetLEDColor(struct w_iface *_this, uint64_t inputHandle, uint8_t nColorR, uint8_t nColorG, uint8_t nColorB, uint32_t nFlags)
+{
+    struct ISteamInput_SteamInput007_SetLEDColor_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .nColorR = nColorR,
+        .nColorG = nColorG,
+        .nColorB = nColorB,
+        .nFlags = nFlags,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_SetLEDColor, &params );
+}
+
+void __thiscall winISteamInput_SteamInput007_Legacy_TriggerHapticPulse(struct w_iface *_this, uint64_t inputHandle, uint32_t eTargetPad, uint16_t usDurationMicroSec)
+{
+    struct ISteamInput_SteamInput007_Legacy_TriggerHapticPulse_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_Legacy_TriggerHapticPulse, &params );
+}
+
+void __thiscall winISteamInput_SteamInput007_Legacy_TriggerRepeatedHapticPulse(struct w_iface *_this, uint64_t inputHandle, uint32_t eTargetPad, uint16_t usDurationMicroSec, uint16_t usOffMicroSec, uint16_t unRepeat, uint32_t nFlags)
+{
+    struct ISteamInput_SteamInput007_Legacy_TriggerRepeatedHapticPulse_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .eTargetPad = eTargetPad,
+        .usDurationMicroSec = usDurationMicroSec,
+        .usOffMicroSec = usOffMicroSec,
+        .unRepeat = unRepeat,
+        .nFlags = nFlags,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_Legacy_TriggerRepeatedHapticPulse, &params );
+}
+
+int8_t __thiscall winISteamInput_SteamInput007_ShowBindingPanel(struct w_iface *_this, uint64_t inputHandle)
+{
+    struct ISteamInput_SteamInput007_ShowBindingPanel_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_ShowBindingPanel, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamInput_SteamInput007_GetInputTypeForHandle(struct w_iface *_this, uint64_t inputHandle)
+{
+    struct ISteamInput_SteamInput007_GetInputTypeForHandle_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetInputTypeForHandle, &params );
+    return params._ret;
+}
+
+uint64_t __thiscall winISteamInput_SteamInput007_GetControllerForGamepadIndex(struct w_iface *_this, int32_t nIndex)
+{
+    struct ISteamInput_SteamInput007_GetControllerForGamepadIndex_params params =
+    {
+        .u_iface = _this->u_iface,
+        .nIndex = nIndex,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetControllerForGamepadIndex, &params );
+    return params._ret;
+}
+
+int32_t __thiscall winISteamInput_SteamInput007_GetGamepadIndexForController(struct w_iface *_this, uint64_t ulinputHandle)
+{
+    struct ISteamInput_SteamInput007_GetGamepadIndexForController_params params =
+    {
+        .u_iface = _this->u_iface,
+        .ulinputHandle = ulinputHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetGamepadIndexForController, &params );
+    return params._ret;
+}
+
+const char * __thiscall winISteamInput_SteamInput007_GetStringForXboxOrigin(struct w_iface *_this, uint32_t eOrigin)
+{
+    struct ISteamInput_SteamInput007_GetStringForXboxOrigin_params params =
+    {
+        .u_iface = _this->u_iface,
+        .eOrigin = eOrigin,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetStringForXboxOrigin, &params );
+    return get_unix_buffer( params._ret );
+}
+
+uint32_t __thiscall winISteamInput_SteamInput007_GetActionOriginFromXboxOrigin(struct w_iface *_this, uint64_t inputHandle, uint32_t eOrigin)
+{
+    struct ISteamInput_SteamInput007_GetActionOriginFromXboxOrigin_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .eOrigin = eOrigin,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetActionOriginFromXboxOrigin, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamInput_SteamInput007_TranslateActionOrigin(struct w_iface *_this, uint32_t eDestinationInputType, uint32_t eSourceOrigin)
+{
+    struct ISteamInput_SteamInput007_TranslateActionOrigin_params params =
+    {
+        .u_iface = _this->u_iface,
+        .eDestinationInputType = eDestinationInputType,
+        .eSourceOrigin = eSourceOrigin,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_TranslateActionOrigin, &params );
+    return params._ret;
+}
+
+int8_t __thiscall winISteamInput_SteamInput007_GetDeviceBindingRevision(struct w_iface *_this, uint64_t inputHandle, int32_t *pMajor, int32_t *pMinor)
+{
+    struct ISteamInput_SteamInput007_GetDeviceBindingRevision_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .pMajor = pMajor,
+        .pMinor = pMinor,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetDeviceBindingRevision, &params );
+    return params._ret;
+}
+
+uint32_t __thiscall winISteamInput_SteamInput007_GetRemotePlaySessionID(struct w_iface *_this, uint64_t inputHandle)
+{
+    struct ISteamInput_SteamInput007_GetRemotePlaySessionID_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetRemotePlaySessionID, &params );
+    return params._ret;
+}
+
+uint16_t __thiscall winISteamInput_SteamInput007_GetSessionInputConfigurationSettings(struct w_iface *_this)
+{
+    struct ISteamInput_SteamInput007_GetSessionInputConfigurationSettings_params params =
+    {
+        .u_iface = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_GetSessionInputConfigurationSettings, &params );
+    return params._ret;
+}
+
+void __thiscall winISteamInput_SteamInput007_SetDualSenseTriggerEffect(struct w_iface *_this, uint64_t inputHandle, const ScePadTriggerEffectParam *pParam)
+{
+    struct ISteamInput_SteamInput007_SetDualSenseTriggerEffect_params params =
+    {
+        .u_iface = _this->u_iface,
+        .inputHandle = inputHandle,
+        .pParam = pParam,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamInput_SteamInput007_SetDualSenseTriggerEffect, &params );
+}
+
+extern vtable_ptr winISteamInput_SteamInput007_vtable;
+
+DEFINE_RTTI_DATA0(winISteamInput_SteamInput007, 0, ".?AVISteamInput@@")
+
+__ASM_BLOCK_BEGIN(winISteamInput_SteamInput007_vtables)
+    __ASM_VTABLE(winISteamInput_SteamInput007,
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_Init)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_Shutdown)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_SetInputActionManifestFilePath)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_RunFrame)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_BWaitForData)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_BNewDataAvailable)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetConnectedControllers)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_EnableDeviceCallbacks)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_EnableActionEventCallbacks)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetActionSetHandle)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_ActivateActionSet)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetCurrentActionSet)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_ActivateActionSetLayer)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_DeactivateActionSetLayer)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_DeactivateAllActionSetLayers)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetActiveActionSetLayers)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetDigitalActionHandle)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetDigitalActionData)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetDigitalActionOrigins)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetStringForDigitalActionName)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetAnalogActionHandle)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetAnalogActionData)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetAnalogActionOrigins)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetGlyphPNGForActionOrigin)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetGlyphSVGForActionOrigin)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetGlyphForActionOrigin_Legacy)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetStringForActionOrigin)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetStringForAnalogActionName)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_StopAnalogActionMomentum)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetMotionData)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_TriggerVibration)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_TriggerVibrationExtended)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_TriggerSimpleHapticEvent)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_SetLEDColor)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_Legacy_TriggerHapticPulse)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_Legacy_TriggerRepeatedHapticPulse)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_ShowBindingPanel)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetInputTypeForHandle)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetControllerForGamepadIndex)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetGamepadIndexForController)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetStringForXboxOrigin)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetGlyphForXboxOrigin)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetActionOriginFromXboxOrigin)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_TranslateActionOrigin)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetDeviceBindingRevision)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetRemotePlaySessionID)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_GetSessionInputConfigurationSettings)
+        VTABLE_ADD_FUNC(winISteamInput_SteamInput007_SetDualSenseTriggerEffect)
+    );
+__ASM_BLOCK_END
+
+struct w_iface *create_winISteamInput_SteamInput007( struct u_iface u_iface )
+{
+    struct w_iface *r = alloc_mem_for_iface(sizeof(struct w_iface), "SteamInput007");
+    TRACE("-> %p\n", r);
+    r->vtable = alloc_vtable(&winISteamInput_SteamInput007_vtable, 48, "SteamInput007");
+    r->u_iface = u_iface;
+    return r;
+}
+
 void init_winISteamInput_rtti( char *base )
 {
 #if defined(__x86_64__) || defined(__aarch64__)
@@ -2356,5 +3028,6 @@ void init_winISteamInput_rtti( char *base )
     init_winISteamInput_SteamInput002_rtti( base );
     init_winISteamInput_SteamInput005_rtti( base );
     init_winISteamInput_SteamInput006_rtti( base );
+    init_winISteamInput_SteamInput007_rtti( base );
 #endif /* defined(__x86_64__) || defined(__aarch64__) */
 }

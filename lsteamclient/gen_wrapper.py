@@ -11,6 +11,7 @@ import os
 import re
 
 SDK_VERSIONS = [
+    "165",
     "164",
     "163",
     "162",
@@ -293,6 +294,7 @@ MANUAL_METHODS = {
     "ISteamMatchmakingServers_RequestInternetServerList": lambda ver, abi: abi == 'u' or ver >= 2,
     "ISteamMatchmakingServers_RequestLANServerList": lambda ver, abi: abi == 'u' or ver >= 2,
     "ISteamMatchmakingServers_RequestSpectatorServerList": lambda ver, abi: abi == 'u' or ver >= 2,
+    "ISteamMatchmakingServers_ServerFriends": lambda ver, abi: abi == 'u',
     "ISteamMatchmakingServers_ServerRules": lambda ver, abi: abi == 'u',
 
     "ISteamNetworkingUtils_AllocateMessage": True,
