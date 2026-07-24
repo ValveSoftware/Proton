@@ -2327,6 +2327,32 @@ struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetActiveBeta_params
     W32_PTR(const char *pchBetaName, pchBetaName, const char *);
 };
 
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting_params
+{
+    struct u_iface u_iface;
+    uint32_t setting;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting_params
+{
+    struct u_iface u_iface;
+    uint32_t setting;
+};
+
+struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution_params
+{
+    struct u_iface u_iface;
+    uint32_t unWidth;
+    uint32_t unHeight;
+};
+
+struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution_params
+{
+    struct u_iface u_iface;
+    uint32_t unWidth;
+    uint32_t unHeight;
+};
+
 struct ISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData_params
 {
     struct u_iface u_iface;
@@ -77521,6 +77547,728 @@ struct wow64_ISteamInput_SteamInput006_SetDualSenseTriggerEffect_params
     W32_PTR(const ScePadTriggerEffectParam *pParam, pParam, const ScePadTriggerEffectParam *);
 };
 
+struct ISteamInput_SteamInput007_Init_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int8_t bExplicitlyCallRunFrame;
+};
+
+struct wow64_ISteamInput_SteamInput007_Init_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int8_t bExplicitlyCallRunFrame;
+};
+
+struct ISteamInput_SteamInput007_Shutdown_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamInput_SteamInput007_Shutdown_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamInput_SteamInput007_SetInputActionManifestFilePath_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    const char *pchInputActionManifestAbsolutePath;
+};
+
+struct wow64_ISteamInput_SteamInput007_SetInputActionManifestFilePath_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    W32_PTR(const char *pchInputActionManifestAbsolutePath, pchInputActionManifestAbsolutePath, const char *);
+};
+
+struct ISteamInput_SteamInput007_RunFrame_params
+{
+    struct u_iface u_iface;
+    int8_t bReservedValue;
+};
+
+struct wow64_ISteamInput_SteamInput007_RunFrame_params
+{
+    struct u_iface u_iface;
+    int8_t bReservedValue;
+};
+
+struct ISteamInput_SteamInput007_BWaitForData_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int8_t bWaitForever;
+    uint32_t unTimeout;
+};
+
+struct wow64_ISteamInput_SteamInput007_BWaitForData_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int8_t bWaitForever;
+    uint32_t unTimeout;
+};
+
+struct ISteamInput_SteamInput007_BNewDataAvailable_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamInput_SteamInput007_BNewDataAvailable_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamInput_SteamInput007_GetConnectedControllers_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint64_t *handlesOut;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetConnectedControllers_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    W32_PTR(uint64_t *handlesOut, handlesOut, uint64_t *);
+};
+
+struct ISteamInput_SteamInput007_EnableDeviceCallbacks_params
+{
+    struct u_iface u_iface;
+};
+
+struct wow64_ISteamInput_SteamInput007_EnableDeviceCallbacks_params
+{
+    struct u_iface u_iface;
+};
+
+struct ISteamInput_SteamInput007_EnableActionEventCallbacks_params
+{
+    struct u_iface u_iface;
+    void (*W_CDECL pCallback)(SteamInputActionEvent_t *);
+};
+
+struct wow64_ISteamInput_SteamInput007_EnableActionEventCallbacks_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void (*W_CDECL pCallback)(SteamInputActionEvent_t *), pCallback, void (*W_CDECL )(SteamInputActionEvent_t *));
+};
+
+struct ISteamInput_SteamInput007_GetActionSetHandle_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    const char *pszActionSetName;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetActionSetHandle_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    W32_PTR(const char *pszActionSetName, pszActionSetName, const char *);
+};
+
+struct ISteamInput_SteamInput007_ActivateActionSet_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint64_t actionSetHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_ActivateActionSet_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint64_t actionSetHandle;
+};
+
+struct ISteamInput_SteamInput007_GetCurrentActionSet_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t inputHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetCurrentActionSet_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    uint64_t inputHandle;
+};
+
+struct ISteamInput_SteamInput007_ActivateActionSetLayer_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint64_t actionSetLayerHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_ActivateActionSetLayer_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint64_t actionSetLayerHandle;
+};
+
+struct ISteamInput_SteamInput007_DeactivateActionSetLayer_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint64_t actionSetLayerHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_DeactivateActionSetLayer_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint64_t actionSetLayerHandle;
+};
+
+struct ISteamInput_SteamInput007_DeactivateAllActionSetLayers_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_DeactivateAllActionSetLayers_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+};
+
+struct ISteamInput_SteamInput007_GetActiveActionSetLayers_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint64_t inputHandle;
+    uint64_t *handlesOut;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetActiveActionSetLayers_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint64_t inputHandle;
+    W32_PTR(uint64_t *handlesOut, handlesOut, uint64_t *);
+};
+
+struct ISteamInput_SteamInput007_GetDigitalActionHandle_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    const char *pszActionName;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetDigitalActionHandle_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    W32_PTR(const char *pszActionName, pszActionName, const char *);
+};
+
+struct ISteamInput_SteamInput007_GetDigitalActionData_params
+{
+    struct u_iface u_iface;
+    InputDigitalActionData_t *_ret;
+    uint64_t inputHandle;
+    uint64_t digitalActionHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetDigitalActionData_params
+{
+    struct u_iface u_iface;
+    W32_PTR(InputDigitalActionData_t *_ret, _ret, InputDigitalActionData_t *);
+    uint64_t inputHandle;
+    uint64_t digitalActionHandle;
+};
+
+struct ISteamInput_SteamInput007_GetDigitalActionOrigins_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint64_t inputHandle;
+    uint64_t actionSetHandle;
+    uint64_t digitalActionHandle;
+    uint32_t *originsOut;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetDigitalActionOrigins_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint64_t inputHandle;
+    uint64_t actionSetHandle;
+    uint64_t digitalActionHandle;
+    W32_PTR(uint32_t *originsOut, originsOut, uint32_t *);
+};
+
+struct ISteamInput_SteamInput007_GetStringForDigitalActionName_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint64_t eActionHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetStringForDigitalActionName_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint64_t eActionHandle;
+};
+
+struct ISteamInput_SteamInput007_GetAnalogActionHandle_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    const char *pszActionName;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetAnalogActionHandle_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    W32_PTR(const char *pszActionName, pszActionName, const char *);
+};
+
+struct ISteamInput_SteamInput007_GetAnalogActionData_params
+{
+    struct u_iface u_iface;
+    InputAnalogActionData_t *_ret;
+    uint64_t inputHandle;
+    uint64_t analogActionHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetAnalogActionData_params
+{
+    struct u_iface u_iface;
+    W32_PTR(InputAnalogActionData_t *_ret, _ret, InputAnalogActionData_t *);
+    uint64_t inputHandle;
+    uint64_t analogActionHandle;
+};
+
+struct ISteamInput_SteamInput007_GetAnalogActionOrigins_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint64_t inputHandle;
+    uint64_t actionSetHandle;
+    uint64_t analogActionHandle;
+    uint32_t *originsOut;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetAnalogActionOrigins_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint64_t inputHandle;
+    uint64_t actionSetHandle;
+    uint64_t analogActionHandle;
+    W32_PTR(uint32_t *originsOut, originsOut, uint32_t *);
+};
+
+struct ISteamInput_SteamInput007_GetGlyphPNGForActionOrigin_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t eOrigin;
+    uint32_t eSize;
+    uint32_t unFlags;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetGlyphPNGForActionOrigin_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t eOrigin;
+    uint32_t eSize;
+    uint32_t unFlags;
+};
+
+struct ISteamInput_SteamInput007_GetGlyphSVGForActionOrigin_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t eOrigin;
+    uint32_t unFlags;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetGlyphSVGForActionOrigin_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t eOrigin;
+    uint32_t unFlags;
+};
+
+struct ISteamInput_SteamInput007_GetGlyphForActionOrigin_Legacy_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t eOrigin;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetGlyphForActionOrigin_Legacy_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t eOrigin;
+};
+
+struct ISteamInput_SteamInput007_GetStringForActionOrigin_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t eOrigin;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetStringForActionOrigin_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t eOrigin;
+};
+
+struct ISteamInput_SteamInput007_GetStringForAnalogActionName_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint64_t eActionHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetStringForAnalogActionName_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint64_t eActionHandle;
+};
+
+struct ISteamInput_SteamInput007_StopAnalogActionMomentum_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint64_t eAction;
+};
+
+struct wow64_ISteamInput_SteamInput007_StopAnalogActionMomentum_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint64_t eAction;
+};
+
+struct ISteamInput_SteamInput007_GetMotionData_params
+{
+    struct u_iface u_iface;
+    InputMotionData_t *_ret;
+    uint64_t inputHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetMotionData_params
+{
+    struct u_iface u_iface;
+    W32_PTR(InputMotionData_t *_ret, _ret, InputMotionData_t *);
+    uint64_t inputHandle;
+};
+
+struct ISteamInput_SteamInput007_TriggerVibration_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint16_t usLeftSpeed;
+    uint16_t usRightSpeed;
+};
+
+struct wow64_ISteamInput_SteamInput007_TriggerVibration_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint16_t usLeftSpeed;
+    uint16_t usRightSpeed;
+};
+
+struct ISteamInput_SteamInput007_TriggerVibrationExtended_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint16_t usLeftSpeed;
+    uint16_t usRightSpeed;
+    uint16_t usLeftTriggerSpeed;
+    uint16_t usRightTriggerSpeed;
+};
+
+struct wow64_ISteamInput_SteamInput007_TriggerVibrationExtended_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint16_t usLeftSpeed;
+    uint16_t usRightSpeed;
+    uint16_t usLeftTriggerSpeed;
+    uint16_t usRightTriggerSpeed;
+};
+
+struct ISteamInput_SteamInput007_TriggerSimpleHapticEvent_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint32_t eHapticLocation;
+    uint8_t nIntensity;
+    char nGainDB;
+    uint8_t nOtherIntensity;
+    char nOtherGainDB;
+};
+
+struct wow64_ISteamInput_SteamInput007_TriggerSimpleHapticEvent_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint32_t eHapticLocation;
+    uint8_t nIntensity;
+    char nGainDB;
+    uint8_t nOtherIntensity;
+    char nOtherGainDB;
+};
+
+struct ISteamInput_SteamInput007_SetLEDColor_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint8_t nColorR;
+    uint8_t nColorG;
+    uint8_t nColorB;
+    uint32_t nFlags;
+};
+
+struct wow64_ISteamInput_SteamInput007_SetLEDColor_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint8_t nColorR;
+    uint8_t nColorG;
+    uint8_t nColorB;
+    uint32_t nFlags;
+};
+
+struct ISteamInput_SteamInput007_Legacy_TriggerHapticPulse_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint32_t eTargetPad;
+    uint16_t usDurationMicroSec;
+};
+
+struct wow64_ISteamInput_SteamInput007_Legacy_TriggerHapticPulse_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint32_t eTargetPad;
+    uint16_t usDurationMicroSec;
+};
+
+struct ISteamInput_SteamInput007_Legacy_TriggerRepeatedHapticPulse_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint32_t eTargetPad;
+    uint16_t usDurationMicroSec;
+    uint16_t usOffMicroSec;
+    uint16_t unRepeat;
+    uint32_t nFlags;
+};
+
+struct wow64_ISteamInput_SteamInput007_Legacy_TriggerRepeatedHapticPulse_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    uint32_t eTargetPad;
+    uint16_t usDurationMicroSec;
+    uint16_t usOffMicroSec;
+    uint16_t unRepeat;
+    uint32_t nFlags;
+};
+
+struct ISteamInput_SteamInput007_ShowBindingPanel_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t inputHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_ShowBindingPanel_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t inputHandle;
+};
+
+struct ISteamInput_SteamInput007_GetInputTypeForHandle_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t inputHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetInputTypeForHandle_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t inputHandle;
+};
+
+struct ISteamInput_SteamInput007_GetControllerForGamepadIndex_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    int32_t nIndex;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetControllerForGamepadIndex_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    int32_t nIndex;
+};
+
+struct ISteamInput_SteamInput007_GetGamepadIndexForController_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint64_t ulinputHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetGamepadIndexForController_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint64_t ulinputHandle;
+};
+
+struct ISteamInput_SteamInput007_GetStringForXboxOrigin_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t eOrigin;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetStringForXboxOrigin_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t eOrigin;
+};
+
+struct ISteamInput_SteamInput007_GetGlyphForXboxOrigin_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t eOrigin;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetGlyphForXboxOrigin_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    uint32_t eOrigin;
+};
+
+struct ISteamInput_SteamInput007_GetActionOriginFromXboxOrigin_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t inputHandle;
+    uint32_t eOrigin;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetActionOriginFromXboxOrigin_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t inputHandle;
+    uint32_t eOrigin;
+};
+
+struct ISteamInput_SteamInput007_TranslateActionOrigin_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t eDestinationInputType;
+    uint32_t eSourceOrigin;
+};
+
+struct wow64_ISteamInput_SteamInput007_TranslateActionOrigin_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t eDestinationInputType;
+    uint32_t eSourceOrigin;
+};
+
+struct ISteamInput_SteamInput007_GetDeviceBindingRevision_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t inputHandle;
+    int32_t *pMajor;
+    int32_t *pMinor;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetDeviceBindingRevision_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t inputHandle;
+    W32_PTR(int32_t *pMajor, pMajor, int32_t *);
+    W32_PTR(int32_t *pMinor, pMinor, int32_t *);
+};
+
+struct ISteamInput_SteamInput007_GetRemotePlaySessionID_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t inputHandle;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetRemotePlaySessionID_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t inputHandle;
+};
+
+struct ISteamInput_SteamInput007_GetSessionInputConfigurationSettings_params
+{
+    struct u_iface u_iface;
+    uint16_t _ret;
+};
+
+struct wow64_ISteamInput_SteamInput007_GetSessionInputConfigurationSettings_params
+{
+    struct u_iface u_iface;
+    uint16_t _ret;
+};
+
+struct ISteamInput_SteamInput007_SetDualSenseTriggerEffect_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    const ScePadTriggerEffectParam *pParam;
+};
+
+struct wow64_ISteamInput_SteamInput007_SetDualSenseTriggerEffect_params
+{
+    struct u_iface u_iface;
+    uint64_t inputHandle;
+    W32_PTR(const ScePadTriggerEffectParam *pParam, pParam, const ScePadTriggerEffectParam *);
+};
+
 struct ISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive_params
 {
     struct u_iface u_iface;
@@ -82784,6 +83532,300 @@ struct ISteamMatchmakingServers_SteamMatchMakingServers002_CancelServerQuery_par
 };
 
 struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers002_CancelServerQuery_params
+{
+    struct u_iface u_iface;
+    int32_t hServerQuery;
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_RequestInternetServerList_params
+{
+    struct u_iface u_iface;
+    void *_ret;
+    uint32_t iApp;
+    MatchMakingKeyValuePair_t **ppchFilters;
+    uint32_t nFilters;
+    w_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_RequestInternetServerList_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void *_ret, _ret, void *);
+    uint32_t iApp;
+    W32_PTR(MatchMakingKeyValuePair_t **ppchFilters, ppchFilters, MatchMakingKeyValuePair_t **);
+    uint32_t nFilters;
+    W32_PTR(w32_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse, pRequestServersResponse, w32_ISteamMatchmakingServerListResponse_106 *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_RequestLANServerList_params
+{
+    struct u_iface u_iface;
+    void *_ret;
+    uint32_t iApp;
+    w_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_RequestLANServerList_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void *_ret, _ret, void *);
+    uint32_t iApp;
+    W32_PTR(w32_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse, pRequestServersResponse, w32_ISteamMatchmakingServerListResponse_106 *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_RequestFriendsServerList_params
+{
+    struct u_iface u_iface;
+    void *_ret;
+    uint32_t iApp;
+    MatchMakingKeyValuePair_t **ppchFilters;
+    uint32_t nFilters;
+    w_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_RequestFriendsServerList_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void *_ret, _ret, void *);
+    uint32_t iApp;
+    W32_PTR(MatchMakingKeyValuePair_t **ppchFilters, ppchFilters, MatchMakingKeyValuePair_t **);
+    uint32_t nFilters;
+    W32_PTR(w32_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse, pRequestServersResponse, w32_ISteamMatchmakingServerListResponse_106 *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_RequestFavoritesServerList_params
+{
+    struct u_iface u_iface;
+    void *_ret;
+    uint32_t iApp;
+    MatchMakingKeyValuePair_t **ppchFilters;
+    uint32_t nFilters;
+    w_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_RequestFavoritesServerList_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void *_ret, _ret, void *);
+    uint32_t iApp;
+    W32_PTR(MatchMakingKeyValuePair_t **ppchFilters, ppchFilters, MatchMakingKeyValuePair_t **);
+    uint32_t nFilters;
+    W32_PTR(w32_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse, pRequestServersResponse, w32_ISteamMatchmakingServerListResponse_106 *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_RequestHistoryServerList_params
+{
+    struct u_iface u_iface;
+    void *_ret;
+    uint32_t iApp;
+    MatchMakingKeyValuePair_t **ppchFilters;
+    uint32_t nFilters;
+    w_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_RequestHistoryServerList_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void *_ret, _ret, void *);
+    uint32_t iApp;
+    W32_PTR(MatchMakingKeyValuePair_t **ppchFilters, ppchFilters, MatchMakingKeyValuePair_t **);
+    uint32_t nFilters;
+    W32_PTR(w32_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse, pRequestServersResponse, w32_ISteamMatchmakingServerListResponse_106 *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_RequestSpectatorServerList_params
+{
+    struct u_iface u_iface;
+    void *_ret;
+    uint32_t iApp;
+    MatchMakingKeyValuePair_t **ppchFilters;
+    uint32_t nFilters;
+    w_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_RequestSpectatorServerList_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void *_ret, _ret, void *);
+    uint32_t iApp;
+    W32_PTR(MatchMakingKeyValuePair_t **ppchFilters, ppchFilters, MatchMakingKeyValuePair_t **);
+    uint32_t nFilters;
+    W32_PTR(w32_ISteamMatchmakingServerListResponse_106 *pRequestServersResponse, pRequestServersResponse, w32_ISteamMatchmakingServerListResponse_106 *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_ReleaseRequest_params
+{
+    struct u_iface u_iface;
+    void *hServerListRequest;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_ReleaseRequest_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void *hServerListRequest, hServerListRequest, void *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_GetServerDetails_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    void *hRequest;
+    int32_t iServer;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_GetServerDetails_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+    W32_PTR(void *hRequest, hRequest, void *);
+    int32_t iServer;
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_CancelQuery_params
+{
+    struct u_iface u_iface;
+    void *hRequest;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_CancelQuery_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void *hRequest, hRequest, void *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_RefreshQuery_params
+{
+    struct u_iface u_iface;
+    void *hRequest;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_RefreshQuery_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void *hRequest, hRequest, void *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_IsRefreshing_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    void *hRequest;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_IsRefreshing_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    W32_PTR(void *hRequest, hRequest, void *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_GetServerCount_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    void *hRequest;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_GetServerCount_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    W32_PTR(void *hRequest, hRequest, void *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_RefreshServer_params
+{
+    struct u_iface u_iface;
+    void *hRequest;
+    int32_t iServer;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_RefreshServer_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void *hRequest, hRequest, void *);
+    int32_t iServer;
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_PingServer_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unIP;
+    uint16_t usPort;
+    w_ISteamMatchmakingPingResponse *pRequestServersResponse;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_PingServer_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unIP;
+    uint16_t usPort;
+    W32_PTR(w32_ISteamMatchmakingPingResponse *pRequestServersResponse, pRequestServersResponse, w32_ISteamMatchmakingPingResponse *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_PlayerDetails_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unIP;
+    uint16_t usPort;
+    w_ISteamMatchmakingPlayersResponse *pRequestServersResponse;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_PlayerDetails_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unIP;
+    uint16_t usPort;
+    W32_PTR(w32_ISteamMatchmakingPlayersResponse *pRequestServersResponse, pRequestServersResponse, w32_ISteamMatchmakingPlayersResponse *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_ServerRules_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unIP;
+    uint16_t usPort;
+    w_ISteamMatchmakingRulesResponse *pRequestServersResponse;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_ServerRules_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unIP;
+    uint16_t usPort;
+    W32_PTR(w32_ISteamMatchmakingRulesResponse *pRequestServersResponse, pRequestServersResponse, w32_ISteamMatchmakingRulesResponse *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_ServerFriends_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unIP;
+    uint16_t usPort;
+    w_ISteamMatchmakingServerFriendsResponse *pRequestServersResponse;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_ServerFriends_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t unIP;
+    uint16_t usPort;
+    W32_PTR(w32_ISteamMatchmakingServerFriendsResponse *pRequestServersResponse, pRequestServersResponse, w32_ISteamMatchmakingServerFriendsResponse *);
+};
+
+struct ISteamMatchmakingServers_SteamMatchMakingServers003_CancelServerQuery_params
+{
+    struct u_iface u_iface;
+    int32_t hServerQuery;
+};
+
+struct wow64_ISteamMatchmakingServers_SteamMatchMakingServers003_CancelServerQuery_params
 {
     struct u_iface u_iface;
     int32_t hServerQuery;
@@ -88479,6 +89521,778 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort_param
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t idxFakeServerPort;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_CreateListenSocketIP_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    const SteamNetworkingIPAddr *localAddress;
+    int32_t nOptions;
+    const SteamNetworkingConfigValue_t *pOptions;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateListenSocketIP_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    W32_PTR(const SteamNetworkingIPAddr *localAddress, localAddress, const SteamNetworkingIPAddr *);
+    int32_t nOptions;
+    W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectByIPAddress_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    const SteamNetworkingIPAddr *address;
+    int32_t nOptions;
+    const SteamNetworkingConfigValue_t *pOptions;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectByIPAddress_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    W32_PTR(const SteamNetworkingIPAddr *address, address, const SteamNetworkingIPAddr *);
+    int32_t nOptions;
+    W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_CreateListenSocketP2P_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    int32_t nLocalVirtualPort;
+    int32_t nOptions;
+    const SteamNetworkingConfigValue_t *pOptions;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateListenSocketP2P_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    int32_t nLocalVirtualPort;
+    int32_t nOptions;
+    W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectP2P_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    const SteamNetworkingIdentity_144 *identityRemote;
+    int32_t nRemoteVirtualPort;
+    int32_t nOptions;
+    const SteamNetworkingConfigValue_t *pOptions;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectP2P_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    int32_t nRemoteVirtualPort;
+    int32_t nOptions;
+    W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_AcceptConnection_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t hConn;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_AcceptConnection_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t hConn;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_CloseConnection_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hPeer;
+    int32_t nReason;
+    const char *pszDebug;
+    int8_t bEnableLinger;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_CloseConnection_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hPeer;
+    int32_t nReason;
+    W32_PTR(const char *pszDebug, pszDebug, const char *);
+    int8_t bEnableLinger;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_CloseListenSocket_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hSocket;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_CloseListenSocket_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hSocket;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_SetConnectionUserData_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hPeer;
+    int64_t nUserData;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_SetConnectionUserData_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hPeer;
+    int64_t nUserData;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetConnectionUserData_params
+{
+    struct u_iface u_iface;
+    int64_t _ret;
+    uint32_t hPeer;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetConnectionUserData_params
+{
+    struct u_iface u_iface;
+    int64_t _ret;
+    uint32_t hPeer;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_SetConnectionName_params
+{
+    struct u_iface u_iface;
+    uint32_t hPeer;
+    const char *pszName;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_SetConnectionName_params
+{
+    struct u_iface u_iface;
+    uint32_t hPeer;
+    W32_PTR(const char *pszName, pszName, const char *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetConnectionName_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hPeer;
+    char *pszName;
+    int32_t nMaxLen;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetConnectionName_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hPeer;
+    W32_PTR(char *pszName, pszName, char *);
+    int32_t nMaxLen;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_SendMessageToConnection_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t hConn;
+    const void *pData;
+    uint32_t cbData;
+    int32_t nSendFlags;
+    int64_t *pOutMessageNumber;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_SendMessageToConnection_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t hConn;
+    W32_PTR(const void *pData, pData, const void *);
+    uint32_t cbData;
+    int32_t nSendFlags;
+    W32_PTR(int64_t *pOutMessageNumber, pOutMessageNumber, int64_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_SendMessages_params
+{
+    struct u_iface u_iface;
+    int32_t nMessages;
+    w_SteamNetworkingMessage_t_153a **pMessages;
+    int64_t *pOutMessageNumberOrResult;
+    int8_t bDeleteFailedMessages;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_SendMessages_params
+{
+    struct u_iface u_iface;
+    int32_t nMessages;
+    W32_PTR(w32_SteamNetworkingMessage_t_153a **pMessages, pMessages, w32_SteamNetworkingMessage_t_153a **);
+    W32_PTR(int64_t *pOutMessageNumberOrResult, pOutMessageNumberOrResult, int64_t *);
+    int8_t bDeleteFailedMessages;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_FlushMessagesOnConnection_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t hConn;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_FlushMessagesOnConnection_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t hConn;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_ReceiveMessagesOnConnection_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t hConn;
+    w_SteamNetworkingMessage_t_153a **ppOutMessages;
+    int32_t nMaxMessages;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ReceiveMessagesOnConnection_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t hConn;
+    W32_PTR(w32_SteamNetworkingMessage_t_153a **ppOutMessages, ppOutMessages, w32_SteamNetworkingMessage_t_153a **);
+    int32_t nMaxMessages;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetConnectionInfo_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hConn;
+    SteamNetConnectionInfo_t_153a *pInfo;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetConnectionInfo_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hConn;
+    W32_PTR(SteamNetConnectionInfo_t_153a *pInfo, pInfo, SteamNetConnectionInfo_t_153a *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetConnectionRealTimeStatus_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t hConn;
+    SteamNetConnectionRealTimeStatus_t_164 *pStatus;
+    int32_t nLanes;
+    SteamNetConnectionRealTimeLaneStatus_t *pLanes;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetConnectionRealTimeStatus_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t hConn;
+    W32_PTR(SteamNetConnectionRealTimeStatus_t_164 *pStatus, pStatus, SteamNetConnectionRealTimeStatus_t_164 *);
+    int32_t nLanes;
+    W32_PTR(SteamNetConnectionRealTimeLaneStatus_t *pLanes, pLanes, SteamNetConnectionRealTimeLaneStatus_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetDetailedConnectionStatus_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t hConn;
+    char *pszBuf;
+    int32_t cbBuf;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetDetailedConnectionStatus_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t hConn;
+    W32_PTR(char *pszBuf, pszBuf, char *);
+    int32_t cbBuf;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetListenSocketAddress_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hSocket;
+    SteamNetworkingIPAddr *address;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetListenSocketAddress_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hSocket;
+    W32_PTR(SteamNetworkingIPAddr *address, address, SteamNetworkingIPAddr *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_CreateSocketPair_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t *pOutConnection1;
+    uint32_t *pOutConnection2;
+    int8_t bUseNetworkLoopback;
+    const SteamNetworkingIdentity_144 *pPeerIdentity1;
+    const SteamNetworkingIdentity_144 *pPeerIdentity2;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateSocketPair_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    W32_PTR(uint32_t *pOutConnection1, pOutConnection1, uint32_t *);
+    W32_PTR(uint32_t *pOutConnection2, pOutConnection2, uint32_t *);
+    int8_t bUseNetworkLoopback;
+    W32_PTR(const SteamNetworkingIdentity_144 *pPeerIdentity1, pPeerIdentity1, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity_144 *pPeerIdentity2, pPeerIdentity2, const SteamNetworkingIdentity_144 *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_ConfigureConnectionLanes_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t hConn;
+    int32_t nNumLanes;
+    const int32_t *pLanePriorities;
+    const uint16_t *pLaneWeights;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ConfigureConnectionLanes_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t hConn;
+    int32_t nNumLanes;
+    W32_PTR(const int32_t *pLanePriorities, pLanePriorities, const int32_t *);
+    W32_PTR(const uint16_t *pLaneWeights, pLaneWeights, const uint16_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetIdentity_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    SteamNetworkingIdentity_144 *pIdentity;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetIdentity_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    W32_PTR(SteamNetworkingIdentity_144 *pIdentity, pIdentity, SteamNetworkingIdentity_144 *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_InitAuthentication_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_InitAuthentication_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetAuthenticationStatus_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    SteamNetAuthenticationStatus_t *pDetails;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetAuthenticationStatus_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    W32_PTR(SteamNetAuthenticationStatus_t *pDetails, pDetails, SteamNetAuthenticationStatus_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_CreatePollGroup_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_CreatePollGroup_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_DestroyPollGroup_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hPollGroup;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_DestroyPollGroup_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hPollGroup;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_SetConnectionPollGroup_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hConn;
+    uint32_t hPollGroup;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_SetConnectionPollGroup_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t hConn;
+    uint32_t hPollGroup;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_ReceiveMessagesOnPollGroup_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t hPollGroup;
+    w_SteamNetworkingMessage_t_153a **ppOutMessages;
+    int32_t nMaxMessages;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ReceiveMessagesOnPollGroup_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t hPollGroup;
+    W32_PTR(w32_SteamNetworkingMessage_t_153a **ppOutMessages, ppOutMessages, w32_SteamNetworkingMessage_t_153a **);
+    int32_t nMaxMessages;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_ReceivedRelayAuthTicket_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    const void *pvTicket;
+    int32_t cbTicket;
+    SteamDatagramRelayAuthTicket *pOutParsedTicket;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ReceivedRelayAuthTicket_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    W32_PTR(const void *pvTicket, pvTicket, const void *);
+    int32_t cbTicket;
+    W32_PTR(SteamDatagramRelayAuthTicket *pOutParsedTicket, pOutParsedTicket, SteamDatagramRelayAuthTicket *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_FindRelayAuthTicketForServer_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    const SteamNetworkingIdentity_144 *identityGameServer;
+    int32_t nRemoteVirtualPort;
+    SteamDatagramRelayAuthTicket *pOutParsedTicket;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_FindRelayAuthTicketForServer_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    W32_PTR(const SteamNetworkingIdentity_144 *identityGameServer, identityGameServer, const SteamNetworkingIdentity_144 *);
+    int32_t nRemoteVirtualPort;
+    W32_PTR(SteamDatagramRelayAuthTicket *pOutParsedTicket, pOutParsedTicket, SteamDatagramRelayAuthTicket *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectToHostedDedicatedServer_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    const SteamNetworkingIdentity_144 *identityTarget;
+    int32_t nRemoteVirtualPort;
+    int32_t nOptions;
+    const SteamNetworkingConfigValue_t *pOptions;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectToHostedDedicatedServer_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    W32_PTR(const SteamNetworkingIdentity_144 *identityTarget, identityTarget, const SteamNetworkingIdentity_144 *);
+    int32_t nRemoteVirtualPort;
+    int32_t nOptions;
+    W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetHostedDedicatedServerPort_params
+{
+    struct u_iface u_iface;
+    uint16_t _ret;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetHostedDedicatedServerPort_params
+{
+    struct u_iface u_iface;
+    uint16_t _ret;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetHostedDedicatedServerPOPID_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetHostedDedicatedServerPOPID_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetHostedDedicatedServerAddress_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    SteamDatagramHostedAddress *pRouting;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetHostedDedicatedServerAddress_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    W32_PTR(SteamDatagramHostedAddress *pRouting, pRouting, SteamDatagramHostedAddress *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_CreateHostedDedicatedServerListenSocket_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    int32_t nLocalVirtualPort;
+    int32_t nOptions;
+    const SteamNetworkingConfigValue_t *pOptions;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateHostedDedicatedServerListenSocket_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    int32_t nLocalVirtualPort;
+    int32_t nOptions;
+    W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetGameCoordinatorServerLogin_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    SteamDatagramGameCoordinatorServerLogin *pLoginInfo;
+    int32_t *pcbSignedBlob;
+    void *pBlob;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetGameCoordinatorServerLogin_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    W32_PTR(SteamDatagramGameCoordinatorServerLogin *pLoginInfo, pLoginInfo, SteamDatagramGameCoordinatorServerLogin *);
+    W32_PTR(int32_t *pcbSignedBlob, pcbSignedBlob, int32_t *);
+    W32_PTR(void *pBlob, pBlob, void *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectP2PCustomSignaling_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    void /*ISteamNetworkingConnectionSignaling*/ *pSignaling;
+    const SteamNetworkingIdentity_144 *pPeerIdentity;
+    int32_t nRemoteVirtualPort;
+    int32_t nOptions;
+    const SteamNetworkingConfigValue_t *pOptions;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectP2PCustomSignaling_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    W32_PTR(void /*ISteamNetworkingConnectionSignaling*/ *pSignaling, pSignaling, void /*ISteamNetworkingConnectionSignaling*/ *);
+    W32_PTR(const SteamNetworkingIdentity_144 *pPeerIdentity, pPeerIdentity, const SteamNetworkingIdentity_144 *);
+    int32_t nRemoteVirtualPort;
+    int32_t nOptions;
+    W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_ReceivedP2PCustomSignal_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    const void *pMsg;
+    int32_t cbMsg;
+    void /*ISteamNetworkingSignalingRecvContext*/ *pContext;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ReceivedP2PCustomSignal_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    W32_PTR(const void *pMsg, pMsg, const void *);
+    int32_t cbMsg;
+    W32_PTR(void /*ISteamNetworkingSignalingRecvContext*/ *pContext, pContext, void /*ISteamNetworkingSignalingRecvContext*/ *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetCertificateRequest_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t *pcbBlob;
+    void *pBlob;
+    char (*errMsg)[1024];
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetCertificateRequest_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    W32_PTR(int32_t *pcbBlob, pcbBlob, int32_t *);
+    W32_PTR(void *pBlob, pBlob, void *);
+    W32_PTR(char (*errMsg)[1024], errMsg, char (*)[1024]);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_SetCertificate_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    const void *pCertificate;
+    int32_t cbCertificate;
+    char (*errMsg)[1024];
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_SetCertificate_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    W32_PTR(const void *pCertificate, pCertificate, const void *);
+    int32_t cbCertificate;
+    W32_PTR(char (*errMsg)[1024], errMsg, char (*)[1024]);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_ResetIdentity_params
+{
+    struct u_iface u_iface;
+    const SteamNetworkingIdentity_144 *pIdentity;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ResetIdentity_params
+{
+    struct u_iface u_iface;
+    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity, pIdentity, const SteamNetworkingIdentity_144 *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_RunCallbacks_params
+{
+    struct u_iface u_iface;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_RunCallbacks_params
+{
+    struct u_iface u_iface;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_BeginAsyncRequestFakeIP_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t nNumPorts;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_BeginAsyncRequestFakeIP_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t nNumPorts;
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetFakeIP_params
+{
+    struct u_iface u_iface;
+    int32_t idxFirstPort;
+    SteamNetworkingFakeIPResult_t *pInfo;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetFakeIP_params
+{
+    struct u_iface u_iface;
+    int32_t idxFirstPort;
+    W32_PTR(SteamNetworkingFakeIPResult_t *pInfo, pInfo, SteamNetworkingFakeIPResult_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_CreateListenSocketP2PFakeIP_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    int32_t idxFakePort;
+    int32_t nOptions;
+    const SteamNetworkingConfigValue_t *pOptions;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateListenSocketP2PFakeIP_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    int32_t idxFakePort;
+    int32_t nOptions;
+    W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetRemoteFakeIPForConnection_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t hConn;
+    SteamNetworkingIPAddr *pOutAddr;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetRemoteFakeIPForConnection_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t hConn;
+    W32_PTR(SteamNetworkingIPAddr *pOutAddr, pOutAddr, SteamNetworkingIPAddr *);
+};
+
+struct ISteamNetworkingSockets_SteamNetworkingSockets013_CreateFakeUDPPort_params
+{
+    struct u_iface u_iface;
+    struct u_iface _ret;
+    int32_t idxFakeServerPort;
+};
+
+struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateFakeUDPPort_params
 {
     struct u_iface u_iface;
     struct u_iface _ret;
@@ -99637,6 +101451,552 @@ struct wow64_ISteamUtils_SteamUtils010_DismissGamepadTextInput_params
     int8_t _ret;
 };
 
+struct ISteamUtils_SteamUtils011_GetSecondsSinceAppActive_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetSecondsSinceAppActive_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_GetSecondsSinceComputerActive_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetSecondsSinceComputerActive_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_GetConnectedUniverse_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetConnectedUniverse_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_GetServerRealTime_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetServerRealTime_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_GetIPCountry_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetIPCountry_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+};
+
+struct ISteamUtils_SteamUtils011_GetImageSize_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t iImage;
+    uint32_t *pnWidth;
+    uint32_t *pnHeight;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetImageSize_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t iImage;
+    W32_PTR(uint32_t *pnWidth, pnWidth, uint32_t *);
+    W32_PTR(uint32_t *pnHeight, pnHeight, uint32_t *);
+};
+
+struct ISteamUtils_SteamUtils011_GetImageRGBA_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t iImage;
+    uint8_t *pubDest;
+    int32_t nDestBufferSize;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetImageRGBA_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    int32_t iImage;
+    W32_PTR(uint8_t *pubDest, pubDest, uint8_t *);
+    int32_t nDestBufferSize;
+};
+
+struct ISteamUtils_SteamUtils011_GetCurrentBatteryPower_params
+{
+    struct u_iface u_iface;
+    uint8_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetCurrentBatteryPower_params
+{
+    struct u_iface u_iface;
+    uint8_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_GetAppID_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetAppID_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_SetOverlayNotificationPosition_params
+{
+    struct u_iface u_iface;
+    uint32_t eNotificationPosition;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_SetOverlayNotificationPosition_params
+{
+    struct u_iface u_iface;
+    uint32_t eNotificationPosition;
+};
+
+struct ISteamUtils_SteamUtils011_IsAPICallCompleted_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t hSteamAPICall;
+    int8_t *pbFailed;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_IsAPICallCompleted_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t hSteamAPICall;
+    W32_PTR(int8_t *pbFailed, pbFailed, int8_t *);
+};
+
+struct ISteamUtils_SteamUtils011_GetAPICallFailureReason_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t hSteamAPICall;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetAPICallFailureReason_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint64_t hSteamAPICall;
+};
+
+struct ISteamUtils_SteamUtils011_GetAPICallResult_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t hSteamAPICall;
+    void *pCallback;
+    int32_t cubCallback;
+    int32_t iCallbackExpected;
+    int8_t *pbFailed;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetAPICallResult_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint64_t hSteamAPICall;
+    W32_PTR(void *pCallback, pCallback, void *);
+    int32_t cubCallback;
+    int32_t iCallbackExpected;
+    W32_PTR(int8_t *pbFailed, pbFailed, int8_t *);
+};
+
+struct ISteamUtils_SteamUtils011_RunFrame_params
+{
+    struct u_iface u_iface;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_RunFrame_params
+{
+    struct u_iface u_iface;
+};
+
+struct ISteamUtils_SteamUtils011_GetIPCCallCount_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetIPCCallCount_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_SetWarningMessageHook_params
+{
+    struct u_iface u_iface;
+    void (*W_CDECL pFunction)(int32_t, const char *);
+};
+
+struct wow64_ISteamUtils_SteamUtils011_SetWarningMessageHook_params
+{
+    struct u_iface u_iface;
+    W32_PTR(void (*W_CDECL pFunction)(int32_t, const char *), pFunction, void (*W_CDECL )(int32_t, const char *));
+};
+
+struct ISteamUtils_SteamUtils011_IsOverlayEnabled_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_IsOverlayEnabled_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_BOverlayNeedsPresent_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_BOverlayNeedsPresent_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_CheckFileSignature_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    const char *szFileName;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_CheckFileSignature_params
+{
+    struct u_iface u_iface;
+    uint64_t _ret;
+    W32_PTR(const char *szFileName, szFileName, const char *);
+};
+
+struct ISteamUtils_SteamUtils011_ShowGamepadTextInput_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t eInputMode;
+    uint32_t eLineInputMode;
+    const char *pchDescription;
+    uint32_t unCharMax;
+    const char *pchExistingText;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_ShowGamepadTextInput_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t eInputMode;
+    uint32_t eLineInputMode;
+    W32_PTR(const char *pchDescription, pchDescription, const char *);
+    uint32_t unCharMax;
+    W32_PTR(const char *pchExistingText, pchExistingText, const char *);
+};
+
+struct ISteamUtils_SteamUtils011_GetEnteredGamepadTextLength_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetEnteredGamepadTextLength_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_GetEnteredGamepadTextInput_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    char *pchText;
+    uint32_t cchText;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetEnteredGamepadTextInput_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    W32_PTR(char *pchText, pchText, char *);
+    uint32_t cchText;
+};
+
+struct ISteamUtils_SteamUtils011_GetSteamUILanguage_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetSteamUILanguage_params
+{
+    struct u_iface u_iface;
+    struct u_buffer _ret;
+};
+
+struct ISteamUtils_SteamUtils011_IsSteamRunningInVR_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_IsSteamRunningInVR_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_SetOverlayNotificationInset_params
+{
+    struct u_iface u_iface;
+    int32_t nHorizontalInset;
+    int32_t nVerticalInset;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_SetOverlayNotificationInset_params
+{
+    struct u_iface u_iface;
+    int32_t nHorizontalInset;
+    int32_t nVerticalInset;
+};
+
+struct ISteamUtils_SteamUtils011_IsSteamInBigPictureMode_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_IsSteamInBigPictureMode_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_StartVRDashboard_params
+{
+    struct u_iface u_iface;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_StartVRDashboard_params
+{
+    struct u_iface u_iface;
+};
+
+struct ISteamUtils_SteamUtils011_IsVRHeadsetStreamingEnabled_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_IsVRHeadsetStreamingEnabled_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_SetVRHeadsetStreamingEnabled_params
+{
+    struct u_iface u_iface;
+    int8_t bEnabled;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_SetVRHeadsetStreamingEnabled_params
+{
+    struct u_iface u_iface;
+    int8_t bEnabled;
+};
+
+struct ISteamUtils_SteamUtils011_IsSteamChinaLauncher_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_IsSteamChinaLauncher_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_InitFilterText_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t unFilterOptions;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_InitFilterText_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t unFilterOptions;
+};
+
+struct ISteamUtils_SteamUtils011_FilterText_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t eContext;
+    CSteamID sourceSteamID;
+    const char *pchInputMessage;
+    char *pchOutFilteredText;
+    uint32_t nByteSizeOutFilteredText;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_FilterText_params
+{
+    struct u_iface u_iface;
+    int32_t _ret;
+    uint32_t eContext;
+    CSteamID sourceSteamID;
+    W32_PTR(const char *pchInputMessage, pchInputMessage, const char *);
+    W32_PTR(char *pchOutFilteredText, pchOutFilteredText, char *);
+    uint32_t nByteSizeOutFilteredText;
+};
+
+struct ISteamUtils_SteamUtils011_GetIPv6ConnectivityState_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t eProtocol;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetIPv6ConnectivityState_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+    uint32_t eProtocol;
+};
+
+struct ISteamUtils_SteamUtils011_ShowFloatingGamepadTextInput_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t eKeyboardMode;
+    int32_t nTextFieldXPosition;
+    int32_t nTextFieldYPosition;
+    int32_t nTextFieldWidth;
+    int32_t nTextFieldHeight;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_ShowFloatingGamepadTextInput_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+    uint32_t eKeyboardMode;
+    int32_t nTextFieldXPosition;
+    int32_t nTextFieldYPosition;
+    int32_t nTextFieldWidth;
+    int32_t nTextFieldHeight;
+};
+
+struct ISteamUtils_SteamUtils011_SetGameLauncherMode_params
+{
+    struct u_iface u_iface;
+    int8_t bLauncherMode;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_SetGameLauncherMode_params
+{
+    struct u_iface u_iface;
+    int8_t bLauncherMode;
+};
+
+struct ISteamUtils_SteamUtils011_DismissFloatingGamepadTextInput_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_DismissFloatingGamepadTextInput_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_DismissGamepadTextInput_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_DismissGamepadTextInput_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_IsRunningOnSteamHardware_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_IsRunningOnSteamHardware_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_GetSteamHardwareDefaultConfig_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_GetSteamHardwareDefaultConfig_params
+{
+    struct u_iface u_iface;
+    uint32_t _ret;
+};
+
+struct ISteamUtils_SteamUtils011_IsRunningUnderProton_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
+struct wow64_ISteamUtils_SteamUtils011_IsRunningUnderProton_params
+{
+    struct u_iface u_iface;
+    int8_t _ret;
+};
+
 #include <poppack.h>
 
 enum unix_funcs
@@ -99825,6 +102185,8 @@ enum unix_funcs
     unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetNumBetas,
     unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetBetaInfo,
     unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetActiveBeta,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGamePerformanceSetting,
+    unix_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_SetGameRenderResolution,
     unix_ISteamAppTicket_STEAMAPPTICKET_INTERFACE_VERSION001_GetAppOwnershipTicketData,
     unix_ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Init,
     unix_ISteamController_STEAMCONTROLLER_INTERFACE_VERSION_Shutdown,
@@ -104629,6 +106991,54 @@ enum unix_funcs
     unix_ISteamInput_SteamInput006_GetRemotePlaySessionID,
     unix_ISteamInput_SteamInput006_GetSessionInputConfigurationSettings,
     unix_ISteamInput_SteamInput006_SetDualSenseTriggerEffect,
+    unix_ISteamInput_SteamInput007_Init,
+    unix_ISteamInput_SteamInput007_Shutdown,
+    unix_ISteamInput_SteamInput007_SetInputActionManifestFilePath,
+    unix_ISteamInput_SteamInput007_RunFrame,
+    unix_ISteamInput_SteamInput007_BWaitForData,
+    unix_ISteamInput_SteamInput007_BNewDataAvailable,
+    unix_ISteamInput_SteamInput007_GetConnectedControllers,
+    unix_ISteamInput_SteamInput007_EnableDeviceCallbacks,
+    unix_ISteamInput_SteamInput007_EnableActionEventCallbacks,
+    unix_ISteamInput_SteamInput007_GetActionSetHandle,
+    unix_ISteamInput_SteamInput007_ActivateActionSet,
+    unix_ISteamInput_SteamInput007_GetCurrentActionSet,
+    unix_ISteamInput_SteamInput007_ActivateActionSetLayer,
+    unix_ISteamInput_SteamInput007_DeactivateActionSetLayer,
+    unix_ISteamInput_SteamInput007_DeactivateAllActionSetLayers,
+    unix_ISteamInput_SteamInput007_GetActiveActionSetLayers,
+    unix_ISteamInput_SteamInput007_GetDigitalActionHandle,
+    unix_ISteamInput_SteamInput007_GetDigitalActionData,
+    unix_ISteamInput_SteamInput007_GetDigitalActionOrigins,
+    unix_ISteamInput_SteamInput007_GetStringForDigitalActionName,
+    unix_ISteamInput_SteamInput007_GetAnalogActionHandle,
+    unix_ISteamInput_SteamInput007_GetAnalogActionData,
+    unix_ISteamInput_SteamInput007_GetAnalogActionOrigins,
+    unix_ISteamInput_SteamInput007_GetGlyphPNGForActionOrigin,
+    unix_ISteamInput_SteamInput007_GetGlyphSVGForActionOrigin,
+    unix_ISteamInput_SteamInput007_GetGlyphForActionOrigin_Legacy,
+    unix_ISteamInput_SteamInput007_GetStringForActionOrigin,
+    unix_ISteamInput_SteamInput007_GetStringForAnalogActionName,
+    unix_ISteamInput_SteamInput007_StopAnalogActionMomentum,
+    unix_ISteamInput_SteamInput007_GetMotionData,
+    unix_ISteamInput_SteamInput007_TriggerVibration,
+    unix_ISteamInput_SteamInput007_TriggerVibrationExtended,
+    unix_ISteamInput_SteamInput007_TriggerSimpleHapticEvent,
+    unix_ISteamInput_SteamInput007_SetLEDColor,
+    unix_ISteamInput_SteamInput007_Legacy_TriggerHapticPulse,
+    unix_ISteamInput_SteamInput007_Legacy_TriggerRepeatedHapticPulse,
+    unix_ISteamInput_SteamInput007_ShowBindingPanel,
+    unix_ISteamInput_SteamInput007_GetInputTypeForHandle,
+    unix_ISteamInput_SteamInput007_GetControllerForGamepadIndex,
+    unix_ISteamInput_SteamInput007_GetGamepadIndexForController,
+    unix_ISteamInput_SteamInput007_GetStringForXboxOrigin,
+    unix_ISteamInput_SteamInput007_GetGlyphForXboxOrigin,
+    unix_ISteamInput_SteamInput007_GetActionOriginFromXboxOrigin,
+    unix_ISteamInput_SteamInput007_TranslateActionOrigin,
+    unix_ISteamInput_SteamInput007_GetDeviceBindingRevision,
+    unix_ISteamInput_SteamInput007_GetRemotePlaySessionID,
+    unix_ISteamInput_SteamInput007_GetSessionInputConfigurationSettings,
+    unix_ISteamInput_SteamInput007_SetDualSenseTriggerEffect,
     unix_ISteamMasterServerUpdater_SteamMasterServerUpdater001_SetActive,
     unix_ISteamMasterServerUpdater_SteamMasterServerUpdater001_SetHeartbeatInterval,
     unix_ISteamMasterServerUpdater_SteamMasterServerUpdater001_HandleIncomingPacket,
@@ -104954,6 +107364,24 @@ enum unix_funcs
     unix_ISteamMatchmakingServers_SteamMatchMakingServers002_PlayerDetails,
     unix_ISteamMatchmakingServers_SteamMatchMakingServers002_ServerRules,
     unix_ISteamMatchmakingServers_SteamMatchMakingServers002_CancelServerQuery,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_RequestInternetServerList,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_RequestLANServerList,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_RequestFriendsServerList,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_RequestFavoritesServerList,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_RequestHistoryServerList,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_RequestSpectatorServerList,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_ReleaseRequest,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_GetServerDetails,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_CancelQuery,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_RefreshQuery,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_IsRefreshing,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_GetServerCount,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_RefreshServer,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_PingServer,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_PlayerDetails,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_ServerRules,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_ServerFriends,
+    unix_ISteamMatchmakingServers_SteamMatchMakingServers003_CancelServerQuery,
     unix_ISteamNetworking_SteamNetworking001_CreateListenSocket,
     unix_ISteamNetworking_SteamNetworking001_CreateP2PConnectionSocket,
     unix_ISteamNetworking_SteamNetworking001_CreateConnectionSocket,
@@ -105293,6 +107721,53 @@ enum unix_funcs
     unix_ISteamNetworkingSockets_SteamNetworkingSockets012_CreateListenSocketP2PFakeIP,
     unix_ISteamNetworkingSockets_SteamNetworkingSockets012_GetRemoteFakeIPForConnection,
     unix_ISteamNetworkingSockets_SteamNetworkingSockets012_CreateFakeUDPPort,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateListenSocketIP,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectByIPAddress,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateListenSocketP2P,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectP2P,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_AcceptConnection,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_CloseConnection,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_CloseListenSocket,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_SetConnectionUserData,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetConnectionUserData,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_SetConnectionName,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetConnectionName,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_SendMessageToConnection,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_SendMessages,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_FlushMessagesOnConnection,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_ReceiveMessagesOnConnection,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetConnectionInfo,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetConnectionRealTimeStatus,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetDetailedConnectionStatus,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetListenSocketAddress,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateSocketPair,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_ConfigureConnectionLanes,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetIdentity,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_InitAuthentication,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetAuthenticationStatus,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_CreatePollGroup,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_DestroyPollGroup,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_SetConnectionPollGroup,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_ReceiveMessagesOnPollGroup,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_ReceivedRelayAuthTicket,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_FindRelayAuthTicketForServer,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectToHostedDedicatedServer,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetHostedDedicatedServerPort,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetHostedDedicatedServerPOPID,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetHostedDedicatedServerAddress,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateHostedDedicatedServerListenSocket,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetGameCoordinatorServerLogin,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectP2PCustomSignaling,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_ReceivedP2PCustomSignal,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetCertificateRequest,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_SetCertificate,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_ResetIdentity,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_RunCallbacks,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_BeginAsyncRequestFakeIP,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetFakeIP,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateListenSocketP2PFakeIP,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_GetRemoteFakeIPForConnection,
+    unix_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateFakeUDPPort,
     unix_ISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_SendP2PRendezvous,
     unix_ISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_SendP2PConnectionFailure,
     unix_ISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002_GetCertAsync,
@@ -106042,6 +108517,46 @@ enum unix_funcs
     unix_ISteamUtils_SteamUtils010_SetGameLauncherMode,
     unix_ISteamUtils_SteamUtils010_DismissFloatingGamepadTextInput,
     unix_ISteamUtils_SteamUtils010_DismissGamepadTextInput,
+    unix_ISteamUtils_SteamUtils011_GetSecondsSinceAppActive,
+    unix_ISteamUtils_SteamUtils011_GetSecondsSinceComputerActive,
+    unix_ISteamUtils_SteamUtils011_GetConnectedUniverse,
+    unix_ISteamUtils_SteamUtils011_GetServerRealTime,
+    unix_ISteamUtils_SteamUtils011_GetIPCountry,
+    unix_ISteamUtils_SteamUtils011_GetImageSize,
+    unix_ISteamUtils_SteamUtils011_GetImageRGBA,
+    unix_ISteamUtils_SteamUtils011_GetCurrentBatteryPower,
+    unix_ISteamUtils_SteamUtils011_GetAppID,
+    unix_ISteamUtils_SteamUtils011_SetOverlayNotificationPosition,
+    unix_ISteamUtils_SteamUtils011_IsAPICallCompleted,
+    unix_ISteamUtils_SteamUtils011_GetAPICallFailureReason,
+    unix_ISteamUtils_SteamUtils011_GetAPICallResult,
+    unix_ISteamUtils_SteamUtils011_RunFrame,
+    unix_ISteamUtils_SteamUtils011_GetIPCCallCount,
+    unix_ISteamUtils_SteamUtils011_SetWarningMessageHook,
+    unix_ISteamUtils_SteamUtils011_IsOverlayEnabled,
+    unix_ISteamUtils_SteamUtils011_BOverlayNeedsPresent,
+    unix_ISteamUtils_SteamUtils011_CheckFileSignature,
+    unix_ISteamUtils_SteamUtils011_ShowGamepadTextInput,
+    unix_ISteamUtils_SteamUtils011_GetEnteredGamepadTextLength,
+    unix_ISteamUtils_SteamUtils011_GetEnteredGamepadTextInput,
+    unix_ISteamUtils_SteamUtils011_GetSteamUILanguage,
+    unix_ISteamUtils_SteamUtils011_IsSteamRunningInVR,
+    unix_ISteamUtils_SteamUtils011_SetOverlayNotificationInset,
+    unix_ISteamUtils_SteamUtils011_IsSteamInBigPictureMode,
+    unix_ISteamUtils_SteamUtils011_StartVRDashboard,
+    unix_ISteamUtils_SteamUtils011_IsVRHeadsetStreamingEnabled,
+    unix_ISteamUtils_SteamUtils011_SetVRHeadsetStreamingEnabled,
+    unix_ISteamUtils_SteamUtils011_IsSteamChinaLauncher,
+    unix_ISteamUtils_SteamUtils011_InitFilterText,
+    unix_ISteamUtils_SteamUtils011_FilterText,
+    unix_ISteamUtils_SteamUtils011_GetIPv6ConnectivityState,
+    unix_ISteamUtils_SteamUtils011_ShowFloatingGamepadTextInput,
+    unix_ISteamUtils_SteamUtils011_SetGameLauncherMode,
+    unix_ISteamUtils_SteamUtils011_DismissFloatingGamepadTextInput,
+    unix_ISteamUtils_SteamUtils011_DismissGamepadTextInput,
+    unix_ISteamUtils_SteamUtils011_IsRunningOnSteamHardware,
+    unix_ISteamUtils_SteamUtils011_GetSteamHardwareDefaultConfig,
+    unix_ISteamUtils_SteamUtils011_IsRunningUnderProton,
 };
 
 #ifdef __cplusplus

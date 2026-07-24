@@ -153,6 +153,7 @@ static const struct { const char *iface_version; iface_constructor ctor; } const
     {"SteamInput002", &create_winISteamInput_SteamInput002},
     {"SteamInput005", &create_winISteamInput_SteamInput005},
     {"SteamInput006", &create_winISteamInput_SteamInput006},
+    {"SteamInput007", &create_winISteamInput_SteamInput007},
     {"SteamMasterServerUpdater001", &create_winISteamMasterServerUpdater_SteamMasterServerUpdater001},
     {"SteamMatchGameSearch001", &create_winISteamGameSearch_SteamMatchGameSearch001},
     {"SteamMatchMaking001", &create_winISteamMatchmaking_SteamMatchMaking001},
@@ -166,6 +167,7 @@ static const struct { const char *iface_version; iface_constructor ctor; } const
     {"SteamMatchMaking009", &create_winISteamMatchmaking_SteamMatchMaking009},
     {"SteamMatchMakingServers001", &create_winISteamMatchmakingServers_SteamMatchMakingServers001},
     {"SteamMatchMakingServers002", &create_winISteamMatchmakingServers_SteamMatchMakingServers002},
+    {"SteamMatchMakingServers003", &create_winISteamMatchmakingServers_SteamMatchMakingServers003},
     {"SteamNetworking001", &create_winISteamNetworking_SteamNetworking001},
     {"SteamNetworking002", &create_winISteamNetworking_SteamNetworking002},
     {"SteamNetworking003", &create_winISteamNetworking_SteamNetworking003},
@@ -181,6 +183,7 @@ static const struct { const char *iface_version; iface_constructor ctor; } const
     {"SteamNetworkingSockets008", &create_winISteamNetworkingSockets_SteamNetworkingSockets008},
     {"SteamNetworkingSockets009", &create_winISteamNetworkingSockets_SteamNetworkingSockets009},
     {"SteamNetworkingSockets012", &create_winISteamNetworkingSockets_SteamNetworkingSockets012},
+    {"SteamNetworkingSockets013", &create_winISteamNetworkingSockets_SteamNetworkingSockets013},
     {"SteamNetworkingSocketsSerialized002", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002},
     {"SteamNetworkingSocketsSerialized001", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized002}, /* alias */
     {"SteamNetworkingSocketsSerialized003", &create_winISteamNetworkingSocketsSerialized_SteamNetworkingSocketsSerialized003},
@@ -219,6 +222,7 @@ static const struct { const char *iface_version; iface_constructor ctor; } const
     {"SteamUtils008", &create_winISteamUtils_SteamUtils008},
     {"SteamUtils009", &create_winISteamUtils_SteamUtils009},
     {"SteamUtils010", &create_winISteamUtils_SteamUtils010},
+    {"SteamUtils011", &create_winISteamUtils_SteamUtils011},
 };
 
 iface_constructor find_iface_constructor( const char *iface_version )

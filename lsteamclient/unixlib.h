@@ -70,6 +70,7 @@ enum callback_type
     CALL_IFACE_VTABLE_0_SERVER_RESPONDED,
     CALL_IFACE_VTABLE_0_ADD_PLAYER_TO_LIST,
     CALL_IFACE_VTABLE_0_RULES_RESPONDED,
+    CALL_IFACE_VTABLE_0_FRIENDS_RESPONDED,
 };
 
 struct callback
@@ -129,7 +130,7 @@ struct callback
                 struct w_iface *iface;
                 UINT64 __pad;
             };
-            gameserveritem_t_105 server[];
+            gameserveritem_t_165 server[];
         } server_responded;
 
         struct
@@ -153,6 +154,17 @@ struct callback
             };
             const char rule_and_value[1];
         } rules_responded;
+        struct
+        {
+            union
+            {
+                struct w_iface *iface;
+                UINT64 __pad;
+            };
+            CSteamID steamid;
+            int64_t connected;
+            const char name[1];
+        } friends_responded;
     };
 };
 
@@ -393,7 +405,7 @@ struct w_request
     struct u_response u_response;
     union
     {
-        gameserveritem_t_105 *details;
+        gameserveritem_t_165 *details;
         UINT64 __pad;
     };
     UINT64 details_count;

@@ -715,3 +715,78 @@ w_SteamNetworkingMessage_t_153a *__thiscall winISteamNetworkingUtils_SteamNetwor
     STEAMCLIENT_CALL( ISteamNetworkingUtils_SteamNetworkingUtils004_AllocateMessage, &params );
     return params._ret;
 }
+
+/* ISteamNetworkingSockets_SteamNetworkingSockets013 */
+
+void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets013_RunCallbacks(struct w_iface *_this)
+{
+    struct ISteamNetworkingSockets_SteamNetworkingSockets013_RunCallbacks_params params =
+    {
+        .u_iface = _this->u_iface,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets013_RunCallbacks, &params );
+    execute_pending_callbacks();
+    TRACE("done.\n");
+}
+
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets013_ReceiveMessagesOnConnection( struct w_iface *_this,
+                                                                                                     uint32_t hConn, w_SteamNetworkingMessage_t_153a **ppOutMessages,
+                                                                                                     int32_t nMaxMessages )
+{
+    struct ISteamNetworkingSockets_SteamNetworkingSockets013_ReceiveMessagesOnConnection_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hConn = hConn,
+        .ppOutMessages = ppOutMessages,
+        .nMaxMessages = nMaxMessages,
+    };
+
+    TRACE( "%p\n", _this );
+
+    if (!networking_message_pool_create_153a( nMaxMessages, params.ppOutMessages )) return 0;
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets013_ReceiveMessagesOnConnection, &params );
+    if (!networking_message_pool_receive_153a( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
+
+    return params._ret;
+}
+
+int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets013_ReceiveMessagesOnPollGroup( struct w_iface *_this, uint32_t hPollGroup,
+                                                                                                    w_SteamNetworkingMessage_t_153a **ppOutMessages,
+                                                                                                    int32_t nMaxMessages )
+{
+    struct ISteamNetworkingSockets_SteamNetworkingSockets013_ReceiveMessagesOnPollGroup_params params =
+    {
+        .u_iface = _this->u_iface,
+        .hPollGroup = hPollGroup,
+        .ppOutMessages = ppOutMessages,
+        .nMaxMessages = nMaxMessages,
+    };
+
+    TRACE( "%p\n", _this );
+
+    if (!networking_message_pool_create_153a( nMaxMessages, params.ppOutMessages )) return 0;
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets013_ReceiveMessagesOnPollGroup, &params );
+    if (!networking_message_pool_receive_153a( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
+
+    return params._ret;
+}
+
+void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets013_SendMessages(struct w_iface *_this, int32_t nMessages, w_SteamNetworkingMessage_t_153a *const *pMessages, int64_t *pOutMessageNumberOrResult,
+        int8_t bDeleteFailedMessages)
+{
+    struct ISteamNetworkingSockets_SteamNetworkingSockets013_SendMessages_params params =
+    {
+        .u_iface = _this->u_iface,
+        .nMessages = nMessages,
+        .pMessages = (w_SteamNetworkingMessage_t_153a **)pMessages,
+        .pOutMessageNumberOrResult = pOutMessageNumberOrResult,
+        .bDeleteFailedMessages = bDeleteFailedMessages,
+    };
+    int64_t i;
+
+    TRACE("%p\n", _this);
+
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets013_SendMessages, &params );
+    for (i = 0; i < nMessages; i++) pMessages[i]->m_pfnRelease( pMessages[i] );
+}
