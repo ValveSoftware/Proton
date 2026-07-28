@@ -35,7 +35,7 @@ In Steam, set your game's Properties -> GENERAL -> LAUNCH OPTIONS to:
 
 This should work for GeForce GTX 1650. A different name may be required for
 your particular graphics card (e.g. "VEGA10" for Vega 56/64). You can use
-`vulkaninfo` program (usually packaged as `vulkan-tools`) to check the names
+the `vulkaninfo` program (usually packaged as `vulkan-tools`) to check the names
 of your GPUs.
 
 
@@ -55,7 +55,7 @@ In Steam, set your game's Properties -> GENERAL -> LAUNCH OPTIONS to:
 
 ### Nvidia -> Integrated Intel (Nvidia's Proprietary Driver -> Mesa)
 
-In Steam set your game's Properties -> GENERAL -> LAUNCH OPTIONS to:
+In Steam, set your game's Properties -> GENERAL -> LAUNCH OPTIONS to:
 
     __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia %command%
 
@@ -85,12 +85,12 @@ list the GPUs:
 
 Then set the launch options using one of the vendor and product ids, e.g.:
 
-    DRI_PRIME=1 MESA_VK_DEVICE_SELECT=1002:67df $command%
+    DRI_PRIME=1 MESA_VK_DEVICE_SELECT=1002:67df %command%
 
 
 ### Nvidia -> Integrated Intel (Nvidia's Proprietary Driver -> Mesa)
 
-In Steam set your game's Properties -> GENERAL -> LAUNCH OPTIONS to:
+In Steam, set your game's Properties -> GENERAL -> LAUNCH OPTIONS to:
 
     __NV_PRIME_RENDER_OFFLOAD=1 __VK_LAYER_NV_optimus=NVIDIA_only %command%
 
