@@ -1166,7 +1166,7 @@ class CompatData:
                 # Try to detect known DLLs that ship with the NVIDIA Linux Driver
                 # and add them into the prefix
                 if g_session.nvidia_wine_dll_dir:
-                    for dll in ["_nvngx.dll", "nvngx.dll"]:
+                    for dll in ["_nvngx.dll", "nvngx.dll", "nvngx_dlssg.dll"]:
                         try_copy(g_session.nvidia_wine_dll_dir + "/" + dll,
                                  "drive_c/windows/system32",
                                  optional=True,
