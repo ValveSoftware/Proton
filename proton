@@ -1438,6 +1438,39 @@ default_cpu_limit = {
     "65540"     :  16,  # Gothic 1 Classic
 }
 
+pcore_cpu_limit = {
+    "1038250" : True, # DIRT 5
+}
+
+# This function reads the cpu_core/cpus file - responsible for listing the
+# P-cores - and returns a string that matches the format WINE_CPU_TOPOLOGY
+# wants. If the file contains something such as "0-3,6,8-9", we'll return
+# "7:0,1,2,3,6,8,9".
+def cpu_range_to_wine_topology_str():
+    try:
+        with open("/sys/devices/cpu_core/cpus", "r") as f:
+            range_string = f.read().strip()
+
+        cpus = []
+
+        subranges = range_string.split(",")
+        for sr in subranges:
+            start_end = list(map(int, sr.split("-")))
+            if (len(start_end) == 1):
+                sr_cpus = start_end
+            elif (len(start_end) == 2):
+                sr_cpus = list(range(start_end[0], start_end[1] + 1))
+            else:
+                raise Exception("unexpected file contents")
+
+            cpus += sr_cpus
+
+        n_cpus = len(sr_cpus)
+        cpus_str = ",".join(map(str, cpus))
+        return f"{n_cpus}:{cpus_str}"
+    except Exception:
+        return ""
+
 class Session:
     def __init__(self):
         self.log_file = None
@@ -1484,6 +1517,10 @@ class Session:
             self.env["WINE_CPU_TOPOLOGY"] = self.env["PROTON_CPU_TOPOLOGY"]
         elif appid in default_cpu_limit:
             self.env["WINE_CPU_TOPOLOGY"] = str(default_cpu_limit[appid])
+        elif appid in pcore_cpu_limit:
+            topology_str = cpu_range_to_wine_topology_str()
+            if topology_str != "":
+                self.env["WINE_CPU_TOPOLOGY"] = topology_str
 
         if "WINE_HIDE_AMD_GPU" not in self.env and appid in [
                     "1282690",
