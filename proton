@@ -271,6 +271,18 @@ def getmtimestr(*path_fragments):
     except IOError:
         return "0"
 
+def get_validated_steamapps_parent(orig_path):
+    try:
+        path = os.path.realpath(orig_path)
+        if os.path.isdir(path) and os.path.basename(path) == "steamapps":
+            parent = os.path.dirname(path)
+            if os.access(parent, os.W_OK) and os.stat(path).st_dev == os.stat(parent).st_dev:
+                return parent
+    except: pass
+
+    log("Error: unable to use parent for game drive, path " + orig_path)
+    return orig_path
+
 def try_get_game_library_dir():
     if "STEAM_COMPAT_INSTALL_PATH" not in g_session.env or \
             "STEAM_COMPAT_LIBRARY_PATHS" not in g_session.env:
@@ -280,7 +292,7 @@ def try_get_game_library_dir():
     library_paths = g_session.env["STEAM_COMPAT_LIBRARY_PATHS"].split(":")
     for path in library_paths:
         if path in g_session.env["STEAM_COMPAT_INSTALL_PATH"]:
-            return path
+            return get_validated_steamapps_parent(path)
 
     return None
 
