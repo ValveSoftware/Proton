@@ -827,6 +827,9 @@ VKD3D_PROTON_x86_64_MESON_ARGS = --bindir=$(VKD3D_PROTON_x86_64_DST)/lib/wine/vk
 VKD3D_PROTON_arm64ec_MESON_ARGS = --bindir=$(VKD3D_PROTON_arm64ec_DST)/lib/wine/vkd3d-proton/aarch64-windows
 VKD3D_PROTON_HOST_DEPENDS = glslang
 
+VKD3D_PROTON_arm64ec_CFLAGS = -marm64x
+VKD3D_PROTON_arm64ec_LDFLAGS = -marm64x
+
 ifneq ($(UNSTRIPPED_BUILD),)
 	VKD3D_PROTON_MESON_ARGS = -Denable_trace=true
 endif
