@@ -12,7 +12,7 @@ endef
 escape = $(subst $(space),\$(space),$(subst $(double-quote),\$(double-quote),$(1)))
 
 list-join = $(if $(2),$(3)$(subst $(space),$(1),$(strip $(2)))$(4))
-list-quote = $(call list-join,$(quote)$(comma)$(quote),$(1),$(2)$(quote),$(quote)$(3))
+list-quote = $(if $(strip $(1)),$(call list-join,$(quote)$(comma)$(quote),$(1),$(2)$(quote),$(quote)$(3)))
 list-double-quote = $(call list-join,$(double-quote)$(space)$(double-quote),$(1),$(2)$(double-quote),$(double-quote)$(3))
 
 head = $(word 1,$(1))
