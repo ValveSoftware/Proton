@@ -24,7 +24,8 @@ pkgconfig = '$$$$PKG_CONFIG'
 needs_exe_wrapper = true
 c_args = [$$(call list-quote,$$($(2)_$(3)_INCFLAGS) $$($(2)_CFLAGS) $$($(3)_CFLAGS) $$(CFLAGS))]
 cpp_args = [$$(call list-quote,$$($(2)_$(3)_INCFLAGS) $$($(2)_CFLAGS) $$($(3)_CFLAGS) $$(CFLAGS))]
-link_args = [$$(call list-quote,$$($(2)_$(3)-$(4)_LIBFLAGS) $$($(2)_$(3)_LIBFLAGS) $$($(2)_LDFLAGS) $$($(3)_LDFLAGS) $$(LDFLAGS))]
+c_link_args = [$$(call list-quote,$$($(2)_$(3)-$(4)_LIBFLAGS) $$($(2)_$(3)_LIBFLAGS) $$($(2)_LDFLAGS) $$($(3)_LDFLAGS) $$($(2)_$(3)_CFLAGS) $$(LDFLAGS))]
+cpp_link_args = [$$(call list-quote,$$($(2)_$(3)-$(4)_LIBFLAGS) $$($(2)_$(3)_LIBFLAGS) $$($(2)_LDFLAGS) $$($(3)_LDFLAGS) $$($(2)_$(3)_CFLAGS) $$(LDFLAGS))]
 pkg_config_libdir = '$$$$PKG_CONFIG_LIBDIR'
 
 [host_machine]
