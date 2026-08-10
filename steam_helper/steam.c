@@ -843,7 +843,7 @@ static HANDLE find_ack_event(void)
         if (!strncmpW( di->ObjectName.Buffer, L"STEAM_START_ACK_EVENT", 21 ))
         {
             WINE_TRACE("Found event %s.\n", wine_dbgstr_w(di->ObjectName.Buffer));
-            ret = OpenEventW(SYNCHRONIZE, FALSE, di->ObjectName.Buffer);
+            ret = OpenEventW(SYNCHRONIZE | EVENT_MODIFY_STATE, FALSE, di->ObjectName.Buffer);
             if (!ret)
                 WINE_WARN("Failed to create event, err %lu.\n", GetLastError());
             break;
