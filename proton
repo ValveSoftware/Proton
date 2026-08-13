@@ -1540,8 +1540,14 @@ class Session:
         if "SteamVirtualGamepadInfo_Proton" in self.env and "SteamVirtualGamepadInfo" not in self.env:
             self.env["SteamVirtualGamepadInfo"] = self.env["SteamVirtualGamepadInfo_Proton"]
 
+        if "PROTON_USE_WOW64" not in self.env and "SteamGameId" in self.env:
+            if self.env["SteamGameId"] in [
+                    "747920",
+                    ]:
+                self.env["PROTON_USE_WOW64"] = "1"
+
         self.env.pop("WINEARCH", "")
-        if os.environ.get("PROTON_USE_WOW64", None) == "1" and platform.machine() == "x86_64":
+        if "PROTON_USE_WOW64" in self.env and self.env["PROTON_USE_WOW64"] == "1" and platform.machine() == "x86_64":
             self.env["WINEARCH"] = "wow64"
 
         if 'ORIG_'+ld_path_var not in os.environ:
