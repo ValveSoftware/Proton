@@ -45,8 +45,9 @@ example, if you wish to make changes to Wine, you would apply them to the
 Building Proton
 ---------------
 
-Most of Proton builds inside the Proton SDK container with very few
-dependencies on the host side.
+Most of Proton builds inside the [Proton SDK](docker/README.md) (a downstream
+of [SteamRT SDK][steamrt-sdk]) container with very few dependencies on the host
+side.
 
 ## Preparing the build environment
 
@@ -59,6 +60,7 @@ to your distribution's documentation for setup instructions (e.g. Arch
 [Podman][arch-podman] / [Docker][arch-docker], Debian [Podman][debian-podman] /
 [Docker][debian-docker]).
 
+[steamrt-sdk]: https://gitlab.steamos.cloud/steamrt/steamrt4/sdk
 [rootless-podman]: https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md
 [arch-podman]: https://wiki.archlinux.org/title/Podman
 [arch-docker]: https://wiki.archlinux.org/title/Docker
