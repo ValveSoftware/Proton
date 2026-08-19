@@ -1004,22 +1004,22 @@ LIBERATION_SRCDIR = $(FONTS)/liberation-fonts/src
 SOURCE_HAN_SANS_SRCDIR = $(FONTS)/source-han-sans
 UME_DIR = $(FONTS)/ume
 
-msyh.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
-msyh.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
+msyh.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/Regular/cidfont.ps.OTC.SC
+msyh.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/Regular/features.OTC.SC
 msyh.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
 msyh.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
 msyh.ttf_MENUNAMEDB = $(FONTS)/patches/YaHei-FontMenuNameDB
 msyh.ttf = $(FONTS_OBJ)/source-han/msyh.ttf
 
-simsun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
-simsun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
+simsun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/Regular/cidfont.ps.OTC.SC
+simsun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/Regular/features.OTC.SC
 simsun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
 simsun.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
 simsun.ttf_MENUNAMEDB = $(FONTS)/patches/SimSun-FontMenuNameDB
 simsun.ttf = $(FONTS_OBJ)/source-han/simsun.ttf
 
-nsimsun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.SC
-nsimsun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.SC
+nsimsun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/Regular/cidfont.ps.OTC.SC
+nsimsun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/Regular/features.OTC.SC
 nsimsun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
 nsimsun.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
 nsimsun.ttf_MENUNAMEDB = $(FONTS)/patches/NSimSun-FontMenuNameDB
@@ -1037,8 +1037,8 @@ msuigothic.ttf_FONT = $(UME_DIR)/ume-ugo4.ttf
 msuigothic.ttf_NAMETABLE_PATCH = $(FONTS)/patches/UmeUIGothic-nametable.patch
 msuigothic.ttf = $(FONTS_OBJ)/ume-gothic/msuigothic.ttf
 
-malgun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/cidfont.ps.OTC.K
-malgun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/features.OTC.K
+malgun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/Regular/cidfont.ps.OTC.K
+malgun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/Regular/features.OTC.K
 malgun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_KR_sequences.txt
 malgun.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansKR-UTF32-H
 malgun.ttf_MENUNAMEDB = $(FONTS)/patches/Malgun-FontMenuNameDB
