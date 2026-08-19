@@ -858,6 +858,7 @@ ifneq ($(findstring aarch64,$(unix_ARCHS)),)
 FEX_COMMON_CMAKE_ARGS = \
   -DENABLE_FEXCORE_PROFILER=True -DCMAKE_BUILD_TYPE=Release -DENABLE_LTO=False \
   -DBUILD_TESTING=False -DTUNE_CPU=none -DRANGES_NATIVE=OFF \
+  -DBUILD_STEAM_SUPPORT=True \
   -DOVERRIDE_VERSION=$$(cat $(FEX_SRC)/.git_describe) \
   -DOVERRIDE_HASH=$$(cat $(FEX_SRC)/.git_rev)
 
