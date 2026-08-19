@@ -1011,6 +1011,13 @@ msyh.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
 msyh.ttf_MENUNAMEDB = $(FONTS)/patches/YaHei-FontMenuNameDB
 msyh.ttf = $(FONTS_OBJ)/source-han/msyh.ttf
 
+msyhbd.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/Bold/cidfont.ps.OTC.SC
+msyhbd.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/Bold/features.OTC.SC
+msyhbd.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
+msyhbd.ttf_UNISOURCE = $(SOURCE_HAN_SANS_SRCDIR)/UniSourceHanSansCN-UTF32-H
+msyhbd.ttf_MENUNAMEDB = $(FONTS)/patches/YaHeiBold-FontMenuNameDB
+msyhbd.ttf = $(FONTS_OBJ)/source-han/msyhbd.ttf
+
 simsun.ttf_CIDFONT = $(SOURCE_HAN_SANS_SRCDIR)/Regular/cidfont.ps.OTC.SC
 simsun.ttf_FEATURES = $(SOURCE_HAN_SANS_SRCDIR)/Regular/features.OTC.SC
 simsun.ttf_SEQUENCES = $(SOURCE_HAN_SANS_SRCDIR)/SourceHanSans_CN_sequences.txt
@@ -1137,7 +1144,10 @@ $(FONTS_OBJ)/source-han/%.ttf: $$(%.ttf_CIDFONT) $$(%.ttf_FEATURES) $$(%.ttf_SEQ
 	# to run it in a dedicated temporary directory to prevent concurrent instances
 	# to step onto each other's feet
 	(TEMP_DIR=`mktemp -d` && cd $$TEMP_DIR && afdko sfntedit -a CFF=$(abspath $($(notdir $@)).cff) $(abspath $@.tmp) && rm -fr $$TEMP_DIR)
-	if [ "$(notdir $@)" = "msyh.ttf" ]; then afdko otf2ttf -o $@.tmp.ttf $@.tmp; mv -f $@.tmp.ttf $@.tmp; fi
+	if [ "$(notdir $@)" = "msyh.ttf" ] || [ "$(notdir $@)" = "msyhbd.ttf" ]; then \
+		afdko otf2ttf -o $@.tmp.ttf $@.tmp; \
+		mv -f $@.tmp.ttf $@.tmp; \
+	fi
 	mv $@.tmp $@
 
 $(FONTS_OBJ)/ume-gothic/%.ttf: $$(%.ttf_FONT) $$(%.ttf_NAMETABLE_PATCH)
@@ -1180,6 +1190,7 @@ $(lucon.ttf): $(FONTS)/scripts/merge.py $(noto_sans_mono.ttf) $(noto_sans_math.t
 	$(FONTS)/scripts/merge.py $(noto_sans_mono.ttf) $(noto_sans_math.ttf) $(noto_sans_symbols.ttf) $(noto_sans_symbols2.ttf) "LucidaConsole" "Lucida Console" "Regular" $(FONTS)/ranges/lucon $(lucon.ttf)
 
 fonts: $(msyh.ttf)
+fonts: $(msyhbd.ttf)
 fonts: $(simsun.ttc)
 fonts: $(msgothic.ttc)
 fonts: $(malgun.ttf)
@@ -1193,6 +1204,7 @@ $(DIST_FONTS): fonts
 	mkdir -p $@
 	cp $(FONTS_OBJ)/*.ttf "$@"
 	cp $(FONTS_OBJ)/source-han/msyh.ttf "$@"
+	cp $(FONTS_OBJ)/source-han/msyhbd.ttf "$@"
 	cp $(FONTS_OBJ)/source-han/simsun.ttc "$@"
 	cp $(FONTS_OBJ)/ume-gothic/msgothic.ttc "$@"
 	cp $(FONTS_OBJ)/source-han/malgun.ttf "$@"
