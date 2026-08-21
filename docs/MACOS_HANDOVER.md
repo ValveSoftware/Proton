@@ -4,10 +4,10 @@ This is the persistent engineering handover for the macOS port. The newest statu
 
 ## Current status
 
-Last updated: 2026-08-21T07:50:00Z  
+Last updated: 2026-08-21T08:05:00Z  
 Upstream branch: proton_11.0  
-Wine commit: 470d07449c6 (macos-rosetta2-support)  
-Proton commit: a6d11e29 (macos-rosetta2-support)  
+Wine commit: 40b0d91c5b0 (macos-rosetta2-support)  
+Proton commit: 74716ac7 (macos-rosetta2-support)  
 State: FULL SUCCESS — TrackMania Nations Forever & 32-bit/64-bit Windows Binaries Executing under Wine WoW64 on macOS Rosetta 2
 
 ### Working-tree changes
@@ -20,7 +20,8 @@ State: FULL SUCCESS — TrackMania Nations Forever & 32-bit/64-bit Windows Binar
 - wine/dlls/ntdll/unix/signal_x86_64.c:
   - Made `set_thread_teb()` a no-op on `__APPLE__` to prevent corrupting Unix `pthread_t` TSD base during initialization.
   - Implemented register preservation across `_thread_set_tsd_base` C library calls in `call_user_mode_callback`, `__wine_syscall_dispatcher`, `__wine_syscall_dispatcher_return`, and `__wine_unix_call_dispatcher`.
-  - Added TEB pointer assignment in `sigsys_handler` (`R13_sig(ucontext) = (ULONG_PTR)teb`) and guarded `%gs:0x30` accesses when running on macOS.
+  - Positioned `movq %gs:0x30, %r13` before `__wine_syscall_dispatcher_prolog_end` so `%r13` is correctly populated with `teb` during both direct Windows user-space calls and `SIGSYS` traps.
+  - Set `R13_sig(ucontext) = (ULONG_PTR)teb` in `sigsys_handler`.
 - wine/server/token.c: added `gethostuuid()` fallback for macOS in `init_user_sid()` to prevent missing `/etc/machine-id` warnings.
 - proton:
   - Ensured `self.base_dir` exists in `CompatData.__init__` before acquiring `pfx.lock`.
