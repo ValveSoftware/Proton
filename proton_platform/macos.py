@@ -68,9 +68,10 @@ class MacOSPlatformBackend(PlatformBackend):
             env.setdefault("MVK_ALLOW_METAL_EVENTS", "1")
             mvk_dir = os.path.dirname(moltenvk_path)
             if mvk_dir:
-                cur_dyld = env.get("DYLD_LIBRARY_PATH", "")
-                if mvk_dir not in cur_dyld.split(":"):
-                    env["DYLD_LIBRARY_PATH"] = (mvk_dir + ":" + cur_dyld).rstrip(":")
+                for var_name in ("DYLD_LIBRARY_PATH", "DYLD_FALLBACK_LIBRARY_PATH"):
+                    cur_val = env.get(var_name, "")
+                    if mvk_dir not in cur_val.split(":"):
+                        env[var_name] = (mvk_dir + ":" + cur_val).rstrip(":")
         else:
             # When MoltenVK is not installed on host, use WineD3D (OpenGL over MacDriver)
             compat_config.add("wined3d")

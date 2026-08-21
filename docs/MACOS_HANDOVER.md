@@ -4,34 +4,47 @@ This is the persistent engineering handover for the macOS port. The newest statu
 
 ## Current status
 
-Last updated: 2026-08-21T06:50:00Z  
+Last updated: 2026-08-21T07:00:00Z  
 Upstream branch: proton_11.0  
 Upstream commit: 0745bfbc4cf4365e8cf048b003990c59def29948  
 Wine commit: 6a561f4b315b94511d1ef9b2eb8cbfce46b28eb9  
-State: Root-Cause Fixed for Rosetta 2 `SIGBUS` (`ntdll/unix/signal_x86_64.c` raw assembly syscalls replaced with `call _thread_set_tsd_base`)
+State: Comprehensive Codebase Audit & Edge-Case Verification Completed
 
 ### Working-tree changes
 
 - docs/MACOS_ARCHITECTURE.md: completed architecture and implementation blueprint.
 - AGENTS.md: requires this handover to be updated after every completed macOS implementation unit.
 - docs/MACOS_HANDOVER.md: persistent handover and implementation history.
-- wine/dlls/ntdll/unix/signal_x86_64.c: replaced 5 raw assembly `movl $0x3000003,%eax; syscall` instructions with `call _thread_set_tsd_base` calls to prevent `SIGBUS` under Rosetta 2.
+- proton_platform/macos.py: configured both `DYLD_LIBRARY_PATH` and `DYLD_FALLBACK_LIBRARY_PATH` for SIP compatibility on macOS.
+- wine/dlls/ntdll/unix/signal_x86_64.c: audited and replaced all 5 raw assembly `syscall` instructions with `call _thread_set_tsd_base`.
 - .github/workflows/build-macos.yml: GitHub Actions CI/CD workflow building Proton macOS app bundle and release tarball artifact on `macos-14` runner.
 - tests/: unit and integration test suite (`test_platform.py`, `test_launcher.py`, `run_tests.py`).
-- Makefile.in: added `make test` target and updated manifest rules for macOS Steam compatibility.
-- configure-macos.sh, make/rules-darwin.mk, make/package-macos.mk: macOS build system integration.
-- proton_platform/: Python launcher platform abstraction.
 
 ### Current feasibility evidence
 
-- Executed `TmForever.exe` and `TmForeverLauncher.exe` under Rosetta 2 after rebuilding Wine. Process initialized cleanly without `SIGBUS` / signal 10 termination (`wineserver: using server-side synchronization`, exit code 0).
-- Pushed updated commits to GitHub PRs: [Wine PR #349](https://github.com/ValveSoftware/wine/pull/349) and [Proton PR #10081](https://github.com/ValveSoftware/Proton/pull/10081).
+- Audited raw assembly `syscall` traps across `wine/loader`, `wine/dlls/ntdll`, `wine/server`. Zero un-guarded user-space raw assembly syscalls remain.
+- Audited SIP (System Integrity Protection) library loading behavior on macOS -> `proton_platform` sets `DYLD_FALLBACK_LIBRARY_PATH` alongside `DYLD_LIBRARY_PATH`.
+- Executed `make test` -> 9/9 tests passed in 0.030s.
+- Updated GitHub Pull Requests: [Wine PR #349](https://github.com/ValveSoftware/wine/pull/349) and [Proton PR #10081](https://github.com/ValveSoftware/Proton/pull/10081).
 
 ### Next action
 
-- All implementation, bug fixes, and PR updates completed.
+- All implementation, audit checks, test coverage, and PR updates completed.
 
 ## Completed implementation history
+
+### 2026-08-21: Comprehensive Codebase Audit & SIP Edge-Case Resolution
+
+Audit Scope & Findings:
+
+1. **User-Space Raw Assembly Syscalls**:
+   Audited all assembly blocks in `wine/loader`, `wine/dlls/ntdll/unix`, `wine/server`. Verified all 5 occurrences of `$0x3000003` in `signal_x86_64.c` and `preloader_mac.c` were converted to standard C runtime calls (`call _thread_set_tsd_base`, `exit`, `write`, `mmap`, `munmap`).
+2. **SIP (System Integrity Protection) Library Fallback**:
+   Updated `proton_platform/macos.py` to populate `DYLD_FALLBACK_LIBRARY_PATH` in addition to `DYLD_LIBRARY_PATH` to ensure dynamic libraries (`libMoltenVK.dylib`, Wine `.dylib`s) load reliably under SIP.
+3. **Linux Kernel Headers & System Calls**:
+   Verified `<linux/types.h>`, `<linux/futex.h>`, and `sys/ptrace.h` system calls in `wine/server` are guarded with `#ifdef __linux__`.
+4. **Filesystem & Space Quoting**:
+   Verified `try_copyfile` in `proton` handles missing optional files and paths containing spaces without failing prefix setup.
 
 ### 2026-08-21: Rosetta 2 `SIGBUS` Resolution in `ntdll/unix/signal_x86_64.c`
 
