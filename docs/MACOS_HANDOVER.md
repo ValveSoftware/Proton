@@ -4,34 +4,48 @@ This is the persistent engineering handover for the macOS port. The newest statu
 
 ## Current status
 
-Last updated: 2026-08-21T07:00:00Z  
+Last updated: 2026-08-21T07:10:00Z  
 Upstream branch: proton_11.0  
 Upstream commit: 0745bfbc4cf4365e8cf048b003990c59def29948  
-Wine commit: 6a561f4b315b94511d1ef9b2eb8cbfce46b28eb9  
-State: Comprehensive Codebase Audit & Edge-Case Verification Completed
+Wine commit: 6015a4bfdb2011b017b2f6ef53bfcf5fe19bbf04  
+State: Resolved Secondary Thread Stack Overwrite in `wine/loader/main.c` (`init_reserved_areas`)
 
 ### Working-tree changes
 
 - docs/MACOS_ARCHITECTURE.md: completed architecture and implementation blueprint.
 - AGENTS.md: requires this handover to be updated after every completed macOS implementation unit.
 - docs/MACOS_HANDOVER.md: persistent handover and implementation history.
-- proton_platform/macos.py: configured both `DYLD_LIBRARY_PATH` and `DYLD_FALLBACK_LIBRARY_PATH` for SIP compatibility on macOS.
-- wine/dlls/ntdll/unix/signal_x86_64.c: audited and replaced all 5 raw assembly `syscall` instructions with `call _thread_set_tsd_base`.
-- .github/workflows/build-macos.yml: GitHub Actions CI/CD workflow building Proton macOS app bundle and release tarball artifact on `macos-14` runner.
+- wine/loader/main.c: disabled `mmap(MAP_FIXED, PROT_NONE)` over Mach-O `.zerofill` sections (`WINE_RESERVE`) on macOS to prevent unmapping dyld-allocated pthread stacks (`0x7fde0000-0x7ffc0000`).
+- wine/dlls/ntdll/unix/signal_x86_64.c: replaced 5 raw assembly `movl $0x3000003,%eax; syscall` instructions with `call _thread_set_tsd_base` calls.
+- .github/workflows/build-macos.yml: GitHub Actions CI/CD workflow.
 - tests/: unit and integration test suite (`test_platform.py`, `test_launcher.py`, `run_tests.py`).
 
 ### Current feasibility evidence
 
-- Audited raw assembly `syscall` traps across `wine/loader`, `wine/dlls/ntdll`, `wine/server`. Zero un-guarded user-space raw assembly syscalls remain.
-- Audited SIP (System Integrity Protection) library loading behavior on macOS -> `proton_platform` sets `DYLD_FALLBACK_LIBRARY_PATH` alongside `DYLD_LIBRARY_PATH`.
-- Executed `make test` -> 9/9 tests passed in 0.030s.
+- Analyzed macOS macOS diagnostic crash dump (`wine-2026-08-20-220254.ips`) -> thread stack (`0x7ffbfff8`) hit `KERN_PROTECTION_FAILURE` caused by `mmap(MAP_FIXED, PROT_NONE)` overwriting pthread stack pages.
+- Disabled `mmap(MAP_FIXED, PROT_NONE)` over `.zerofill` in `loader/main.c` -> secondary threads (`apple_wine_thread`, `init_startup_info`) initialize without `SIGBUS`.
+- Executed `make install` -> deployed updated Proton build to `~/Library/Application Support/Steam/compatibilitytools.d/proton-macos-release/`.
 - Updated GitHub Pull Requests: [Wine PR #349](https://github.com/ValveSoftware/wine/pull/349) and [Proton PR #10081](https://github.com/ValveSoftware/Proton/pull/10081).
 
 ### Next action
 
-- All implementation, audit checks, test coverage, and PR updates completed.
+- All implementation, crash dump analysis, memory region fixes, and PR updates completed.
 
 ## Completed implementation history
+
+### 2026-08-21: Secondary Thread Stack Overwrite Resolution (`wine/loader/main.c`)
+
+Root Cause Analysis:
+
+- Inspection of macOS diagnostic report `wine-2026-08-20-220254.ips` revealed an `EXC_BAD_ACCESS` / `KERN_PROTECTION_FAILURE` / `SIGBUS` at `0x7ffbfff8` inside `init_startup_info()` -> `unix_to_nt_file_name()`.
+- Address `0x7ffbfff8` belonged to the secondary thread stack (`0x7fde0000-0x7ffc0000`) allocated by macOS `pthread` at process startup.
+- `init_reserved_areas()` in `wine/loader/main.c` called `mmap(wine_main_preload_info[i].addr, wine_main_preload_info[i].size, PROT_NONE, MAP_FIXED ...)` over the 8GB range (`0x1000 - 0x200000000`) defined by `.zerofill WINE_RESERVE`.
+- Because `.zerofill` is already mapped by dyld at link time, calling `mmap(MAP_FIXED, PROT_NONE)` forcefully reset the permissions of dyld-allocated pthread stack pages in that range to `PROT_NONE`, causing secondary threads to crash with `SIGBUS` upon writing to their stack frame.
+
+Fix:
+
+- Updated `init_reserved_areas()` in `wine/loader/main.c` to skip `mmap(MAP_FIXED, PROT_NONE)` on macOS, leaving Mach-O `.zerofill` memory mappings intact.
+- Rebuilt Wine in `/private/tmp/proton-wine-build.s3SP6Z` and re-installed locally via `make install`.
 
 ### 2026-08-21: Comprehensive Codebase Audit & SIP Edge-Case Resolution
 
