@@ -125,12 +125,23 @@ function configure() {
   if [[ -n $arg_target_arch ]]; then
     target_arch="$arg_target_arch"
   fi
-  info "Build targetting: $target_arch"
+  info "Build targetting arch: $target_arch"
 
-  # nothing specified, getting the default value from the Makefile to test the
-  # container engine
-  if [[ -z $steamrt_image ]]; then
-    steamrt_image="$(make --silent "SRCDIR=$srcdir" --file "$srcdir/Makefile.in" "TARGET_ARCH=$target_arch" get-steamrt-image)"
+  local target_os="linux"
+  if [[ -n $arg_target_os ]]; then
+    target_os="$arg_target_os"
+  fi
+  info "Build targetting OS: $target_os"
+
+  if [[ "$target_os" == "macos" ]]; then
+    arg_container_engine="none"
+    ROOTLESS_CONTAINER=0
+  else
+    # nothing specified, getting the default value from the Makefile to test the
+    # container engine
+    if [[ -z $steamrt_image ]]; then
+      steamrt_image="$(make --silent "SRCDIR=$srcdir" --file "$srcdir/Makefile.in" "TARGET_ARCH=$target_arch" get-steamrt-image)"
+    fi
   fi
 
   dependency_command make "GNU Make"
@@ -139,24 +150,26 @@ function configure() {
       die "Missing dependencies, cannot continue."
   fi
 
-  if [[ -n "$arg_relabel_volumes" ]]; then
-    CONTAINER_MOUNT_OPTS=:Z
-  fi
-
-  if [[ -n "$arg_container_engine" ]]; then
-    check_container_engine "$arg_container_engine" "$steamrt_image" || die "Specified container engine \"$arg_container_engine\" doesn't work"
-  else
-    stat "Trying to find usable container engine."
-    if check_container_engine docker "$steamrt_image"; then
-      arg_container_engine="docker"
-    elif check_container_engine podman "$steamrt_image"; then
-      arg_container_engine="podman"
-    else
-        die "${arg_container_engine:-Container engine discovery} has failed. Please fix your setup."
+  if [[ "$target_os" != "macos" ]]; then
+    if [[ -n "$arg_relabel_volumes" ]]; then
+      CONTAINER_MOUNT_OPTS=:Z
     fi
-  fi
 
-  stat "Using $arg_container_engine."
+    if [[ -n "$arg_container_engine" ]]; then
+      check_container_engine "$arg_container_engine" "$steamrt_image" || die "Specified container engine \"$arg_container_engine\" doesn't work"
+    else
+      stat "Trying to find usable container engine."
+      if check_container_engine docker "$steamrt_image"; then
+        arg_container_engine="docker"
+      elif check_container_engine podman "$steamrt_image"; then
+        arg_container_engine="podman"
+      else
+          die "${arg_container_engine:-Container engine discovery} has failed. Please fix your setup."
+      fi
+    fi
+
+    stat "Using $arg_container_engine."
+  fi
 
   ## Write out config
   # Don't die after this point or we'll have rather unhelpfully deleted the Makefile
@@ -168,6 +181,7 @@ function configure() {
     echo ""
     echo "SRCDIR     := $(escape_for_make "$srcdir")"
     echo "BUILD_NAME := $(escape_for_make "$build_name")"
+    echo "TARGET_OS := $(escape_for_make "$target_os")"
     echo "TARGET_ARCH := $(escape_for_make "$target_arch")"
     echo "INTERNAL_TOOL_NAME := $(escape_for_make "$internal_tool_name")"
 
@@ -204,6 +218,7 @@ function configure() {
 arg_protonsdk_image=""
 arg_build_name=""
 arg_target_arch=""
+arg_target_os=""
 arg_container_engine=""
 arg_docker_opts=""
 arg_relabel_volumes=""
@@ -246,6 +261,9 @@ function parse_args() {
       val_used=1
     elif [[ $arg = --target-arch ]]; then
       arg_target_arch="$val"
+      val_used=1
+    elif [[ $arg = --target-os ]]; then
+      arg_target_os="$val"
       val_used=1
     elif [[ $arg = --container-engine ]]; then
       arg_container_engine="$val"

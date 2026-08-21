@@ -25,6 +25,7 @@ SHELL := /bin/bash
 #   STEAMRT_IMAGE   - Name of the docker image to use for building
 #
 TARGET_ARCH ?= x86_64
+TARGET_OS   ?= linux
 
 ifeq ($(TARGET_ARCH),x86_64)
 	STEAMRT_IMAGE ?= registry.gitlab.steamos.cloud/proton/steamrt4/sdk/x86_64:4.0.20260331.220802-0
@@ -67,14 +68,23 @@ endif
 $(DST_DIR):
 	mkdir -p $@
 
-ifeq ($(CONTAINER),1) # inside the container
+ifeq ($(CONTAINER_ENGINE),none)
+override CONTAINER := 1
+endif
+ifeq ($(TARGET_OS),macos)
+override CONTAINER := 1
+endif
+
+ifeq ($(CONTAINER),1) # inside the container or native host build
 
 HOST_ARCH := $(shell uname -m)
 ARCHS := i386-windows x86_64-windows
 
 TARGET_ARCH ?= x86_64
 
-ifeq ($(TARGET_ARCH),x86_64)
+ifeq ($(TARGET_OS),macos)
+	ARCHS += x86_64-darwin
+else ifeq ($(TARGET_ARCH),x86_64)
 	ARCHS += i386-unix x86_64-unix
 else ifeq ($(TARGET_ARCH),arm64)
 	ARCHS += aarch64-unix aarch64-windows arm64ec-windows
@@ -85,10 +95,11 @@ endif
 unix_ARCHS = $(subst -unix,,$(filter %-unix,$(ARCHS)))
 windows_ARCHS = $(subst -windows,,$(filter %-windows,$(ARCHS)))
 
+BASE_SOURCE_DATE_EPOCH ?= $(SOURCE_DATE_EPOCH)
 i386_SOURCE_DATE_EPOCH := $(BASE_SOURCE_DATE_EPOCH)
-x86_64_SOURCE_DATE_EPOCH := $(shell expr $(BASE_SOURCE_DATE_EPOCH) - 10)
-aarch64_SOURCE_DATE_EPOCH := $(shell expr $(BASE_SOURCE_DATE_EPOCH) - 20)
-arm64ec_SOURCE_DATE_EPOCH := $(shell expr $(BASE_SOURCE_DATE_EPOCH) - 30)
+x86_64_SOURCE_DATE_EPOCH := $(shell expr $(or $(BASE_SOURCE_DATE_EPOCH),$(SOURCE_DATE_EPOCH)) - 10)
+aarch64_SOURCE_DATE_EPOCH := $(shell expr $(or $(BASE_SOURCE_DATE_EPOCH),$(SOURCE_DATE_EPOCH)) - 20)
+arm64ec_SOURCE_DATE_EPOCH := $(shell expr $(or $(BASE_SOURCE_DATE_EPOCH),$(SOURCE_DATE_EPOCH)) - 30)
 
 ifeq ($(shell cc --version|grep 'clang'),)
 	# GCC-specific flags
@@ -138,6 +149,10 @@ include $(SRC)/make/rules-winemaker.mk
 include $(SRC)/make/rules-wine-requests.mk
 include $(SRC)/make/rules-wine-tools.mk
 include $(SRC)/make/rules-cargo.mk
+include $(SRC)/make/rules-darwin.mk
+ifeq ($(TARGET_OS),macos)
+include $(SRC)/make/package-macos.mk
+endif
 
 
 ##
@@ -1358,11 +1373,33 @@ all-dist: $(DIST_TOOLMANIFEST)
 
 COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
 DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
-INTERNAL_TOOL_NAME ?= $(BUILD_NAME)-proton
+ifeq ($(TARGET_OS),macos)
+TO_OSLIST := macos,linux
+else
+TO_OSLIST := linux
+endif
+
 $(DIST_COMPAT_MANIFEST): $(COMPAT_MANIFEST_TEMPLATE) | $(DST_DIR)
-	sed -r -e 's|##BUILD_NAME##|$(BUILD_NAME)|' -e 's|##INTERNAL_TOOL_NAME##|$(INTERNAL_TOOL_NAME)|' $< > $@
+	sed -r -e 's|##BUILD_NAME##|$(BUILD_NAME)|' -e 's|##INTERNAL_TOOL_NAME##|$(INTERNAL_TOOL_NAME)|' -e 's|"to_oslist"[[:space:]]+"linux"|"to_oslist"    "$(TO_OSLIST)"|' $< > $@
 
 all-dist: $(DIST_COMPAT_MANIFEST)
+
+ifeq ($(TARGET_OS),macos)
+STEAM_DIR := $(HOME)/Library/Application Support/Steam
+else
+STEAM_DIR := $(HOME)/.steam/root
+endif
+
+.PHONY: install
+install: $(DIST_COMPAT_MANIFEST)
+	mkdir -p "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)"
+	rsync --delete -arx $(DST_BASE)/* "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)/"
+	@echo "Installed Proton to $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)"
+	@echo "You may need to restart Steam to select this tool"
+
+.PHONY: test
+test:
+	python3 $(SRCDIR)/tests/run_tests.py
 
 
 ##
@@ -1485,8 +1522,8 @@ DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPT
                 -w $(OBJ) -e MAKEFLAGS \
                 $(DOCKER_OPTS) $(STEAMRT_IMAGE)
 
-.PHONY: dist deploy redist symstore-tarball
-.DEFAULT dist deploy redist symstore-tarball:
+.PHONY: dist deploy redist symstore-tarball install macos-app-bundle macos-dist-tarball test
+.DEFAULT dist deploy redist symstore-tarball install macos-app-bundle macos-dist-tarball test:
 	if [ "$(ENABLE_CCACHE)" -eq "1" ]; then mkdir -p $(CCACHE_DIR); fi
 	mkdir -p $(CARGO_HOME)
 	$(DOCKER_BASE) $(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $@
@@ -1501,13 +1538,16 @@ test-container:
 get-steamrt-image:
 	echo $(STEAMRT_IMAGE)
 
-STEAM_DIR := $(HOME)/.steam/root
+ifeq ($(TARGET_OS),macos)
+	STEAM_DIR := $(HOME)/Library/Application Support/Steam
+else
+	STEAM_DIR := $(HOME)/.steam/root
+endif
 .PHONY: install
-install: all
-	if [ ! -d $(STEAM_DIR) ]; then echo >&2 "!! "$(STEAM_DIR)" does not exist, cannot install"; return 1; fi
-	mkdir -p $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
-	rsync --delete -arx $(DST_BASE)/* $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
-	@echo "Installed Proton to "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)
+install: $(DIST_COMPAT_MANIFEST)
+	mkdir -p "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)"
+	rsync --delete -arx $(DST_BASE)/* "$(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)/"
+	@echo "Installed Proton to $(STEAM_DIR)/compatibilitytools.d/$(BUILD_NAME)"
 	@echo "You may need to restart Steam to select this tool"
 
 

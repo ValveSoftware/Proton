@@ -1,0 +1,60 @@
+name: Proton macOS CI / CD
+
+on:
+  push:
+    branches:
+      - main
+      - proton_*
+      - 'feature/**'
+  pull_request:
+    branches:
+      - main
+      - proton_*
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    name: Build & Test Proton macOS
+    runs-on: macos-14
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Build Dependencies via Homebrew
+        run: |
+          brew update || true
+          brew install mingw-w64 bison molten-vk rsync
+
+      - name: Configure macOS Target
+        run: |
+          chmod +x configure-macos.sh
+          ./configure-macos.sh --build-name=proton-macos-release
+
+      - name: Run Test Suite
+        run: |
+          make test
+
+      - name: Build macOS Application Bundle
+        run: |
+          make macos-app-bundle
+
+      - name: Package Distribution Archive
+        run: |
+          make macos-dist-tarball
+
+      - name: Upload Proton macOS Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: proton-macos-release-archive
+          path: |
+            deploy/proton-macos-release-macos.tar.gz
+            ProtonMac.app
+          if-no-files-found: error

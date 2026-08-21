@@ -6,3 +6,13 @@
 /.vagrant/
 /vagrant_share/
 /build/
+/deploy/
+/ProtonMac.app/
+/__pycache__/
+/proton_platform/__pycache__/
+/tests/__pycache__/
+/.vulkan-headers-*
+/src-*
+/files/
+/dist.lock
+/Makefile

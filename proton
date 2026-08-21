@@ -37,6 +37,7 @@ from ctypes import c_ssize_t
 
 from filelock import FileLock
 from random import randrange
+from proton_platform import get_platform_backend
 
 #To enable debug logging, copy "user_settings.sample.py" to "user_settings.py"
 #and edit it if needed.
@@ -44,7 +45,8 @@ from random import randrange
 CURRENT_PREFIX_VERSION="11.0-100"
 
 PFX="Proton: "
-ld_path_var = "LD_LIBRARY_PATH"
+g_platform_backend = get_platform_backend()
+ld_path_var = g_platform_backend.ld_library_path_var
 
 def file_exists(s, *, follow_symlinks):
     if follow_symlinks:
@@ -450,18 +452,7 @@ EXT2_IOC_SETFLAGS = 0x40086602
 EXT4_CASEFOLD_FL = 0x40000000
 
 def set_dir_casefold_bit(dir_path):
-    dr = os.open(dir_path, 0o644)
-    if dr < 0:
-        return
-    try:
-        dat = array.array('I', [0])
-        if fcntl.ioctl(dr, EXT2_IOC_GETFLAGS, dat, True) >= 0:
-            dat[0] = dat[0] | EXT4_CASEFOLD_FL
-            fcntl.ioctl(dr, EXT2_IOC_SETFLAGS, dat, False)
-    except (OSError, IOError):
-        #no problem
-        pass
-    os.close(dr)
+    g_platform_backend.apply_dir_casefold(dir_path)
 
 def get_replace_reg_value(file, key, name, new_value=None):
     if not file_exists(file, follow_symlinks=True):
@@ -516,7 +507,7 @@ def get_replace_reg_value(file, key, name, new_value=None):
 
 class Proton:
     def __init__(self, base_dir):
-        self.base_dir = base_dir + "/"
+        self.base_dir = os.path.abspath(base_dir) + "/"
         self.dist_dir = self.path("files/")
         self.bin_dir = self.path("files/bin/")
         self.lib_dir = self.path("files/lib/")
@@ -541,6 +532,15 @@ class Proton:
             self.bin_dir = self.path("files/bin-arm64/")
             self.wine_bin = self.bin_dir + "wine"
             self.wineserver_bin = self.bin_dir + "wineserver"
+
+        if g_platform_backend.name == "macos" and not file_exists(self.wine_bin, follow_symlinks=True):
+            tmp_wine_dir = "/private/tmp/proton-wine-build.s3SP6Z"
+            if file_exists(tmp_wine_dir + "/wine", follow_symlinks=True):
+                self.bin_dir = tmp_wine_dir + "/tools/wine:" + tmp_wine_dir + "/server"
+                self.wine_bin = tmp_wine_dir + "/wine"
+                self.wineserver_bin = tmp_wine_dir + "/server/wineserver"
+                if file_exists(tmp_wine_dir + "/loader/wine.inf", follow_symlinks=True):
+                    self.wine_inf = tmp_wine_dir + "/loader/wine.inf"
 
     def path(self, d):
         return self.base_dir + d
@@ -586,6 +586,7 @@ class Proton:
             local_env = dict(g_session.env)
             if self.missing_default_prefix():
                 #make default prefix
+                makedirs(self.default_pfx_dir)
                 local_env["WINEPREFIX"] = self.default_pfx_dir
                 local_env["WINEDEBUG"] = "-all"
                 g_session.run_proc([self.wine_bin, "wineboot"], local_env)
@@ -904,6 +905,8 @@ class CompatData:
         makedirs(windowsfonts)
         sgi = os.environ.get('SteamGameId', '')
         for fonts_dir in [g_proton.fonts_dir, g_proton.wine_fonts_dir]:
+            if not os.path.exists(fonts_dir):
+                continue
             for font in os.listdir(fonts_dir):
                 if not font.endswith('.ttf') and not font.endswith('.ttc'):
                     continue
@@ -979,8 +982,12 @@ class CompatData:
             if not file_exists(self.prefix_dir + "/dosdevices/z:", follow_symlinks=False):
                 os.symlink("/", self.prefix_dir + "/dosdevices/z:")
 
-            # collect configuration info
-            steamdir = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
+            steamdir = os.environ.get("STEAM_COMPAT_CLIENT_INSTALL_PATH")
+            if not steamdir:
+                if g_platform_backend.name == "macos":
+                    steamdir = os.path.expanduser("~/Library/Application Support/Steam")
+                else:
+                    steamdir = os.path.expanduser("~/.steam/root")
 
             use_wined3d = "wined3d" in g_session.compat_config
             use_dxvk_dxgi = not use_wined3d and \
@@ -1109,18 +1116,18 @@ class CompatData:
                 #copy openvr files into place
                 makedirs(self.prefix_dir + "/drive_c/vrclient/bin")
                 try_copy(g_proton.arch_pe_dir("wine", True) + "vrclient.dll", "drive_c/vrclient/bin",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
                 try_copy(g_proton.arch_pe_dir("wine", False) + "vrclient_x64.dll", "drive_c/vrclient/bin",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
 
                 try_copy(g_proton.arch_pe_dir("wine/dxvk", True) + "openvr_api_dxvk.dll", "drive_c/windows/syswow64",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
                 try_copy(g_proton.arch_pe_dir("wine/dxvk", False) + "openvr_api_dxvk.dll", "drive_c/windows/system32",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
 
                 makedirs(self.prefix_dir + "/drive_c/openxr")
                 try_copy(g_proton.dist_dir + "share/openxr/wineopenxr64.json", "drive_c/openxr",
-                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                        prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
 
                 if use_wined3d:
                     dxvkfiles = []
@@ -1145,47 +1152,48 @@ class CompatData:
 
                 for f in wined3dfiles:
                     try_copy(g_proton.default_pfx_dir + "drive_c/windows/system32/" + f + ".dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
                     try_copy(g_proton.default_pfx_dir + "drive_c/windows/syswow64/" + f + ".dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
 
                 for f in dxvkfiles:
                     try_copy(g_proton.arch_pe_dir("wine/dxvk", False) + f + ".dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
                     try_copy(g_proton.arch_pe_dir("wine/dxvk", True) + f + ".dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
                     g_session.dlloverrides[f] = "n"
 
                 for f in vkd3d_protonfiles:
-                    optional = False
-                    if f == "d3d12core":
-                        optional = True
                     try_copy(g_proton.arch_pe_dir("wine/vkd3d-proton", False) + f + ".dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
                     try_copy(g_proton.arch_pe_dir("wine/vkd3d-proton", True) + f + ".dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=optional)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
                     g_session.dlloverrides[f] = "n"
 
                 for f in icufiles:
-                    dst = "drive_c/windows/system32/" + f + ".dll"
-                    if not file_exists(self.prefix_dir + dst, follow_symlinks=False):
-                        tracked_files.write(dst + '\n')
-                    self.create_symlink(self.prefix_dir + dst, g_proton.arch_pe_dir("wine/icu", False) + f + ".dll")
+                    src64 = g_proton.arch_pe_dir("wine/icu", False) + f + ".dll"
+                    if file_exists(src64, follow_symlinks=True):
+                        dst = "drive_c/windows/system32/" + f + ".dll"
+                        if not file_exists(self.prefix_dir + dst, follow_symlinks=False):
+                            tracked_files.write(dst + '\n')
+                        self.create_symlink(self.prefix_dir + dst, src64)
 
-                    dst = "drive_c/windows/syswow64/" + f + ".dll"
-                    if not file_exists(self.prefix_dir + dst, follow_symlinks=False):
-                        tracked_files.write(dst + '\n')
-                    self.create_symlink(self.prefix_dir + dst, g_proton.arch_pe_dir("wine/icu", True) + f + ".dll")
+                    src32 = g_proton.arch_pe_dir("wine/icu", True) + f + ".dll"
+                    if file_exists(src32, follow_symlinks=True):
+                        dst = "drive_c/windows/syswow64/" + f + ".dll"
+                        if not file_exists(self.prefix_dir + dst, follow_symlinks=False):
+                            tracked_files.write(dst + '\n')
+                        self.create_symlink(self.prefix_dir + dst, src32)
 
                 # If the user requested the NVAPI be available, copy it into place.
                 # If they didn't, clean up any stray nvapi DLLs.
                 if use_nvapi:
                     try_copy(g_proton.arch_pe_dir("wine/nvapi", False) + "nvapi64.dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
                     try_copy(g_proton.arch_pe_dir("wine/nvapi", False) + "nvofapi64.dll", "drive_c/windows/system32",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
                     try_copy(g_proton.arch_pe_dir("wine/nvapi", True) + "nvapi.dll", "drive_c/windows/syswow64",
-                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                            prefix=self.prefix_dir, track_file=tracked_files, link_debug=True, optional=True)
                     g_session.dlloverrides["nvapi64"] = "n"
                     g_session.dlloverrides["nvofapi64"] = "n"
                     g_session.dlloverrides["nvapi"] = "n"
@@ -1218,7 +1226,8 @@ class CompatData:
             setup_openvr_paths()
 
             # add Steam ffmpeg libraries to path
-            prepend_to_env_str(g_session.env, ld_path_var, steamdir + "/ubuntu12_64/video/:" + steamdir + "/ubuntu12_32/video/:" + steamdir + "/steamrtarm64/video/", ":")
+            if g_platform_backend.name != "macos":
+                prepend_to_env_str(g_session.env, ld_path_var, steamdir + "/ubuntu12_64/video/:" + steamdir + "/ubuntu12_32/video/:" + steamdir + "/steamrtarm64/video/", ":")
 
 def comma_escaped(s):
     escaped = False
@@ -1516,10 +1525,19 @@ class Session:
             # Allow wine to restore this when calling an external app.
             self.env['ORIG_'+ld_path_var] = os.environ.get(ld_path_var, '')
 
-        ld_library_path = [g_proton.lib_dir + "x86_64-linux-gnu", g_proton.lib_dir + "aarch64-linux-gnu", g_proton.lib_dir + "i386-linux-gnu"]
-        prepend_to_env_str(self.env, ld_path_var, ':'.join(ld_library_path), ":")
+        if g_platform_backend.name == "macos":
+            ld_library_path = [path for path in [g_proton.lib_dir + "x86_64-darwin"] if file_exists(path, follow_symlinks=True)]
+        else:
+            ld_library_path = [g_proton.lib_dir + "x86_64-linux-gnu", g_proton.lib_dir + "aarch64-linux-gnu", g_proton.lib_dir + "i386-linux-gnu"]
+        if ld_library_path:
+            prepend_to_env_str(self.env, ld_path_var, ':'.join(ld_library_path), ":")
 
-        dllpaths = [g_proton.lib_dir + "vkd3d", g_proton.lib_dir + "wine"]
+        dllpaths = []
+        if g_platform_backend.name == "macos":
+            dev_dll_path = "/private/tmp/proton-wine-build.s3SP6Z/dlls"
+            if file_exists(dev_dll_path, follow_symlinks=True):
+                dllpaths.append(dev_dll_path)
+        dllpaths.extend([g_proton.lib_dir + "vkd3d", g_proton.lib_dir + "wine"])
         if "WINEDLLPATH" in os.environ:
             dllpaths.append(os.environ["WINEDLLPATH"])
         self.env["WINEDLLPATH"] = ':'.join(dllpaths)
@@ -1702,7 +1720,7 @@ class Session:
         self.check_environment("PROTON_FORCE_NVAPI", "forcenvapi")
         self.check_environment("PROTON_HIDE_APU", "hideapu")
 
-        if "nofsync" in self.compat_config:
+        if "nofsync" in self.compat_config or not g_platform_backend.default_fsync_enabled:
             self.env.pop("WINEFSYNC", "")
         else:
             self.env["WINEFSYNC"] = "1"
@@ -1948,6 +1966,8 @@ class Session:
         else:
             self.remote_debug_cmd = None
 
+        g_platform_backend.configure_graphics_environment(self.env, self.compat_config)
+
         if update_prefix_files:
             g_compatdata.setup_prefix()
 
@@ -2036,12 +2056,7 @@ class Session:
                 ]:
             argv = [g_proton.wine_bin, "c:\\Program Files (x86)\\Steam\\steam.exe"]
         else:
-            if g_proton.host_pe_arch == "x86_64-windows":
-                #run with winepreloader directly to avoid restart through start.exe
-                self.env["WINELOADERNOEXEC"] = "1"
-                argv = [g_proton.lib_dir + "/wine/x86_64-unix/wine-preloader", g_proton.lib_dir + "/wine/x86_64-unix/wine", "c:\\windows\\system32\\steam.exe"]
-            else:
-                argv = [g_proton.wine_bin, "c:\\windows\\system32\\steam.exe"]
+            argv = g_platform_backend.get_wine_cmd(g_proton, self.env)
 
         rc = self.run_proc(adverb + argv + sys.argv[2:] + self.cmdlineappend)
 
@@ -2058,8 +2073,14 @@ class Session:
 
 if __name__ == "__main__":
     if "STEAM_COMPAT_DATA_PATH" not in os.environ:
-        log("No compat data path?")
-        sys.exit(1)
+        default_path = g_platform_backend.get_default_compat_data_path()
+        if default_path:
+            log("STEAM_COMPAT_DATA_PATH not set; using platform default: " + default_path)
+            os.environ["STEAM_COMPAT_DATA_PATH"] = default_path
+            makedirs(default_path)
+        else:
+            log("No compat data path?")
+            sys.exit(1)
 
     g_proton = Proton(os.path.dirname(sys.argv[0]))
 
