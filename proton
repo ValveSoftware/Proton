@@ -254,15 +254,17 @@ else:
 
 def try_copyfile(src, dst):
     try:
+        if not file_exists(src):
+            return
         if os.path.isdir(dst):
             dst = dst + "/" + os.path.basename(src)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
         if file_exists(dst, follow_symlinks=False):
             os.remove(dst)
         copyfile(src, dst)
-    except PermissionError as e:
-        if e.errno == errno.EPERM:
-            #be forgiving about permissions errors; if it's a real problem, things will explode later anyway
-            log('Error while copying to \"' + dst + '\": ' + e.strerror)
+    except (PermissionError, FileNotFoundError, OSError) as e:
+        if e.errno in (errno.EPERM, errno.ENOENT) or isinstance(e, FileNotFoundError):
+            log('Error while copying to \"' + dst + '\": ' + (e.strerror or str(e)))
         else:
             raise
 

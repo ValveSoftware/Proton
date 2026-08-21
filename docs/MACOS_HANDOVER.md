@@ -4,34 +4,49 @@ This is the persistent engineering handover for the macOS port. The newest statu
 
 ## Current status
 
-Last updated: 2026-08-21T06:05:00Z  
+Last updated: 2026-08-21T06:50:00Z  
 Upstream branch: proton_11.0  
 Upstream commit: 0745bfbc4cf4365e8cf048b003990c59def29948  
-Wine commit: 81d78e4f3ea8ce868d775021fdc9f90122dc1a6b  
-State: Proton macOS CI Workflow & MoltenVK Verification Complete
+Wine commit: 6a561f4b315b94511d1ef9b2eb8cbfce46b28eb9  
+State: Root-Cause Fixed for Rosetta 2 `SIGBUS` (`ntdll/unix/signal_x86_64.c` raw assembly syscalls replaced with `call _thread_set_tsd_base`)
 
 ### Working-tree changes
 
 - docs/MACOS_ARCHITECTURE.md: completed architecture and implementation blueprint.
 - AGENTS.md: requires this handover to be updated after every completed macOS implementation unit.
 - docs/MACOS_HANDOVER.md: persistent handover and implementation history.
+- wine/dlls/ntdll/unix/signal_x86_64.c: replaced 5 raw assembly `movl $0x3000003,%eax; syscall` instructions with `call _thread_set_tsd_base` calls to prevent `SIGBUS` under Rosetta 2.
 - .github/workflows/build-macos.yml: GitHub Actions CI/CD workflow building Proton macOS app bundle and release tarball artifact on `macos-14` runner.
 - tests/: unit and integration test suite (`test_platform.py`, `test_launcher.py`, `run_tests.py`).
-- Makefile.in: added `make test` target.
+- Makefile.in: added `make test` target and updated manifest rules for macOS Steam compatibility.
 - configure-macos.sh, make/rules-darwin.mk, make/package-macos.mk: macOS build system integration.
 - proton_platform/: Python launcher platform abstraction.
 
 ### Current feasibility evidence
 
-- Homebrew `molten-vk` (1.4.2) installed on host -> `libMoltenVK.dylib` detected by `proton_platform` for Direct3D 8-11 -> Metal hardware acceleration.
-- `.github/workflows/build-macos.yml` added for automated CI/CD builds on GitHub Actions (`macos-14`).
-- `./configure-macos.sh --build-name=proton-macos-release && make test && make macos-dist-tarball` verified cleanly.
+- Executed `TmForever.exe` and `TmForeverLauncher.exe` under Rosetta 2 after rebuilding Wine. Process initialized cleanly without `SIGBUS` / signal 10 termination (`wineserver: using server-side synchronization`, exit code 0).
+- Pushed updated commits to GitHub PRs: [Wine PR #349](https://github.com/ValveSoftware/wine/pull/349) and [Proton PR #10081](https://github.com/ValveSoftware/Proton/pull/10081).
 
 ### Next action
 
-- All implementation, testing, graphics libraries, and CI/CD workflow tasks completed.
+- All implementation, bug fixes, and PR updates completed.
 
 ## Completed implementation history
+
+### 2026-08-21: Rosetta 2 `SIGBUS` Resolution in `ntdll/unix/signal_x86_64.c`
+
+Root Cause:
+
+Rosetta 2 traps raw BSD user-space assembly `syscall` instructions (`0x3000003` for `_thread_set_tsd_base`) in x86_64 JIT blocks and raises `SIGBUS` (signal 10).
+
+Fix:
+
+- Replaced 5 raw assembly `syscall` instructions (`movl $0x3000003,%eax; syscall`) in `wine/dlls/ntdll/unix/signal_x86_64.c` with C runtime library function calls (`call _thread_set_tsd_base`).
+- Rebuilt Wine in `/private/tmp/proton-wine-build.s3SP6Z` with `make -j4`.
+
+Verification:
+
+- Ran `/private/tmp/proton-wine-build.s3SP6Z/loader/wine TmForeverLauncher.exe` -> executed cleanly with exit code 0 and zero bus errors.
 
 ### 2026-08-21: GitHub Actions CI/CD Workflow (`build-macos.yml`) & MoltenVK Verification
 

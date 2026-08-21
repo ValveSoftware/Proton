@@ -1374,7 +1374,7 @@ all-dist: $(DIST_TOOLMANIFEST)
 COMPAT_MANIFEST_TEMPLATE := $(SRCDIR)/compatibilitytool.vdf.template
 DIST_COMPAT_MANIFEST := $(DST_BASE)/compatibilitytool.vdf
 ifeq ($(TARGET_OS),macos)
-TO_OSLIST := macos,linux
+TO_OSLIST := macos,linux,windows
 else
 TO_OSLIST := linux
 endif
