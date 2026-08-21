@@ -160,6 +160,8 @@ def try_copy(src, dst, prefix=None, add_write_perm=True, copy_metadata=False, op
         if os.path.isdir(dst):
             dst = os.path.join(dst, os.path.basename(src))
 
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+
         if file_exists(dst, follow_symlinks=False):
             os.remove(dst)
         elif track_file and prefix is not None:
@@ -254,7 +256,7 @@ else:
 
 def try_copyfile(src, dst):
     try:
-        if not file_exists(src):
+        if not file_exists(src, follow_symlinks=True):
             return
         if os.path.isdir(dst):
             dst = dst + "/" + os.path.basename(src)
@@ -597,6 +599,7 @@ class Proton:
 class CompatData:
     def __init__(self, compatdata):
         self.base_dir = compatdata + "/"
+        makedirs(self.base_dir)
         self.prefix_dir = self.path("pfx/")
         self.creation_sync_guard = self.path("pfx/creation_sync_guard")
         self.version_file = self.path("version")

@@ -41,7 +41,11 @@ class MacOSPlatformBackend(PlatformBackend):
         # Avoid wine-preloader on macOS; run wine directly
         if "WINELOADERNOEXEC" in env:
             del env["WINELOADERNOEXEC"]
-        return [g_proton.wine_bin, "c:\\windows\\system32\\steam.exe"]
+        steam_exe = "c:\\windows\\system32\\steam.exe"
+        pfx_steam = os.path.join(g_proton.lib_dir, "wine/x86_64-windows/steam.exe")
+        if os.path.exists(pfx_steam):
+            return [g_proton.wine_bin, steam_exe]
+        return [g_proton.wine_bin]
 
     def apply_dir_casefold(self, dir_path: str) -> None:
         # No-op on macOS
