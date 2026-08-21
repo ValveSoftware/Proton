@@ -4,32 +4,38 @@ This is the persistent engineering handover for the macOS port. The newest statu
 
 ## Current status
 
-Last updated: 2026-08-21T07:10:00Z  
+Last updated: 2026-08-21T07:50:00Z  
 Upstream branch: proton_11.0  
-Upstream commit: 0745bfbc4cf4365e8cf048b003990c59def29948  
-Wine commit: 6015a4bfdb2011b017b2f6ef53bfcf5fe19bbf04  
-State: Resolved Secondary Thread Stack Overwrite in `wine/loader/main.c` (`init_reserved_areas`)
+Wine commit: 470d07449c6 (macos-rosetta2-support)  
+Proton commit: a6d11e29 (macos-rosetta2-support)  
+State: FULL SUCCESS — TrackMania Nations Forever & 32-bit/64-bit Windows Binaries Executing under Wine WoW64 on macOS Rosetta 2
 
 ### Working-tree changes
 
 - docs/MACOS_ARCHITECTURE.md: completed architecture and implementation blueprint.
 - AGENTS.md: requires this handover to be updated after every completed macOS implementation unit.
 - docs/MACOS_HANDOVER.md: persistent handover and implementation history.
-- wine/loader/main.c: disabled `mmap(MAP_FIXED, PROT_NONE)` over Mach-O `.zerofill` sections (`WINE_RESERVE`) on macOS to prevent unmapping dyld-allocated pthread stacks (`0x7fde0000-0x7ffc0000`).
-- wine/dlls/ntdll/unix/signal_x86_64.c: replaced 5 raw assembly `movl $0x3000003,%eax; syscall` instructions with `call _thread_set_tsd_base` calls.
-- .github/workflows/build-macos.yml: GitHub Actions CI/CD workflow.
-- tests/: unit and integration test suite (`test_platform.py`, `test_launcher.py`, `run_tests.py`).
+- wine/loader/main.c: disabled `mmap(MAP_FIXED, PROT_NONE)` over Mach-O `.zerofill` sections (`WINE_RESERVE`) on macOS.
+- wine/dlls/ntdll/unix/loader.c: allocated secondary thread stack dynamically above `0x200100000` (outside `WINE_RESERVE`).
+- wine/dlls/ntdll/unix/signal_x86_64.c:
+  - Made `set_thread_teb()` a no-op on `__APPLE__` to prevent corrupting Unix `pthread_t` TSD base during initialization.
+  - Implemented register preservation across `_thread_set_tsd_base` C library calls in `call_user_mode_callback`, `__wine_syscall_dispatcher`, `__wine_syscall_dispatcher_return`, and `__wine_unix_call_dispatcher`.
+  - Added TEB pointer assignment in `sigsys_handler` (`R13_sig(ucontext) = (ULONG_PTR)teb`) and guarded `%gs:0x30` accesses when running on macOS.
+- wine/server/token.c: added `gethostuuid()` fallback for macOS in `init_user_sid()` to prevent missing `/etc/machine-id` warnings.
+- proton:
+  - Ensured `self.base_dir` exists in `CompatData.__init__` before acquiring `pfx.lock`.
+  - Added `os.makedirs(os.path.dirname(dst), exist_ok=True)` to `try_copy` and `try_copyfile`.
+  - Configured full WoW64 PE toolchain with `--host=x86_64-apple-darwin` and `--enable-archs=i386,x86_64` using `i686-w64-mingw32-gcc` and `x86_64-w64-mingw32-gcc`.
 
 ### Current feasibility evidence
 
-- Analyzed macOS macOS diagnostic crash dump (`wine-2026-08-20-220254.ips`) -> thread stack (`0x7ffbfff8`) hit `KERN_PROTECTION_FAILURE` caused by `mmap(MAP_FIXED, PROT_NONE)` overwriting pthread stack pages.
-- Disabled `mmap(MAP_FIXED, PROT_NONE)` over `.zerofill` in `loader/main.c` -> secondary threads (`apple_wine_thread`, `init_startup_info`) initialize without `SIGBUS`.
-- Executed `make install` -> deployed updated Proton build to `~/Library/Application Support/Steam/compatibilitytools.d/proton-macos-release/`.
-- Updated GitHub Pull Requests: [Wine PR #349](https://github.com/ValveSoftware/wine/pull/349) and [Proton PR #10081](https://github.com/ValveSoftware/Proton/pull/10081).
+- Empirical verification 1: 64-bit Windows Notepad (`notepad.exe`) runs cleanly on macOS under Wine (PID 5841).
+- Empirical verification 2: 32-bit Windows Notepad (`i386-windows/notepad.exe`) runs cleanly on macOS under WoW64 Wine (PID 40155).
+- Empirical verification 3: TrackMania Nations Forever (`TmForeverLauncher.exe` PID 40844 and `TmForever.exe` PID 40898) launches and runs on macOS under Proton without any bus errors or SIGBUS crashes.
 
 ### Next action
 
-- All implementation, crash dump analysis, memory region fixes, and PR updates completed.
+- Keep repository synchronised with remote forks and perform additional game compatibility benchmarks.
 
 ## Completed implementation history
 
