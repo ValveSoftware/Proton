@@ -21,7 +21,7 @@ fi
 
 sh_quote() {
         local quoted
-        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted:0:-1}";
+        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted}" | sed 's/ $//';
 }
 err()      { echo >&2 "${COLOR_ERR}!!${COLOR_CLEAR} $*"; }
 stat()     { echo >&2 "${COLOR_STAT}::${COLOR_CLEAR} $*"; }
@@ -115,7 +115,7 @@ function configure() {
     info "No build name specified, using default: $build_name"
   fi
 
-  if [[ ${build_name,,} == *proton* ]]; then
+  if echo "$build_name" | tr '[:upper:]' '[:lower:]' | grep -q 'proton'; then
     internal_tool_name=${build_name}
   else
     internal_tool_name=${build_name}-proton
