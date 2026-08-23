@@ -51,6 +51,22 @@ dependencies on the host side.
 ## Preparing the build environment
 
 You need either a Docker or a Podman setup which Proton's build system uses
+
+NOTE: A few considerations when building Proton on a macOS host:
+
+1. Proton does not run on macOS, but a Mac can build Proton for a Steam Deck or
+   for Linux Steam.
+2. On Apple Silicon the container runtime must be configured to use Rosetta 2
+   for x86-64 emulation -- the build does not work under QEMU. See the
+   [Docker](https://www.docker.com/blog/docker-desktop-4-25/) or
+   [Podman](https://podman-desktop.io/docs/podman/rosetta) instructions. Note
+   that Rosetta only handles x86-64; 32-bit x86 binaries still run under QEMU.
+3. macOS default file handle limits are far too low for rsync and the source
+   setup stages. Raise them with
+   `sudo sysctl -w kern.maxfiles=1048576; sudo sysctl -w kern.maxfilesperproc=1048576`
+   and reboot. The change must be global to be picked up by container runtimes
+   and background daemons at boot.
+
 internally. You should never need to use either container engine manually unless
 working on those parts of build system directly.
 
