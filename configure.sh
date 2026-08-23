@@ -48,15 +48,42 @@ dependency_command() {
 
 CONTAINER_MOUNT_OPTS=""
 
+# The container platform follows the *target* architecture, not the host's: an
+# arm64 build needs an arm64 container even on an x86_64 host, and an x86_64
+# build needs an amd64 container on an arm64 host. --platform is only passed
+# when the host is not already native for it, so same-arch builds are unchanged.
+CONTAINER_PLATFORM=""
+TARGET_PLATFORM=""
+HOST_PLATFORM=""
+
+platform_of_arch() {
+    case "$1" in
+        arm64|aarch64)  echo "linux/arm64" ;;
+        *)              echo "linux/amd64" ;;
+    esac
+}
+
+set_container_platform() {
+    TARGET_PLATFORM="$(platform_of_arch "$1")"
+    HOST_PLATFORM="$(platform_of_arch "$(uname -m)")"
+    if [[ "$TARGET_PLATFORM" != "$HOST_PLATFORM" ]]; then
+        CONTAINER_PLATFORM="--platform $TARGET_PLATFORM"
+        info "Host is $HOST_PLATFORM, target needs $TARGET_PLATFORM: using '$CONTAINER_PLATFORM'"
+    else
+        CONTAINER_PLATFORM=""
+    fi
+}
+
 check_container_engine() {
+    local platform="$CONTAINER_PLATFORM"
     stat "Trying $1."
-    if ! cmd $1 run --rm $2; then
+    if ! cmd $1 run $platform --rm $2; then
         info "$1 is unable to run the container."
         return 1
     fi
 
     touch permission_check
-    local inner_uid="$($1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
+    local inner_uid="$($1 run $platform -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
                                             --rm $2 \
                                             stat --format "%u" /test/permission_check 2>&1)"
     rm permission_check
@@ -126,6 +153,14 @@ function configure() {
     target_arch="$arg_target_arch"
   fi
   info "Build targetting: $target_arch"
+
+  set_container_platform "$target_arch"
+
+  # a non-native target needs its platform pinned for the build itself, not just
+  # for the engine probe above
+  if [[ -n "$CONTAINER_PLATFORM" ]]; then
+    arg_docker_opts="${arg_docker_opts} ${CONTAINER_PLATFORM}"
+  fi
 
   # nothing specified, getting the default value from the Makefile to test the
   # container engine
