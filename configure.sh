@@ -103,6 +103,16 @@ check_container_engine() {
         err "File owner's UID doesn't map to 0 or $(id -u) in the container."
         die "Don't know how to map permissions. Please check your $1 setup."
     fi
+
+    # Only x86_64-on-Apple-Silicon goes through Rosetta; a native arm64 container
+    # must not be required to have it.
+    if [ "$(uname)" = "Darwin" ] && [[ "$HOST_PLATFORM" == "linux/arm64" ]] \
+       && [[ "$TARGET_PLATFORM" == "linux/amd64" ]]; then
+        if ! $1 run $platform --rm $2 \
+             bash -c 'ls -ahl /proc/$$/exe 2>/dev/null | grep -q "rosetta"'; then
+            die "macOS: The container needs to be using Rosetta instruction emulation."
+        fi
+    fi
 }
 
 #
@@ -193,6 +203,27 @@ function configure() {
 
   stat "Using $arg_container_engine."
 
+  if [ "$(uname)" = "Darwin" ]; then
+      # the default file handle limit is far below what rsync and the source
+      # setup stages need, and the resulting failures are opaque
+      if [ "$(sysctl -n kern.maxfiles)" -lt 100000 ]; then
+          die "macOS: system file handle limit too low. See README.md for instructions."
+      fi
+
+      # neither Docker nor Podman provide a machine-id on macOS, and Wine needs one
+      machine_id_file="$(pwd)/etc/machine-id"
+      if [ ! -s "$machine_id_file" ]; then
+        mkdir -p "$(pwd)/etc"
+        uuidgen | tr -d '-' | tr '[:upper:]' '[:lower:]' > "$machine_id_file"
+        chmod 444 "$machine_id_file"
+        info "macOS: generated container machine-id: $(cat "$machine_id_file")"
+      fi
+      arg_docker_opts="${arg_docker_opts} -v $(pwd)/etc/machine-id:/etc/machine-id"
+
+      # macOS resolves make to a path inside Xcode, which does not exist in the container
+      arg_make_override="/usr/bin/make"
+  fi
+
   ## Write out config
   # Don't die after this point or we'll have rather unhelpfully deleted the Makefile
   [[ ! -e "$MAKEFILE" ]] || rm "$MAKEFILE"
@@ -205,6 +236,10 @@ function configure() {
     echo "BUILD_NAME := $(escape_for_make "$build_name")"
     echo "TARGET_ARCH := $(escape_for_make "$target_arch")"
     echo "INTERNAL_TOOL_NAME := $(escape_for_make "$internal_tool_name")"
+
+    if [[ -n "$arg_make_override" ]]; then
+      echo "MAKE := $(escape_for_make "$arg_make_override")"
+    fi
 
     # SteamRT was specified, baking it into the Makefile
     if [[ -n $arg_protonsdk_image ]]; then
@@ -241,6 +276,7 @@ arg_build_name=""
 arg_target_arch=""
 arg_container_engine=""
 arg_docker_opts=""
+arg_make_override=""
 arg_relabel_volumes=""
 arg_enable_ccache=""
 arg_help=""
