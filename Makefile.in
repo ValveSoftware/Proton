@@ -1083,6 +1083,7 @@ noto_serif_tibetan.ttf = $(FONTS)/noto/NotoSerifTibetan-Regular.ttf
 micross.ttf = $(FONTS_OBJ)/micross.ttf
 nirmala.ttf = $(FONTS_OBJ)/nirmala.ttf
 alt_arial.ttf = $(ALT_FONTS_OBJ)/arial.ttf
+lucon.ttf = $(FONTS_OBJ)/lucon.ttf
 
 #The use of "Arial" here is for compatibility with programs that require that exact string. This font is not Arial.
 arial_NAMES := "Arial" "Arial" "Arial"
@@ -1175,6 +1176,9 @@ $(alt_arial.ttf): $(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_arabic.
 	$(FONTS)/scripts/merge.py $(noto_sans.ttf) $(noto_sans_arabic.ttf) $(noto_sans_hebrew.ttf) $(noto_sans_armenian.ttf) $(noto_sans_coptic.ttf) \
 		$(noto_sans_math.ttf) $(noto_sans_symbols.ttf) $(noto_sans_symbols2.ttf) $(noto_sans_mono.ttf) "Arial" "Arial" "Regular" $(FONTS)/ranges/arial $(alt_arial.ttf)
 
+$(lucon.ttf): $(FONTS)/scripts/merge.py $(noto_sans_mono.ttf) $(noto_sans_math.ttf) $(noto_sans_symbols.ttf) $(noto_sans_symbols2.ttf)
+	$(FONTS)/scripts/merge.py $(noto_sans_mono.ttf) $(noto_sans_math.ttf) $(noto_sans_symbols.ttf) $(noto_sans_symbols2.ttf) "LucidaConsole" "Lucida Console" "Regular" $(FONTS)/ranges/lucon $(lucon.ttf)
+
 fonts: $(msyh.ttf)
 fonts: $(simsun.ttc)
 fonts: $(msgothic.ttc)
@@ -1182,6 +1186,7 @@ fonts: $(malgun.ttf)
 fonts: $(micross.ttf)
 fonts: $(nirmala.ttf)
 fonts: $(alt_arial.ttf)
+fonts: $(lucon.ttf)
 
 DIST_FONTS := $(DST_DIR)/share/fonts
 $(DIST_FONTS): fonts
