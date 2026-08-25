@@ -1474,6 +1474,15 @@ fex_application_profiles = {
     }
 }
 
+def get_current_cpu_affinity():
+    try:
+        affinity = os.sched_getaffinity(0)
+        if len(affinity) >= os.cpu_count():
+            return ""
+        topo_str = ",".join(map(str, list(affinity)))
+        return f"{len(affinity)}:{topo_str}"
+    except: return ""
+
 class Session:
     def __init__(self):
         self.log_file = None
@@ -1520,6 +1529,11 @@ class Session:
             self.env["WINE_CPU_TOPOLOGY"] = self.env["PROTON_CPU_TOPOLOGY"]
         elif appid in default_cpu_limit:
             self.env["WINE_CPU_TOPOLOGY"] = default_cpu_limit[appid]
+        elif "WINE_CPU_TOPOLOGY" not in self.env and platform.machine() == 'aarch64':
+            topo_str = get_current_cpu_affinity()
+            if topo_str != "":
+                self.env["WINE_CPU_TOPOLOGY"] = topo_str
+
 
         if "WINE_HIDE_AMD_GPU" not in self.env and appid in [
                     "1282690",
