@@ -526,7 +526,8 @@ run:
     SetConsoleCtrlHandler( console_ctrl_handler, TRUE );
 
     use_shell_execute = should_use_shell_execute(cmdline);
-    if (use_shell_execute && wcslen( cmdline ) > 10 && !memcmp( cmdline, L"link2ea://", 10 * sizeof(WCHAR) ))
+    if (use_shell_execute && wcslen( cmdline ) > 10
+        && (!memcmp( cmdline, L"link2ea://", 10 * sizeof(WCHAR) ) || !memcmp( cmdline, L"steam2ea://", 11 * sizeof(WCHAR) )))
     {
         HDESK desktop = GetThreadDesktop(GetCurrentThreadId());
         DWORD is_unavailable, type, size;
@@ -536,6 +537,7 @@ run:
         HKEY eakey;
         BOOL ret;
 
+        TRACE("applying EA launcher workarounds.\n");
         link2ea = TRUE;
         if (!SetUserObjectInformationA(desktop, 1000, &timeout, sizeof(timeout)))
             WINE_ERR("Failed to set desktop timeout, err %lu.\n", GetLastError());
