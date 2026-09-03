@@ -1231,6 +1231,15 @@ class CompatData:
                                  track_file=tracked_files,
                                  link_debug=True)
 
+                intc_store = "drive_c/windows/system32/DriverStore/FileRepository/igd_faux.inf_1"
+                makedirs(os.path.join(self.prefix_dir, intc_store))
+                try_copy(g_proton.arch_pe_dir("wine/igdext", False) + "igdext64.dll",
+                         intc_store,
+                         optional=True,
+                         prefix=self.prefix_dir,
+                         track_file=tracked_files,
+                         link_debug=True)
+
             setup_game_dir_drive()
             setup_steam_dir_drive()
             setup_openvr_paths()
