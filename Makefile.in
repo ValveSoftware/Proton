@@ -745,6 +745,24 @@ $(OBJ)/.dxvk-nvapi-post-source:
 
 
 ##
+## dxvk-igdext
+##
+
+DXVK_IGDEXT_x86_64_CMAKE_ARGS = \
+  -DCMAKE_TOOLCHAIN_FILE=$(DXVK_IGDEXT_SRC)/toolchain-mingw64.cmake \
+  -DCMAKE_INSTALL_BINDIR=$(DXVK_IGDEXT_x86_64_DST)/lib/wine/igdext/x86_64-windows
+
+$(eval $(call rules-source,dxvk-igdext,$(SRCDIR)/dxvk-igdext))
+$(eval $(call rules-cmake,dxvk-igdext,x86_64,windows))
+
+$(OBJ)/.dxvk-igdext-post-source:
+	mkdir -p $(DST_LIBDIR)/wine/igdext
+	rm -rf $(DST_LIBDIR)/wine/igdext/version
+	echo "$(shell git -C $(SRCDIR) submodule status -- dxvk-igdext)" > $(DST_LIBDIR)/wine/igdext/version
+	touch $@
+
+
+##
 ## vkd3d
 ##
 
@@ -1365,7 +1383,7 @@ endif
 ## default_pfx
 ##
 
-default_pfx: wine gst_good gst_bad gst_libav gst_plugins_rs lsteamclient steamexe vrclient wineopenxr $(WINEOPENXR64_JSON) dxvk dxvk-nvapi vkd3d-proton
+default_pfx: wine gst_good gst_bad gst_libav gst_plugins_rs lsteamclient steamexe vrclient wineopenxr $(WINEOPENXR64_JSON) dxvk dxvk-nvapi dxvk-igdext vkd3d-proton
 	find $(DST_LIBDIR)/wine -type f -execdir chmod a-w '{}' '+'
 	rm -rf $(abspath $(DIST_PREFIX))
 	rm -rf $(abspath $(DIST_PREFIX_ARM64))
