@@ -1516,6 +1516,13 @@ test-container:
 get-steamrt-image:
 	echo $(STEAMRT_IMAGE)
 
+.PHONY: container-shell
+container-shell:
+	@echo >&2 ":: Entering interactive container shell"
+	$(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPTS) -v $(OBJ):$(OBJ)$(CONTAINER_MOUNT_OPTS) \
+		-w $(OBJ) -e MAKEFLAGS \
+		$(DOCKER_OPTS) -it $(STEAMRT_IMAGE) /bin/bash
+
 STEAM_DIR := $(HOME)/.steam/root
 .PHONY: install
 install: all
@@ -1534,6 +1541,7 @@ targets:
 	$(info make deploy            - create a build ready to be uploaded to steamworks in deploy/)
 	$(info make redist            - create an easily sharable proton redistributable in redist/)
 	$(info make module=xyz module - build the selected wine dll)
+	$(info make container-shell   - launch an interactive shell in the container environment)
 
 
 .PHONY: default
