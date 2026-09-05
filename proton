@@ -1106,6 +1106,10 @@ class CompatData:
                     if os.path.isfile(srcfile):
                         try_copy(srcfile, steam_dir + tgt, prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
+                try:
+                    self.create_symlink(self.prefix_dir + steam_dir + 'appcache', steamdir + '/appcache')
+                except: pass
+
                 # CW Bug 19152. IL-2 Sturmovik: Cliffs of Dover Blitz Edition needs user's localconfig.vdf
                 if os.environ.get("SteamGameId", 0) == "754530":
                     srcdir = os.path.join(steamdir, 'userdata')
