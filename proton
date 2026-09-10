@@ -456,6 +456,88 @@ def find_nvidia_wine_dll_dir():
 
     return None
 
+def can_import_shared_library(lib_name):
+    try:
+        CDLL(lib_name)
+    except OSError:
+        return False
+    return True
+
+def get_xess_so_version(path):
+    """Return (major, minor, patch) from a libxess.so, or None on failure."""
+    try:
+        from ctypes import byref, c_uint16
+        lib = CDLL(path)
+        class xess_version_t(Structure):
+            _fields_ = [
+                ("major", c_uint16),
+                ("minor", c_uint16),
+                ("patch", c_uint16),
+                ("reserved", c_uint16),
+            ]
+        get_ver = lib.xessGetVersion
+        get_ver.restype = c_int
+        get_ver.argtypes = [POINTER(xess_version_t)]
+        ver = xess_version_t()
+        if get_ver(byref(ver)) == 0:  # XESS_RESULT_SUCCESS
+            return (ver.major, ver.minor, ver.patch)
+    except (OSError, AttributeError):
+        pass
+    return None
+
+def get_pe_file_version(path):
+    """Return (major, minor, patch) from a PE binary's version resource, or None on failure."""
+    import struct
+    # VS_FIXEDFILEINFO is identified by the signature 0xFEEF04BD (little-endian)
+    VS_FFI_SIGNATURE = b'\xbd\x04\xef\xfe'
+    try:
+        with open(path, 'rb') as f:
+            data = f.read()
+        idx = data.find(VS_FFI_SIGNATURE)
+        if idx < 0:
+            return None
+        _sig, _struc_ver, file_ver_ms, file_ver_ls = struct.unpack_from('<IIII', data, idx)
+        major = (file_ver_ms >> 16) & 0xffff
+        minor = file_ver_ms & 0xffff
+        patch = (file_ver_ls >> 16) & 0xffff
+        return (major, minor, patch)
+    except (OSError, struct.error):
+        return None
+
+def find_game_xess_dll():
+    """Walk the game install directory to locate a game-shipped libxess.dll."""
+    install_path = g_session.env.get("STEAM_COMPAT_INSTALL_PATH")
+    if not install_path:
+        return None
+    for root, _dirs, files in os.walk(install_path):
+        for name in files:
+            if name.lower() == "libxess.dll":
+                return os.path.join(root, name)
+    return None
+
+def is_xess_compatible(so_path):
+    """Return True if libxess.so major/minor is >= game libxess.dll major/minor."""
+    so_ver = get_xess_so_version(so_path)
+    if so_ver is None:
+        log("XeSS: could not determine version of " + so_path)
+        return False
+
+    game_dll_path = find_game_xess_dll()
+    if game_dll_path is None:
+        log("XeSS: could not find game-shipped libxess.dll")
+        return False
+
+    game_dll_ver = get_pe_file_version(game_dll_path)
+    if game_dll_ver is None:
+        log("XeSS: could not read version from " + game_dll_path)
+        return False
+
+    log("XeSS: libxess.so version {}, game libxess.dll version {} (comparing major.minor only)".format(
+        ".".join(str(v) for v in so_ver),
+        ".".join(str(v) for v in game_dll_ver)))
+
+    return so_ver[:2] >= game_dll_ver[:2]
+
 EXT2_IOC_GETFLAGS = 0x80086601
 EXT2_IOC_SETFLAGS = 0x40086602
 
@@ -2048,6 +2130,38 @@ class Session:
 
         if "nativevulkanloader" in self.compat_config:
             self.dlloverrides["vulkan-1"] = "n"
+
+        if "XESS_LIB_OVERRIDE" in self.env:
+            override_path = self.env["XESS_LIB_OVERRIDE"]
+            if os.path.exists(override_path):
+                if os.path.isfile(override_path):
+                    log("XeSS: using XESS_LIB_OVERRIDE from environment (" + override_path + ")")
+                else:
+                    raise RuntimeError("XeSS: XESS_LIB_OVERRIDE from environment is not a valid file: " + override_path)
+            else:
+                raise RuntimeError("XeSS: XESS_LIB_OVERRIDE from environment does not exist: " + override_path)
+        elif file_exists(g_proton.contrib_dir + "libxess.so", follow_symlinks=True):
+            potential_override = g_proton.contrib_dir + "libxess.so"
+            log("XeSS: found libxess.so in contrib at " + potential_override)
+            if is_xess_compatible(potential_override):
+                log("XeSS: using libxess.so from contrib")
+                self.env["XESS_LIB_OVERRIDE"] = potential_override
+            else:
+                log("XeSS: libxess.so from contrib is not compatible; ignoring")
+                self.dlloverrides["libxess"] = "n"
+        elif can_import_shared_library("libxess.so"):
+            log("XeSS: found libxess.so in standard library paths")
+            if is_xess_compatible("libxess.so"):
+                log("XeSS: using libxess.so from standard library paths")
+                self.env["XESS_LIB_OVERRIDE"] = "libxess.so"
+            else:
+                log("XeSS: libxess.so from standard library paths is not compatible; ignoring")
+                self.dlloverrides["libxess"] = "n"
+        elif "WINEDLLOVERRIDES" in self.env and "libxess" in self.env["WINEDLLOVERRIDES"]:
+            log("XeSS: libxess.so unavailable; respecting user WINEDLLOVERRIDES for libxess")
+        else:
+            self.dlloverrides["libxess"] = "n"
+            log("XeSS: libxess.so unavailable; setting libxess=n")
 
         if "disablenvapi" not in self.compat_config or "forcenvapi" in self.compat_config:
             self.env["DXVK_ENABLE_NVAPI"] = "1"
