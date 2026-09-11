@@ -2067,6 +2067,7 @@ class Session:
             if os.environ["SteamAppId"] in [
                     "1282270",
                     "2963870",
+                    "4212480",
                 ]:
                 self.env["PROTON_LIMIT_ADDRESS_SPACE"] = "1"
 
