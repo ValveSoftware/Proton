@@ -1275,8 +1275,14 @@ all-dist: $(OBJ)/.gecko-i386-dist $(OBJ)/.gecko-x86_64-dist
 ## wine-mono
 ##
 
-WINEMONO_VER := 11.2.1
-WINEMONO_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
+WINEMONO_VER := 11.3.0
+WINEMONO_x86_64_TARBALL := wine-mono-$(WINEMONO_VER)-x86.tar.xz
+WINEMONO_aarch64_TARBALL := wine-mono-$(WINEMONO_VER)-arm64.tar.xz
+ifeq ($(TARGET_ARCH),arm64)
+WINEMONO_TARBALL := $(WINEMONO_aarch64_TARBALL)
+else
+WINEMONO_TARBALL := $(WINEMONO_x86_64_TARBALL)
+endif
 DIST_WINEMONO_DIR := $(DST_DIR)/share/wine/mono
 DIST_WINEMONO := $(OBJ)/.wine-mono-dist
 MONO_TARBALL_URL := https://github.com/madewokherd/wine-mono/releases/download/wine-mono-$(WINEMONO_VER)/$(WINEMONO_TARBALL)
