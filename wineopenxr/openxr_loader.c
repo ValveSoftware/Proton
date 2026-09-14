@@ -31,29 +31,6 @@ union CompositionLayer {
   XrCompositionLayerEquirect2KHR equirect2;
 };
 
-static CRITICAL_SECTION session_list_lock = {NULL, -1, 0, 0, 0, 0};
-static struct list session_list = LIST_INIT(session_list);
-
-static wine_XrSession *get_wrapped_XrSession(XrSession native) {
-  wine_XrSession *cursor;
-
-  EnterCriticalSection(&session_list_lock);
-
-  LIST_FOR_EACH_ENTRY(cursor, &session_list, wine_XrSession, entry) {
-    if (cursor->host_session == native) {
-      break;
-    }
-  }
-
-  LeaveCriticalSection(&session_list_lock);
-
-  if (&cursor->entry == &session_list) {
-    return NULL;
-  }
-
-  return cursor;
-}
-
 static void parse_extensions(const char *in, uint32_t *out_count, char ***out_strs) {
   char *iter, *start;
   char **list, *str = strdup(in);
@@ -466,7 +443,7 @@ XrResult WINAPI xrCreateInstance(const XrInstanceCreateInfo *createInfo, XrInsta
     WARN("xrCreateInstance failed: %d\n", params.result);
     free(wine_instance);
   } else {
-    *instance = (XrInstance)wine_instance;
+    *instance = (XrInstance)(ULONG_PTR)wine_instance;
   }
 
   return params.result;
@@ -504,7 +481,7 @@ XrResult WINAPI xrDestroyInstance(XrInstance instance) {
 
 /* SteamVR does some internal init during these functions. */
 static XrResult do_vulkan_init(wine_XrInstance *wine_instance, VkInstance vk_instance) {
-  XrInstance instance = (XrInstance)wine_instance;
+  XrInstance instance = (XrInstance)(ULONG_PTR)wine_instance;
   char *instance_extensions, *device_extensions;
   XrGraphicsRequirementsVulkanKHR vk_reqs;
   XrResult res;
@@ -562,12 +539,12 @@ XrResult WINAPI xrCreateSession(XrInstance instance, const XrSessionCreateInfo *
   struct xrCreateSession_params params = {
       .instance = instance,
       .createInfo = &our_create_info,
-      .session = &wine_session->host_session,
+      .session = session,
   };
   XrResult res;
   uint32_t session_type = 0;
 
-  TRACE("%p, %p, %p\n", instance, createInfo, session);
+  TRACE("%#I64x, %p, %p\n", (ULONG64)instance, createInfo, session);
 
   if (createInfo->next) {
     switch (((XrBaseInStructure *)createInfo->next)->type) {
@@ -674,6 +651,9 @@ XrResult WINAPI xrCreateSession(XrInstance instance, const XrSessionCreateInfo *
     }
   }
 
+  wine_session->instance = wine_instance;
+  wine_session->session_type = session_type;
+  *session = (XrSession)(ULONG_PTR)wine_session;
   UNIX_CALL_CHECKED(xrCreateSession, &params);
 
   if (params.result != XR_SUCCESS) {
@@ -681,16 +661,6 @@ XrResult WINAPI xrCreateSession(XrInstance instance, const XrSessionCreateInfo *
     free(wine_session);
     return params.result;
   }
-
-  wine_session->instance = wine_instance;
-  wine_session->session_type = session_type;
-
-  EnterCriticalSection(&session_list_lock);
-  list_add_tail(&session_list, &wine_session->entry);
-  LeaveCriticalSection(&session_list_lock);
-
-  *session = (XrSession)wine_session;
-
   return XR_SUCCESS;
 }
 
@@ -698,76 +668,22 @@ XrResult WINAPI xrDestroySession(XrSession session) {
   wine_XrSession *wine_session = wine_session_from_handle(session);
   struct xrDestroySession_params params = {.session = session};
 
-  TRACE("%p\n", session);
+  TRACE("%#I64x.\n", (ULONG64)session);
   UNIX_CALL_CHECKED(xrDestroySession, &params);
   if (params.result != XR_SUCCESS) {
     WARN("xrDestroySession failed: %d\n", params.result);
     return params.result;
   }
 
-  EnterCriticalSection(&session_list_lock);
-  list_remove(&wine_session->entry);
-  LeaveCriticalSection(&session_list_lock);
-
   free(wine_session);
   return XR_SUCCESS;
 }
 
-XrResult WINAPI xrPollEvent(XrInstance instance, XrEventDataBuffer *eventData) {
-  struct xrPollEvent_params params = {.instance = instance, .eventData = eventData};
-  NTSTATUS _status;
-
-  WINE_TRACE("%p, %p\n", instance, eventData);
-
-  _status = UNIX_CALL(xrPollEvent, &params);
-  assert(!_status && "xrPollEvent");
-
-  WINE_TRACE("eventData->type %#x\n", eventData->type);
-
-  if (params.result == XR_SUCCESS) {
-    switch (eventData->type) {
-      case XR_TYPE_EVENT_DATA_INTERACTION_PROFILE_CHANGED: {
-        XrEventDataInteractionProfileChanged *evt = (XrEventDataInteractionProfileChanged *)eventData;
-        evt->session = (XrSession)get_wrapped_XrSession(evt->session);
-        break;
-      }
-      case XR_TYPE_EVENT_DATA_SESSION_STATE_CHANGED: {
-        XrEventDataSessionStateChanged *evt = (XrEventDataSessionStateChanged *)eventData;
-        evt->session = (XrSession)get_wrapped_XrSession(evt->session);
-        break;
-      }
-      case XR_TYPE_EVENT_DATA_VISIBILITY_MASK_CHANGED_KHR: {
-        XrEventDataVisibilityMaskChangedKHR *evt = (XrEventDataVisibilityMaskChangedKHR *)eventData;
-        evt->session = (XrSession)get_wrapped_XrSession(evt->session);
-        break;
-      }
-      case XR_TYPE_EVENT_DATA_REFERENCE_SPACE_CHANGE_PENDING: {
-        XrEventDataReferenceSpaceChangePending *evt = (XrEventDataReferenceSpaceChangePending *)eventData;
-        evt->session = (XrSession)get_wrapped_XrSession(evt->session);
-        break;
-      }
-      case XR_TYPE_EVENT_DATA_USER_PRESENCE_CHANGED_EXT: {
-        XrEventDataUserPresenceChangedEXT *evt = (XrEventDataUserPresenceChangedEXT *)eventData;
-        evt->session = (XrSession)get_wrapped_XrSession(evt->session);
-        break;
-      }
-      case XR_TYPE_EVENT_DATA_LOCALIZATION_CHANGED_ML: {
-        XrEventDataLocalizationChangedML *evt = (XrEventDataLocalizationChangedML *)eventData;
-        evt->session = (XrSession)get_wrapped_XrSession(evt->session);
-        break;
-      }
-      default:
-        break;
-    }
-  }
-
-  return params.result;
-}
 XrResult WINAPI xrGetSystem(XrInstance instance, const XrSystemGetInfo *getInfo, XrSystemId *systemId) {
   wine_XrInstance *wine_instance = wine_instance_from_handle(instance);
   struct xrGetSystem_params params = {.instance = instance, .getInfo = getInfo, .systemId = systemId};
 
-  TRACE("%p, %p, %p\n", instance, getInfo, systemId);
+  TRACE("%#I64x, %p, %p\n", (ULONG64)instance, getInfo, systemId);
   UNIX_CALL_CHECKED(xrGetSystem, &params);
   if (params.result != XR_SUCCESS) {
     return params.result;
@@ -912,7 +828,7 @@ XrResult WINAPI xrEnumerateSwapchainFormats(XrSession session,
       .formats = formats,
   };
 
-  TRACE("%p, %u, %p, %p\n", session, formatCapacityInput, formatCountOutput, formats);
+  TRACE("%#I64x, %u, %p, %p\n", (ULONG64)session, formatCapacityInput, formatCountOutput, formats);
 
   if (wine_session->session_type != SESSION_TYPE_D3D11 && wine_session->session_type != SESSION_TYPE_D3D12) {
     UNIX_CALL_CHECKED(xrEnumerateSwapchainFormats, &params);
@@ -971,7 +887,7 @@ XrResult WINAPI xrCreateSwapchain(XrSession session, const XrSwapchainCreateInfo
 
   wine_swapchain->create_info = *createInfo;
 
-  TRACE("%p, %p, %p\n", session, createInfo, swapchain);
+  TRACE("%#I64x, %p, %p\n", (ULONG64)session, createInfo, swapchain);
 
   if (wine_session->session_type == SESSION_TYPE_D3D11 || wine_session->session_type == SESSION_TYPE_D3D12) {
     BOOL format_is_depth;
@@ -1001,7 +917,7 @@ XrResult WINAPI xrCreateSwapchain(XrSession session, const XrSwapchainCreateInfo
   }
 
   wine_swapchain->session = wine_session;
-  *swapchain = (XrSwapchain)wine_swapchain;
+  *swapchain = (XrSwapchain)(ULONG_PTR)wine_swapchain;
 
   return XR_SUCCESS;
 }
@@ -1031,7 +947,7 @@ XrResult WINAPI xrDestroySwapchain(XrSwapchain swapchain) {
   wine_XrSwapchain *wine_swapchain = wine_swapchain_from_handle(swapchain);
   struct xrDestroySwapchain_params params = {.swapchain = swapchain};
 
-  TRACE("%p\n", swapchain);
+  TRACE("%#I64x.\n", (ULONG64)swapchain);
 
   UNIX_CALL_CHECKED(xrDestroySwapchain, &params);
   if (params.result != XR_SUCCESS) {
@@ -1146,7 +1062,7 @@ XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
       .images = images,
   };
 
-  TRACE("%p, %u, %p, %p\n", swapchain, imageCapacityInput, imageCountOutput, images);
+  TRACE("%#I64x, %u, %p, %p\n", (ULONG64)swapchain, imageCapacityInput, imageCountOutput, images);
   if (wine_swapchain->session->session_type != SESSION_TYPE_D3D11 &&
       wine_swapchain->session->session_type != SESSION_TYPE_D3D12) {
     UNIX_CALL_CHECKED(xrEnumerateSwapchainImages, &params);
@@ -1354,7 +1270,7 @@ XrResult WINAPI xrAcquireSwapchainImage(XrSwapchain swapchain,
       .index = index,
   };
 
-  TRACE("%p, %p, %p image count %d, acquired %d\n", swapchain, acquireInfo, index, wine_swapchain->image_count,
+  TRACE("%#I64x, %p, %p image count %d, acquired %d\n", (ULONG64)swapchain, acquireInfo, index, wine_swapchain->image_count,
         wine_swapchain->acquired_count);
 
   if (wine_instance->d3d12_device && wine_swapchain->acquired_count >= wine_swapchain->image_count)
@@ -1405,7 +1321,7 @@ XrResult WINAPI xrReleaseSwapchainImage(XrSwapchain swapchain, const XrSwapchain
       .releaseInfo = releaseInfo,
   };
 
-  TRACE("%p, %p\n", swapchain, releaseInfo);
+  TRACE("%#I64x, %p\n", (ULONG64)swapchain, releaseInfo);
 
   if (wine_instance->d3d12_device && !wine_swapchain->acquired_count)
   {
@@ -1460,7 +1376,7 @@ XrResult WINAPI xrBeginFrame(XrSession session, const XrFrameBeginInfo *frameBeg
       .frameBeginInfo = frameBeginInfo,
   };
 
-  TRACE("%p, %p\n", session, frameBeginInfo);
+  TRACE("%#I64x, %p\n", (ULONG64)session, frameBeginInfo);
 
   lock_d3d_queue(wine_session->instance, FALSE);
   UNIX_CALL_CHECKED(xrBeginFrame, &params);
@@ -1468,166 +1384,14 @@ XrResult WINAPI xrBeginFrame(XrSession session, const XrFrameBeginInfo *frameBeg
   return params.result;
 }
 
-static XrCompositionLayerBaseHeader *convert_XrCompositionLayer(wine_XrSession *wine_session,
-                                                                const XrCompositionLayerBaseHeader *in_layer,
-                                                                CompositionLayer *out_layer,
-                                                                uint32_t *view_idx,
-                                                                uint32_t *view_info_idx) {
-  uint32_t i;
-
-  TRACE("Type %u, pNext %p.\n", in_layer->type, in_layer->next);
-
-  switch (in_layer->type) {
-    case XR_TYPE_COMPOSITION_LAYER_CUBE_KHR: {
-      out_layer->cube = *(const XrCompositionLayerCubeKHR *)in_layer;
-      out_layer->cube.swapchain = wine_swapchain_from_handle(out_layer->cube.swapchain)->host_swapchain;
-      break;
-    }
-
-    case XR_TYPE_COMPOSITION_LAYER_CYLINDER_KHR:
-      out_layer->cylinder = *(const XrCompositionLayerCylinderKHR *)in_layer;
-      out_layer->cylinder.subImage.swapchain =
-          wine_swapchain_from_handle(out_layer->cylinder.subImage.swapchain)->host_swapchain;
-      break;
-
-    case XR_TYPE_COMPOSITION_LAYER_DEPTH_INFO_KHR:
-      out_layer->depth_info = *(const XrCompositionLayerDepthInfoKHR *)in_layer;
-      out_layer->depth_info.subImage.swapchain =
-          wine_swapchain_from_handle(out_layer->depth_info.subImage.swapchain)->host_swapchain;
-      break;
-
-    case XR_TYPE_COMPOSITION_LAYER_EQUIRECT_KHR:
-      out_layer->equirect = *(const XrCompositionLayerEquirectKHR *)in_layer;
-      out_layer->equirect.subImage.swapchain =
-          wine_swapchain_from_handle(out_layer->equirect.subImage.swapchain)->host_swapchain;
-      break;
-
-    case XR_TYPE_COMPOSITION_LAYER_EQUIRECT2_KHR:
-      out_layer->equirect2 = *(const XrCompositionLayerEquirect2KHR *)in_layer;
-      out_layer->equirect2.subImage.swapchain =
-          wine_swapchain_from_handle(out_layer->equirect2.subImage.swapchain)->host_swapchain;
-      break;
-
-    case XR_TYPE_COMPOSITION_LAYER_PROJECTION: {
-      const XrCompositionLayerProjectionView *view;
-      unsigned int view_info_count;
-
-      out_layer->projection = *(const XrCompositionLayerProjection *)in_layer;
-
-      view_info_count = 0;
-      for (i = 0; i < out_layer->projection.viewCount; ++i) {
-        view = &((XrCompositionLayerProjection *)in_layer)->views[i];
-        while ((view = view->next)) {
-          ++view_info_count;
-        }
-      }
-
-      if (out_layer->projection.viewCount + *view_idx > wine_session->projection_view_count) {
-        wine_session->projection_view_count = out_layer->projection.viewCount + *view_idx;
-        wine_session->projection_views =
-            realloc(wine_session->projection_views,
-                    sizeof(XrCompositionLayerProjectionView) * wine_session->projection_view_count);
-      }
-
-      if (view_info_count + *view_info_idx > wine_session->view_info_count) {
-        wine_session->view_info_count += view_info_count;
-        wine_session->view_infos =
-            realloc(wine_session->view_infos, sizeof(*wine_session->view_infos) * wine_session->view_info_count);
-      }
-
-      out_layer->projection.views = &wine_session->projection_views[*view_idx];
-      memcpy((void *)out_layer->projection.views, ((const XrCompositionLayerProjection *)in_layer)->views,
-             sizeof(XrCompositionLayerProjectionView) * out_layer->projection.viewCount);
-      view_info_count = 0;
-      for (i = 0; i < out_layer->projection.viewCount; ++i) {
-        view = &out_layer->projection.views[i];
-        if (view->type != XR_TYPE_COMPOSITION_LAYER_PROJECTION_VIEW) {
-          WARN("Unexpected view type %u.\n", view->type);
-        }
-
-        ((XrCompositionLayerProjectionView *)view)->subImage.swapchain =
-            wine_swapchain_from_handle(view->subImage.swapchain)->host_swapchain;
-        while (view->next) {
-          TRACE("Projection view type %u.\n", ((XrCompositionLayerProjectionView *)view->next)->type);
-          switch (((XrCompositionLayerProjectionView *)view->next)->type) {
-            case XR_TYPE_COMPOSITION_LAYER_DEPTH_INFO_KHR: {
-              XrCompositionLayerDepthInfoKHR *out_depth_info, *in_depth_info;
-
-              in_depth_info = (XrCompositionLayerDepthInfoKHR *)view->next;
-              out_depth_info = &wine_session->view_infos[*view_info_idx + view_info_count].depth_info;
-              *out_depth_info = *in_depth_info;
-              out_depth_info->subImage.swapchain =
-                  wine_swapchain_from_handle(out_depth_info->subImage.swapchain)->host_swapchain;
-              ((XrCompositionLayerProjectionView *)view)->next = out_depth_info;
-              break;
-            }
-            case XR_TYPE_COMPOSITION_LAYER_SPACE_WARP_INFO_FB: {
-              XrCompositionLayerSpaceWarpInfoFB *out_warp_info, *in_warp_info;
-
-              in_warp_info = (XrCompositionLayerSpaceWarpInfoFB *)view->next;
-              out_warp_info = &wine_session->view_infos[*view_info_idx + view_info_count].space_warp_info;
-              *out_warp_info = *in_warp_info;
-              out_warp_info->motionVectorSubImage.swapchain =
-                  wine_swapchain_from_handle(out_warp_info->motionVectorSubImage.swapchain)->host_swapchain;
-              out_warp_info->depthSubImage.swapchain =
-                  wine_swapchain_from_handle(out_warp_info->depthSubImage.swapchain)->host_swapchain;
-              ((XrCompositionLayerProjectionView *)view)->next = out_warp_info;
-              break;
-            }
-            default:
-              WARN("Unknown view info type %u.\n", view->type);
-              break;
-          }
-          ++view_info_count;
-          view = view->next;
-        }
-      }
-
-      *view_idx += out_layer->projection.viewCount;
-      *view_info_idx += view_info_count;
-      break;
-    }
-    case XR_TYPE_COMPOSITION_LAYER_QUAD:
-      out_layer->quad = *(const XrCompositionLayerQuad *)in_layer;
-      out_layer->quad.subImage.swapchain =
-          wine_swapchain_from_handle(out_layer->quad.subImage.swapchain)->host_swapchain;
-      break;
-
-    default:
-      WARN("Unknown composition in_layer type: %d\n", in_layer->type);
-      return (XrCompositionLayerBaseHeader *)in_layer;
-  }
-
-  return (XrCompositionLayerBaseHeader *)out_layer;
-}
-
 XrResult WINAPI xrEndFrame(XrSession session, const XrFrameEndInfo *frameEndInfo) {
   wine_XrSession *wine_session = wine_session_from_handle(session);
-  XrFrameEndInfo our_frameEndInfo;
   struct xrEndFrame_params params = {
       .session = session,
-      .frameEndInfo = &our_frameEndInfo,
+      .frameEndInfo = frameEndInfo,
   };
-  uint32_t i, view_idx = 0, view_info_idx = 0;
 
-  TRACE("%p, %p\n", session, frameEndInfo);
-
-  if (frameEndInfo->layerCount > wine_session->composition_layer_count) {
-    free(wine_session->composition_layers);
-    wine_session->composition_layers = malloc(frameEndInfo->layerCount * sizeof(*wine_session->composition_layers));
-    free(wine_session->composition_layer_ptrs);
-    wine_session->composition_layer_ptrs =
-        malloc(frameEndInfo->layerCount * sizeof(*wine_session->composition_layer_ptrs));
-    wine_session->composition_layer_count = frameEndInfo->layerCount;
-  }
-
-  for (i = 0; i < frameEndInfo->layerCount; ++i) {
-    wine_session->composition_layer_ptrs[i] = convert_XrCompositionLayer(
-        wine_session, frameEndInfo->layers[i], &wine_session->composition_layers[i], &view_idx, &view_info_idx);
-  }
-
-  our_frameEndInfo = *frameEndInfo;
-  our_frameEndInfo.layers = (const XrCompositionLayerBaseHeader *const *)wine_session->composition_layer_ptrs;
+  TRACE("%#I64x, %p\n", (ULONG64)session, frameEndInfo);
 
   lock_d3d_queue(wine_session->instance, FALSE);
   UNIX_CALL_CHECKED(xrEndFrame, &params);
@@ -1733,7 +1497,7 @@ XrResult WINAPI xrCreateVulkanInstanceKHR(XrInstance instance,
   VkCreateInfoWineInstanceCallback callback;
   VkInstanceCreateInfo vulkan_create_info;
 
-  TRACE("instance %p, createInfo %p, vulkanInstance %p, vulkanResult %p.\n", instance, createInfo, vulkanInstance,
+  TRACE("instance %#I64x, createInfo %p, vulkanInstance %p, vulkanResult %p.\n", (ULONG64)instance, createInfo, vulkanInstance,
         vulkanResult);
 
   if (createInfo->createFlags) {
@@ -1741,12 +1505,12 @@ XrResult WINAPI xrCreateVulkanInstanceKHR(XrInstance instance,
   }
 
   context.wine_instance = instance;
-  context.create_info = (UINT64)createInfo;
+  context.create_info = (ULONG_PTR)createInfo;
 
   vulkan_create_info = *createInfo->vulkanCreateInfo;
   callback.sType = VK_STRUCTURE_TYPE_CREATE_INFO_WINE_INSTANCE_CALLBACK;
   callback.native_create_callback = g_vk_create_instance_callback;
-  callback.context = (UINT64)&context;
+  callback.context = (ULONG_PTR)&context;
   callback.pNext = vulkan_create_info.pNext;
   vulkan_create_info.pNext = &callback;
 
@@ -1768,7 +1532,7 @@ XrResult WINAPI xrCreateVulkanDeviceKHR(XrInstance instance,
   VkCreateInfoWineDeviceCallback callback;
   VkDeviceCreateInfo vulkan_create_info;
 
-  TRACE("instance %p, createInfo %p, vulkanDevice %p, vulkanResult %p.\n", instance, createInfo, vulkanDevice,
+  TRACE("instance %#I64x, createInfo %p, vulkanDevice %p, vulkanResult %p.\n", (ULONG64)instance, createInfo, vulkanDevice,
         vulkanResult);
 
   if (createInfo->createFlags) {
@@ -1776,12 +1540,12 @@ XrResult WINAPI xrCreateVulkanDeviceKHR(XrInstance instance,
   }
 
   context.wine_instance = instance;
-  context.create_info = (UINT64)createInfo;
+  context.create_info = (ULONG_PTR)createInfo;
 
   vulkan_create_info = *createInfo->vulkanCreateInfo;
   callback.sType = VK_STRUCTURE_TYPE_CREATE_INFO_WINE_DEVICE_CALLBACK;
   callback.native_create_callback = g_vk_create_device_callback;
-  callback.context = (UINT64)&context;
+  callback.context = (ULONG_PTR)&context;
   callback.pNext = vulkan_create_info.pNext;
   vulkan_create_info.pNext = &callback;
 

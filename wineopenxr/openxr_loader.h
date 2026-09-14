@@ -74,23 +74,11 @@ static inline wine_XrInstance *wine_instance_from_handle(XrInstance handle) {
 union CompositionLayer;
 typedef union CompositionLayer CompositionLayer;
 
-typedef union {
-  XrCompositionLayerDepthInfoKHR depth_info;
-  XrCompositionLayerSpaceWarpInfoFB space_warp_info;
-} view_info;
-
 typedef struct {
   XrSession host_session;
+  XrSession client_session;
   wine_XrInstance *instance;
   uint32_t session_type;
-  struct list entry;
-  uint32_t composition_layer_count;
-  CompositionLayer *composition_layers;
-  XrCompositionLayerBaseHeader **composition_layer_ptrs;
-
-  uint32_t projection_view_count, view_info_count;
-  XrCompositionLayerProjectionView *projection_views;
-  view_info *view_infos;
 } wine_XrSession;
 
 static inline wine_XrSession *wine_session_from_handle(XrSession handle) {
