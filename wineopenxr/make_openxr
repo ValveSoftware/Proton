@@ -64,7 +64,7 @@ from enum import Enum
 LOGGER = logging.Logger("openxr")
 LOGGER.addHandler(logging.StreamHandler())
 
-XR_XML_VERSION = "1.1.58"
+XR_XML_VERSION = "1.1.63"
 WINE_XR_VERSION = (1, 1)
 
 # Filenames to create.
@@ -1651,6 +1651,8 @@ class XrParam(XrVariable):
                     self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type == "float":
                 self.format_str = "%f"
+            elif self.type == "double":
+                self.format_str = "%lf"
             elif self.type == "int":
                 self.format_str = "%d"
             elif self.type == "int32_t":
@@ -1665,7 +1667,7 @@ class XrParam(XrVariable):
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type in ["HANDLE", "VkInstance"]:
                 self.format_str = "%p"
-            elif self.type in ["XrSystemId", "XrPath", "XrTime", "XrDuration", "XrControllerModelKeyMSFT", "XrMarkerML", "XrSpatialEntityIdBD"]:
+            elif self.type in ["XrSystemId", "XrPath", "XrTime", "XrDuration", "XrControllerModelKeyMSFT", "XrMarkerML", "XrSpatialEntityIdBD", "XrCameraImageIdBD"]:
                 self.format_str = "0x%s"
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type in ["XrVector2f"]:
@@ -1678,7 +1680,7 @@ class XrParam(XrVariable):
                 # Don't care about specific types for non-Windows platforms.
                 self.format_str = ""
             else:
-                LOGGER.warn("Unhandled type: {0}".format(self.type_info))
+                LOGGER.warning("Unhandled type: {0}".format(self.type_info))
 
     def copy(self, direction, conv, unwrap, prefix=""):
         win_type = "win32" if conv else "win64"
