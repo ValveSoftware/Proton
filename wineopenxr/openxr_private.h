@@ -44,17 +44,66 @@ static inline void *conversion_context_alloc(struct conversion_context *pool, si
 }
 
 NTSTATUS init_openxr(void *args);
+NTSTATUS wow64_init_openxr(void *args);
 NTSTATUS is_available_instance_function_openxr(void *args);
+NTSTATUS is_available_instance_function_openxr32(void *args);
 NTSTATUS get_vk_create_callback_ptrs(void *args);
 extern void register_dispatchable_handle(uint64_t handle, struct openxr_instance_funcs *funcs);
 extern void unregister_dispatchable_handle(uint64_t handle);
 extern struct openxr_instance_funcs *get_dispatch_table(uint64_t handle);
 
-#define MEMDUP(ctx, dst, src, count)                               \
-  dst = conversion_context_alloc((ctx), sizeof(*(dst)) * (count)); \
-  memcpy((void *)(dst), (src), sizeof(*(dst)) * (count));
-#define MEMDUP_VOID(ctx, dst, src, size)       \
-  dst = conversion_context_alloc((ctx), size); \
-  memcpy((void *)(dst), (src), size);
+#if (XR_PTR_SIZE == 8)
+    static inline uint64_t uint64_from_xr_handle( void *handle )
+    {
+        return (uint64_t)handle;
+    }
+#else
+    static inline uint64_t uint64_from_xr_handle( uint64_t handle )
+    {
+        return handle;
+    }
+#endif
+
+typedef UINT32 PTR32;
+
+typedef struct
+{
+    XrStructureType type;
+    PTR32 next;
+} XrBaseInStructure32;
+
+typedef struct
+{
+    XrStructureType type;
+    PTR32 next;
+} XrBaseOutStructure32;
+
+static inline void *find_next_struct32(void *s, XrStructureType t)
+{
+    XrBaseOutStructure32 *header;
+
+    for (header = s; header; header = UlongToPtr(header->next))
+    {
+        if (header->type == t)
+            return header;
+    }
+
+    return NULL;
+}
+
+static inline void *find_next_struct(const void *s, XrStructureType t)
+{
+    XrBaseOutStructure *header;
+
+    for (header = (XrBaseOutStructure *)s; header; header = header->next)
+    {
+        if (header->type == t)
+            return header;
+    }
+
+    return NULL;
+}
+
+XrSession xr_wrap_host_session( XrSession host );
 
 #endif /* __WINE_OPENXR_PRIVATE_H */
