@@ -165,7 +165,10 @@ with dist_lock:
         if os.path.exists(basedir + "/dist"):
             shutil.rmtree(basedir + "/dist")
         tar = tarfile.open(basedir + "/proton_dist.tar.gz", mode="r:gz")
-        tar.extractall(path=basedir + "/dist")
+        if hasattr(tarfile, "fully_trusted_filter"):
+            tar.extractall(path=basedir + "/dist", filter='fully_trusted')
+        else:
+            tar.extractall(path=basedir + "/dist")
         tar.close()
         try_copy(basedir + "/version", basedir + "/dist/")
 
