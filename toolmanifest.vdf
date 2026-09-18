@@ -1,5 +1,7 @@
 "manifest"
 {
+  "version" "2"
+  "require_tool_appid" "4690330"
   "commandline" "/proton run"
   "commandline_getnativepath" "/proton getnativepath"
   "commandline_getcompatpath" "/proton getcompatpath"
