@@ -122,7 +122,10 @@ class Proton:
                 if not tar:
                     log("No proton_dist tarball??")
                     sys.exit(1)
-                tar.extractall(path=self.dist_dir)
+                if hasattr(tarfile, "fully_trusted_filter"):
+                    tar.extractall(path=self.dist_dir, filter='fully_trusted')
+                else:
+                    tar.extractall(path=self.dist_dir)
                 tar.close()
                 try_copy(self.version_file, self.dist_dir)
 
