@@ -253,7 +253,6 @@ static int get_extensions(char **ret_instance_extensions, char **ret_device_exte
   VkPhysicalDevice vk_physdev;
   VkPhysicalDeviceProperties vk_dev_props;
   struct xrGetVulkanDeviceExtensionsKHR_params params;
-  NTSTATUS status;
 
   static const char *xr_extensions[] = {
       "XR_KHR_vulkan_enable",
@@ -417,8 +416,7 @@ static int get_extensions(char **ret_instance_extensions, char **ret_device_exte
   params.bufferCapacityInput = 0;
   params.bufferCountOutput = &len;
   params.buffer = NULL;
-  status = UNIX_CALL(xrGetVulkanDeviceExtensionsKHR, &params);
-  assert(!status && "xrGetVulkanDeviceExtensionsKHR");
+  UNIX_CALL_CHECKED(xrGetVulkanDeviceExtensionsKHR, &params);
   res = params.result;
 
   if (res != XR_SUCCESS) {
@@ -432,8 +430,7 @@ static int get_extensions(char **ret_instance_extensions, char **ret_device_exte
 
   params.bufferCapacityInput = len;
   params.buffer = device_extensions;
-  status = UNIX_CALL(xrGetVulkanDeviceExtensionsKHR, &params);
-  assert(!status && "xrGetVulkanDeviceExtensionsKHR");
+  UNIX_CALL_CHECKED(xrGetVulkanDeviceExtensionsKHR, &params);
   res = params.result;
 
   if (res != XR_SUCCESS) {
@@ -463,9 +460,7 @@ XrResult WINAPI xrCreateInstance(const XrInstanceCreateInfo *createInfo, XrInsta
       .createInfo = createInfo,
       .instance = &wine_instance->host_instance,
   };
-  NTSTATUS _status;
-  _status = UNIX_CALL(xrCreateInstance, &params);
-  assert(!_status && "xrCreateInstance");
+  UNIX_CALL_CHECKED(xrCreateInstance, &params);
 
   if (params.result != XR_SUCCESS) {
     WARN("xrCreateInstance failed: %d\n", params.result);
@@ -482,11 +477,9 @@ XrResult WINAPI xrDestroyInstance(XrInstance instance) {
   struct xrDestroyInstance_params params = {
       .instance = instance,
   };
-  NTSTATUS _status;
 
   TRACE("\n");
-  _status = UNIX_CALL(xrDestroyInstance, &params);
-  assert(!_status && "xrDestroyInstance");
+  UNIX_CALL_CHECKED(xrDestroyInstance, &params);
 
   if (params.result != XR_SUCCESS) {
     WARN("xrDestroyInstance failed: %d\n", params.result);
@@ -572,7 +565,6 @@ XrResult WINAPI xrCreateSession(XrInstance instance, const XrSessionCreateInfo *
       .session = &wine_session->host_session,
   };
   XrResult res;
-  NTSTATUS _status;
   uint32_t session_type = 0;
 
   TRACE("%p, %p, %p\n", instance, createInfo, session);
@@ -682,8 +674,7 @@ XrResult WINAPI xrCreateSession(XrInstance instance, const XrSessionCreateInfo *
     }
   }
 
-  _status = UNIX_CALL(xrCreateSession, &params);
-  assert(!_status && "xrCreateSession");
+  UNIX_CALL_CHECKED(xrCreateSession, &params);
 
   if (params.result != XR_SUCCESS) {
     WARN("xrCreateSession failed: %d\n", res);
@@ -706,11 +697,9 @@ XrResult WINAPI xrCreateSession(XrInstance instance, const XrSessionCreateInfo *
 XrResult WINAPI xrDestroySession(XrSession session) {
   wine_XrSession *wine_session = wine_session_from_handle(session);
   struct xrDestroySession_params params = {.session = session};
-  NTSTATUS _status;
 
   TRACE("%p\n", session);
-  _status = UNIX_CALL(xrDestroySession, &params);
-  assert(!_status && "xrDestroySession");
+  UNIX_CALL_CHECKED(xrDestroySession, &params);
   if (params.result != XR_SUCCESS) {
     WARN("xrDestroySession failed: %d\n", params.result);
     return params.result;
@@ -777,11 +766,9 @@ XrResult WINAPI xrPollEvent(XrInstance instance, XrEventDataBuffer *eventData) {
 XrResult WINAPI xrGetSystem(XrInstance instance, const XrSystemGetInfo *getInfo, XrSystemId *systemId) {
   wine_XrInstance *wine_instance = wine_instance_from_handle(instance);
   struct xrGetSystem_params params = {.instance = instance, .getInfo = getInfo, .systemId = systemId};
-  NTSTATUS _status;
 
   TRACE("%p, %p, %p\n", instance, getInfo, systemId);
-  _status = UNIX_CALL(xrGetSystem, &params);
-  assert(!_status && "xrGetSystem");
+  UNIX_CALL_CHECKED(xrGetSystem, &params);
   if (params.result != XR_SUCCESS) {
     return params.result;
   }
@@ -924,13 +911,11 @@ XrResult WINAPI xrEnumerateSwapchainFormats(XrSession session,
       .formatCountOutput = formatCountOutput,
       .formats = formats,
   };
-  NTSTATUS _status;
 
   TRACE("%p, %u, %p, %p\n", session, formatCapacityInput, formatCountOutput, formats);
 
   if (wine_session->session_type != SESSION_TYPE_D3D11 && wine_session->session_type != SESSION_TYPE_D3D12) {
-    _status = UNIX_CALL(xrEnumerateSwapchainFormats, &params);
-    assert(!_status && "xrEnumerateSwapchainFormats");
+    UNIX_CALL_CHECKED(xrEnumerateSwapchainFormats, &params);
     return params.result;
   }
 
@@ -938,8 +923,7 @@ XrResult WINAPI xrEnumerateSwapchainFormats(XrSession session,
   params.formatCountOutput = &real_format_count;
   params.formats = NULL;
 
-  _status = UNIX_CALL(xrEnumerateSwapchainFormats, &params);
-  assert(!_status && "xrEnumerateSwapchainFormats");
+  UNIX_CALL_CHECKED(xrEnumerateSwapchainFormats, &params);
   if (params.result != XR_SUCCESS) {
     return params.result;
   }
@@ -949,8 +933,7 @@ XrResult WINAPI xrEnumerateSwapchainFormats(XrSession session,
   params.formatCapacityInput = real_format_count;
   params.formats = real_formats;
 
-  _status = UNIX_CALL(xrEnumerateSwapchainFormats, &params);
-  assert(!_status && "xrEnumerateSwapchainFormats");
+  UNIX_CALL_CHECKED(xrEnumerateSwapchainFormats, &params);
   if (params.result != XR_SUCCESS) {
     goto done;
   }
@@ -985,7 +968,6 @@ XrResult WINAPI xrCreateSwapchain(XrSession session, const XrSwapchainCreateInfo
   XrSwapchainCreateInfo our_createInfo = *createInfo;
   struct xrCreateSwapchain_params params = {
       .session = session, .createInfo = &our_createInfo, .swapchain = &wine_swapchain->host_swapchain};
-  NTSTATUS _status;
 
   wine_swapchain->create_info = *createInfo;
 
@@ -1011,8 +993,7 @@ XrResult WINAPI xrCreateSwapchain(XrSession session, const XrSwapchainCreateInfo
     }
   }
 
-  _status = UNIX_CALL(xrCreateSwapchain, &params);
-  assert(!_status && "xrCreateSwapchain");
+  UNIX_CALL_CHECKED(xrCreateSwapchain, &params);
   if (params.result != XR_SUCCESS) {
     WARN("xrCreateSwapchain failed: %d\n", params.result);
     free(wine_swapchain);
@@ -1049,12 +1030,10 @@ static void release_d3d12_resources(wine_XrSwapchain *swapchain, uint32_t image_
 XrResult WINAPI xrDestroySwapchain(XrSwapchain swapchain) {
   wine_XrSwapchain *wine_swapchain = wine_swapchain_from_handle(swapchain);
   struct xrDestroySwapchain_params params = {.swapchain = swapchain};
-  NTSTATUS _status;
 
   TRACE("%p\n", swapchain);
 
-  _status = UNIX_CALL(xrDestroySwapchain, &params);
-  assert(!_status && "xrDestroySwapchain");
+  UNIX_CALL_CHECKED(xrDestroySwapchain, &params);
   if (params.result != XR_SUCCESS) {
     WARN("xrDestroySwapchain failed: %d\n", params.result);
     return params.result;
@@ -1166,13 +1145,11 @@ XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
       .imageCountOutput = imageCountOutput,
       .images = images,
   };
-  NTSTATUS _status;
 
   TRACE("%p, %u, %p, %p\n", swapchain, imageCapacityInput, imageCountOutput, images);
   if (wine_swapchain->session->session_type != SESSION_TYPE_D3D11 &&
       wine_swapchain->session->session_type != SESSION_TYPE_D3D12) {
-    _status = UNIX_CALL(xrEnumerateSwapchainImages, &params);
-    assert(!_status && "xrEnumerateSwapchainImages");
+    UNIX_CALL_CHECKED(xrEnumerateSwapchainImages, &params);
     return params.result;
   }
 
@@ -1181,8 +1158,7 @@ XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
     params.imageCapacityInput = 0;
     params.imageCountOutput = &image_count;
     params.images = NULL;
-    _status = UNIX_CALL(xrEnumerateSwapchainImages, &params);
-    assert(!_status && "xrEnumerateSwapchainImages");
+    UNIX_CALL_CHECKED(xrEnumerateSwapchainImages, &params);
     if (params.result != XR_SUCCESS) {
       return params.result;
     }
@@ -1195,8 +1171,7 @@ XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
 
     params.imageCapacityInput = image_count;
     params.images = (XrSwapchainImageBaseHeader *)our_vk;
-    _status = UNIX_CALL(xrEnumerateSwapchainImages, &params);
-    assert(!_status && "xrEnumerateSwapchainImages");
+    UNIX_CALL_CHECKED(xrEnumerateSwapchainImages, &params);
     if (params.result != XR_SUCCESS) {
       free(our_vk);
       return params.result;
@@ -1378,7 +1353,6 @@ XrResult WINAPI xrAcquireSwapchainImage(XrSwapchain swapchain,
       .acquireInfo = acquireInfo,
       .index = index,
   };
-  NTSTATUS _status;
 
   TRACE("%p, %p, %p image count %d, acquired %d\n", swapchain, acquireInfo, index, wine_swapchain->image_count,
         wine_swapchain->acquired_count);
@@ -1391,8 +1365,7 @@ XrResult WINAPI xrAcquireSwapchainImage(XrSwapchain swapchain,
 
   lock_d3d_queue(wine_instance, FALSE);
 
-  _status = UNIX_CALL(xrAcquireSwapchainImage, &params);
-  assert(!_status && "xrAcquireSwapchainImage");
+  UNIX_CALL_CHECKED(xrAcquireSwapchainImage, &params);
 
   if (!wine_instance->d3d12_device) {
     unlock_d3d_queue(wine_instance, FALSE);
@@ -1431,7 +1404,6 @@ XrResult WINAPI xrReleaseSwapchainImage(XrSwapchain swapchain, const XrSwapchain
       .swapchain = swapchain,
       .releaseInfo = releaseInfo,
   };
-  NTSTATUS _status;
 
   TRACE("%p, %p\n", swapchain, releaseInfo);
 
@@ -1457,8 +1429,7 @@ XrResult WINAPI xrReleaseSwapchainImage(XrSwapchain swapchain, const XrSwapchain
     }
   }
 
-  _status = UNIX_CALL(xrReleaseSwapchainImage, &params);
-  assert(!_status && "xrReleaseSwapchainImage");
+  UNIX_CALL_CHECKED(xrReleaseSwapchainImage, &params);
   if (!wine_instance->d3d12_device) {
     unlock_d3d_queue(wine_instance, TRUE);
     return params.result;
@@ -1488,13 +1459,11 @@ XrResult WINAPI xrBeginFrame(XrSession session, const XrFrameBeginInfo *frameBeg
       .session = session,
       .frameBeginInfo = frameBeginInfo,
   };
-  NTSTATUS _status;
 
   TRACE("%p, %p\n", session, frameBeginInfo);
 
   lock_d3d_queue(wine_session->instance, FALSE);
-  _status = UNIX_CALL(xrBeginFrame, &params);
-  assert(!_status && "xrBeginFrame");
+  UNIX_CALL_CHECKED(xrBeginFrame, &params);
   unlock_d3d_queue(wine_session->instance, FALSE);
   return params.result;
 }
@@ -1640,7 +1609,6 @@ XrResult WINAPI xrEndFrame(XrSession session, const XrFrameEndInfo *frameEndInfo
       .frameEndInfo = &our_frameEndInfo,
   };
   uint32_t i, view_idx = 0, view_info_idx = 0;
-  NTSTATUS _status;
 
   TRACE("%p, %p\n", session, frameEndInfo);
 
@@ -1662,8 +1630,7 @@ XrResult WINAPI xrEndFrame(XrSession session, const XrFrameEndInfo *frameEndInfo
   our_frameEndInfo.layers = (const XrCompositionLayerBaseHeader *const *)wine_session->composition_layer_ptrs;
 
   lock_d3d_queue(wine_session->instance, FALSE);
-  _status = UNIX_CALL(xrEndFrame, &params);
-  assert(!_status && "xrEndFrame");
+  UNIX_CALL_CHECKED(xrEndFrame, &params);
 
   unlock_d3d_queue(wine_session->instance, FALSE);
   return params.result;
@@ -1835,12 +1802,10 @@ XrResult WINAPI xrGetInstanceProcAddr(XrInstance instance, const char *fn_name, 
     .instance = instance,
     .name = fn_name,
   };
-  NTSTATUS _status;
 
   TRACE("%s\n", fn_name);
 
-  _status = UNIX_CALL(is_available_instance_function, &params);
-  assert(!_status && "is_available_instance_function");
+  UNIX_CALL_CHECKED(is_available_instance_function, &params);
 
   if (params.ret)
   {
@@ -1901,7 +1866,6 @@ XrResult WINAPI xrNegotiateLoaderRuntimeInterface(const XrNegotiateLoaderInfo *i
 XrResult WINAPI xrGetVulkanDeviceExtensionsKHR(XrInstance instance, XrSystemId systemId, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, char *buffer)
 {
     struct xrGetVulkanDeviceExtensionsKHR_params params;
-    NTSTATUS _status;
 
     /* Even while returning fixed string still call the host function, that is a part of OpenXR over Vulkan
      * expected initialization sequence. */
@@ -1910,8 +1874,7 @@ XrResult WINAPI xrGetVulkanDeviceExtensionsKHR(XrInstance instance, XrSystemId s
     params.bufferCapacityInput = bufferCapacityInput;
     params.bufferCountOutput = bufferCountOutput;
     params.buffer = buffer;
-    _status = UNIX_CALL(xrGetVulkanDeviceExtensionsKHR, &params);
-    assert(!_status && "xrGetVulkanDeviceExtensionsKHR");
+    UNIX_CALL_CHECKED(xrGetVulkanDeviceExtensionsKHR, &params);
 
     if (params.result == XR_SUCCESS && bufferCapacityInput)
     {

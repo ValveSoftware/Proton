@@ -123,5 +123,14 @@ struct openxr_func {
 };
 
 #define UNIX_CALL(code, params) WINE_UNIX_CALL(unix_##code, params)
+#define UNIX_CALL_CHECKED(code, params)                           \
+    do {                                                          \
+        NTSTATUS status = UNIX_CALL(code, params);                \
+        if (status)                                               \
+        {                                                         \
+            ERR("Exception %#lx in Unix call.\n", status);        \
+            ExitProcess(3);                                       \
+        }                                                         \
+    } while (0)
 
 #endif /* __WINE_OPENXR_LOADER_H */
