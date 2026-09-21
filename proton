@@ -1265,9 +1265,6 @@ def default_compat_config():
     if "SteamAppId" in os.environ:
         appid = os.environ["SteamAppId"]
         if appid in [
-                #affected by CW bug 19741
-                "1017900", #Age of Empires: Definitive Edition
-
                 #affected by CW bug 20240
                 "1331440", #FUSER
 
