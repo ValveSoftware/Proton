@@ -111,18 +111,18 @@ static BOOL get_vulkan_extensions(void) {
   HKEY vr_key;
 
   if ((status = RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Wine\\VR", 0, KEY_READ, &vr_key))) {
-    ERR("Could not create key, status %#x.\n", status);
+    ERR("Could not create key, status %#lx.\n", status);
     return FALSE;
   }
 
   size = sizeof(value);
   if ((status = RegQueryValueExA(vr_key, "state", NULL, &type, (BYTE *)&value, &size))) {
-    ERR("Could not query value, status %#x.\n", status);
+    ERR("Could not query value, status %#lx.\n", status);
     RegCloseKey(vr_key);
     return FALSE;
   }
   if (type != REG_DWORD) {
-    ERR("Unexpected value type %#x.\n", type);
+    ERR("Unexpected value type %#lx.\n", type);
     RegCloseKey(vr_key);
     return FALSE;
   }
@@ -140,7 +140,7 @@ static BOOL get_vulkan_extensions(void) {
     }
     size = sizeof(value);
     if ((status = RegQueryValueExA(vr_key, "state", NULL, &type, (BYTE *)&value, &size))) {
-      ERR("Could not query value, status %#x.\n", status);
+      ERR("Could not query value, status %#lx.\n", status);
       CloseHandle(event);
       goto done;
     }
@@ -152,7 +152,7 @@ static BOOL get_vulkan_extensions(void) {
     }
 
     if (wait_status != WAIT_OBJECT_0) {
-      ERR("Got unexpected wait status %#x.\n", wait_status);
+      ERR("Got unexpected wait status %#lx.\n", wait_status);
       break;
     }
   }
@@ -161,36 +161,36 @@ static BOOL get_vulkan_extensions(void) {
 done:
   if (value == 1) {
     if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_instance_extensions", NULL, &type, NULL, &size))) {
-      ERR("Error getting openxr_vulkan_instance_extensions, status %#x.\n", status);
+      ERR("Error getting openxr_vulkan_instance_extensions, status %#lx.\n", status);
       RegCloseKey(vr_key);
       return FALSE;
     }
     g_instance_extensions = malloc(size);
     if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_instance_extensions", NULL, &type,
                                    (BYTE *)g_instance_extensions, &size))) {
-      ERR("Error getting openxr_vulkan_instance_extensions, status %#x.\n", status);
+      ERR("Error getting openxr_vulkan_instance_extensions, status %#lx.\n", status);
       RegCloseKey(vr_key);
       return FALSE;
     }
     if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_extensions", NULL, &type, NULL, &size))) {
-      ERR("Error getting openxr_vulkan_device_extensions, status %#x.\n", status);
+      ERR("Error getting openxr_vulkan_device_extensions, status %#lx.\n", status);
       RegCloseKey(vr_key);
       return FALSE;
     }
     g_device_extensions = malloc(size);
     if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_extensions", NULL, &type, (BYTE *)g_device_extensions,
                                    &size))) {
-      ERR("Error getting openxr_vulkan_device_extensions, status %#x.\n", status);
+      ERR("Error getting openxr_vulkan_device_extensions, status %#lx.\n", status);
       RegCloseKey(vr_key);
       return FALSE;
     }
     if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_vid", NULL, &type, (BYTE *)&g_physdev_vid, &size))) {
-      ERR("Error getting openxr_vulkan_device_vid, status: %#x.\n", status);
+      ERR("Error getting openxr_vulkan_device_vid, status: %#lx.\n", status);
       RegCloseKey(vr_key);
       return FALSE;
     }
     if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_pid", NULL, &type, (BYTE *)&g_physdev_pid, &size))) {
-      ERR("Error getting openxr_vulkan_device_pid, status: %#x.\n", status);
+      ERR("Error getting openxr_vulkan_device_pid, status: %#lx.\n", status);
       RegCloseKey(vr_key);
       return FALSE;
     }
@@ -1231,7 +1231,7 @@ XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
           }
           free(our_d3d11);
           free(our_vk);
-          WARN("Failed to create DXVK texture from VkImage: %08x\n", hr);
+          WARN("Failed to create DXVK texture from VkImage: %#lx.\n", hr);
           return XR_ERROR_RUNTIME_FAILURE;
         }
         TRACE("Successfully allocated texture %p\n", our_d3d11[i].texture);
@@ -1258,7 +1258,7 @@ XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
               format_is_depth ? (VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT) : VK_IMAGE_ASPECT_COLOR_BIT,
       };
       if (FAILED(hr)) {
-        ERR("Cannot get vkd3d-proton interface: %08x\n", hr);
+        ERR("Cannot get vkd3d-proton interface: %#lx.\n", hr);
         return XR_ERROR_VALIDATION_FAILURE;
       }
 
@@ -1291,7 +1291,7 @@ XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
         hr = device_ext->lpVtbl->CreateResourceFromBorrowedHandle(device_ext, &desc, our_vk[i].image,
                                                                   &our_d3d12[i].texture);
         if (FAILED(hr)) {
-          ERR("Failed to create vkd3d-proton texture from VkImage: %08x\n", hr);
+          ERR("Failed to create vkd3d-proton texture from VkImage: %#lx.\n", hr);
           succeeded = FALSE;
           break;
         }
@@ -1682,7 +1682,7 @@ XrResult WINAPI xrGetD3D11GraphicsRequirementsKHR(XrInstance instance,
 
   hr = CreateDXGIFactory1(&IID_IDXGIFactory1, (void **)&factory);
   if (FAILED(hr)) {
-    WARN("CreateDXGIFactory1 failed: %08x\n", hr);
+    WARN("CreateDXGIFactory1 failed: %#lx.\n", hr);
     return XR_ERROR_INITIALIZATION_FAILED;
   }
 
@@ -1690,7 +1690,7 @@ XrResult WINAPI xrGetD3D11GraphicsRequirementsKHR(XrInstance instance,
   while ((hr = IDXGIFactory1_EnumAdapters(factory, i++, &adapter)) == S_OK) {
     hr = IDXGIAdapter_GetDesc(adapter, &adapter_desc);
     if (FAILED(hr)) {
-      WARN("GetDesc failed: %08x\n", hr);
+      WARN("GetDesc failed: %#lx.\n", hr);
       IDXGIAdapter_Release(adapter);
       continue;
     }
@@ -1711,14 +1711,14 @@ XrResult WINAPI xrGetD3D11GraphicsRequirementsKHR(XrInstance instance,
 
     hr = IDXGIFactory1_EnumAdapters(factory, 0, &adapter);
     if (FAILED(hr)) {
-      WARN("EnumAdapters(0) failed: %08x\n", hr);
+      WARN("EnumAdapters(0) failed: %#lx.\n", hr);
       IDXGIFactory1_Release(factory);
       return XR_ERROR_INITIALIZATION_FAILED;
     }
 
     hr = IDXGIAdapter_GetDesc(adapter, &adapter_desc);
     if (FAILED(hr)) {
-      WARN("GetDesc(0) failed: %08x\n", hr);
+      WARN("GetDesc(0) failed: %#lx.\n", hr);
       IDXGIAdapter_Release(adapter);
       IDXGIFactory1_Release(factory);
       return XR_ERROR_INITIALIZATION_FAILED;
@@ -1983,7 +1983,7 @@ BOOL CDECL wineopenxr_init_registry(void)
 
     if ((status = RegOpenKeyExA( HKEY_CURRENT_USER, "Software\\Wine\\VR", 0, KEY_ALL_ACCESS, &vr_key )))
     {
-        WARN( "Could not open key, status %#x.\n", status );
+        WARN( "Could not open key, status %#lx.\n", status );
         return FALSE;
     }
 
@@ -1992,16 +1992,16 @@ BOOL CDECL wineopenxr_init_registry(void)
         TRACE( "Got XR extensions.\n" );
         if ((status = RegSetValueExA( vr_key, "openxr_vulkan_instance_extensions", 0, REG_SZ,
                                       (BYTE *)xr_inst_ext, strlen( xr_inst_ext ) + 1 )))
-            ERR( "Could not set openxr_vulkan_instance_extensions value, status %#x.\n", status );
+            ERR( "Could not set openxr_vulkan_instance_extensions value, status %#lx.\n", status );
         if ((status = RegSetValueExA( vr_key, "openxr_vulkan_device_extensions", 0, REG_SZ,
                                       (BYTE *)xr_dev_ext, strlen( xr_dev_ext ) + 1 )))
-            ERR( "Could not set openxr_vulkan_device_extensions value, status %#x.\n", status );
+            ERR( "Could not set openxr_vulkan_device_extensions value, status %#lx.\n", status );
         if ((status = RegSetValueExA( vr_key, "openxr_vulkan_device_vid", 0, REG_DWORD,
                                       (BYTE *)&vid, sizeof(vid) )))
-            ERR( "Could not set openxr_vulkan_device_vid value, status %#x.\n", status );
+            ERR( "Could not set openxr_vulkan_device_vid value, status %#lx.\n", status );
         if ((status = RegSetValueExA( vr_key, "openxr_vulkan_device_pid", 0, REG_DWORD,
                                       (BYTE *)&pid, sizeof(pid) )))
-            ERR( "Could not set openxr_vulkan_device_pid value, status %#x.\n", status );
+            ERR( "Could not set openxr_vulkan_device_pid value, status %#lx.\n", status );
     }
 
     TRACE( "Initialized OpenXR registry entries\n" );
