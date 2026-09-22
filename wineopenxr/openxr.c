@@ -415,13 +415,49 @@ static VkResult WINAPI vk_create_instance_callback(const VkInstanceCreateInfo *c
   return ret;
 }
 
+typedef struct XrVulkanInstanceCreateInfoKHR32
+{
+    XrStructureType type;
+    PTR32 next;
+    XrSystemId DECLSPEC_ALIGN(8) systemId;
+    XrVulkanInstanceCreateFlagsKHR DECLSPEC_ALIGN(8) createFlags;
+    PTR32 pfnGetInstanceProcAddr;
+    PTR32 vulkanCreateInfo;
+    PTR32 vulkanAllocator;
+} XrVulkanInstanceCreateInfoKHR32;
+
+static void convert_XrVulkanInstanceCreateInfoKHR_win32_to_host(const XrVulkanInstanceCreateInfoKHR32 *in, XrVulkanInstanceCreateInfoKHR *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    out->systemId = in->systemId;
+    out->createFlags = in->createFlags;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static VkResult WINAPI vk_create_instance_callback32(const VkInstanceCreateInfo *create_info,
+                                                   const VkAllocationCallbacks *allocator,
+                                                   VkInstance *vk_instance,
+                                                   void *(*pfnGetInstanceProcAddr)(VkInstance, const char *),
+                                                   void *context)
+{
+  struct vk_create_callback_context *c = context;
+  XrVulkanInstanceCreateInfoKHR xr_create_info_host;
+
+  convert_XrVulkanInstanceCreateInfoKHR_win32_to_host((const XrVulkanInstanceCreateInfoKHR32 *)(ULONG_PTR)c->create_info, &xr_create_info_host);
+  c->create_info = (ULONG_PTR)&xr_create_info_host;
+  return vk_create_instance_callback(create_info, allocator, vk_instance, pfnGetInstanceProcAddr, context);
+}
+
 static VkResult WINAPI vk_create_device_callback(VkPhysicalDevice phys_dev,
                                                  const VkDeviceCreateInfo *create_info,
                                                  const VkAllocationCallbacks *allocator,
                                                  VkDevice *vk_device,
                                                  void *(*pfnGetInstanceProcAddr)(VkInstance, const char *),
                                                  void *context) {
-  /* Only Unix calls here, called from the Unix side. */
   struct vk_create_callback_context *c = context;
   XrVulkanDeviceCreateInfoKHR our_create_info;
   VkResult ret;
@@ -436,12 +472,55 @@ static VkResult WINAPI vk_create_device_callback(VkPhysicalDevice phys_dev,
   return ret;
 }
 
+typedef struct XrVulkanDeviceCreateInfoKHR32
+{
+    XrStructureType type;
+    PTR32 next;
+    XrSystemId DECLSPEC_ALIGN(8) systemId;
+    XrVulkanDeviceCreateFlagsKHR DECLSPEC_ALIGN(8) createFlags;
+    PTR32 pfnGetInstanceProcAddr;
+    PTR32 vulkanPhysicalDevice;
+    PTR32 vulkanCreateInfo;
+    PTR32 vulkanAllocator;
+} XrVulkanDeviceCreateInfoKHR32;
+
+static void convert_XrVulkanDeviceCreateInfoKHR_win32_to_host(const XrVulkanDeviceCreateInfoKHR32 *in, XrVulkanDeviceCreateInfoKHR *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    out->systemId = in->systemId;
+    out->createFlags = in->createFlags;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static VkResult WINAPI vk_create_device_callback32(VkPhysicalDevice phys_dev,
+                                                 const VkDeviceCreateInfo *create_info,
+                                                 const VkAllocationCallbacks *allocator,
+                                                 VkDevice *vk_device,
+                                                 void *(*pfnGetInstanceProcAddr)(VkInstance, const char *),
+                                                 void *context)
+{
+  struct vk_create_callback_context *c = context;
+  XrVulkanDeviceCreateInfoKHR xr_create_info_host;
+
+  convert_XrVulkanDeviceCreateInfoKHR_win32_to_host((const XrVulkanDeviceCreateInfoKHR32 *)(ULONG_PTR)c->create_info, &xr_create_info_host);
+  c->create_info = (ULONG_PTR)&xr_create_info_host;
+  return vk_create_device_callback(phys_dev, create_info, allocator, vk_device, pfnGetInstanceProcAddr, context);
+}
+
 NTSTATUS init_openxr(void *args) {
   struct init_openxr_params *params = args;
 
+#ifdef _WIN64
   params->create_instance_callback = (UINT64)(ULONG_PTR)&vk_create_instance_callback;
   params->create_device_callback = (UINT64)(ULONG_PTR)&vk_create_device_callback;
-
+#else
+  params->create_instance_callback = (UINT64)(ULONG_PTR)&vk_create_instance_callback32;
+  params->create_device_callback = (UINT64)(ULONG_PTR)&vk_create_device_callback32;
+#endif
   return STATUS_SUCCESS;
 }
 
@@ -455,8 +534,8 @@ NTSTATUS wow64_init_openxr(void *args)
   }
   *params = args;
 
-  params->create_instance_callback = (UINT64)(ULONG_PTR)&vk_create_instance_callback;
-  params->create_device_callback = (UINT64)(ULONG_PTR)&vk_create_device_callback;
+  params->create_instance_callback = (UINT64)(ULONG_PTR)&vk_create_instance_callback32;
+  params->create_device_callback = (UINT64)(ULONG_PTR)&vk_create_device_callback32;
   return STATUS_SUCCESS;
 }
 
