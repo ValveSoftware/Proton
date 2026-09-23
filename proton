@@ -1584,6 +1584,12 @@ class Session:
                 ]:
             self.env["WINE_HIDE_AMD_GPU"] = "1"
 
+        if "WINE_HIDE_AMD_CPU" not in self.env and appid in [
+                    "17300",
+                    "17340",
+                ]:
+            self.env["WINE_HIDE_AMD_CPU"] = "1"
+
         if "WINE_DISABLE_GAMESCOPE_MAX_SIZE_HACK" not in self.env and appid in [
                     "3754990",
                     "3495730"
