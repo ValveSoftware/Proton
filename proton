@@ -5,6 +5,7 @@
 import fcntl
 import array
 import fnmatch
+import filecmp
 import os
 import shutil
 import errno
@@ -200,6 +201,30 @@ def try_copy(src, dst, prefix=None, add_write_perm=True, copy_metadata=False, op
             log('Error while copying to \"' + dst + '\": ' + e.strerror)
         else:
             raise
+
+#rsync-like directory sync, deletes files at dst not present in src
+def dir_sync(dst, src):
+    if not os.path.exists(dst):
+        os.makedirs(dst)
+
+    comp = filecmp.dircmp(src, dst)
+    for f in comp.left_only + comp.diff_files:
+        s = os.path.join(src, f)
+        d = os.path.join(dst, f)
+        if os.path.isdir(s):
+            shutil.copytree(s, d)
+        else:
+            shutil.copy2(s, d, follow_symlinks=False)
+
+    for f in comp.right_only:
+        d = os.path.join(dst, f)
+        if os.path.isdir(d):
+            shutil.rmtree(d)
+        else:
+            os.remove(d)
+
+    for dir in comp.common_dirs:
+        dir_sync(os.path.join(dst, dir), os.path.join(src, dir))
 
 # copy_file_range implementation for old Python versions
 __syscall__copy_file_range = None
@@ -615,6 +640,7 @@ class CompatData:
         self.tracked_files_file = self.path("tracked_files")
         self.prefix_lock = FileLock(self.path("pfx.lock"), timeout=-1)
         self.old_machine_guid = None
+        self.steam_in_pfx_dir = "drive_c/Program Files (x86)/Steam/"
 
     def path(self, d):
         return self.base_dir + d
@@ -1086,8 +1112,7 @@ class CompatData:
 
             with open(self.tracked_files_file, "a") as tracked_files:
                 #copy steam files into place
-                steam_in_pfx_dir = "drive_c/Program Files (x86)/Steam/"
-                makedirs(self.prefix_dir + steam_in_pfx_dir)
+                makedirs(self.prefix_dir + self.steam_in_pfx_dir)
                 filestocopy = [("steamclient.dll", "steamclient.dll"),
                                ("steamclient64.dll", "steamclient64.dll"),
                                ("GameOverlayRenderer64.dll", "GameOverlayRenderer64.dll"),
@@ -1096,7 +1121,7 @@ class CompatData:
                 for (src,tgt) in filestocopy:
                     srcfile = steam_linux_path + '/legacycompat/' + src
                     if os.path.isfile(srcfile):
-                        try_copy(srcfile, steam_in_pfx_dir + tgt, prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
+                        try_copy(srcfile, self.steam_in_pfx_dir + tgt, prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
                 filestocopy = [("steamclient64.dll", "steamclient64.dll"),
                                ("GameOverlayRenderer.dll", "GameOverlayRenderer.dll"),
@@ -1104,16 +1129,12 @@ class CompatData:
                 for (src,tgt) in filestocopy:
                     srcfile = g_proton.path(src)
                     if os.path.isfile(srcfile):
-                        try_copy(srcfile, steam_in_pfx_dir + tgt, prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
-
-                try:
-                    self.create_symlink(self.prefix_dir + steam_in_pfx_dir + 'appcache', steam_linux_path + '/appcache')
-                except: pass
+                        try_copy(srcfile, self.steam_in_pfx_dir + tgt, prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
                 # CW Bug 19152. IL-2 Sturmovik: Cliffs of Dover Blitz Edition needs user's localconfig.vdf
                 if os.environ.get("SteamGameId", 0) == "754530":
                     srcdir = os.path.join(steam_linux_path, 'userdata')
-                    dstdir = os.path.join(self.prefix_dir, steam_in_pfx_dir, 'userdata')
+                    dstdir = os.path.join(self.prefix_dir, self.steam_in_pfx_dir, 'userdata')
                     # figuring out the current user is hard, so copy the config for all users
                     for userid in os.listdir(srcdir):
                         srcvdf = os.path.join(srcdir, userid, 'config', 'localconfig.vdf')
@@ -1250,6 +1271,19 @@ class CompatData:
 
             # add Steam ffmpeg libraries to path
             prepend_to_env_str(g_session.env, ld_path_var, steam_linux_path + "/ubuntu12_64/video/:" + steam_linux_path + "/ubuntu12_32/video/:" + steam_linux_path + "/steamrtarm64/video/", ":")
+
+    def sync_appcache(self):
+        sgi = os.environ.get('SteamGameId', '')
+        if sgi == '':
+            return
+        steam_linux_path = os.environ["STEAM_COMPAT_CLIENT_INSTALL_PATH"]
+        dst = self.prefix_dir + self.steam_in_pfx_dir + 'appcache'
+        try:
+            os.unlink(dst)
+        except: pass
+        try:
+            dir_sync(dst + "/librarycache/" + sgi, steam_linux_path + '/appcache/librarycache/' + sgi)
+        except: pass
 
 def comma_escaped(s):
     escaped = False
@@ -2032,6 +2066,7 @@ class Session:
 
         if update_prefix_files:
             g_compatdata.setup_prefix()
+        g_compatdata.sync_appcache()
 
         if "nod3d11" in self.compat_config:
             self.dlloverrides["d3d11"] = ""
