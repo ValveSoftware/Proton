@@ -2,6 +2,51 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
+/* Some games (e.g. The Forest) call ReleaseRequest more than once on the same
+ * server list request handle, sometimes from different threads. This is
+ * harmless on Windows, but here the handle is our own w_request allocation, so
+ * a second release would pass freed memory to the native client and free it
+ * again. Keep track of live requests and ignore releases of unknown ones. */
+struct live_request
+{
+    struct list entry;
+    struct w_request *request;
+};
+
+static struct list live_requests = LIST_INIT( live_requests );
+static CRITICAL_SECTION live_requests_cs = { NULL, -1, 0, 0, 0, 0 };
+
+static void track_request( struct w_request *request )
+{
+    struct live_request *live;
+
+    if (!(live = HeapAlloc( GetProcessHeap(), 0, sizeof(*live) ))) return;
+    live->request = request;
+
+    EnterCriticalSection( &live_requests_cs );
+    list_add_tail( &live_requests, &live->entry );
+    LeaveCriticalSection( &live_requests_cs );
+}
+
+static BOOL untrack_request( struct w_request *request )
+{
+    struct live_request *live;
+    BOOL found = FALSE;
+
+    EnterCriticalSection( &live_requests_cs );
+    LIST_FOR_EACH_ENTRY( live, &live_requests, struct live_request, entry )
+    {
+        if (live->request != request) continue;
+        list_remove( &live->entry );
+        HeapFree( GetProcessHeap(), 0, live );
+        found = TRUE;
+        break;
+    }
+    LeaveCriticalSection( &live_requests_cs );
+
+    return found;
+}
+
 void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_CancelQuery(struct w_iface *_this, uint32_t eType)
 {
     struct ISteamMatchmakingServers_SteamMatchMakingServers001_CancelQuery_params params =
@@ -38,6 +83,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         return NULL;
     }
 
+    track_request( request );
     return request;
 }
 
@@ -63,6 +109,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         return NULL;
     }
 
+    track_request( request );
     return request;
 }
 
@@ -90,6 +137,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         return NULL;
     }
 
+    track_request( request );
     return request;
 }
 
@@ -117,6 +165,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         return NULL;
     }
 
+    track_request( request );
     return request;
 }
 
@@ -144,6 +193,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         return NULL;
     }
 
+    track_request( request );
     return request;
 }
 
@@ -171,6 +221,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         return NULL;
     }
 
+    track_request( request );
     return request;
 }
 
@@ -196,6 +247,13 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRe
     struct w_request *request = hServerListRequest;
 
     TRACE( "%p %p\n", _this, hServerListRequest );
+
+    if (request && !untrack_request( request ))
+    {
+        WARN( "ignoring release of unknown or already released request %p\n", request );
+        return;
+    }
+
     execute_pending_callbacks(); /* execute any pending callbacks that might still need to use the request */
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest, &params );
@@ -271,6 +329,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_Request
         return NULL;
     }
 
+    track_request( request );
     return request;
 }
 
@@ -296,6 +355,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_Request
         return NULL;
     }
 
+    track_request( request );
     return request;
 }
 
@@ -323,6 +383,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_Request
         return NULL;
     }
 
+    track_request( request );
     return request;
 }
 
@@ -350,6 +411,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_Request
         return NULL;
     }
 
+    track_request( request );
     return request;
 }
 
@@ -377,6 +439,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_Request
         return NULL;
     }
 
+    track_request( request );
     return request;
 }
 
@@ -404,6 +467,7 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_Request
         return NULL;
     }
 
+    track_request( request );
     return request;
 }
 
@@ -429,6 +493,13 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_ReleaseRe
     struct w_request *request = hServerListRequest;
 
     TRACE( "%p %p\n", _this, hServerListRequest );
+
+    if (request && !untrack_request( request ))
+    {
+        WARN( "ignoring release of unknown or already released request %p\n", request );
+        return;
+    }
+
     execute_pending_callbacks(); /* execute any pending callbacks that might still need to use the request */
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers003_ReleaseRequest, &params );
