@@ -47,6 +47,14 @@ RUN apt-get update \
 && rm -rf /opt/usr/share/doc /opt/usr/share/info /opt/usr/share/man \
 && rm -rf /var/lib/apt/lists/*
 
+RUN if [ "$BUILD_ARCH" = x86_64 ]; then apt-get update \
+&& apt-get install -y \
+  libopenblas-dev:i386 \
+  libxpresent-dev:i386 \
+  libcapstone-dev:i386 \
+&& rm -rf /opt/usr/share/doc /opt/usr/share/info /opt/usr/share/man \
+&& rm -rf /var/lib/apt/lists/*; fi
+
 RUN cd /tmp \
 && wget -q @NINJA_URLBASE@/@NINJA_SOURCE@ \
 && echo '@NINJA_SHA256@ @NINJA_SOURCE@' | sha256sum -c - \
