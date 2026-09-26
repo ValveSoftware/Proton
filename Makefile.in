@@ -624,10 +624,10 @@ WINE_aarch64_AUTOCONF_ARGS = \
 
 WINE_i386_AUTOCONF_ARGS += \
   VKD3D_PE_CFLAGS="-I$(VULKAN_HEADERS_i386_DST)/include -I$(VKD3D_i386_DST)/include/vkd3d" \
-  VKD3D_PE_LIBS="-L$(VKD3D_i386_LIBDIR)/vkd3d/i386-windows -l:libvkd3d-1.dll -l:libvkd3d-shader-1.dll -l:libvkd3d-utils-1.dll"
+  VKD3D_PE_LIBS="-L$(VKD3D_i386_LIBDIR) -lvkd3d -lvkd3d-shader -lvkd3d-utils"
 WINE_x86_64_AUTOCONF_ARGS += \
   VKD3D_PE_CFLAGS="-I$(VULKAN_HEADERS_x86_64_DST)/include -I$(VKD3D_x86_64_DST)/include/vkd3d" \
-  VKD3D_PE_LIBS="-L$(VKD3D_x86_64_LIBDIR)/vkd3d/x86_64-windows -l:libvkd3d-1.dll -l:libvkd3d-shader-1.dll -l:libvkd3d-utils-1.dll"
+  VKD3D_PE_LIBS="-L$(VKD3D_x86_64_LIBDIR) -lvkd3d -lvkd3d-shader -lvkd3d-utils"
 
 WINE_DEPENDS = gst_orc gstreamer gst_base ffmpeg openfst kaldi vosk
 WINE_i386_DEPENDS = vkd3d
