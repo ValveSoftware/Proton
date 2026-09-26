@@ -2106,6 +2106,7 @@ class Session:
         append_to_env_str(self.env, "WINEDLLOVERRIDES", s, ";")
 
         if platform.machine() == 'aarch64':
+            self.env.setdefault("FEX_DISKCACHE", "1")
             if os.environ.get("SteamGameId", 0) == "1167630": # Teardown
                 # https://github.com/microsoft/mimalloc/issues/958
                 self.env["MIMALLOC_DISABLE_REDIRECT"] = "1"
