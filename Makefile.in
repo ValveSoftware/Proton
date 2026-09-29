@@ -744,6 +744,16 @@ $(OBJ)/.dxvk-nvapi-post-source:
 
 
 ##
+## igdext_unix
+##
+
+IGDEXT_UNIX_DEPENDS = wine
+
+$(eval $(call rules-source,igdext_unix,$(SRCDIR)/dxvk-igdext/igdext_unix))
+$(eval $(call rules-makedep,igdext_unix,x86_64))
+
+
+##
 ## dxvk-igdext
 ##
 
@@ -1404,7 +1414,7 @@ endif
 ## default_pfx
 ##
 
-default_pfx: wine gst_good gst_bad gst_libav gst_plugins_rs lsteamclient steamexe vrclient wineopenxr $(WINEOPENXR64_JSON) dxvk dxvk-nvapi dxvk-igdext vkd3d-proton
+default_pfx: wine gst_good gst_bad gst_libav gst_plugins_rs lsteamclient steamexe vrclient wineopenxr $(WINEOPENXR64_JSON) dxvk dxvk-nvapi igdext_unix dxvk-igdext vkd3d-proton
 	find $(DST_LIBDIR)/wine -type f -execdir chmod a-w '{}' '+'
 	rm -rf $(abspath $(DIST_PREFIX))
 	rm -rf $(abspath $(DIST_PREFIX_ARM64))
