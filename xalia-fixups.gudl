@@ -3,3 +3,15 @@
 if (class_name == "BmLauncher.FormControls") {
     supported: not child_matches(not supported);
 }
+
+if (class_name == "NxApp" and process_name == "DXMD" and not clipchildren) {
+    application_supports_gamepad: false;
+}
+
+if (class_name.endswith("NxApp") and class_name != "GameNxApp" and clipchildren) {
+    application_supports_gamepad: true;
+}
+
+if (class_name == "NixxesLC2" and clipchildren) {
+    application_supports_gamepad: true;
+}
