@@ -289,6 +289,19 @@ ln -s ../build/current-dev/compile_commands/wine-x86_64/compile_commands.json .
 ```
 
 
+LLM Policy
+----------
+
+Don't use Large Language Models (LLMs) or similar to generate / contribute code
+to this repository or to the Wine submodule (see [upstream LLM
+policy](wine-llm)).
+
+Please also refrain from pasting verbatim LLM output into issues and other
+channels where you communicate with people.
+
+[wine-llm]: https://gitlab.winehq.org/wine/wine/-/wikis/Developer-FAQ
+
+
 Runtime Config Options
 ----------------------
 
