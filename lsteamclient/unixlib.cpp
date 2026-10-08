@@ -935,8 +935,7 @@ static void collapse_path( WCHAR *path, UINT mark )
 static char *get_unix_file_name( const WCHAR *path )
 {
     NTSTATUS status;
-    ULONG size = 256;
-    char *buffer;
+    char *buffer = NULL;
 
     status = ntdll_get_unix_file_name( path, &buffer, FILE_OPEN_IF );
 
