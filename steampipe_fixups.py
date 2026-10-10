@@ -15,7 +15,7 @@ DEFAULT_MANIFEST_NAME = "steampipe_fixups.json"
 
 def usage():
     print("Usage:")
-    print("\t" + sys.argv[0] + "\tprepare\t<path to directory to process>\t[manifest output file]")
+    print("\t" + sys.argv[0] + "\tprocess\t<path to directory to process>\t[manifest output file]")
     print("\t\tProcess the given path and output the manifest file to the given path, or <path/" + DEFAULT_MANIFEST_NAME + "> if unspecified.")
     print("")
     print("\t" + sys.argv[0] + "\trestore\t<path to directory to process>\t[manifest file]")
