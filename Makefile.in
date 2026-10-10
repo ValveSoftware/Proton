@@ -1473,8 +1473,6 @@ module: module32 module64
 else # outside of the container
 ###############################
 
-J := $(shell nproc)
-
 # If CC is coming from make's defaults or nowhere, use our own default.  Otherwise respect environment.
 CCACHE_ENV := $(patsubst %,-e %,$(shell env|cut -d= -f1|grep '^CCACHE_'))
 ifeq ($(ENABLE_CCACHE),1)
@@ -1496,6 +1494,45 @@ ifeq ($(CONTAINER_ENGINE),)
 	CONTAINER_ENGINE := docker
 endif
 
+# Container build parallelism heuristic.
+#
+# The previous "J := $(shell nproc)" assumed the host's core count is the binding
+# constraint. In a container it is usually memory: sub-modules such as kaldi's
+# nnet2/decoder and dxvk's d3d11 peak near 1GB of RAM per compiland, so on a
+# memory-constrained host -j<ncpu> lets the OOM killer take out compilers at
+# random. That surfaces as "cc1plus: fatal error: Killed signal terminated
+# program" and an unrelated-looking "Error 1" thousands of lines from the cause.
+#
+# Default to one job per GiB of container memory, capped by the core count, and
+# say so when that bites. Only differs from nproc on hosts with less than 1GiB
+# per core; if the engine cannot be reached we fall back to the core count.
+# Override with 'make J=N'.
+J := $(shell \
+	cpus=$$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1); \
+	mem=$$($(CONTAINER_ENGINE) info --format '{{json .}}' 2>/dev/null \
+	       | tr ',{' '\n\n' \
+	       | sed -n 's/.*"[Mm]em[Tt]otal": *\([0-9][0-9]*\).*/\1/p' | head -1); \
+	jobs=$$cpus; \
+	if [ -n "$$mem" ] && [ "$$mem" -gt 0 ] 2>/dev/null; then \
+	    memgib=$$(( mem / 1073741824 )); \
+	    [ $$memgib -lt 1 ] && memgib=1; \
+	    if [ $$memgib -lt $$cpus ]; then \
+	        jobs=$$memgib; \
+	        echo ":: limiting to -j$$jobs ($$memgib GiB container memory)" >&2; \
+	    fi; \
+	fi; \
+	echo $$jobs)
+
+# GNU make 4.x keeps an explicit -jN count in MAKEFLAGS so it survives into the
+# container; GNU make 3.81 (still shipped by macOS) records only a bare "-j" and
+# keeps the count in the jobserver, so -jN arrives unbounded. Harmless on Linux,
+# a good way to OOM a small VM elsewhere, so warn rather than override the user.
+#
+# Deliberately recursive (=), not simple (:=): make 3.81 leaves MAKEFLAGS empty
+# until recipe-expansion time, so a parse-time test would never see the -j.
+J_HOST_OS := $(shell uname)
+J_WARNING = $(if $(filter-out Linux,$(J_HOST_OS)),$(if $(findstring j,$(MAKEFLAGS)),@echo >&2 ":: warning: -j may reach the container unbounded on $(J_HOST_OS) -- use J=N to bound it or omit -j to auto-size to -j$(J)"))
+
 DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPTS) -v $(OBJ):$(OBJ)$(CONTAINER_MOUNT_OPTS) \
                 -w $(OBJ) -e MAKEFLAGS \
                 $(DOCKER_OPTS) $(STEAMRT_IMAGE)
@@ -1504,6 +1541,7 @@ DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPT
 .DEFAULT dist deploy redist symstore-tarball:
 	if [ "$(ENABLE_CCACHE)" -eq "1" ]; then mkdir -p $(CCACHE_DIR); fi
 	mkdir -p $(CARGO_HOME)
+	$(J_WARNING)
 	$(DOCKER_BASE) $(MAKE) -j$(J) $(filter -j%,$(MAKEFLAGS)) -f $(firstword $(MAKEFILE_LIST)) $(MFLAGS) $(MAKEOVERRIDES) CONTAINER=1 $@
 
 
