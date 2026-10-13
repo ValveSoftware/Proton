@@ -161,11 +161,13 @@ done:
       RegCloseKey(vr_key);
       return FALSE;
     }
+    size = sizeof(g_physdev_vid);
     if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_vid", NULL, &type, (BYTE *)&g_physdev_vid, &size))) {
       ERR("Error getting openxr_vulkan_device_vid, status: %#lx.\n", status);
       RegCloseKey(vr_key);
       return FALSE;
     }
+    size = sizeof(g_physdev_pid);
     if ((status = RegQueryValueExA(vr_key, "openxr_vulkan_device_pid", NULL, &type, (BYTE *)&g_physdev_pid, &size))) {
       ERR("Error getting openxr_vulkan_device_pid, status: %#lx.\n", status);
       RegCloseKey(vr_key);
