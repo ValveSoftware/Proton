@@ -102,10 +102,10 @@ def file_is_wine_builtin_dll(path):
     if not file_exists(path, follow_symlinks=True):
         return False
     try:
-        sfile = open(path, "rb")
-        sfile.seek(0x40)
-        tag = sfile.read(20)
-        return tag.startswith((b"Wine placeholder DLL", b"Wine builtin DLL"))
+        with open(path, "rb") as sfile:
+            sfile.seek(0x40)
+            tag = sfile.read(20)
+            return tag.startswith((b"Wine placeholder DLL", b"Wine builtin DLL"))
     except IOError:
         return False
 
