@@ -1407,32 +1407,6 @@ def default_compat_config():
             ret.add("disablenvapi")
 
         if appid in [
-                "1808500", #ARC Raiders
-                "2073850", #The Finals
-                "108710", #Alan Wake
-                "202750", #Alan Wake's American Nightmare
-                "505170", #Carmageddon: Max Damage
-                "255220", #GRID Autosport
-                "44350", #GRID 2
-                "407810", #Hard Reset Redux
-                "233130", #Shadow Warrior
-                "2067160", #Simulakros
-                "2621010", #Simulakros Demo
-                "368500", #Assassin's Creed Syndicate
-                "1524630", #KeepUp Survival
-                "1233570", #Mirror's Edge Catalyst
-                "292030", #The Witcher 3: Wild Hunt - Remastered
-                ]:
-            try:
-                with open('/proc/modules') as f:
-                    drivers = set([line.partition(' ')[0] for line in f.read().splitlines()])
-                    if not drivers.intersection({'nvidia', 'nouveau', 'nova'}):
-                        ret.add("disablenvapi")
-            except OSError:
-                ret.add("disablenvapi")
-
-
-        if appid in [
                 "2698940", #The Crew Motorfest
                 ]:
             ret.add("hidenvgpu")
@@ -2070,6 +2044,20 @@ class Session:
             self.remote_debug_cmd = shlex.split(self.env["PROTON_REMOTE_DEBUG_CMD"])
         else:
             self.remote_debug_cmd = None
+
+        if ("disablenvapi" not in self.compat_config) and ("forcenvapi" not in self.compat_config):
+            try:
+                with open('/proc/modules') as f:
+                    drivers = set([line.partition(' ')[0] for line in f.read().splitlines()])
+                    if not drivers.intersection({'nvidia', 'nouveau', 'nova'}):
+                        if self.log_file is not None:
+                            self.log_file.write("No NV driver found, disabling nvapi\n")
+                        self.compat_config.add("disablenvapi")
+            except:
+                if self.log_file is not None:
+                    self.log_file.write("Error: unable to check /proc/modules for NV driver presence\n")
+            if self.log_file is not None:
+                self.log_file.flush()
 
         if update_prefix_files:
             g_compatdata.setup_prefix()
