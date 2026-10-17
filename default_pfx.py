@@ -117,6 +117,18 @@ def fixup_drive_links(default_pfx_dir):
             if ":" in dir_:
                 os.remove(os.path.join(walk_dir, dir_))
 
+# normalize driverstore hierarchy to CamelCase DriverStore/FileRepository
+# to satisfy case-sensitive Intel igdext loader (wcsstr) and avoid case collision
+def fixup_driverstore(default_pfx_dir):
+    legacy_store = os.path.join(default_pfx_dir, "drive_c/windows/system32/driverstore")
+    camel_store = os.path.join(default_pfx_dir, "drive_c/windows/system32/DriverStore")
+    if os.path.isdir(legacy_store) and not os.path.isdir(camel_store):
+        lower_repo = os.path.join(legacy_store, "filerepository")
+        camel_repo = os.path.join(legacy_store, "FileRepository")
+        if os.path.isdir(lower_repo) and not os.path.isdir(camel_repo):
+            os.rename(lower_repo, camel_repo)
+        os.rename(legacy_store, camel_store)
+
 def make_default_pfx(default_pfx_dir, dist_dir, arm64):
     local_env = dict(os.environ)
     libdir = dist_dir + '/lib/'
@@ -136,6 +148,7 @@ def make_default_pfx(default_pfx_dir, dist_dir, arm64):
         os.path.join(bin_dir, 'wineserver') + " -w"],
 
         env=local_env, check=True)
+    fixup_driverstore(default_pfx_dir)
     setup_dll_symlinks(default_pfx_dir, dist_dir, arm64)
     fixup_drive_links(default_pfx_dir)
 
