@@ -1255,7 +1255,14 @@ class CompatData:
                                  track_file=tracked_files,
                                  link_debug=True)
 
-                intc_store = "drive_c/windows/system32/DriverStore/FileRepository/igd_faux.inf_1"
+                legacy_intc_store = os.path.join(self.prefix_dir, "drive_c/windows/system32/DriverStore")
+                if os.path.isdir(legacy_intc_store) and not os.path.islink(legacy_intc_store):
+                    try:
+                        shutil.rmtree(legacy_intc_store, ignore_errors=True)
+                    except OSError:
+                        pass
+
+                intc_store = "drive_c/windows/system32/driverstore/filerepository/igd_faux.inf_1"
                 makedirs(os.path.join(self.prefix_dir, intc_store))
                 try_copy(g_proton.arch_pe_dir("wine/igdext", False) + "igdext64.dll",
                          intc_store,
