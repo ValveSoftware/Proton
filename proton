@@ -1255,7 +1255,44 @@ class CompatData:
                                  track_file=tracked_files,
                                  link_debug=True)
 
+                # The Intel igdext loader in d3dext-sdk is case-sensitive and checks for
+                # L"DriverStore\\FileRepository". Unify any lowercase driverstore from Wine
+                # into CamelCase DriverStore to satisfy the loader while avoiding duplicate
+                # folders that collide during Steam's library move.
                 intc_store = "drive_c/windows/system32/DriverStore/FileRepository/igd_faux.inf_1"
+                camel_store = os.path.join(self.prefix_dir, "drive_c/windows/system32/DriverStore")
+                camel_repo = os.path.join(camel_store, "FileRepository")
+
+                legacy_lower_store = os.path.join(self.prefix_dir, "drive_c/windows/system32/driverstore")
+                if os.path.isdir(legacy_lower_store) and not os.path.islink(legacy_lower_store):
+                    if not (os.path.isdir(camel_store) and os.path.samefile(legacy_lower_store, camel_store)):
+                        try:
+                            lower_repo = os.path.join(legacy_lower_store, "filerepository")
+                            if os.path.isdir(lower_repo) and not os.path.islink(lower_repo):
+                                makedirs(camel_repo)
+                                for entry in os.listdir(lower_repo):
+                                    src_entry = os.path.join(lower_repo, entry)
+                                    dst_entry = os.path.join(camel_repo, entry)
+                                    if os.path.isdir(src_entry) and not os.path.islink(src_entry):
+                                        makedirs(dst_entry)
+                                        for f in os.listdir(src_entry):
+                                            src_f = os.path.join(src_entry, f)
+                                            dst_f = os.path.join(dst_entry, f)
+                                            if not file_exists(dst_f, follow_symlinks=False):
+                                                shutil.move(src_f, dst_f)
+                                    elif not file_exists(dst_entry, follow_symlinks=False):
+                                        shutil.move(src_entry, dst_entry)
+                            for entry in os.listdir(legacy_lower_store):
+                                if entry == "filerepository":
+                                    continue
+                                src_entry = os.path.join(legacy_lower_store, entry)
+                                dst_entry = os.path.join(camel_store, entry)
+                                if not file_exists(dst_entry, follow_symlinks=False):
+                                    shutil.move(src_entry, dst_entry)
+                            shutil.rmtree(legacy_lower_store, ignore_errors=True)
+                        except OSError:
+                            pass
+
                 makedirs(os.path.join(self.prefix_dir, intc_store))
                 try_copy(g_proton.arch_pe_dir("wine/igdext", False) + "igdext64.dll",
                          intc_store,
