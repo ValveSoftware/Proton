@@ -341,7 +341,8 @@ XrResult WINAPI wine_xrGetVulkanInstanceExtensionsKHR(XrInstance instance,
   static const char win32_surface[] = "VK_KHR_surface VK_KHR_win32_surface";
 
   XrResult res;
-  uint32_t lin_len;
+  char internal_exts[4096];
+  uint32_t size;
 
   TRACE("%p, 0x%s, %u, %p, %p\n", (void *)(uintptr_t)instance, wine_dbgstr_longlong(systemId), bufferCapacityInput, bufferCountOutput,
         buffer);
@@ -351,27 +352,26 @@ XrResult WINAPI wine_xrGetVulkanInstanceExtensionsKHR(XrInstance instance,
    * add it here. */
 
   res = g_xr_host_instance_dispatch_table.p_xrGetVulkanInstanceExtensionsKHR(
-      wine_instance_from_handle(instance)->host_instance, systemId, bufferCapacityInput, bufferCountOutput, buffer);
-  if (res == XR_SUCCESS) {
-    if (bufferCapacityInput > 0) {
-      /* *bufferCountOutput is not required to (and sometimes does not) contain the offset to the NUL byte */
-      lin_len = strlen(buffer) + 1;
+      wine_instance_from_handle(instance)->host_instance, systemId, sizeof(internal_exts),
+      &size, internal_exts);
 
-      if (bufferCapacityInput < lin_len + sizeof(win32_surface)) {
-        return XR_ERROR_SIZE_INSUFFICIENT;
-      }
-
-      buffer[lin_len - 1] = ' ';
-      memcpy(&buffer[lin_len], win32_surface, sizeof(win32_surface));
-
-      TRACE("returning: %s\n", buffer);
-      *bufferCountOutput = lin_len + sizeof(win32_surface);
-    } else {
-      *bufferCountOutput += sizeof(win32_surface) /* NUL byte included for required ' ' */;
-    }
+  if (res)
+  {
+    ERR("params.result %d, size %u.\n", res, size);
+    return res;
   }
 
-  return res;
+  size = strlen(internal_exts) + 1;
+  internal_exts[size - 1] = ' ';
+  memcpy(&internal_exts[size], win32_surface, sizeof(win32_surface));
+  size = strlen(internal_exts) + 1;
+
+  *bufferCountOutput = size;
+  if (bufferCapacityInput < size)
+    return bufferCapacityInput ? XR_ERROR_SIZE_INSUFFICIENT : XR_SUCCESS;
+  memcpy(buffer, internal_exts, size);
+  TRACE("returning: %s\n", buffer);
+  return XR_SUCCESS;
 }
 
 static VkResult WINAPI vk_create_instance_callback(const VkInstanceCreateInfo *create_info,

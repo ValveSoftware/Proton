@@ -1630,30 +1630,33 @@ XrResult WINAPI xrNegotiateLoaderRuntimeInterface(const XrNegotiateLoaderInfo *i
 XrResult WINAPI xrGetVulkanDeviceExtensionsKHR(XrInstance instance, XrSystemId systemId, uint32_t bufferCapacityInput, uint32_t *bufferCountOutput, char *buffer)
 {
     struct xrGetVulkanDeviceExtensionsKHR_params params;
+    char internal_exts[4096];
+    uint32_t size;
 
     /* Even while returning fixed string still call the host function, that is a part of OpenXR over Vulkan
      * expected initialization sequence. */
     params.instance = instance;
     params.systemId = systemId;
-    params.bufferCapacityInput = bufferCapacityInput;
-    params.bufferCountOutput = bufferCountOutput;
-    params.buffer = buffer;
+    params.bufferCapacityInput = bufferCapacityInput ? sizeof(internal_exts) : 0;
+    params.bufferCountOutput = &size;
+    params.buffer = bufferCapacityInput ? internal_exts : NULL;
     UNIX_CALL_CHECKED(xrGetVulkanDeviceExtensionsKHR, &params);
 
-    if (params.result == XR_SUCCESS && bufferCapacityInput)
+    if (params.result)
     {
-        __wine_set_unix_env(WINE_VULKAN_DEVICE_VARIABLE, buffer);
-        strcpy(buffer, WINE_VULKAN_DEVICE_EXTENSION_NAME);
-        *bufferCountOutput = sizeof(WINE_VULKAN_DEVICE_EXTENSION_NAME);
-        TRACE("returning %s.\n", buffer);
-    }
-    else if ((params.result == XR_SUCCESS || params.result == XR_ERROR_SIZE_INSUFFICIENT)
-            && *bufferCountOutput < sizeof(WINE_VULKAN_DEVICE_EXTENSION_NAME))
-    {
-        *bufferCountOutput = sizeof(WINE_VULKAN_DEVICE_EXTENSION_NAME);
+      ERR("params.result %d, size %u.\n", params.result, size);
+      return params.result;
     }
 
-    return params.result;
+    *bufferCountOutput = sizeof(WINE_VULKAN_DEVICE_EXTENSION_NAME);
+
+    if (bufferCapacityInput < *bufferCountOutput)
+      return bufferCapacityInput ? XR_ERROR_SIZE_INSUFFICIENT : XR_SUCCESS;
+
+    __wine_set_unix_env(WINE_VULKAN_DEVICE_VARIABLE, internal_exts);
+    strcpy(buffer, WINE_VULKAN_DEVICE_EXTENSION_NAME);
+    TRACE("returning %s.\n", buffer);
+    return XR_SUCCESS;
 }
 
 
