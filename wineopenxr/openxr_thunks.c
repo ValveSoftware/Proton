@@ -711,6 +711,50 @@ typedef struct XrApiLayerProperties32
     char description[XR_MAX_API_LAYER_DESCRIPTION_SIZE];
 } XrApiLayerProperties32;
 
+typedef struct XrAppConsumedSwapchainCreateInfoEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    XrAppConsumedSwapchainKindEXT kind;
+    XrSwapchainUsageFlags DECLSPEC_ALIGN(8) usageFlags;
+    int64_t DECLSPEC_ALIGN(8) format;
+} XrAppConsumedSwapchainCreateInfoEXT32;
+
+typedef struct XrAppConsumedSwapchainImageAcquireInfoEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+} XrAppConsumedSwapchainImageAcquireInfoEXT32;
+
+typedef struct XrAppConsumedSwapchainImageReleaseInfoEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+} XrAppConsumedSwapchainImageReleaseInfoEXT32;
+
+typedef struct XrAppConsumedSwapchainImageStateEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    XrBool32 ready;
+    XrBool32 unchanged;
+    uint32_t imageIndex;
+} XrAppConsumedSwapchainImageStateEXT32;
+
+typedef struct XrAppConsumedSwapchainPropertiesEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    XrSwapchainUsageFlags DECLSPEC_ALIGN(8) usageFlags;
+    int64_t DECLSPEC_ALIGN(8) format;
+    uint32_t sampleCount;
+    uint32_t width;
+    uint32_t height;
+    uint32_t faceCount;
+    uint32_t arraySize;
+    uint32_t mipCount;
+} XrAppConsumedSwapchainPropertiesEXT32;
+
 typedef struct XrAudioBufferBD32
 {
     XrStructureType type;
@@ -4285,6 +4329,15 @@ typedef struct XrSpatialCapabilityConfigurationImageTrackingEXT32
     PTR32 imageTrackingDatabases;
 } XrSpatialCapabilityConfigurationImageTrackingEXT32;
 
+typedef struct XrSpatialCapabilityConfigurationMeshTrackingEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    XrSpatialCapabilityEXT capability;
+    uint32_t enabledComponentCount;
+    PTR32 enabledComponents;
+} XrSpatialCapabilityConfigurationMeshTrackingEXT32;
+
 typedef struct XrSpatialCapabilityConfigurationMicroQrCodeEXT32
 {
     XrStructureType type;
@@ -4304,6 +4357,15 @@ typedef struct XrSpatialCapabilityConfigurationObjectTrackingANDROID32
     uint32_t activeSemanticLabelCount;
     PTR32 activeSemanticLabels;
 } XrSpatialCapabilityConfigurationObjectTrackingANDROID32;
+
+typedef struct XrSpatialCapabilityConfigurationObjectTrackingEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    XrSpatialCapabilityEXT capability;
+    uint32_t enabledComponentCount;
+    PTR32 enabledComponents;
+} XrSpatialCapabilityConfigurationObjectTrackingEXT32;
 
 typedef struct XrSpatialCapabilityConfigurationPlaneTrackingEXT32
 {
@@ -4375,6 +4437,14 @@ typedef struct XrSpatialComponentImage2DListEXT32
     PTR32 images;
 } XrSpatialComponentImage2DListEXT32;
 
+typedef struct XrSpatialComponentKeyboardSemanticLabelListEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    uint32_t semanticLabelCount;
+    PTR32 semanticLabels;
+} XrSpatialComponentKeyboardSemanticLabelListEXT32;
+
 typedef struct XrSpatialComponentMarkerListEXT32
 {
     XrStructureType type;
@@ -4399,6 +4469,38 @@ typedef struct XrSpatialComponentMesh3DListEXT32
     PTR32 meshes;
 } XrSpatialComponentMesh3DListEXT32;
 
+typedef struct XrSpatialComponentMesh3DNormalsListEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    uint32_t meshNormalsCount;
+    PTR32 meshNormals;
+} XrSpatialComponentMesh3DNormalsListEXT32;
+
+typedef struct XrSpatialComponentMesh3DTriangleSemanticLabelsListEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    uint32_t meshSemanticLabelsCount;
+    PTR32 meshSemanticLabels;
+} XrSpatialComponentMesh3DTriangleSemanticLabelsListEXT32;
+
+typedef struct XrSpatialComponentMesh3DVertexSemanticLabelsListEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    uint32_t meshSemanticLabelsCount;
+    PTR32 meshSemanticLabels;
+} XrSpatialComponentMesh3DVertexSemanticLabelsListEXT32;
+
+typedef struct XrSpatialComponentMouseSemanticLabelListEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    uint32_t semanticLabelCount;
+    PTR32 semanticLabels;
+} XrSpatialComponentMouseSemanticLabelListEXT32;
+
 typedef struct XrSpatialComponentObjectSemanticLabelListANDROID32
 {
     XrStructureType type;
@@ -4406,6 +4508,14 @@ typedef struct XrSpatialComponentObjectSemanticLabelListANDROID32
     uint32_t semanticLabelCount;
     PTR32 semanticLabels;
 } XrSpatialComponentObjectSemanticLabelListANDROID32;
+
+typedef struct XrSpatialComponentObjectSemanticLabelListEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    uint32_t semanticLabelCount;
+    PTR32 semanticLabels;
+} XrSpatialComponentObjectSemanticLabelListEXT32;
 
 typedef struct XrSpatialComponentParentListEXT32
 {
@@ -4430,6 +4540,14 @@ typedef struct XrSpatialComponentPlaneAlignmentListEXT32
     uint32_t planeAlignmentCount;
     PTR32 planeAlignments;
 } XrSpatialComponentPlaneAlignmentListEXT32;
+
+typedef struct XrSpatialComponentPlaneSemanticLabel2ListEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    uint32_t semanticLabelCount;
+    PTR32 semanticLabels;
+} XrSpatialComponentPlaneSemanticLabel2ListEXT32;
 
 typedef struct XrSpatialComponentPlaneSemanticLabelListEXT32
 {
@@ -4745,6 +4863,36 @@ typedef struct XrSpatialEntityUnpersistInfoEXT32
     XrUuid persistUuid;
 } XrSpatialEntityUnpersistInfoEXT32;
 
+typedef struct XrSpatialFeatureObjectSemanticLabelSubsetEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    uint32_t semanticLabelCount;
+    PTR32 semanticLabels;
+} XrSpatialFeatureObjectSemanticLabelSubsetEXT32;
+
+typedef struct XrSpatialFeaturePlaneSemanticLabel2SubsetEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    uint32_t semanticLabelCount;
+    PTR32 semanticLabels;
+} XrSpatialFeaturePlaneSemanticLabel2SubsetEXT32;
+
+typedef struct XrSpatialFeatureTrackWatertightMeshEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    XrBool32 enableWatertightMeshTracking;
+} XrSpatialFeatureTrackWatertightMeshEXT32;
+
+typedef struct XrSpatialFilterArchetypeEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+    XrSpatialArchetypeIdEXT DECLSPEC_ALIGN(8) archetype;
+} XrSpatialFilterArchetypeEXT32;
+
 typedef struct XrSpatialFilterTrackingStateEXT32
 {
     XrStructureType type;
@@ -4918,6 +5066,12 @@ typedef struct XrSwapchainCreateInfoFoveationFB32
     PTR32 next;
     XrSwapchainCreateFoveationFlagsFB DECLSPEC_ALIGN(8) flags;
 } XrSwapchainCreateInfoFoveationFB32;
+
+typedef struct XrSwapchainFormatsEnumerateInfoEXT32
+{
+    XrStructureType type;
+    PTR32 next;
+} XrSwapchainFormatsEnumerateInfoEXT32;
 
 typedef struct XrSwapchainImageAcquireInfo32
 {
@@ -5965,8 +6119,10 @@ typedef union XrSpatialCapabilityConfigurationBaseHeaderEXT32_any
     XrSpatialCapabilityConfigurationArucoMarkerEXT32 _XrSpatialCapabilityConfigurationArucoMarkerEXT32;
     XrSpatialCapabilityConfigurationDepthRaycastANDROID32 _XrSpatialCapabilityConfigurationDepthRaycastANDROID32;
     XrSpatialCapabilityConfigurationImageTrackingEXT32 _XrSpatialCapabilityConfigurationImageTrackingEXT32;
+    XrSpatialCapabilityConfigurationMeshTrackingEXT32 _XrSpatialCapabilityConfigurationMeshTrackingEXT32;
     XrSpatialCapabilityConfigurationMicroQrCodeEXT32 _XrSpatialCapabilityConfigurationMicroQrCodeEXT32;
     XrSpatialCapabilityConfigurationObjectTrackingANDROID32 _XrSpatialCapabilityConfigurationObjectTrackingANDROID32;
+    XrSpatialCapabilityConfigurationObjectTrackingEXT32 _XrSpatialCapabilityConfigurationObjectTrackingEXT32;
     XrSpatialCapabilityConfigurationPlaneTrackingEXT32 _XrSpatialCapabilityConfigurationPlaneTrackingEXT32;
     XrSpatialCapabilityConfigurationQrCodeEXT32 _XrSpatialCapabilityConfigurationQrCodeEXT32;
 } XrSpatialCapabilityConfigurationBaseHeaderEXT32_any;
@@ -6074,6 +6230,35 @@ typedef union XrSwapchainStateBaseHeaderFB32_any
     XrSwapchainStateFoveationFB32 _XrSwapchainStateFoveationFB32;
     XrSwapchainStateSamplerVulkanFB32 _XrSwapchainStateSamplerVulkanFB32;
 } XrSwapchainStateBaseHeaderFB32_any;
+
+static void convert_XrAppConsumedSwapchainImageAcquireInfoEXT_win32_to_host(const XrAppConsumedSwapchainImageAcquireInfoEXT32 *in, XrAppConsumedSwapchainImageAcquireInfoEXT *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static void convert_XrAppConsumedSwapchainImageStateEXT_win32_to_host(const XrAppConsumedSwapchainImageStateEXT32 *in, XrAppConsumedSwapchainImageStateEXT *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static void convert_XrAppConsumedSwapchainImageStateEXT_host_to_win32(const XrAppConsumedSwapchainImageStateEXT *in, XrAppConsumedSwapchainImageStateEXT32 *out)
+{
+    if (!in) return;
+
+    out->ready = in->ready;
+    out->unchanged = in->unchanged;
+    out->imageIndex = in->imageIndex;
+}
 
 static void convert_XrSwapchainImageAcquireInfo_win32_to_host(const XrSwapchainImageAcquireInfo32 *in, XrSwapchainImageAcquireInfo *out)
 {
@@ -6541,6 +6726,19 @@ static void convert_XrAnchorSpaceCreateInfoBD_win32_to_host(const XrAnchorSpaceC
     out->next = NULL;
     out->anchor = in->anchor;
     out->poseInAnchorSpace = in->poseInAnchorSpace;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static void convert_XrAppConsumedSwapchainCreateInfoEXT_win32_to_host(const XrAppConsumedSwapchainCreateInfoEXT32 *in, XrAppConsumedSwapchainCreateInfoEXT *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    out->kind = in->kind;
+    out->usageFlags = in->usageFlags;
+    out->format = in->format;
     if (in->next)
         FIXME("Unexpected next\n");
 }
@@ -8076,6 +8274,41 @@ static void convert_XrSpatialCapabilityConfigurationImageTrackingEXT_win32_to_ho
         TRACE("Unexpected next\n");
 }
 
+static void convert_XrSpatialCapabilityConfigurationMeshTrackingEXT_win32_to_host(struct conversion_context *ctx, const XrSpatialCapabilityConfigurationMeshTrackingEXT32 *in, XrSpatialCapabilityConfigurationMeshTrackingEXT *out)
+{
+    const XrBaseInStructure32 *in_header;
+    XrBaseOutStructure *out_header = (void *)out;
+
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    out->capability = in->capability;
+    out->enabledComponentCount = in->enabledComponentCount;
+    out->enabledComponents = UlongToPtr(in->enabledComponents);
+
+    for (in_header = UlongToPtr(in->next); in_header; in_header = UlongToPtr(in_header->next))
+    {
+        switch (in_header->type)
+        {
+        case XR_TYPE_SPATIAL_FEATURE_TRACK_WATERTIGHT_MESH_EXT:
+        {
+            XrSpatialFeatureTrackWatertightMeshEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
+            const XrSpatialFeatureTrackWatertightMeshEXT32 *in_ext = (const XrSpatialFeatureTrackWatertightMeshEXT32 *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_FEATURE_TRACK_WATERTIGHT_MESH_EXT;
+            out_ext->next = NULL;
+            out_ext->enableWatertightMeshTracking = in_ext->enableWatertightMeshTracking;
+            out_header->next = (void *)out_ext;
+            out_header = (void *)out_ext;
+            break;
+        }
+        default:
+            TRACE("Unhandled type %u.\n", in_header->type);
+            break;
+        }
+    }
+}
+
 static void convert_XrSpatialCapabilityConfigurationMicroQrCodeEXT_win32_to_host(struct conversion_context *ctx, const XrSpatialCapabilityConfigurationMicroQrCodeEXT32 *in, XrSpatialCapabilityConfigurationMicroQrCodeEXT *out)
 {
     const XrBaseInStructure32 *in_header;
@@ -8137,8 +8370,11 @@ static void convert_XrSpatialCapabilityConfigurationObjectTrackingANDROID_win32_
         TRACE("Unexpected next\n");
 }
 
-static void convert_XrSpatialCapabilityConfigurationPlaneTrackingEXT_win32_to_host(const XrSpatialCapabilityConfigurationPlaneTrackingEXT32 *in, XrSpatialCapabilityConfigurationPlaneTrackingEXT *out)
+static void convert_XrSpatialCapabilityConfigurationObjectTrackingEXT_win32_to_host(struct conversion_context *ctx, const XrSpatialCapabilityConfigurationObjectTrackingEXT32 *in, XrSpatialCapabilityConfigurationObjectTrackingEXT *out)
 {
+    const XrBaseInStructure32 *in_header;
+    XrBaseOutStructure *out_header = (void *)out;
+
     if (!in) return;
 
     out->type = in->type;
@@ -8146,8 +8382,64 @@ static void convert_XrSpatialCapabilityConfigurationPlaneTrackingEXT_win32_to_ho
     out->capability = in->capability;
     out->enabledComponentCount = in->enabledComponentCount;
     out->enabledComponents = UlongToPtr(in->enabledComponents);
-    if (in->next)
-        TRACE("Unexpected next\n");
+
+    for (in_header = UlongToPtr(in->next); in_header; in_header = UlongToPtr(in_header->next))
+    {
+        switch (in_header->type)
+        {
+        case XR_TYPE_SPATIAL_FEATURE_OBJECT_SEMANTIC_LABEL_SUBSET_EXT:
+        {
+            XrSpatialFeatureObjectSemanticLabelSubsetEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
+            const XrSpatialFeatureObjectSemanticLabelSubsetEXT32 *in_ext = (const XrSpatialFeatureObjectSemanticLabelSubsetEXT32 *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_FEATURE_OBJECT_SEMANTIC_LABEL_SUBSET_EXT;
+            out_ext->next = NULL;
+            out_ext->semanticLabelCount = in_ext->semanticLabelCount;
+            out_ext->semanticLabels = UlongToPtr(in_ext->semanticLabels);
+            out_header->next = (void *)out_ext;
+            out_header = (void *)out_ext;
+            break;
+        }
+        default:
+            TRACE("Unhandled type %u.\n", in_header->type);
+            break;
+        }
+    }
+}
+
+static void convert_XrSpatialCapabilityConfigurationPlaneTrackingEXT_win32_to_host(struct conversion_context *ctx, const XrSpatialCapabilityConfigurationPlaneTrackingEXT32 *in, XrSpatialCapabilityConfigurationPlaneTrackingEXT *out)
+{
+    const XrBaseInStructure32 *in_header;
+    XrBaseOutStructure *out_header = (void *)out;
+
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    out->capability = in->capability;
+    out->enabledComponentCount = in->enabledComponentCount;
+    out->enabledComponents = UlongToPtr(in->enabledComponents);
+
+    for (in_header = UlongToPtr(in->next); in_header; in_header = UlongToPtr(in_header->next))
+    {
+        switch (in_header->type)
+        {
+        case XR_TYPE_SPATIAL_FEATURE_PLANE_SEMANTIC_LABEL2_SUBSET_EXT:
+        {
+            XrSpatialFeaturePlaneSemanticLabel2SubsetEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
+            const XrSpatialFeaturePlaneSemanticLabel2SubsetEXT32 *in_ext = (const XrSpatialFeaturePlaneSemanticLabel2SubsetEXT32 *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_FEATURE_PLANE_SEMANTIC_LABEL2_SUBSET_EXT;
+            out_ext->next = NULL;
+            out_ext->semanticLabelCount = in_ext->semanticLabelCount;
+            out_ext->semanticLabels = UlongToPtr(in_ext->semanticLabels);
+            out_header->next = (void *)out_ext;
+            out_header = (void *)out_ext;
+            break;
+        }
+        default:
+            TRACE("Unhandled type %u.\n", in_header->type);
+            break;
+        }
+    }
 }
 
 static void convert_XrSpatialCapabilityConfigurationQrCodeEXT_win32_to_host(struct conversion_context *ctx, const XrSpatialCapabilityConfigurationQrCodeEXT32 *in, XrSpatialCapabilityConfigurationQrCodeEXT *out)
@@ -8208,9 +8500,11 @@ static void convert_XrSpatialCapabilityConfigurationBaseHeaderEXT_win32_to_host(
     case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_ARUCO_MARKER_EXT: convert_XrSpatialCapabilityConfigurationArucoMarkerEXT_win32_to_host(ctx, (const void *)in, (void *)out); break;
     case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_DEPTH_RAYCAST_ANDROID: convert_XrSpatialCapabilityConfigurationDepthRaycastANDROID_win32_to_host((const void *)in, (void *)out); break;
     case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_IMAGE_TRACKING_EXT: convert_XrSpatialCapabilityConfigurationImageTrackingEXT_win32_to_host((const void *)in, (void *)out); break;
+    case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_MESH_TRACKING_EXT: convert_XrSpatialCapabilityConfigurationMeshTrackingEXT_win32_to_host(ctx, (const void *)in, (void *)out); break;
     case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_MICRO_QR_CODE_EXT: convert_XrSpatialCapabilityConfigurationMicroQrCodeEXT_win32_to_host(ctx, (const void *)in, (void *)out); break;
     case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_OBJECT_TRACKING_ANDROID: convert_XrSpatialCapabilityConfigurationObjectTrackingANDROID_win32_to_host((const void *)in, (void *)out); break;
-    case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_PLANE_TRACKING_EXT: convert_XrSpatialCapabilityConfigurationPlaneTrackingEXT_win32_to_host((const void *)in, (void *)out); break;
+    case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_OBJECT_TRACKING_EXT: convert_XrSpatialCapabilityConfigurationObjectTrackingEXT_win32_to_host(ctx, (const void *)in, (void *)out); break;
+    case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_PLANE_TRACKING_EXT: convert_XrSpatialCapabilityConfigurationPlaneTrackingEXT_win32_to_host(ctx, (const void *)in, (void *)out); break;
     case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_QR_CODE_EXT: convert_XrSpatialCapabilityConfigurationQrCodeEXT_win32_to_host(ctx, (const void *)in, (void *)out); break;
     default:
         TRACE("Unhandled type %u.\n", in->type);
@@ -8249,11 +8543,17 @@ static const XrSpatialCapabilityConfigurationBaseHeaderEXT * const*convert_XrSpa
     case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_IMAGE_TRACKING_EXT:
         out_elem_size = sizeof(XrSpatialCapabilityConfigurationImageTrackingEXT);
         break;
+    case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_MESH_TRACKING_EXT:
+        out_elem_size = sizeof(XrSpatialCapabilityConfigurationMeshTrackingEXT);
+        break;
     case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_MICRO_QR_CODE_EXT:
         out_elem_size = sizeof(XrSpatialCapabilityConfigurationMicroQrCodeEXT);
         break;
     case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_OBJECT_TRACKING_ANDROID:
         out_elem_size = sizeof(XrSpatialCapabilityConfigurationObjectTrackingANDROID);
+        break;
+    case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_OBJECT_TRACKING_EXT:
+        out_elem_size = sizeof(XrSpatialCapabilityConfigurationObjectTrackingEXT);
         break;
     case XR_TYPE_SPATIAL_CAPABILITY_CONFIGURATION_PLANE_TRACKING_EXT:
         out_elem_size = sizeof(XrSpatialCapabilityConfigurationPlaneTrackingEXT);
@@ -10428,224 +10728,6 @@ static void convert_XrApiLayerProperties_array_host_to_win32(const XrApiLayerPro
     }
 }
 
-static void convert_XrBoundSourcesForActionEnumerateInfo_win32_to_host(const XrBoundSourcesForActionEnumerateInfo32 *in, XrBoundSourcesForActionEnumerateInfo *out)
-{
-    if (!in) return;
-
-    out->type = in->type;
-    out->next = NULL;
-    out->action = in->action;
-    if (in->next)
-        FIXME("Unexpected next\n");
-}
-
-static void convert_XrColorSpacesEnumerateInfoSONY_win32_to_host(const XrColorSpacesEnumerateInfoSONY32 *in, XrColorSpacesEnumerateInfoSONY *out)
-{
-    if (!in) return;
-
-    out->type = in->type;
-    out->next = NULL;
-    out->format = in->format;
-    if (in->next)
-        FIXME("Unexpected next\n");
-}
-
-static void convert_XrExternalCameraOCULUS_win32_to_host(const XrExternalCameraOCULUS32 *in, XrExternalCameraOCULUS *out)
-{
-    if (!in) return;
-
-    out->type = in->type;
-    out->next = NULL;
-    if (in->next)
-        FIXME("Unexpected next\n");
-}
-
-static XrExternalCameraOCULUS *convert_XrExternalCameraOCULUS_array_win32_to_host(struct conversion_context *ctx, const XrExternalCameraOCULUS32 *in, uint32_t count)
-{
-    XrExternalCameraOCULUS *out;
-    unsigned int i;
-
-    if (!in || !count) return NULL;
-    out = conversion_context_alloc(ctx, count * sizeof(*out));
-    for (i = 0; i < count; i++)
-    {
-        convert_XrExternalCameraOCULUS_win32_to_host(&in[i], &out[i]);
-    }
-
-    return out;
-}
-
-static void convert_XrExternalCameraIntrinsicsOCULUS_host_to_win32(const XrExternalCameraIntrinsicsOCULUS *in, XrExternalCameraIntrinsicsOCULUS32 *out)
-{
-    if (!in) return;
-
-    out->lastChangeTime = in->lastChangeTime;
-    out->fov = in->fov;
-    out->virtualNearPlaneDistance = in->virtualNearPlaneDistance;
-    out->virtualFarPlaneDistance = in->virtualFarPlaneDistance;
-    out->imageSensorPixelResolution = in->imageSensorPixelResolution;
-}
-
-static void convert_XrExternalCameraExtrinsicsOCULUS_host_to_win32(const XrExternalCameraExtrinsicsOCULUS *in, XrExternalCameraExtrinsicsOCULUS32 *out)
-{
-    if (!in) return;
-
-    out->lastChangeTime = in->lastChangeTime;
-    out->cameraStatusFlags = in->cameraStatusFlags;
-    out->attachedToDevice = in->attachedToDevice;
-    out->relativePose = in->relativePose;
-}
-
-static void convert_XrExternalCameraOCULUS_host_to_win32(const XrExternalCameraOCULUS *in, XrExternalCameraOCULUS32 *out)
-{
-    if (!in) return;
-
-    memcpy(out->name, in->name, XR_MAX_EXTERNAL_CAMERA_NAME_SIZE_OCULUS * sizeof(char));
-    convert_XrExternalCameraIntrinsicsOCULUS_host_to_win32(&in->intrinsics, &out->intrinsics);
-    convert_XrExternalCameraExtrinsicsOCULUS_host_to_win32(&in->extrinsics, &out->extrinsics);
-}
-
-static void convert_XrExternalCameraOCULUS_array_host_to_win32(const XrExternalCameraOCULUS *in, XrExternalCameraOCULUS32 *out, uint32_t count)
-{
-    unsigned int i;
-
-    if (!in) return;
-    for (i = 0; i < count; i++)
-    {
-        convert_XrExternalCameraOCULUS_host_to_win32(&in[i], &out[i]);
-    }
-}
-
-static void convert_XrExtensionProperties_win32_to_host(const XrExtensionProperties32 *in, XrExtensionProperties *out)
-{
-    if (!in) return;
-
-    out->type = in->type;
-    out->next = NULL;
-    if (in->next)
-        FIXME("Unexpected next\n");
-}
-
-static XrExtensionProperties *convert_XrExtensionProperties_array_win32_to_host(struct conversion_context *ctx, const XrExtensionProperties32 *in, uint32_t count)
-{
-    XrExtensionProperties *out;
-    unsigned int i;
-
-    if (!in || !count) return NULL;
-    out = conversion_context_alloc(ctx, count * sizeof(*out));
-    for (i = 0; i < count; i++)
-    {
-        convert_XrExtensionProperties_win32_to_host(&in[i], &out[i]);
-    }
-
-    return out;
-}
-
-static void convert_XrExtensionProperties_host_to_win32(const XrExtensionProperties *in, XrExtensionProperties32 *out)
-{
-    if (!in) return;
-
-    memcpy(out->extensionName, in->extensionName, XR_MAX_EXTENSION_NAME_SIZE * sizeof(char));
-    out->extensionVersion = in->extensionVersion;
-}
-
-static void convert_XrExtensionProperties_array_host_to_win32(const XrExtensionProperties *in, XrExtensionProperties32 *out, uint32_t count)
-{
-    unsigned int i;
-
-    if (!in) return;
-    for (i = 0; i < count; i++)
-    {
-        convert_XrExtensionProperties_host_to_win32(&in[i], &out[i]);
-    }
-}
-
-static void convert_XrInteractionRenderModelIdsEnumerateInfoEXT_win32_to_host(const XrInteractionRenderModelIdsEnumerateInfoEXT32 *in, XrInteractionRenderModelIdsEnumerateInfoEXT *out)
-{
-    if (!in) return;
-
-    out->type = in->type;
-    out->next = NULL;
-    if (in->next)
-        FIXME("Unexpected next\n");
-}
-
-static void convert_XrRenderModelPathInfoFB_win32_to_host(const XrRenderModelPathInfoFB32 *in, XrRenderModelPathInfoFB *out)
-{
-    if (!in) return;
-
-    out->type = in->type;
-    out->next = NULL;
-    out->path = in->path;
-    if (in->next)
-        FIXME("Unexpected next\n");
-}
-
-static XrRenderModelPathInfoFB *convert_XrRenderModelPathInfoFB_array_win32_to_host(struct conversion_context *ctx, const XrRenderModelPathInfoFB32 *in, uint32_t count)
-{
-    XrRenderModelPathInfoFB *out;
-    unsigned int i;
-
-    if (!in || !count) return NULL;
-    out = conversion_context_alloc(ctx, count * sizeof(*out));
-    for (i = 0; i < count; i++)
-    {
-        convert_XrRenderModelPathInfoFB_win32_to_host(&in[i], &out[i]);
-    }
-
-    return out;
-}
-
-static void convert_XrRenderModelPathInfoFB_host_to_win32(const XrRenderModelPathInfoFB *in, XrRenderModelPathInfoFB32 *out)
-{
-    if (!in) return;
-
-    out->path = in->path;
-}
-
-static void convert_XrRenderModelPathInfoFB_array_host_to_win32(const XrRenderModelPathInfoFB *in, XrRenderModelPathInfoFB32 *out, uint32_t count)
-{
-    unsigned int i;
-
-    if (!in) return;
-    for (i = 0; i < count; i++)
-    {
-        convert_XrRenderModelPathInfoFB_host_to_win32(&in[i], &out[i]);
-    }
-}
-
-static void convert_XrInteractionRenderModelSubactionPathInfoEXT_win32_to_host(const XrInteractionRenderModelSubactionPathInfoEXT32 *in, XrInteractionRenderModelSubactionPathInfoEXT *out)
-{
-    if (!in) return;
-
-    out->type = in->type;
-    out->next = NULL;
-    if (in->next)
-        FIXME("Unexpected next\n");
-}
-
-static void convert_XrSpatialCapabilityComponentTypesEXT_win32_to_host(const XrSpatialCapabilityComponentTypesEXT32 *in, XrSpatialCapabilityComponentTypesEXT *out)
-{
-    if (!in) return;
-
-    out->type = in->type;
-    out->next = NULL;
-    out->componentTypeCapacityInput = in->componentTypeCapacityInput;
-    out->componentTypeCountOutput = in->componentTypeCountOutput;
-    out->componentTypes = UlongToPtr(in->componentTypes);
-    if (in->next)
-        FIXME("Unexpected next\n");
-}
-
-static void convert_XrSpatialCapabilityComponentTypesEXT_host_to_win32(const XrSpatialCapabilityComponentTypesEXT *in, XrSpatialCapabilityComponentTypesEXT32 *out)
-{
-    if (!in) return;
-
-    out->componentTypeCapacityInput = in->componentTypeCapacityInput;
-    out->componentTypeCountOutput = in->componentTypeCountOutput;
-    out->componentTypes = PtrToUlong(in->componentTypes);
-}
-
 static void convert_XrSwapchainImageD3D11KHR_win32_to_host(const XrSwapchainImageD3D11KHR32 *in, XrSwapchainImageD3D11KHR *out)
 {
     if (!in) return;
@@ -10882,6 +10964,240 @@ static void convert_XrSwapchainImageBaseHeader_array_host_to_win32(const XrSwapc
         void *out_p = (char *)out + i * out_elem_size;
         convert_XrSwapchainImageBaseHeader_host_to_win32(in_p, out_p);
     }
+}
+
+static void convert_XrBoundSourcesForActionEnumerateInfo_win32_to_host(const XrBoundSourcesForActionEnumerateInfo32 *in, XrBoundSourcesForActionEnumerateInfo *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    out->action = in->action;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static void convert_XrColorSpacesEnumerateInfoSONY_win32_to_host(const XrColorSpacesEnumerateInfoSONY32 *in, XrColorSpacesEnumerateInfoSONY *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    out->format = in->format;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static void convert_XrExternalCameraOCULUS_win32_to_host(const XrExternalCameraOCULUS32 *in, XrExternalCameraOCULUS *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static XrExternalCameraOCULUS *convert_XrExternalCameraOCULUS_array_win32_to_host(struct conversion_context *ctx, const XrExternalCameraOCULUS32 *in, uint32_t count)
+{
+    XrExternalCameraOCULUS *out;
+    unsigned int i;
+
+    if (!in || !count) return NULL;
+    out = conversion_context_alloc(ctx, count * sizeof(*out));
+    for (i = 0; i < count; i++)
+    {
+        convert_XrExternalCameraOCULUS_win32_to_host(&in[i], &out[i]);
+    }
+
+    return out;
+}
+
+static void convert_XrExternalCameraIntrinsicsOCULUS_host_to_win32(const XrExternalCameraIntrinsicsOCULUS *in, XrExternalCameraIntrinsicsOCULUS32 *out)
+{
+    if (!in) return;
+
+    out->lastChangeTime = in->lastChangeTime;
+    out->fov = in->fov;
+    out->virtualNearPlaneDistance = in->virtualNearPlaneDistance;
+    out->virtualFarPlaneDistance = in->virtualFarPlaneDistance;
+    out->imageSensorPixelResolution = in->imageSensorPixelResolution;
+}
+
+static void convert_XrExternalCameraExtrinsicsOCULUS_host_to_win32(const XrExternalCameraExtrinsicsOCULUS *in, XrExternalCameraExtrinsicsOCULUS32 *out)
+{
+    if (!in) return;
+
+    out->lastChangeTime = in->lastChangeTime;
+    out->cameraStatusFlags = in->cameraStatusFlags;
+    out->attachedToDevice = in->attachedToDevice;
+    out->relativePose = in->relativePose;
+}
+
+static void convert_XrExternalCameraOCULUS_host_to_win32(const XrExternalCameraOCULUS *in, XrExternalCameraOCULUS32 *out)
+{
+    if (!in) return;
+
+    memcpy(out->name, in->name, XR_MAX_EXTERNAL_CAMERA_NAME_SIZE_OCULUS * sizeof(char));
+    convert_XrExternalCameraIntrinsicsOCULUS_host_to_win32(&in->intrinsics, &out->intrinsics);
+    convert_XrExternalCameraExtrinsicsOCULUS_host_to_win32(&in->extrinsics, &out->extrinsics);
+}
+
+static void convert_XrExternalCameraOCULUS_array_host_to_win32(const XrExternalCameraOCULUS *in, XrExternalCameraOCULUS32 *out, uint32_t count)
+{
+    unsigned int i;
+
+    if (!in) return;
+    for (i = 0; i < count; i++)
+    {
+        convert_XrExternalCameraOCULUS_host_to_win32(&in[i], &out[i]);
+    }
+}
+
+static void convert_XrExtensionProperties_win32_to_host(const XrExtensionProperties32 *in, XrExtensionProperties *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static XrExtensionProperties *convert_XrExtensionProperties_array_win32_to_host(struct conversion_context *ctx, const XrExtensionProperties32 *in, uint32_t count)
+{
+    XrExtensionProperties *out;
+    unsigned int i;
+
+    if (!in || !count) return NULL;
+    out = conversion_context_alloc(ctx, count * sizeof(*out));
+    for (i = 0; i < count; i++)
+    {
+        convert_XrExtensionProperties_win32_to_host(&in[i], &out[i]);
+    }
+
+    return out;
+}
+
+static void convert_XrExtensionProperties_host_to_win32(const XrExtensionProperties *in, XrExtensionProperties32 *out)
+{
+    if (!in) return;
+
+    memcpy(out->extensionName, in->extensionName, XR_MAX_EXTENSION_NAME_SIZE * sizeof(char));
+    out->extensionVersion = in->extensionVersion;
+}
+
+static void convert_XrExtensionProperties_array_host_to_win32(const XrExtensionProperties *in, XrExtensionProperties32 *out, uint32_t count)
+{
+    unsigned int i;
+
+    if (!in) return;
+    for (i = 0; i < count; i++)
+    {
+        convert_XrExtensionProperties_host_to_win32(&in[i], &out[i]);
+    }
+}
+
+static void convert_XrInteractionRenderModelIdsEnumerateInfoEXT_win32_to_host(const XrInteractionRenderModelIdsEnumerateInfoEXT32 *in, XrInteractionRenderModelIdsEnumerateInfoEXT *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static void convert_XrRenderModelPathInfoFB_win32_to_host(const XrRenderModelPathInfoFB32 *in, XrRenderModelPathInfoFB *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    out->path = in->path;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static XrRenderModelPathInfoFB *convert_XrRenderModelPathInfoFB_array_win32_to_host(struct conversion_context *ctx, const XrRenderModelPathInfoFB32 *in, uint32_t count)
+{
+    XrRenderModelPathInfoFB *out;
+    unsigned int i;
+
+    if (!in || !count) return NULL;
+    out = conversion_context_alloc(ctx, count * sizeof(*out));
+    for (i = 0; i < count; i++)
+    {
+        convert_XrRenderModelPathInfoFB_win32_to_host(&in[i], &out[i]);
+    }
+
+    return out;
+}
+
+static void convert_XrRenderModelPathInfoFB_host_to_win32(const XrRenderModelPathInfoFB *in, XrRenderModelPathInfoFB32 *out)
+{
+    if (!in) return;
+
+    out->path = in->path;
+}
+
+static void convert_XrRenderModelPathInfoFB_array_host_to_win32(const XrRenderModelPathInfoFB *in, XrRenderModelPathInfoFB32 *out, uint32_t count)
+{
+    unsigned int i;
+
+    if (!in) return;
+    for (i = 0; i < count; i++)
+    {
+        convert_XrRenderModelPathInfoFB_host_to_win32(&in[i], &out[i]);
+    }
+}
+
+static void convert_XrInteractionRenderModelSubactionPathInfoEXT_win32_to_host(const XrInteractionRenderModelSubactionPathInfoEXT32 *in, XrInteractionRenderModelSubactionPathInfoEXT *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static void convert_XrSpatialCapabilityComponentTypesEXT_win32_to_host(const XrSpatialCapabilityComponentTypesEXT32 *in, XrSpatialCapabilityComponentTypesEXT *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    out->componentTypeCapacityInput = in->componentTypeCapacityInput;
+    out->componentTypeCountOutput = in->componentTypeCountOutput;
+    out->componentTypes = UlongToPtr(in->componentTypes);
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static void convert_XrSpatialCapabilityComponentTypesEXT_host_to_win32(const XrSpatialCapabilityComponentTypesEXT *in, XrSpatialCapabilityComponentTypesEXT32 *out)
+{
+    if (!in) return;
+
+    out->componentTypeCapacityInput = in->componentTypeCapacityInput;
+    out->componentTypeCountOutput = in->componentTypeCountOutput;
+    out->componentTypes = PtrToUlong(in->componentTypes);
+}
+
+static void convert_XrSwapchainFormatsEnumerateInfoEXT_win32_to_host(const XrSwapchainFormatsEnumerateInfoEXT32 *in, XrSwapchainFormatsEnumerateInfoEXT *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static void convert_XrSwapchainFormatsEnumerateInfoEXT_host_to_win32(const XrSwapchainFormatsEnumerateInfoEXT *in, XrSwapchainFormatsEnumerateInfoEXT32 *out)
+{
+    if (!in) return;
+
 }
 
 static void convert_XrViewConfigurationView_win32_to_host(struct conversion_context *ctx, const XrViewConfigurationView32 *in, XrViewConfigurationView *out)
@@ -11285,6 +11601,30 @@ static void convert_XrSceneSubmeshStateANDROID_array_host_to_win32(const XrScene
     {
         convert_XrSceneSubmeshStateANDROID_host_to_win32(&in[i], &out[i]);
     }
+}
+
+static void convert_XrAppConsumedSwapchainPropertiesEXT_win32_to_host(const XrAppConsumedSwapchainPropertiesEXT32 *in, XrAppConsumedSwapchainPropertiesEXT *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    if (in->next)
+        FIXME("Unexpected next\n");
+}
+
+static void convert_XrAppConsumedSwapchainPropertiesEXT_host_to_win32(const XrAppConsumedSwapchainPropertiesEXT *in, XrAppConsumedSwapchainPropertiesEXT32 *out)
+{
+    if (!in) return;
+
+    out->usageFlags = in->usageFlags;
+    out->format = in->format;
+    out->sampleCount = in->sampleCount;
+    out->width = in->width;
+    out->height = in->height;
+    out->faceCount = in->faceCount;
+    out->arraySize = in->arraySize;
+    out->mipCount = in->mipCount;
 }
 
 static void convert_XrBodySkeletonFB_win32_to_host(const XrBodySkeletonFB32 *in, XrBodySkeletonFB *out)
@@ -19242,6 +19582,17 @@ static void convert_XrSpatialComponentDataQueryConditionEXT_win32_to_host(struct
             out_header = (void *)out_ext;
             break;
         }
+        case XR_TYPE_SPATIAL_FILTER_ARCHETYPE_EXT:
+        {
+            XrSpatialFilterArchetypeEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
+            const XrSpatialFilterArchetypeEXT32 *in_ext = (const XrSpatialFilterArchetypeEXT32 *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_FILTER_ARCHETYPE_EXT;
+            out_ext->next = NULL;
+            out_ext->archetype = in_ext->archetype;
+            out_header->next = (void *)out_ext;
+            out_header = (void *)out_ext;
+            break;
+        }
         case XR_TYPE_SPATIAL_FILTER_TRACKING_STATE_EXT:
         {
             XrSpatialFilterTrackingStateEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
@@ -19339,6 +19690,21 @@ static XrSpatialMeshDataEXT *convert_XrSpatialMeshDataEXT_array_win32_to_host(st
     return out;
 }
 
+static XrSpatialBufferEXT *convert_XrSpatialBufferEXT_array_win32_to_host(struct conversion_context *ctx, const XrSpatialBufferEXT32 *in, uint32_t count)
+{
+    XrSpatialBufferEXT *out;
+    unsigned int i;
+
+    if (!in || !count) return NULL;
+    out = conversion_context_alloc(ctx, count * sizeof(*out));
+    for (i = 0; i < count; i++)
+    {
+        convert_XrSpatialBufferEXT_win32_to_host(&in[i], &out[i]);
+    }
+
+    return out;
+}
+
 static void convert_XrSpatialPolygon2DDataEXT_win32_to_host(const XrSpatialPolygon2DDataEXT32 *in, XrSpatialPolygon2DDataEXT *out)
 {
     if (!in) return;
@@ -19430,6 +19796,18 @@ static void convert_XrSpatialComponentDataQueryResultEXT_win32_to_host(struct co
             out_header = (void *)out_ext;
             break;
         }
+        case XR_TYPE_SPATIAL_COMPONENT_KEYBOARD_SEMANTIC_LABEL_LIST_EXT:
+        {
+            XrSpatialComponentKeyboardSemanticLabelListEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
+            const XrSpatialComponentKeyboardSemanticLabelListEXT32 *in_ext = (const XrSpatialComponentKeyboardSemanticLabelListEXT32 *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_KEYBOARD_SEMANTIC_LABEL_LIST_EXT;
+            out_ext->next = NULL;
+            out_ext->semanticLabelCount = in_ext->semanticLabelCount;
+            out_ext->semanticLabels = UlongToPtr(in_ext->semanticLabels);
+            out_header->next = (void *)out_ext;
+            out_header = (void *)out_ext;
+            break;
+        }
         case XR_TYPE_SPATIAL_COMPONENT_MARKER_LIST_EXT:
         {
             XrSpatialComponentMarkerListEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
@@ -19466,11 +19844,71 @@ static void convert_XrSpatialComponentDataQueryResultEXT_win32_to_host(struct co
             out_header = (void *)out_ext;
             break;
         }
+        case XR_TYPE_SPATIAL_COMPONENT_MESH_3D_NORMALS_LIST_EXT:
+        {
+            XrSpatialComponentMesh3DNormalsListEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
+            const XrSpatialComponentMesh3DNormalsListEXT32 *in_ext = (const XrSpatialComponentMesh3DNormalsListEXT32 *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_MESH_3D_NORMALS_LIST_EXT;
+            out_ext->next = NULL;
+            out_ext->meshNormalsCount = in_ext->meshNormalsCount;
+            out_ext->meshNormals = convert_XrSpatialBufferEXT_array_win32_to_host(ctx, (XrSpatialBufferEXT32 *)UlongToPtr(in_ext->meshNormals), in_ext->meshNormalsCount);
+            out_header->next = (void *)out_ext;
+            out_header = (void *)out_ext;
+            break;
+        }
+        case XR_TYPE_SPATIAL_COMPONENT_MESH_3D_TRIANGLE_SEMANTIC_LABELS_LIST_EXT:
+        {
+            XrSpatialComponentMesh3DTriangleSemanticLabelsListEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
+            const XrSpatialComponentMesh3DTriangleSemanticLabelsListEXT32 *in_ext = (const XrSpatialComponentMesh3DTriangleSemanticLabelsListEXT32 *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_MESH_3D_TRIANGLE_SEMANTIC_LABELS_LIST_EXT;
+            out_ext->next = NULL;
+            out_ext->meshSemanticLabelsCount = in_ext->meshSemanticLabelsCount;
+            out_ext->meshSemanticLabels = convert_XrSpatialBufferEXT_array_win32_to_host(ctx, (XrSpatialBufferEXT32 *)UlongToPtr(in_ext->meshSemanticLabels), in_ext->meshSemanticLabelsCount);
+            out_header->next = (void *)out_ext;
+            out_header = (void *)out_ext;
+            break;
+        }
+        case XR_TYPE_SPATIAL_COMPONENT_MESH_3D_VERTEX_SEMANTIC_LABELS_LIST_EXT:
+        {
+            XrSpatialComponentMesh3DVertexSemanticLabelsListEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
+            const XrSpatialComponentMesh3DVertexSemanticLabelsListEXT32 *in_ext = (const XrSpatialComponentMesh3DVertexSemanticLabelsListEXT32 *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_MESH_3D_VERTEX_SEMANTIC_LABELS_LIST_EXT;
+            out_ext->next = NULL;
+            out_ext->meshSemanticLabelsCount = in_ext->meshSemanticLabelsCount;
+            out_ext->meshSemanticLabels = convert_XrSpatialBufferEXT_array_win32_to_host(ctx, (XrSpatialBufferEXT32 *)UlongToPtr(in_ext->meshSemanticLabels), in_ext->meshSemanticLabelsCount);
+            out_header->next = (void *)out_ext;
+            out_header = (void *)out_ext;
+            break;
+        }
+        case XR_TYPE_SPATIAL_COMPONENT_MOUSE_SEMANTIC_LABEL_LIST_EXT:
+        {
+            XrSpatialComponentMouseSemanticLabelListEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
+            const XrSpatialComponentMouseSemanticLabelListEXT32 *in_ext = (const XrSpatialComponentMouseSemanticLabelListEXT32 *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_MOUSE_SEMANTIC_LABEL_LIST_EXT;
+            out_ext->next = NULL;
+            out_ext->semanticLabelCount = in_ext->semanticLabelCount;
+            out_ext->semanticLabels = UlongToPtr(in_ext->semanticLabels);
+            out_header->next = (void *)out_ext;
+            out_header = (void *)out_ext;
+            break;
+        }
         case XR_TYPE_SPATIAL_COMPONENT_OBJECT_SEMANTIC_LABEL_LIST_ANDROID:
         {
             XrSpatialComponentObjectSemanticLabelListANDROID *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
             const XrSpatialComponentObjectSemanticLabelListANDROID32 *in_ext = (const XrSpatialComponentObjectSemanticLabelListANDROID32 *)in_header;
             out_ext->type = XR_TYPE_SPATIAL_COMPONENT_OBJECT_SEMANTIC_LABEL_LIST_ANDROID;
+            out_ext->next = NULL;
+            out_ext->semanticLabelCount = in_ext->semanticLabelCount;
+            out_ext->semanticLabels = UlongToPtr(in_ext->semanticLabels);
+            out_header->next = (void *)out_ext;
+            out_header = (void *)out_ext;
+            break;
+        }
+        case XR_TYPE_SPATIAL_COMPONENT_OBJECT_SEMANTIC_LABEL_LIST_EXT:
+        {
+            XrSpatialComponentObjectSemanticLabelListEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
+            const XrSpatialComponentObjectSemanticLabelListEXT32 *in_ext = (const XrSpatialComponentObjectSemanticLabelListEXT32 *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_OBJECT_SEMANTIC_LABEL_LIST_EXT;
             out_ext->next = NULL;
             out_ext->semanticLabelCount = in_ext->semanticLabelCount;
             out_ext->semanticLabels = UlongToPtr(in_ext->semanticLabels);
@@ -19510,6 +19948,18 @@ static void convert_XrSpatialComponentDataQueryResultEXT_win32_to_host(struct co
             out_ext->next = NULL;
             out_ext->planeAlignmentCount = in_ext->planeAlignmentCount;
             out_ext->planeAlignments = UlongToPtr(in_ext->planeAlignments);
+            out_header->next = (void *)out_ext;
+            out_header = (void *)out_ext;
+            break;
+        }
+        case XR_TYPE_SPATIAL_COMPONENT_PLANE_SEMANTIC_LABEL2_LIST_EXT:
+        {
+            XrSpatialComponentPlaneSemanticLabel2ListEXT *out_ext = conversion_context_alloc(ctx, sizeof(*out_ext));
+            const XrSpatialComponentPlaneSemanticLabel2ListEXT32 *in_ext = (const XrSpatialComponentPlaneSemanticLabel2ListEXT32 *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_PLANE_SEMANTIC_LABEL2_LIST_EXT;
+            out_ext->next = NULL;
+            out_ext->semanticLabelCount = in_ext->semanticLabelCount;
+            out_ext->semanticLabels = UlongToPtr(in_ext->semanticLabels);
             out_header->next = (void *)out_ext;
             out_header = (void *)out_ext;
             break;
@@ -19636,6 +20086,17 @@ static void convert_XrSpatialMeshDataEXT_array_host_to_win32(const XrSpatialMesh
     }
 }
 
+static void convert_XrSpatialBufferEXT_array_host_to_win32(const XrSpatialBufferEXT *in, XrSpatialBufferEXT32 *out, uint32_t count)
+{
+    unsigned int i;
+
+    if (!in) return;
+    for (i = 0; i < count; i++)
+    {
+        convert_XrSpatialBufferEXT_host_to_win32(&in[i], &out[i]);
+    }
+}
+
 static void convert_XrSpatialPolygon2DDataEXT_host_to_win32(const XrSpatialPolygon2DDataEXT *in, XrSpatialPolygon2DDataEXT32 *out)
 {
     if (!in) return;
@@ -19713,6 +20174,16 @@ static void convert_XrSpatialComponentDataQueryResultEXT_host_to_win32(const XrS
             out_header = (void *)out_ext;
             break;
         }
+        case XR_TYPE_SPATIAL_COMPONENT_KEYBOARD_SEMANTIC_LABEL_LIST_EXT:
+        {
+            XrSpatialComponentKeyboardSemanticLabelListEXT32 *out_ext = find_next_struct32(out_header, XR_TYPE_SPATIAL_COMPONENT_KEYBOARD_SEMANTIC_LABEL_LIST_EXT);
+            const XrSpatialComponentKeyboardSemanticLabelListEXT *in_ext = (const XrSpatialComponentKeyboardSemanticLabelListEXT *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_KEYBOARD_SEMANTIC_LABEL_LIST_EXT;
+            out_ext->semanticLabelCount = in_ext->semanticLabelCount;
+            out_ext->semanticLabels = PtrToUlong(in_ext->semanticLabels);
+            out_header = (void *)out_ext;
+            break;
+        }
         case XR_TYPE_SPATIAL_COMPONENT_MARKER_LIST_EXT:
         {
             XrSpatialComponentMarkerListEXT32 *out_ext = find_next_struct32(out_header, XR_TYPE_SPATIAL_COMPONENT_MARKER_LIST_EXT);
@@ -19743,11 +20214,61 @@ static void convert_XrSpatialComponentDataQueryResultEXT_host_to_win32(const XrS
             out_header = (void *)out_ext;
             break;
         }
+        case XR_TYPE_SPATIAL_COMPONENT_MESH_3D_NORMALS_LIST_EXT:
+        {
+            XrSpatialComponentMesh3DNormalsListEXT32 *out_ext = find_next_struct32(out_header, XR_TYPE_SPATIAL_COMPONENT_MESH_3D_NORMALS_LIST_EXT);
+            const XrSpatialComponentMesh3DNormalsListEXT *in_ext = (const XrSpatialComponentMesh3DNormalsListEXT *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_MESH_3D_NORMALS_LIST_EXT;
+            out_ext->meshNormalsCount = in_ext->meshNormalsCount;
+            convert_XrSpatialBufferEXT_array_host_to_win32(in_ext->meshNormals, (XrSpatialBufferEXT32 *)UlongToPtr(out_ext->meshNormals), in_ext->meshNormalsCount);
+            out_header = (void *)out_ext;
+            break;
+        }
+        case XR_TYPE_SPATIAL_COMPONENT_MESH_3D_TRIANGLE_SEMANTIC_LABELS_LIST_EXT:
+        {
+            XrSpatialComponentMesh3DTriangleSemanticLabelsListEXT32 *out_ext = find_next_struct32(out_header, XR_TYPE_SPATIAL_COMPONENT_MESH_3D_TRIANGLE_SEMANTIC_LABELS_LIST_EXT);
+            const XrSpatialComponentMesh3DTriangleSemanticLabelsListEXT *in_ext = (const XrSpatialComponentMesh3DTriangleSemanticLabelsListEXT *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_MESH_3D_TRIANGLE_SEMANTIC_LABELS_LIST_EXT;
+            out_ext->meshSemanticLabelsCount = in_ext->meshSemanticLabelsCount;
+            convert_XrSpatialBufferEXT_array_host_to_win32(in_ext->meshSemanticLabels, (XrSpatialBufferEXT32 *)UlongToPtr(out_ext->meshSemanticLabels), in_ext->meshSemanticLabelsCount);
+            out_header = (void *)out_ext;
+            break;
+        }
+        case XR_TYPE_SPATIAL_COMPONENT_MESH_3D_VERTEX_SEMANTIC_LABELS_LIST_EXT:
+        {
+            XrSpatialComponentMesh3DVertexSemanticLabelsListEXT32 *out_ext = find_next_struct32(out_header, XR_TYPE_SPATIAL_COMPONENT_MESH_3D_VERTEX_SEMANTIC_LABELS_LIST_EXT);
+            const XrSpatialComponentMesh3DVertexSemanticLabelsListEXT *in_ext = (const XrSpatialComponentMesh3DVertexSemanticLabelsListEXT *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_MESH_3D_VERTEX_SEMANTIC_LABELS_LIST_EXT;
+            out_ext->meshSemanticLabelsCount = in_ext->meshSemanticLabelsCount;
+            convert_XrSpatialBufferEXT_array_host_to_win32(in_ext->meshSemanticLabels, (XrSpatialBufferEXT32 *)UlongToPtr(out_ext->meshSemanticLabels), in_ext->meshSemanticLabelsCount);
+            out_header = (void *)out_ext;
+            break;
+        }
+        case XR_TYPE_SPATIAL_COMPONENT_MOUSE_SEMANTIC_LABEL_LIST_EXT:
+        {
+            XrSpatialComponentMouseSemanticLabelListEXT32 *out_ext = find_next_struct32(out_header, XR_TYPE_SPATIAL_COMPONENT_MOUSE_SEMANTIC_LABEL_LIST_EXT);
+            const XrSpatialComponentMouseSemanticLabelListEXT *in_ext = (const XrSpatialComponentMouseSemanticLabelListEXT *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_MOUSE_SEMANTIC_LABEL_LIST_EXT;
+            out_ext->semanticLabelCount = in_ext->semanticLabelCount;
+            out_ext->semanticLabels = PtrToUlong(in_ext->semanticLabels);
+            out_header = (void *)out_ext;
+            break;
+        }
         case XR_TYPE_SPATIAL_COMPONENT_OBJECT_SEMANTIC_LABEL_LIST_ANDROID:
         {
             XrSpatialComponentObjectSemanticLabelListANDROID32 *out_ext = find_next_struct32(out_header, XR_TYPE_SPATIAL_COMPONENT_OBJECT_SEMANTIC_LABEL_LIST_ANDROID);
             const XrSpatialComponentObjectSemanticLabelListANDROID *in_ext = (const XrSpatialComponentObjectSemanticLabelListANDROID *)in_header;
             out_ext->type = XR_TYPE_SPATIAL_COMPONENT_OBJECT_SEMANTIC_LABEL_LIST_ANDROID;
+            out_ext->semanticLabelCount = in_ext->semanticLabelCount;
+            out_ext->semanticLabels = PtrToUlong(in_ext->semanticLabels);
+            out_header = (void *)out_ext;
+            break;
+        }
+        case XR_TYPE_SPATIAL_COMPONENT_OBJECT_SEMANTIC_LABEL_LIST_EXT:
+        {
+            XrSpatialComponentObjectSemanticLabelListEXT32 *out_ext = find_next_struct32(out_header, XR_TYPE_SPATIAL_COMPONENT_OBJECT_SEMANTIC_LABEL_LIST_EXT);
+            const XrSpatialComponentObjectSemanticLabelListEXT *in_ext = (const XrSpatialComponentObjectSemanticLabelListEXT *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_OBJECT_SEMANTIC_LABEL_LIST_EXT;
             out_ext->semanticLabelCount = in_ext->semanticLabelCount;
             out_ext->semanticLabels = PtrToUlong(in_ext->semanticLabels);
             out_header = (void *)out_ext;
@@ -19780,6 +20301,16 @@ static void convert_XrSpatialComponentDataQueryResultEXT_host_to_win32(const XrS
             out_ext->type = XR_TYPE_SPATIAL_COMPONENT_PLANE_ALIGNMENT_LIST_EXT;
             out_ext->planeAlignmentCount = in_ext->planeAlignmentCount;
             out_ext->planeAlignments = PtrToUlong(in_ext->planeAlignments);
+            out_header = (void *)out_ext;
+            break;
+        }
+        case XR_TYPE_SPATIAL_COMPONENT_PLANE_SEMANTIC_LABEL2_LIST_EXT:
+        {
+            XrSpatialComponentPlaneSemanticLabel2ListEXT32 *out_ext = find_next_struct32(out_header, XR_TYPE_SPATIAL_COMPONENT_PLANE_SEMANTIC_LABEL2_LIST_EXT);
+            const XrSpatialComponentPlaneSemanticLabel2ListEXT *in_ext = (const XrSpatialComponentPlaneSemanticLabel2ListEXT *)in_header;
+            out_ext->type = XR_TYPE_SPATIAL_COMPONENT_PLANE_SEMANTIC_LABEL2_LIST_EXT;
+            out_ext->semanticLabelCount = in_ext->semanticLabelCount;
+            out_ext->semanticLabels = PtrToUlong(in_ext->semanticLabels);
             out_header = (void *)out_ext;
             break;
         }
@@ -19915,6 +20446,16 @@ static void convert_XrRaycastHitResultsANDROID_host_to_win32(const XrRaycastHitR
     out->resultsCapacityInput = in->resultsCapacityInput;
     out->resultsCountOutput = in->resultsCountOutput;
     convert_XrRaycastHitResultANDROID_array_host_to_win32(in->results, (XrRaycastHitResultANDROID32 *)UlongToPtr(out->results), in->resultsCapacityInput);
+}
+
+static void convert_XrAppConsumedSwapchainImageReleaseInfoEXT_win32_to_host(const XrAppConsumedSwapchainImageReleaseInfoEXT32 *in, XrAppConsumedSwapchainImageReleaseInfoEXT *out)
+{
+    if (!in) return;
+
+    out->type = in->type;
+    out->next = NULL;
+    if (in->next)
+        FIXME("Unexpected next\n");
 }
 
 static void convert_XrSwapchainImageReleaseInfo_win32_to_host(const XrSwapchainImageReleaseInfo32 *in, XrSwapchainImageReleaseInfo *out)
@@ -21375,6 +21916,39 @@ static void convert_XrSwapchainImageWaitInfo_win32_to_host(const XrSwapchainImag
 }
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrAcquireAppConsumedSwapchainImageEXT(void *args)
+{
+    struct xrAcquireAppConsumedSwapchainImageEXT_params *params = args;
+
+    TRACE("0x%s, %p, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->acquireInfo, params->image);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrAcquireAppConsumedSwapchainImageEXT(params->appConsumedSwapchain, params->acquireInfo, params->image);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+static NTSTATUS thunk32_xrAcquireAppConsumedSwapchainImageEXT(void *args)
+{
+    struct
+    {
+        XrAppConsumedSwapchainEXT DECLSPEC_ALIGN(8) appConsumedSwapchain;
+        PTR32 acquireInfo;
+        PTR32 image;
+        XrResult result;
+    } *params = args;
+    XrAppConsumedSwapchainImageAcquireInfoEXT acquireInfo_host;
+    XrAppConsumedSwapchainImageStateEXT image_host;
+
+    TRACE("0x%s, %#x, %#x\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->acquireInfo, params->image);
+
+    convert_XrAppConsumedSwapchainImageAcquireInfoEXT_win32_to_host((const XrAppConsumedSwapchainImageAcquireInfoEXT32 *)UlongToPtr(params->acquireInfo), &acquireInfo_host);
+    convert_XrAppConsumedSwapchainImageStateEXT_win32_to_host((XrAppConsumedSwapchainImageStateEXT32 *)UlongToPtr(params->image), &image_host);
+    params->result = g_xr_host_instance_dispatch_table.p_xrAcquireAppConsumedSwapchainImageEXT(params->appConsumedSwapchain, &acquireInfo_host, &image_host);
+    convert_XrAppConsumedSwapchainImageStateEXT_host_to_win32(&image_host, (XrAppConsumedSwapchainImageStateEXT32 *)UlongToPtr(params->image));
+    return STATUS_SUCCESS;
+}
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrAcquireSwapchainImage(void *args)
 {
     struct xrAcquireSwapchainImage_params *params = args;
@@ -22139,6 +22713,36 @@ static NTSTATUS thunk32_xrCreateAnchorSpaceBD(void *args)
 
     convert_XrAnchorSpaceCreateInfoBD_win32_to_host((const XrAnchorSpaceCreateInfoBD32 *)UlongToPtr(params->createInfo), &createInfo_host);
     params->result = g_xr_host_instance_dispatch_table.p_xrCreateAnchorSpaceBD(wine_session_from_handle(params->session)->host_session, &createInfo_host, (XrSpace *)UlongToPtr(params->space));
+    return STATUS_SUCCESS;
+}
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrCreateAppConsumedSwapchainEXT(void *args)
+{
+    struct xrCreateAppConsumedSwapchainEXT_params *params = args;
+
+    TRACE("0x%s, %p, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->session)), params->createInfo, params->appConsumedSwapchain);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateAppConsumedSwapchainEXT(wine_session_from_handle(params->session)->host_session, params->createInfo, params->appConsumedSwapchain);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+static NTSTATUS thunk32_xrCreateAppConsumedSwapchainEXT(void *args)
+{
+    struct
+    {
+        XrSession DECLSPEC_ALIGN(8) session;
+        PTR32 createInfo;
+        PTR32 appConsumedSwapchain;
+        XrResult result;
+    } *params = args;
+    XrAppConsumedSwapchainCreateInfoEXT createInfo_host;
+
+    TRACE("0x%s, %#x, %#x\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->session)), params->createInfo, params->appConsumedSwapchain);
+
+    convert_XrAppConsumedSwapchainCreateInfoEXT_win32_to_host((const XrAppConsumedSwapchainCreateInfoEXT32 *)UlongToPtr(params->createInfo), &createInfo_host);
+    params->result = g_xr_host_instance_dispatch_table.p_xrCreateAppConsumedSwapchainEXT(wine_session_from_handle(params->session)->host_session, &createInfo_host, (XrAppConsumedSwapchainEXT *)UlongToPtr(params->appConsumedSwapchain));
     return STATUS_SUCCESS;
 }
 
@@ -25021,6 +25625,32 @@ static NTSTATUS thunk32_xrDestroyAnchorBD(void *args)
 }
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrDestroyAppConsumedSwapchainEXT(void *args)
+{
+    struct xrDestroyAppConsumedSwapchainEXT_params *params = args;
+
+    TRACE("0x%s\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)));
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroyAppConsumedSwapchainEXT(params->appConsumedSwapchain);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+static NTSTATUS thunk32_xrDestroyAppConsumedSwapchainEXT(void *args)
+{
+    struct
+    {
+        XrAppConsumedSwapchainEXT DECLSPEC_ALIGN(8) appConsumedSwapchain;
+        XrResult result;
+    } *params = args;
+
+    TRACE("0x%s\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)));
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroyAppConsumedSwapchainEXT(params->appConsumedSwapchain);
+    return STATUS_SUCCESS;
+}
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrDestroyBodyTrackerBD(void *args)
 {
     struct xrDestroyBodyTrackerBD_params *params = args;
@@ -26777,6 +27407,42 @@ static NTSTATUS thunk32_xrEnumerateApiLayerProperties(void *args)
 }
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrEnumerateAppConsumedSwapchainImagesEXT(void *args)
+{
+    struct xrEnumerateAppConsumedSwapchainImagesEXT_params *params = args;
+
+    TRACE("0x%s, %u, %p, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->imageCapacityInput, params->imageCountOutput, params->images);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateAppConsumedSwapchainImagesEXT(params->appConsumedSwapchain, params->imageCapacityInput, params->imageCountOutput, params->images);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+static NTSTATUS thunk32_xrEnumerateAppConsumedSwapchainImagesEXT(void *args)
+{
+    struct
+    {
+        XrAppConsumedSwapchainEXT DECLSPEC_ALIGN(8) appConsumedSwapchain;
+        uint32_t imageCapacityInput;
+        PTR32 imageCountOutput;
+        PTR32 images;
+        XrResult result;
+    } *params = args;
+    XrSwapchainImageBaseHeader *images_host;
+    struct conversion_context local_ctx;
+    struct conversion_context *ctx = &local_ctx;
+
+    TRACE("0x%s, %u, %#x, %#x\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->imageCapacityInput, params->imageCountOutput, params->images);
+
+    init_conversion_context(ctx);
+    images_host = convert_XrSwapchainImageBaseHeader_array_win32_to_host(ctx, (XrSwapchainImageBaseHeader32 *)UlongToPtr(params->images), params->imageCapacityInput);
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateAppConsumedSwapchainImagesEXT(params->appConsumedSwapchain, params->imageCapacityInput, (uint32_t *)UlongToPtr(params->imageCountOutput), images_host);
+    convert_XrSwapchainImageBaseHeader_array_host_to_win32(images_host, (XrSwapchainImageBaseHeader32 *)UlongToPtr(params->images), params->imageCapacityInput);
+    free_conversion_context(ctx);
+    return STATUS_SUCCESS;
+}
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrEnumerateBoundSourcesForAction(void *args)
 {
     struct xrEnumerateBoundSourcesForAction_params *params = args;
@@ -27521,6 +28187,65 @@ static NTSTATUS thunk32_xrEnumerateSpatialAnchorAttachableComponentsANDROID(void
 }
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrEnumerateSpatialArchetypeComponentTypesEXT(void *args)
+{
+    struct xrEnumerateSpatialArchetypeComponentTypesEXT_params *params = args;
+
+    TRACE("0x%s, 0x%s, %u, %p, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->snapshot)), wine_dbgstr_longlong(params->archetype), params->componentTypeCapacityInput, params->componentTypeCountOutput, params->componentTypes);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateSpatialArchetypeComponentTypesEXT(params->snapshot, params->archetype, params->componentTypeCapacityInput, params->componentTypeCountOutput, params->componentTypes);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+static NTSTATUS thunk32_xrEnumerateSpatialArchetypeComponentTypesEXT(void *args)
+{
+    struct
+    {
+        XrSpatialSnapshotEXT DECLSPEC_ALIGN(8) snapshot;
+        XrSpatialArchetypeIdEXT DECLSPEC_ALIGN(8) archetype;
+        uint32_t componentTypeCapacityInput;
+        PTR32 componentTypeCountOutput;
+        PTR32 componentTypes;
+        XrResult result;
+    } *params = args;
+
+    TRACE("0x%s, 0x%s, %u, %#x, %#x\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->snapshot)), wine_dbgstr_longlong(params->archetype), params->componentTypeCapacityInput, params->componentTypeCountOutput, params->componentTypes);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateSpatialArchetypeComponentTypesEXT(params->snapshot, params->archetype, params->componentTypeCapacityInput, (uint32_t *)UlongToPtr(params->componentTypeCountOutput), (XrSpatialComponentTypeEXT *)UlongToPtr(params->componentTypes));
+    return STATUS_SUCCESS;
+}
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrEnumerateSpatialArchetypesEXT(void *args)
+{
+    struct xrEnumerateSpatialArchetypesEXT_params *params = args;
+
+    TRACE("0x%s, %u, %p, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->snapshot)), params->archetypeCapacityInput, params->archetypeCountOutput, params->archetypes);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateSpatialArchetypesEXT(params->snapshot, params->archetypeCapacityInput, params->archetypeCountOutput, params->archetypes);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+static NTSTATUS thunk32_xrEnumerateSpatialArchetypesEXT(void *args)
+{
+    struct
+    {
+        XrSpatialSnapshotEXT DECLSPEC_ALIGN(8) snapshot;
+        uint32_t archetypeCapacityInput;
+        PTR32 archetypeCountOutput;
+        PTR32 archetypes;
+        XrResult result;
+    } *params = args;
+
+    TRACE("0x%s, %u, %#x, %#x\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->snapshot)), params->archetypeCapacityInput, params->archetypeCountOutput, params->archetypes);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateSpatialArchetypesEXT(params->snapshot, params->archetypeCapacityInput, (uint32_t *)UlongToPtr(params->archetypeCountOutput), (XrSpatialArchetypeIdEXT *)UlongToPtr(params->archetypes));
+    return STATUS_SUCCESS;
+}
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrEnumerateSpatialCapabilitiesEXT(void *args)
 {
     struct xrEnumerateSpatialCapabilitiesEXT_params *params = args;
@@ -27909,6 +28634,39 @@ static NTSTATUS thunk32_xrEnumerateSwapchainFormats(void *args)
     TRACE("0x%s, %u, %#x, %#x\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->session)), params->formatCapacityInput, params->formatCountOutput, params->formats);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateSwapchainFormats(wine_session_from_handle(params->session)->host_session, params->formatCapacityInput, (uint32_t *)UlongToPtr(params->formatCountOutput), (int64_t *)UlongToPtr(params->formats));
+    return STATUS_SUCCESS;
+}
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrEnumerateSwapchainFormats2EXT(void *args)
+{
+    struct xrEnumerateSwapchainFormats2EXT_params *params = args;
+
+    TRACE("0x%s, %p, %u, %p, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->session)), params->enumerateInfo, params->formatCapacityInput, params->formatCountOutput, params->formats);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateSwapchainFormats2EXT(wine_session_from_handle(params->session)->host_session, params->enumerateInfo, params->formatCapacityInput, params->formatCountOutput, params->formats);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+static NTSTATUS thunk32_xrEnumerateSwapchainFormats2EXT(void *args)
+{
+    struct
+    {
+        XrSession DECLSPEC_ALIGN(8) session;
+        PTR32 enumerateInfo;
+        uint32_t formatCapacityInput;
+        PTR32 formatCountOutput;
+        PTR32 formats;
+        XrResult result;
+    } *params = args;
+    XrSwapchainFormatsEnumerateInfoEXT enumerateInfo_host;
+
+    TRACE("0x%s, %#x, %u, %#x, %#x\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->session)), params->enumerateInfo, params->formatCapacityInput, params->formatCountOutput, params->formats);
+
+    convert_XrSwapchainFormatsEnumerateInfoEXT_win32_to_host((XrSwapchainFormatsEnumerateInfoEXT32 *)UlongToPtr(params->enumerateInfo), &enumerateInfo_host);
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateSwapchainFormats2EXT(wine_session_from_handle(params->session)->host_session, &enumerateInfo_host, params->formatCapacityInput, (uint32_t *)UlongToPtr(params->formatCountOutput), (int64_t *)UlongToPtr(params->formats));
+    convert_XrSwapchainFormatsEnumerateInfoEXT_host_to_win32(&enumerateInfo_host, (XrSwapchainFormatsEnumerateInfoEXT32 *)UlongToPtr(params->enumerateInfo));
     return STATUS_SUCCESS;
 }
 
@@ -28419,6 +29177,36 @@ static NTSTATUS thunk32_xrGetAnchorUuidBD(void *args)
     TRACE("0x%s, %#x\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->anchor)), params->uuid);
 
     params->result = g_xr_host_instance_dispatch_table.p_xrGetAnchorUuidBD(params->anchor, (XrUuidEXT *)UlongToPtr(params->uuid));
+    return STATUS_SUCCESS;
+}
+
+#ifdef _WIN64
+static NTSTATUS thunk64_xrGetAppConsumedSwapchainPropertiesEXT(void *args)
+{
+    struct xrGetAppConsumedSwapchainPropertiesEXT_params *params = args;
+
+    TRACE("0x%s, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->properties);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetAppConsumedSwapchainPropertiesEXT(params->appConsumedSwapchain, params->properties);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+static NTSTATUS thunk32_xrGetAppConsumedSwapchainPropertiesEXT(void *args)
+{
+    struct
+    {
+        XrAppConsumedSwapchainEXT DECLSPEC_ALIGN(8) appConsumedSwapchain;
+        PTR32 properties;
+        XrResult result;
+    } *params = args;
+    XrAppConsumedSwapchainPropertiesEXT properties_host;
+
+    TRACE("0x%s, %#x\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->properties);
+
+    convert_XrAppConsumedSwapchainPropertiesEXT_win32_to_host((XrAppConsumedSwapchainPropertiesEXT32 *)UlongToPtr(params->properties), &properties_host);
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetAppConsumedSwapchainPropertiesEXT(params->appConsumedSwapchain, &properties_host);
+    convert_XrAppConsumedSwapchainPropertiesEXT_host_to_win32(&properties_host, (XrAppConsumedSwapchainPropertiesEXT32 *)UlongToPtr(params->properties));
     return STATUS_SUCCESS;
 }
 
@@ -33491,6 +34279,43 @@ static NTSTATUS thunk32_xrRaycastANDROID(void *args)
 }
 
 #ifdef _WIN64
+static NTSTATUS thunk64_xrReleaseAppConsumedSwapchainImageEXT(void *args)
+{
+    struct xrReleaseAppConsumedSwapchainImageEXT_params *params = args;
+
+    TRACE("0x%s, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->releaseInfo);
+
+    params->result = g_xr_host_instance_dispatch_table.p_xrReleaseAppConsumedSwapchainImageEXT(params->appConsumedSwapchain, params->releaseInfo);
+    return STATUS_SUCCESS;
+}
+#endif /* _WIN64 */
+
+static NTSTATUS thunk32_xrReleaseAppConsumedSwapchainImageEXT(void *args)
+{
+    struct
+    {
+        XrAppConsumedSwapchainEXT DECLSPEC_ALIGN(8) appConsumedSwapchain;
+        PTR32 releaseInfo;
+        XrResult result;
+    } *params = args;
+    XrAppConsumedSwapchainImageReleaseInfoEXT *releaseInfo_host = NULL;
+    struct conversion_context local_ctx;
+    struct conversion_context *ctx = &local_ctx;
+
+    TRACE("0x%s, %#x\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->releaseInfo);
+
+    init_conversion_context(ctx);
+    if (params->releaseInfo)
+    {
+        releaseInfo_host = conversion_context_alloc(ctx, sizeof(*releaseInfo_host));
+        convert_XrAppConsumedSwapchainImageReleaseInfoEXT_win32_to_host((const XrAppConsumedSwapchainImageReleaseInfoEXT32 *)UlongToPtr(params->releaseInfo), releaseInfo_host);
+    }
+    params->result = g_xr_host_instance_dispatch_table.p_xrReleaseAppConsumedSwapchainImageEXT(params->appConsumedSwapchain, releaseInfo_host);
+    free_conversion_context(ctx);
+    return STATUS_SUCCESS;
+}
+
+#ifdef _WIN64
 static NTSTATUS thunk64_xrReleaseSwapchainImage(void *args)
 {
     struct xrReleaseSwapchainImage_params *params = args;
@@ -36277,6 +37102,7 @@ static const char * const xr_extensions[] =
     "XR_BD_dynamic_object_tracking",
     "XR_BD_facial_simulation",
     "XR_BD_future_progress",
+    "XR_BD_motion_tracker",
     "XR_BD_spatial_anchor",
     "XR_BD_spatial_anchor_sharing",
     "XR_BD_spatial_audio_rendering",
@@ -36289,9 +37115,12 @@ static const char * const xr_extensions[] =
     "XR_EPIC_view_configuration_fov",
     "XR_EXTX_overlay",
     "XR_EXT_active_action_set_priority",
+    "XR_EXT_aosp_hand_tracking_permission",
+    "XR_EXT_app_consumed_swapchain",
     "XR_EXT_composition_layer_inverted_alpha",
     "XR_EXT_conformance_automation",
     "XR_EXT_dpad_binding",
+    "XR_EXT_enumerate_swapchain_formats2",
     "XR_EXT_eye_gaze_interaction",
     "XR_EXT_frame_synthesis",
     "XR_EXT_future",
@@ -36314,10 +37143,14 @@ static const char * const xr_extensions[] =
     "XR_EXT_spatial_container",
     "XR_EXT_spatial_container_self_rendering",
     "XR_EXT_spatial_entity",
+    "XR_EXT_spatial_entity_archetypes",
     "XR_EXT_spatial_image_tracking",
     "XR_EXT_spatial_marker_tracking",
+    "XR_EXT_spatial_mesh_tracking",
+    "XR_EXT_spatial_object_tracking",
     "XR_EXT_spatial_persistence",
     "XR_EXT_spatial_persistence_operations",
+    "XR_EXT_spatial_plane_semantic_label2",
     "XR_EXT_spatial_plane_tracking",
     "XR_EXT_stationary_reference_space",
     "XR_EXT_thermal_query",
@@ -36500,6 +37333,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
 {
     init_openxr,
     is_available_instance_function_openxr,
+    thunk64_xrAcquireAppConsumedSwapchainImageEXT,
     thunk64_xrAcquireSwapchainImage,
     thunk64_xrAddTrackableImageDatabaseANDROID,
     thunk64_xrAllocateWorldMeshBufferML,
@@ -36525,6 +37359,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrCreateActionSpace,
     thunk64_xrCreateAnchorSpaceANDROID,
     thunk64_xrCreateAnchorSpaceBD,
+    thunk64_xrCreateAppConsumedSwapchainEXT,
     thunk64_xrCreateBodyTrackerBD,
     thunk64_xrCreateBodyTrackerFB,
     thunk64_xrCreateBodyTrackerHTC,
@@ -36617,6 +37452,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrDestroyAction,
     thunk64_xrDestroyActionSet,
     thunk64_xrDestroyAnchorBD,
+    thunk64_xrDestroyAppConsumedSwapchainEXT,
     thunk64_xrDestroyBodyTrackerBD,
     thunk64_xrDestroyBodyTrackerFB,
     thunk64_xrDestroyBodyTrackerHTC,
@@ -36683,6 +37519,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrEndSession,
     thunk64_xrEndSpatialContainerRenderingEXT,
     thunk64_xrEnumerateApiLayerProperties,
+    thunk64_xrEnumerateAppConsumedSwapchainImagesEXT,
     thunk64_xrEnumerateBoundSourcesForAction,
     thunk64_xrEnumerateColorSpacesFB,
     thunk64_xrEnumerateColorSpacesSONY,
@@ -36707,6 +37544,8 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrEnumerateSceneComputeFeaturesMSFT,
     thunk64_xrEnumerateSpaceSupportedComponentsFB,
     thunk64_xrEnumerateSpatialAnchorAttachableComponentsANDROID,
+    thunk64_xrEnumerateSpatialArchetypeComponentTypesEXT,
+    thunk64_xrEnumerateSpatialArchetypesEXT,
     thunk64_xrEnumerateSpatialCapabilitiesEXT,
     thunk64_xrEnumerateSpatialCapabilityComponentTypesEXT,
     thunk64_xrEnumerateSpatialCapabilityFeaturesEXT,
@@ -36720,6 +37559,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrEnumerateSupportedSpatialContainerGraphicsPresentationsEXT,
     thunk64_xrEnumerateSupportedTrackableTypesANDROID,
     thunk64_xrEnumerateSwapchainFormats,
+    thunk64_xrEnumerateSwapchainFormats2EXT,
     thunk64_xrEnumerateSwapchainImages,
     thunk64_xrEnumerateViewConfigurationViews,
     thunk64_xrEnumerateViewConfigurations,
@@ -36736,6 +37576,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrGetAllTrackablesANDROID,
     thunk64_xrGetAnchorPersistStateANDROID,
     thunk64_xrGetAnchorUuidBD,
+    thunk64_xrGetAppConsumedSwapchainPropertiesEXT,
     thunk64_xrGetAudioInputDeviceGuidOculus,
     thunk64_xrGetAudioOutputDeviceGuidOculus,
     thunk64_xrGetBodySkeletonFB,
@@ -36892,6 +37733,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk64_xrQuerySpatialComponentDataEXT,
     thunk64_xrQuerySystemTrackedKeyboardFB,
     thunk64_xrRaycastANDROID,
+    thunk64_xrReleaseAppConsumedSwapchainImageEXT,
     thunk64_xrReleaseSwapchainImage,
     thunk64_xrRemoveTrackableImageDatabaseANDROID,
     thunk64_xrRequestBodyTrackingFidelityMETA,
@@ -36996,6 +37838,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
 {
     wow64_init_openxr,
     is_available_instance_function_openxr32,
+    thunk32_xrAcquireAppConsumedSwapchainImageEXT,
     thunk32_xrAcquireSwapchainImage,
     thunk32_xrAddTrackableImageDatabaseANDROID,
     thunk32_xrAllocateWorldMeshBufferML,
@@ -37021,6 +37864,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk32_xrCreateActionSpace,
     thunk32_xrCreateAnchorSpaceANDROID,
     thunk32_xrCreateAnchorSpaceBD,
+    thunk32_xrCreateAppConsumedSwapchainEXT,
     thunk32_xrCreateBodyTrackerBD,
     thunk32_xrCreateBodyTrackerFB,
     thunk32_xrCreateBodyTrackerHTC,
@@ -37113,6 +37957,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk32_xrDestroyAction,
     thunk32_xrDestroyActionSet,
     thunk32_xrDestroyAnchorBD,
+    thunk32_xrDestroyAppConsumedSwapchainEXT,
     thunk32_xrDestroyBodyTrackerBD,
     thunk32_xrDestroyBodyTrackerFB,
     thunk32_xrDestroyBodyTrackerHTC,
@@ -37179,6 +38024,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk32_xrEndSession,
     thunk32_xrEndSpatialContainerRenderingEXT,
     thunk32_xrEnumerateApiLayerProperties,
+    thunk32_xrEnumerateAppConsumedSwapchainImagesEXT,
     thunk32_xrEnumerateBoundSourcesForAction,
     thunk32_xrEnumerateColorSpacesFB,
     thunk32_xrEnumerateColorSpacesSONY,
@@ -37203,6 +38049,8 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk32_xrEnumerateSceneComputeFeaturesMSFT,
     thunk32_xrEnumerateSpaceSupportedComponentsFB,
     thunk32_xrEnumerateSpatialAnchorAttachableComponentsANDROID,
+    thunk32_xrEnumerateSpatialArchetypeComponentTypesEXT,
+    thunk32_xrEnumerateSpatialArchetypesEXT,
     thunk32_xrEnumerateSpatialCapabilitiesEXT,
     thunk32_xrEnumerateSpatialCapabilityComponentTypesEXT,
     thunk32_xrEnumerateSpatialCapabilityFeaturesEXT,
@@ -37216,6 +38064,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk32_xrEnumerateSupportedSpatialContainerGraphicsPresentationsEXT,
     thunk32_xrEnumerateSupportedTrackableTypesANDROID,
     thunk32_xrEnumerateSwapchainFormats,
+    thunk32_xrEnumerateSwapchainFormats2EXT,
     thunk32_xrEnumerateSwapchainImages,
     thunk32_xrEnumerateViewConfigurationViews,
     thunk32_xrEnumerateViewConfigurations,
@@ -37232,6 +38081,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk32_xrGetAllTrackablesANDROID,
     thunk32_xrGetAnchorPersistStateANDROID,
     thunk32_xrGetAnchorUuidBD,
+    thunk32_xrGetAppConsumedSwapchainPropertiesEXT,
     thunk32_xrGetAudioInputDeviceGuidOculus,
     thunk32_xrGetAudioOutputDeviceGuidOculus,
     thunk32_xrGetBodySkeletonFB,
@@ -37388,6 +38238,7 @@ const unixlib_entry_t __wine_unix_call_funcs[] =
     thunk32_xrQuerySpatialComponentDataEXT,
     thunk32_xrQuerySystemTrackedKeyboardFB,
     thunk32_xrRaycastANDROID,
+    thunk32_xrReleaseAppConsumedSwapchainImageEXT,
     thunk32_xrReleaseSwapchainImage,
     thunk32_xrRemoveTrackableImageDatabaseANDROID,
     thunk32_xrRequestBodyTrackingFidelityMETA,

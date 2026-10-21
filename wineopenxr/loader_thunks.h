@@ -26,6 +26,7 @@ enum unix_call
 {
     unix_init,
     unix_is_available_instance_function,
+    unix_xrAcquireAppConsumedSwapchainImageEXT,
     unix_xrAcquireSwapchainImage,
     unix_xrAddTrackableImageDatabaseANDROID,
     unix_xrAllocateWorldMeshBufferML,
@@ -51,6 +52,7 @@ enum unix_call
     unix_xrCreateActionSpace,
     unix_xrCreateAnchorSpaceANDROID,
     unix_xrCreateAnchorSpaceBD,
+    unix_xrCreateAppConsumedSwapchainEXT,
     unix_xrCreateBodyTrackerBD,
     unix_xrCreateBodyTrackerFB,
     unix_xrCreateBodyTrackerHTC,
@@ -143,6 +145,7 @@ enum unix_call
     unix_xrDestroyAction,
     unix_xrDestroyActionSet,
     unix_xrDestroyAnchorBD,
+    unix_xrDestroyAppConsumedSwapchainEXT,
     unix_xrDestroyBodyTrackerBD,
     unix_xrDestroyBodyTrackerFB,
     unix_xrDestroyBodyTrackerHTC,
@@ -209,6 +212,7 @@ enum unix_call
     unix_xrEndSession,
     unix_xrEndSpatialContainerRenderingEXT,
     unix_xrEnumerateApiLayerProperties,
+    unix_xrEnumerateAppConsumedSwapchainImagesEXT,
     unix_xrEnumerateBoundSourcesForAction,
     unix_xrEnumerateColorSpacesFB,
     unix_xrEnumerateColorSpacesSONY,
@@ -233,6 +237,8 @@ enum unix_call
     unix_xrEnumerateSceneComputeFeaturesMSFT,
     unix_xrEnumerateSpaceSupportedComponentsFB,
     unix_xrEnumerateSpatialAnchorAttachableComponentsANDROID,
+    unix_xrEnumerateSpatialArchetypeComponentTypesEXT,
+    unix_xrEnumerateSpatialArchetypesEXT,
     unix_xrEnumerateSpatialCapabilitiesEXT,
     unix_xrEnumerateSpatialCapabilityComponentTypesEXT,
     unix_xrEnumerateSpatialCapabilityFeaturesEXT,
@@ -246,6 +252,7 @@ enum unix_call
     unix_xrEnumerateSupportedSpatialContainerGraphicsPresentationsEXT,
     unix_xrEnumerateSupportedTrackableTypesANDROID,
     unix_xrEnumerateSwapchainFormats,
+    unix_xrEnumerateSwapchainFormats2EXT,
     unix_xrEnumerateSwapchainImages,
     unix_xrEnumerateViewConfigurationViews,
     unix_xrEnumerateViewConfigurations,
@@ -262,6 +269,7 @@ enum unix_call
     unix_xrGetAllTrackablesANDROID,
     unix_xrGetAnchorPersistStateANDROID,
     unix_xrGetAnchorUuidBD,
+    unix_xrGetAppConsumedSwapchainPropertiesEXT,
     unix_xrGetAudioInputDeviceGuidOculus,
     unix_xrGetAudioOutputDeviceGuidOculus,
     unix_xrGetBodySkeletonFB,
@@ -418,6 +426,7 @@ enum unix_call
     unix_xrQuerySpatialComponentDataEXT,
     unix_xrQuerySystemTrackedKeyboardFB,
     unix_xrRaycastANDROID,
+    unix_xrReleaseAppConsumedSwapchainImageEXT,
     unix_xrReleaseSwapchainImage,
     unix_xrRemoveTrackableImageDatabaseANDROID,
     unix_xrRequestBodyTrackingFidelityMETA,
@@ -510,6 +519,14 @@ enum unix_call
     unix_xrWaitFrame,
     unix_xrWaitSwapchainImage,
     unix_count,
+};
+
+struct xrAcquireAppConsumedSwapchainImageEXT_params
+{
+    XrAppConsumedSwapchainEXT DECLSPEC_ALIGN(8) appConsumedSwapchain;
+    const XrAppConsumedSwapchainImageAcquireInfoEXT *acquireInfo;
+    XrAppConsumedSwapchainImageStateEXT *image;
+    XrResult result;
 };
 
 struct xrAcquireSwapchainImage_params
@@ -698,6 +715,14 @@ struct xrCreateAnchorSpaceBD_params
     XrSession DECLSPEC_ALIGN(8) session;
     const XrAnchorSpaceCreateInfoBD *createInfo;
     XrSpace *space;
+    XrResult result;
+};
+
+struct xrCreateAppConsumedSwapchainEXT_params
+{
+    XrSession DECLSPEC_ALIGN(8) session;
+    const XrAppConsumedSwapchainCreateInfoEXT *createInfo;
+    XrAppConsumedSwapchainEXT *appConsumedSwapchain;
     XrResult result;
 };
 
@@ -1434,6 +1459,12 @@ struct xrDestroyAnchorBD_params
     XrResult result;
 };
 
+struct xrDestroyAppConsumedSwapchainEXT_params
+{
+    XrAppConsumedSwapchainEXT DECLSPEC_ALIGN(8) appConsumedSwapchain;
+    XrResult result;
+};
+
 struct xrDestroyBodyTrackerBD_params
 {
     XrBodyTrackerBD DECLSPEC_ALIGN(8) bodyTracker;
@@ -1840,6 +1871,15 @@ struct xrEnumerateApiLayerProperties_params
     XrResult result;
 };
 
+struct xrEnumerateAppConsumedSwapchainImagesEXT_params
+{
+    XrAppConsumedSwapchainEXT DECLSPEC_ALIGN(8) appConsumedSwapchain;
+    uint32_t imageCapacityInput;
+    uint32_t *imageCountOutput;
+    XrSwapchainImageBaseHeader *images;
+    XrResult result;
+};
+
 struct xrEnumerateBoundSourcesForAction_params
 {
     XrSession DECLSPEC_ALIGN(8) session;
@@ -2067,6 +2107,25 @@ struct xrEnumerateSpatialAnchorAttachableComponentsANDROID_params
     XrResult result;
 };
 
+struct xrEnumerateSpatialArchetypeComponentTypesEXT_params
+{
+    XrSpatialSnapshotEXT DECLSPEC_ALIGN(8) snapshot;
+    XrSpatialArchetypeIdEXT DECLSPEC_ALIGN(8) archetype;
+    uint32_t componentTypeCapacityInput;
+    uint32_t *componentTypeCountOutput;
+    XrSpatialComponentTypeEXT *componentTypes;
+    XrResult result;
+};
+
+struct xrEnumerateSpatialArchetypesEXT_params
+{
+    XrSpatialSnapshotEXT DECLSPEC_ALIGN(8) snapshot;
+    uint32_t archetypeCapacityInput;
+    uint32_t *archetypeCountOutput;
+    XrSpatialArchetypeIdEXT *archetypes;
+    XrResult result;
+};
+
 struct xrEnumerateSpatialCapabilitiesEXT_params
 {
     XrInstance DECLSPEC_ALIGN(8) instance;
@@ -2190,6 +2249,16 @@ struct xrEnumerateSupportedTrackableTypesANDROID_params
 struct xrEnumerateSwapchainFormats_params
 {
     XrSession DECLSPEC_ALIGN(8) session;
+    uint32_t formatCapacityInput;
+    uint32_t *formatCountOutput;
+    int64_t *formats;
+    XrResult result;
+};
+
+struct xrEnumerateSwapchainFormats2EXT_params
+{
+    XrSession DECLSPEC_ALIGN(8) session;
+    XrSwapchainFormatsEnumerateInfoEXT *enumerateInfo;
     uint32_t formatCapacityInput;
     uint32_t *formatCountOutput;
     int64_t *formats;
@@ -2327,6 +2396,13 @@ struct xrGetAnchorUuidBD_params
 {
     XrAnchorBD DECLSPEC_ALIGN(8) anchor;
     XrUuidEXT *uuid;
+    XrResult result;
+};
+
+struct xrGetAppConsumedSwapchainPropertiesEXT_params
+{
+    XrAppConsumedSwapchainEXT DECLSPEC_ALIGN(8) appConsumedSwapchain;
+    XrAppConsumedSwapchainPropertiesEXT *properties;
     XrResult result;
 };
 
@@ -3589,6 +3665,13 @@ struct xrRaycastANDROID_params
     XrSession DECLSPEC_ALIGN(8) session;
     const XrRaycastInfoANDROID *rayInfo;
     XrRaycastHitResultsANDROID *results;
+    XrResult result;
+};
+
+struct xrReleaseAppConsumedSwapchainImageEXT_params
+{
+    XrAppConsumedSwapchainEXT DECLSPEC_ALIGN(8) appConsumedSwapchain;
+    const XrAppConsumedSwapchainImageReleaseInfoEXT *releaseInfo;
     XrResult result;
 };
 

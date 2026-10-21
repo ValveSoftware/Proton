@@ -23,6 +23,16 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(openxr);
 
+XrResult WINAPI xrAcquireAppConsumedSwapchainImageEXT(XrAppConsumedSwapchainEXT appConsumedSwapchain, const XrAppConsumedSwapchainImageAcquireInfoEXT *acquireInfo, XrAppConsumedSwapchainImageStateEXT *image)
+{
+    struct xrAcquireAppConsumedSwapchainImageEXT_params params;
+    params.appConsumedSwapchain = appConsumedSwapchain;
+    params.acquireInfo = acquireInfo;
+    params.image = image;
+    UNIX_CALL_CHECKED(xrAcquireAppConsumedSwapchainImageEXT, &params);
+    return params.result;
+}
+
 XrResult WINAPI xrAddTrackableImageDatabaseANDROID(XrTrackableTrackerANDROID tracker, XrTrackableImageDatabaseANDROID database)
 {
     struct xrAddTrackableImageDatabaseANDROID_params params;
@@ -240,6 +250,16 @@ XrResult WINAPI xrCreateAnchorSpaceBD(XrSession session, const XrAnchorSpaceCrea
     params.createInfo = createInfo;
     params.space = space;
     UNIX_CALL_CHECKED(xrCreateAnchorSpaceBD, &params);
+    return params.result;
+}
+
+XrResult WINAPI xrCreateAppConsumedSwapchainEXT(XrSession session, const XrAppConsumedSwapchainCreateInfoEXT *createInfo, XrAppConsumedSwapchainEXT *appConsumedSwapchain)
+{
+    struct xrCreateAppConsumedSwapchainEXT_params params;
+    params.session = session;
+    params.createInfo = createInfo;
+    params.appConsumedSwapchain = appConsumedSwapchain;
+    UNIX_CALL_CHECKED(xrCreateAppConsumedSwapchainEXT, &params);
     return params.result;
 }
 
@@ -1131,6 +1151,14 @@ XrResult WINAPI xrDestroyAnchorBD(XrAnchorBD anchor)
     return params.result;
 }
 
+XrResult WINAPI xrDestroyAppConsumedSwapchainEXT(XrAppConsumedSwapchainEXT appConsumedSwapchain)
+{
+    struct xrDestroyAppConsumedSwapchainEXT_params params;
+    params.appConsumedSwapchain = appConsumedSwapchain;
+    UNIX_CALL_CHECKED(xrDestroyAppConsumedSwapchainEXT, &params);
+    return params.result;
+}
+
 XrResult WINAPI xrDestroyBodyTrackerBD(XrBodyTrackerBD bodyTracker)
 {
     struct xrDestroyBodyTrackerBD_params params;
@@ -1636,6 +1664,17 @@ XrResult WINAPI xrEnumerateApiLayerProperties(uint32_t propertyCapacityInput, ui
     return params.result;
 }
 
+XrResult WINAPI xrEnumerateAppConsumedSwapchainImagesEXT(XrAppConsumedSwapchainEXT appConsumedSwapchain, uint32_t imageCapacityInput, uint32_t *imageCountOutput, XrSwapchainImageBaseHeader *images)
+{
+    struct xrEnumerateAppConsumedSwapchainImagesEXT_params params;
+    params.appConsumedSwapchain = appConsumedSwapchain;
+    params.imageCapacityInput = imageCapacityInput;
+    params.imageCountOutput = imageCountOutput;
+    params.images = images;
+    UNIX_CALL_CHECKED(xrEnumerateAppConsumedSwapchainImagesEXT, &params);
+    return params.result;
+}
+
 XrResult WINAPI xrEnumerateBoundSourcesForAction(XrSession session, const XrBoundSourcesForActionEnumerateInfo *enumerateInfo, uint32_t sourceCapacityInput, uint32_t *sourceCountOutput, XrPath *sources)
 {
     struct xrEnumerateBoundSourcesForAction_params params;
@@ -1911,6 +1950,29 @@ XrResult WINAPI xrEnumerateSpatialAnchorAttachableComponentsANDROID(XrInstance i
     return params.result;
 }
 
+XrResult WINAPI xrEnumerateSpatialArchetypeComponentTypesEXT(XrSpatialSnapshotEXT snapshot, XrSpatialArchetypeIdEXT archetype, uint32_t componentTypeCapacityInput, uint32_t *componentTypeCountOutput, XrSpatialComponentTypeEXT *componentTypes)
+{
+    struct xrEnumerateSpatialArchetypeComponentTypesEXT_params params;
+    params.snapshot = snapshot;
+    params.archetype = archetype;
+    params.componentTypeCapacityInput = componentTypeCapacityInput;
+    params.componentTypeCountOutput = componentTypeCountOutput;
+    params.componentTypes = componentTypes;
+    UNIX_CALL_CHECKED(xrEnumerateSpatialArchetypeComponentTypesEXT, &params);
+    return params.result;
+}
+
+XrResult WINAPI xrEnumerateSpatialArchetypesEXT(XrSpatialSnapshotEXT snapshot, uint32_t archetypeCapacityInput, uint32_t *archetypeCountOutput, XrSpatialArchetypeIdEXT *archetypes)
+{
+    struct xrEnumerateSpatialArchetypesEXT_params params;
+    params.snapshot = snapshot;
+    params.archetypeCapacityInput = archetypeCapacityInput;
+    params.archetypeCountOutput = archetypeCountOutput;
+    params.archetypes = archetypes;
+    UNIX_CALL_CHECKED(xrEnumerateSpatialArchetypesEXT, &params);
+    return params.result;
+}
+
 XrResult WINAPI xrEnumerateSpatialCapabilitiesEXT(XrInstance instance, XrSystemId systemId, uint32_t capabilityCapacityInput, uint32_t *capabilityCountOutput, XrSpatialCapabilityEXT *capabilities)
 {
     struct xrEnumerateSpatialCapabilitiesEXT_params params;
@@ -2052,6 +2114,18 @@ XrResult WINAPI xrEnumerateSupportedTrackableTypesANDROID(XrInstance instance, X
     params.trackableTypeCountOutput = trackableTypeCountOutput;
     params.trackableTypes = trackableTypes;
     UNIX_CALL_CHECKED(xrEnumerateSupportedTrackableTypesANDROID, &params);
+    return params.result;
+}
+
+XrResult WINAPI xrEnumerateSwapchainFormats2EXT(XrSession session, XrSwapchainFormatsEnumerateInfoEXT *enumerateInfo, uint32_t formatCapacityInput, uint32_t *formatCountOutput, int64_t *formats)
+{
+    struct xrEnumerateSwapchainFormats2EXT_params params;
+    params.session = session;
+    params.enumerateInfo = enumerateInfo;
+    params.formatCapacityInput = formatCapacityInput;
+    params.formatCountOutput = formatCountOutput;
+    params.formats = formats;
+    UNIX_CALL_CHECKED(xrEnumerateSwapchainFormats2EXT, &params);
     return params.result;
 }
 
@@ -2207,6 +2281,15 @@ XrResult WINAPI xrGetAnchorUuidBD(XrAnchorBD anchor, XrUuidEXT *uuid)
     params.anchor = anchor;
     params.uuid = uuid;
     UNIX_CALL_CHECKED(xrGetAnchorUuidBD, &params);
+    return params.result;
+}
+
+XrResult WINAPI xrGetAppConsumedSwapchainPropertiesEXT(XrAppConsumedSwapchainEXT appConsumedSwapchain, XrAppConsumedSwapchainPropertiesEXT *properties)
+{
+    struct xrGetAppConsumedSwapchainPropertiesEXT_params params;
+    params.appConsumedSwapchain = appConsumedSwapchain;
+    params.properties = properties;
+    UNIX_CALL_CHECKED(xrGetAppConsumedSwapchainPropertiesEXT, &params);
     return params.result;
 }
 
@@ -3762,6 +3845,15 @@ XrResult WINAPI xrRaycastANDROID(XrSession session, const XrRaycastInfoANDROID *
     return params.result;
 }
 
+XrResult WINAPI xrReleaseAppConsumedSwapchainImageEXT(XrAppConsumedSwapchainEXT appConsumedSwapchain, const XrAppConsumedSwapchainImageReleaseInfoEXT *releaseInfo)
+{
+    struct xrReleaseAppConsumedSwapchainImageEXT_params params;
+    params.appConsumedSwapchain = appConsumedSwapchain;
+    params.releaseInfo = releaseInfo;
+    UNIX_CALL_CHECKED(xrReleaseAppConsumedSwapchainImageEXT, &params);
+    return params.result;
+}
+
 XrResult WINAPI xrRemoveTrackableImageDatabaseANDROID(XrTrackableTrackerANDROID tracker, XrTrackableImageDatabaseANDROID database)
 {
     struct xrRemoveTrackableImageDatabaseANDROID_params params;
@@ -4630,6 +4722,7 @@ XrResult WINAPI xrWaitSwapchainImage(XrSwapchain swapchain, const XrSwapchainIma
 
 static const struct openxr_func xr_instance_dispatch_table[] =
 {
+    {"xrAcquireAppConsumedSwapchainImageEXT", xrAcquireAppConsumedSwapchainImageEXT},
     {"xrAcquireSwapchainImage", xrAcquireSwapchainImage},
     {"xrAddTrackableImageDatabaseANDROID", xrAddTrackableImageDatabaseANDROID},
     {"xrAllocateWorldMeshBufferML", xrAllocateWorldMeshBufferML},
@@ -4656,6 +4749,7 @@ static const struct openxr_func xr_instance_dispatch_table[] =
     {"xrCreateAnchorSpaceANDROID", xrCreateAnchorSpaceANDROID},
     {"xrCreateAnchorSpaceBD", xrCreateAnchorSpaceBD},
     {"xrCreateApiLayerInstance", xrCreateApiLayerInstance},
+    {"xrCreateAppConsumedSwapchainEXT", xrCreateAppConsumedSwapchainEXT},
     {"xrCreateBodyTrackerBD", xrCreateBodyTrackerBD},
     {"xrCreateBodyTrackerFB", xrCreateBodyTrackerFB},
     {"xrCreateBodyTrackerHTC", xrCreateBodyTrackerHTC},
@@ -4750,6 +4844,7 @@ static const struct openxr_func xr_instance_dispatch_table[] =
     {"xrDestroyAction", xrDestroyAction},
     {"xrDestroyActionSet", xrDestroyActionSet},
     {"xrDestroyAnchorBD", xrDestroyAnchorBD},
+    {"xrDestroyAppConsumedSwapchainEXT", xrDestroyAppConsumedSwapchainEXT},
     {"xrDestroyBodyTrackerBD", xrDestroyBodyTrackerBD},
     {"xrDestroyBodyTrackerFB", xrDestroyBodyTrackerFB},
     {"xrDestroyBodyTrackerHTC", xrDestroyBodyTrackerHTC},
@@ -4816,6 +4911,7 @@ static const struct openxr_func xr_instance_dispatch_table[] =
     {"xrEndSession", xrEndSession},
     {"xrEndSpatialContainerRenderingEXT", xrEndSpatialContainerRenderingEXT},
     {"xrEnumerateApiLayerProperties", xrEnumerateApiLayerProperties},
+    {"xrEnumerateAppConsumedSwapchainImagesEXT", xrEnumerateAppConsumedSwapchainImagesEXT},
     {"xrEnumerateBoundSourcesForAction", xrEnumerateBoundSourcesForAction},
     {"xrEnumerateColorSpacesFB", xrEnumerateColorSpacesFB},
     {"xrEnumerateColorSpacesSONY", xrEnumerateColorSpacesSONY},
@@ -4840,6 +4936,8 @@ static const struct openxr_func xr_instance_dispatch_table[] =
     {"xrEnumerateSceneComputeFeaturesMSFT", xrEnumerateSceneComputeFeaturesMSFT},
     {"xrEnumerateSpaceSupportedComponentsFB", xrEnumerateSpaceSupportedComponentsFB},
     {"xrEnumerateSpatialAnchorAttachableComponentsANDROID", xrEnumerateSpatialAnchorAttachableComponentsANDROID},
+    {"xrEnumerateSpatialArchetypeComponentTypesEXT", xrEnumerateSpatialArchetypeComponentTypesEXT},
+    {"xrEnumerateSpatialArchetypesEXT", xrEnumerateSpatialArchetypesEXT},
     {"xrEnumerateSpatialCapabilitiesEXT", xrEnumerateSpatialCapabilitiesEXT},
     {"xrEnumerateSpatialCapabilityComponentTypesEXT", xrEnumerateSpatialCapabilityComponentTypesEXT},
     {"xrEnumerateSpatialCapabilityFeaturesEXT", xrEnumerateSpatialCapabilityFeaturesEXT},
@@ -4853,6 +4951,7 @@ static const struct openxr_func xr_instance_dispatch_table[] =
     {"xrEnumerateSupportedSpatialContainerGraphicsPresentationsEXT", xrEnumerateSupportedSpatialContainerGraphicsPresentationsEXT},
     {"xrEnumerateSupportedTrackableTypesANDROID", xrEnumerateSupportedTrackableTypesANDROID},
     {"xrEnumerateSwapchainFormats", xrEnumerateSwapchainFormats},
+    {"xrEnumerateSwapchainFormats2EXT", xrEnumerateSwapchainFormats2EXT},
     {"xrEnumerateSwapchainImages", xrEnumerateSwapchainImages},
     {"xrEnumerateViewConfigurationViews", xrEnumerateViewConfigurationViews},
     {"xrEnumerateViewConfigurations", xrEnumerateViewConfigurations},
@@ -4869,6 +4968,7 @@ static const struct openxr_func xr_instance_dispatch_table[] =
     {"xrGetAllTrackablesANDROID", xrGetAllTrackablesANDROID},
     {"xrGetAnchorPersistStateANDROID", xrGetAnchorPersistStateANDROID},
     {"xrGetAnchorUuidBD", xrGetAnchorUuidBD},
+    {"xrGetAppConsumedSwapchainPropertiesEXT", xrGetAppConsumedSwapchainPropertiesEXT},
     {"xrGetAudioInputDeviceGuidOculus", xrGetAudioInputDeviceGuidOculus},
     {"xrGetAudioOutputDeviceGuidOculus", xrGetAudioOutputDeviceGuidOculus},
     {"xrGetBodySkeletonFB", xrGetBodySkeletonFB},
@@ -5029,6 +5129,7 @@ static const struct openxr_func xr_instance_dispatch_table[] =
     {"xrQuerySpatialComponentDataEXT", xrQuerySpatialComponentDataEXT},
     {"xrQuerySystemTrackedKeyboardFB", xrQuerySystemTrackedKeyboardFB},
     {"xrRaycastANDROID", xrRaycastANDROID},
+    {"xrReleaseAppConsumedSwapchainImageEXT", xrReleaseAppConsumedSwapchainImageEXT},
     {"xrReleaseSwapchainImage", xrReleaseSwapchainImage},
     {"xrRemoveTrackableImageDatabaseANDROID", xrRemoveTrackableImageDatabaseANDROID},
     {"xrRequestBodyTrackingFidelityMETA", xrRequestBodyTrackingFidelityMETA},

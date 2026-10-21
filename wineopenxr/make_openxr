@@ -65,7 +65,7 @@ from enum import Enum
 LOGGER = logging.Logger("openxr")
 LOGGER.addHandler(logging.StreamHandler())
 
-XR_XML_VERSION = "1.1.63"
+XR_XML_VERSION = "1.1.65"
 
 # Filenames to create.
 WINE_OPENXR_H = "wineopenxr.h"
@@ -1445,7 +1445,7 @@ class Parameter(VkVariable):
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type_name in ["uint16_t", "uint32_t", "XrBool32"]:
                 self.format_str = "%u"
-            elif self.type_name in ["uint64_t", "XrAsyncRequestIdFB", "XrSystemId", "XrPath", "XrTime", "XrDuration", "XrControllerModelKeyMSFT", "XrMarkerML", "XrSpatialEntityIdBD", "XrCameraImageIdBD"]:
+            elif self.type_name in ["uint64_t", "XrAsyncRequestIdFB", "XrSystemId", "XrPath", "XrTime", "XrDuration", "XrControllerModelKeyMSFT", "XrMarkerML", "XrSpatialEntityIdBD", "XrCameraImageIdBD", "XrSpatialArchetypeIdEXT"]:
                 self.format_str = "0x%s"
                 self.format_conv = "wine_dbgstr_longlong({0})"
             elif self.type_name in ["HANDLE", "VkInstance"]:
