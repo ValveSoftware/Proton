@@ -382,7 +382,7 @@ PATH_CONV_METHODS_UTOW = {
 
 PATH_CONV_METHODS_WTOU = {
     "ISteamApps_GetFileDetails": {
-        "pszFileName": {"array": False, "url": False},
+        "pszFileName": {"array": False, "url": False, "slash_in_installdir" : True},
     },
     ### ISteamGameServer::SetModDir - "Just the folder name, not the whole path. I.e. "Spacewar"."
     "ISteamHTMLSurface_LoadURL": {
@@ -1078,6 +1078,8 @@ def handle_method_cpp(method, classname, out, wow64):
     for name, conv in filter(lambda x: x[0] in names, path_conv_wtou.items()):
         if conv['array']:
             out(f'    const char **u_{name} = {prefix}steamclient_dos_to_unix_path_array( params->{name} );\n')
+        elif 'slash_in_installdir' in conv and conv['slash_in_installdir']:
+            out(f'    char *u_{name} = steamclient_dos_to_unix_path_fixup_slash( params->{name}, {int(conv["url"])} );\n')
         else:
             out(f'    char *u_{name} = steamclient_dos_to_unix_path( params->{name}, {int(conv["url"])} );\n')
 

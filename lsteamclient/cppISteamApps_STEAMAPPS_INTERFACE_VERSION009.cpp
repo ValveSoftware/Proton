@@ -461,7 +461,7 @@ NTSTATUS ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetFileDetails( void *args )
 {
     struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetFileDetails_params *params = (struct ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetFileDetails_params *)args;
     struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION009 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION009 *)params->u_iface;
-    char *u_pszFileName = steamclient_dos_to_unix_path( params->pszFileName, 0 );
+    char *u_pszFileName = steamclient_dos_to_unix_path_fixup_slash( params->pszFileName, 0 );
     params->_ret = iface->GetFileDetails( u_pszFileName );
     steamclient_free_path( u_pszFileName );
     return 0;
@@ -472,7 +472,7 @@ NTSTATUS wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetFileDetails( void *a
 {
     struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetFileDetails_params *params = (struct wow64_ISteamApps_STEAMAPPS_INTERFACE_VERSION009_GetFileDetails_params *)args;
     struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION009 *iface = (struct u_ISteamApps_STEAMAPPS_INTERFACE_VERSION009 *)params->u_iface;
-    char *u_pszFileName = steamclient_dos_to_unix_path( params->pszFileName, 0 );
+    char *u_pszFileName = steamclient_dos_to_unix_path_fixup_slash( params->pszFileName, 0 );
     params->_ret = iface->GetFileDetails( u_pszFileName );
     steamclient_free_path( u_pszFileName );
     return 0;

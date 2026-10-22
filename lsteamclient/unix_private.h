@@ -111,6 +111,7 @@ extern NTSTATUS steamclient_networking_message_release_153a( void * );
 extern NTSTATUS wow64_steamclient_networking_message_release_153a( void * );
 
 extern char *steamclient_dos_to_unix_path( const char *src, int is_url );
+extern char *steamclient_dos_to_unix_path_fixup_slash( const char *src, int is_url );
 extern void steamclient_free_path( char *path_array );
 extern const char **steamclient_dos_to_unix_path_array( const char **src_array );
 extern const char **wow64_steamclient_dos_to_unix_path_array( ptr32< const char ** > src_array );
