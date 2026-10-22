@@ -815,6 +815,33 @@ int64_t map_format_vulkan_to_dxgi(int64_t format) {
   }
 }
 
+static XrResult map_vulkan_formats_to_dxgi(int64_t *real_formats, uint32_t real_format_count, int64_t *formats,
+                                           uint32_t formatCapacityInput, uint32_t *formatCountOutput)
+{
+  uint32_t i, o;
+  XrResult ret = XR_SUCCESS;
+
+  o = 0;
+  for (i = 0; i < real_format_count; ++i) {
+    int64_t mapped = map_format_vulkan_to_dxgi(real_formats[i]);
+
+    if (mapped == DXGI_FORMAT_UNKNOWN) {
+      continue;
+    }
+
+    if (formatCapacityInput && formats) {
+      if (o < formatCapacityInput) {
+        formats[o] = mapped;
+      } else {
+        ret = XR_ERROR_SIZE_INSUFFICIENT;
+      }
+    }
+    ++o;
+  }
+  *formatCountOutput = o;
+  return ret;
+}
+
 XrResult WINAPI xrEnumerateSwapchainFormats(XrSession session,
                                             uint32_t formatCapacityInput,
                                             uint32_t *formatCountOutput,
@@ -822,7 +849,6 @@ XrResult WINAPI xrEnumerateSwapchainFormats(XrSession session,
   wine_XrSession *wine_session = wine_session_from_handle(session);
   uint32_t real_format_count;
   int64_t *real_formats;
-  uint32_t i, o;
   struct xrEnumerateSwapchainFormats_params params = {
       .session = session,
       .formatCapacityInput = formatCapacityInput,
@@ -856,24 +882,47 @@ XrResult WINAPI xrEnumerateSwapchainFormats(XrSession session,
     goto done;
   }
 
-  o = 0;
-  for (i = 0; i < real_format_count; ++i) {
-    int64_t mapped = map_format_vulkan_to_dxgi(real_formats[i]);
+  params.result = map_vulkan_formats_to_dxgi(real_formats, real_format_count, formats, formatCapacityInput, formatCountOutput);
 
-    if (mapped == DXGI_FORMAT_UNKNOWN) {
-      continue;
-    }
+done:
+  free(real_formats);
+  return params.result;
+}
 
-    if (formatCapacityInput && formats) {
-      if (o < formatCapacityInput) {
-        formats[o] = mapped;
-      } else {
-        params.result = XR_ERROR_SIZE_INSUFFICIENT;
-      }
-    }
-    ++o;
+XrResult WINAPI xrEnumerateSwapchainFormats2EXT(XrSession session, XrSwapchainFormatsEnumerateInfoEXT *enumerateInfo, uint32_t formatCapacityInput, uint32_t *formatCountOutput, int64_t *formats)
+{
+  wine_XrSession *wine_session = wine_session_from_handle(session);
+  uint32_t real_format_count;
+  int64_t *real_formats;
+  struct xrEnumerateSwapchainFormats2EXT_params params = {
+    .session = session, .enumerateInfo = enumerateInfo, .formatCapacityInput = formatCapacityInput, .formatCountOutput = formatCountOutput,
+    .formats = formats,
+  };
+
+  if (wine_session->session_type != SESSION_TYPE_D3D11 && wine_session->session_type != SESSION_TYPE_D3D12) {
+    UNIX_CALL_CHECKED(xrEnumerateSwapchainFormats2EXT, &params);
+    return params.result;
   }
-  *formatCountOutput = o;
+
+  params.formatCapacityInput = 0;
+  params.formatCountOutput = &real_format_count;
+  params.formats = NULL;
+
+  UNIX_CALL_CHECKED(xrEnumerateSwapchainFormats2EXT, &params);
+  if (params.result != XR_SUCCESS) {
+    return params.result;
+  }
+
+  real_formats = malloc(sizeof(*real_formats) * real_format_count);
+
+  params.formatCapacityInput = real_format_count;
+  params.formats = real_formats;
+
+  UNIX_CALL_CHECKED(xrEnumerateSwapchainFormats2EXT, &params);
+  if (params.result != XR_SUCCESS)
+    goto done;
+
+  params.result = map_vulkan_formats_to_dxgi(real_formats, real_format_count, formats, formatCapacityInput, formatCountOutput);
 
 done:
   free(real_formats);

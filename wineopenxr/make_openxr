@@ -180,6 +180,7 @@ MANUAL_LOADER_THUNKS = {
     "xrDestroySession",
     "xrGetSystem",
     "xrEnumerateSwapchainFormats",
+    "xrEnumerateSwapchainFormats2EXT",
     "xrCreateSwapchain",
     "xrDestroySwapchain",
     "xrEnumerateSwapchainImages",

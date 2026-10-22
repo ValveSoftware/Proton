@@ -2117,18 +2117,6 @@ XrResult WINAPI xrEnumerateSupportedTrackableTypesANDROID(XrInstance instance, X
     return params.result;
 }
 
-XrResult WINAPI xrEnumerateSwapchainFormats2EXT(XrSession session, XrSwapchainFormatsEnumerateInfoEXT *enumerateInfo, uint32_t formatCapacityInput, uint32_t *formatCountOutput, int64_t *formats)
-{
-    struct xrEnumerateSwapchainFormats2EXT_params params;
-    params.session = session;
-    params.enumerateInfo = enumerateInfo;
-    params.formatCapacityInput = formatCapacityInput;
-    params.formatCountOutput = formatCountOutput;
-    params.formats = formats;
-    UNIX_CALL_CHECKED(xrEnumerateSwapchainFormats2EXT, &params);
-    return params.result;
-}
-
 XrResult WINAPI xrEnumerateViewConfigurationViews(XrInstance instance, XrSystemId systemId, XrViewConfigurationType viewConfigurationType, uint32_t viewCapacityInput, uint32_t *viewCountOutput, XrViewConfigurationView *views)
 {
     struct xrEnumerateViewConfigurationViews_params params;
