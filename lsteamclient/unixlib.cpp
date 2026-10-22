@@ -1068,10 +1068,12 @@ char *steamclient_dos_to_unix_path( const char *src, int is_url )
     }
 
 done:
-    len = strlen( buffer ) + 1;
-    if (!(dst = (char *)malloc( len ))) return NULL;
-    memcpy( dst, buffer, len );
-
+    if (is_url || !IS_ABSOLUTE(src) || !(dst = realpath( buffer, NULL )))
+    {
+        len = strlen( buffer ) + 1;
+        if (!(dst = (char *)malloc( len ))) return NULL;
+        memcpy( dst, buffer, len );
+    }
     TRACE( "-> %s\n", debugstr_a(dst) );
     return dst;
 }
