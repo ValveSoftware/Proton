@@ -21922,7 +21922,7 @@ static NTSTATUS thunk64_xrAcquireAppConsumedSwapchainImageEXT(void *args)
 
     TRACE("0x%s, %p, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->acquireInfo, params->image);
 
-    params->result = g_xr_host_instance_dispatch_table.p_xrAcquireAppConsumedSwapchainImageEXT(params->appConsumedSwapchain, params->acquireInfo, params->image);
+    params->result = g_xr_host_instance_dispatch_table.p_xrAcquireAppConsumedSwapchainImageEXT(((XrAppConsumedSwapchainEXT)wine_swapchain_from_app_consumed_swapchain_handle(params->appConsumedSwapchain)->host_swapchain), params->acquireInfo, params->image);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -21943,7 +21943,7 @@ static NTSTATUS thunk32_xrAcquireAppConsumedSwapchainImageEXT(void *args)
 
     convert_XrAppConsumedSwapchainImageAcquireInfoEXT_win32_to_host((const XrAppConsumedSwapchainImageAcquireInfoEXT32 *)UlongToPtr(params->acquireInfo), &acquireInfo_host);
     convert_XrAppConsumedSwapchainImageStateEXT_win32_to_host((XrAppConsumedSwapchainImageStateEXT32 *)UlongToPtr(params->image), &image_host);
-    params->result = g_xr_host_instance_dispatch_table.p_xrAcquireAppConsumedSwapchainImageEXT(params->appConsumedSwapchain, &acquireInfo_host, &image_host);
+    params->result = g_xr_host_instance_dispatch_table.p_xrAcquireAppConsumedSwapchainImageEXT(((XrAppConsumedSwapchainEXT)wine_swapchain_from_app_consumed_swapchain_handle(params->appConsumedSwapchain)->host_swapchain), &acquireInfo_host, &image_host);
     convert_XrAppConsumedSwapchainImageStateEXT_host_to_win32(&image_host, (XrAppConsumedSwapchainImageStateEXT32 *)UlongToPtr(params->image));
     return STATUS_SUCCESS;
 }
@@ -22723,7 +22723,7 @@ static NTSTATUS thunk64_xrCreateAppConsumedSwapchainEXT(void *args)
 
     TRACE("0x%s, %p, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->session)), params->createInfo, params->appConsumedSwapchain);
 
-    params->result = g_xr_host_instance_dispatch_table.p_xrCreateAppConsumedSwapchainEXT(wine_session_from_handle(params->session)->host_session, params->createInfo, params->appConsumedSwapchain);
+    params->result = wine_xrCreateAppConsumedSwapchainEXT(params->session, params->createInfo, params->appConsumedSwapchain);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -22742,7 +22742,7 @@ static NTSTATUS thunk32_xrCreateAppConsumedSwapchainEXT(void *args)
     TRACE("0x%s, %#x, %#x\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->session)), params->createInfo, params->appConsumedSwapchain);
 
     convert_XrAppConsumedSwapchainCreateInfoEXT_win32_to_host((const XrAppConsumedSwapchainCreateInfoEXT32 *)UlongToPtr(params->createInfo), &createInfo_host);
-    params->result = g_xr_host_instance_dispatch_table.p_xrCreateAppConsumedSwapchainEXT(wine_session_from_handle(params->session)->host_session, &createInfo_host, (XrAppConsumedSwapchainEXT *)UlongToPtr(params->appConsumedSwapchain));
+    params->result = wine_xrCreateAppConsumedSwapchainEXT(params->session, &createInfo_host, (XrAppConsumedSwapchainEXT *)UlongToPtr(params->appConsumedSwapchain));
     return STATUS_SUCCESS;
 }
 
@@ -25631,7 +25631,7 @@ static NTSTATUS thunk64_xrDestroyAppConsumedSwapchainEXT(void *args)
 
     TRACE("0x%s\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)));
 
-    params->result = g_xr_host_instance_dispatch_table.p_xrDestroyAppConsumedSwapchainEXT(params->appConsumedSwapchain);
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroyAppConsumedSwapchainEXT(((XrAppConsumedSwapchainEXT)wine_swapchain_from_app_consumed_swapchain_handle(params->appConsumedSwapchain)->host_swapchain));
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -25646,7 +25646,7 @@ static NTSTATUS thunk32_xrDestroyAppConsumedSwapchainEXT(void *args)
 
     TRACE("0x%s\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)));
 
-    params->result = g_xr_host_instance_dispatch_table.p_xrDestroyAppConsumedSwapchainEXT(params->appConsumedSwapchain);
+    params->result = g_xr_host_instance_dispatch_table.p_xrDestroyAppConsumedSwapchainEXT(((XrAppConsumedSwapchainEXT)wine_swapchain_from_app_consumed_swapchain_handle(params->appConsumedSwapchain)->host_swapchain));
     return STATUS_SUCCESS;
 }
 
@@ -27413,7 +27413,7 @@ static NTSTATUS thunk64_xrEnumerateAppConsumedSwapchainImagesEXT(void *args)
 
     TRACE("0x%s, %u, %p, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->imageCapacityInput, params->imageCountOutput, params->images);
 
-    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateAppConsumedSwapchainImagesEXT(params->appConsumedSwapchain, params->imageCapacityInput, params->imageCountOutput, params->images);
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateAppConsumedSwapchainImagesEXT(((XrAppConsumedSwapchainEXT)wine_swapchain_from_app_consumed_swapchain_handle(params->appConsumedSwapchain)->host_swapchain), params->imageCapacityInput, params->imageCountOutput, params->images);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -27436,7 +27436,7 @@ static NTSTATUS thunk32_xrEnumerateAppConsumedSwapchainImagesEXT(void *args)
 
     init_conversion_context(ctx);
     images_host = convert_XrSwapchainImageBaseHeader_array_win32_to_host(ctx, (XrSwapchainImageBaseHeader32 *)UlongToPtr(params->images), params->imageCapacityInput);
-    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateAppConsumedSwapchainImagesEXT(params->appConsumedSwapchain, params->imageCapacityInput, (uint32_t *)UlongToPtr(params->imageCountOutput), images_host);
+    params->result = g_xr_host_instance_dispatch_table.p_xrEnumerateAppConsumedSwapchainImagesEXT(((XrAppConsumedSwapchainEXT)wine_swapchain_from_app_consumed_swapchain_handle(params->appConsumedSwapchain)->host_swapchain), params->imageCapacityInput, (uint32_t *)UlongToPtr(params->imageCountOutput), images_host);
     convert_XrSwapchainImageBaseHeader_array_host_to_win32(images_host, (XrSwapchainImageBaseHeader32 *)UlongToPtr(params->images), params->imageCapacityInput);
     free_conversion_context(ctx);
     return STATUS_SUCCESS;
@@ -29187,7 +29187,7 @@ static NTSTATUS thunk64_xrGetAppConsumedSwapchainPropertiesEXT(void *args)
 
     TRACE("0x%s, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->properties);
 
-    params->result = g_xr_host_instance_dispatch_table.p_xrGetAppConsumedSwapchainPropertiesEXT(params->appConsumedSwapchain, params->properties);
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetAppConsumedSwapchainPropertiesEXT(((XrAppConsumedSwapchainEXT)wine_swapchain_from_app_consumed_swapchain_handle(params->appConsumedSwapchain)->host_swapchain), params->properties);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -29205,7 +29205,7 @@ static NTSTATUS thunk32_xrGetAppConsumedSwapchainPropertiesEXT(void *args)
     TRACE("0x%s, %#x\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->properties);
 
     convert_XrAppConsumedSwapchainPropertiesEXT_win32_to_host((XrAppConsumedSwapchainPropertiesEXT32 *)UlongToPtr(params->properties), &properties_host);
-    params->result = g_xr_host_instance_dispatch_table.p_xrGetAppConsumedSwapchainPropertiesEXT(params->appConsumedSwapchain, &properties_host);
+    params->result = g_xr_host_instance_dispatch_table.p_xrGetAppConsumedSwapchainPropertiesEXT(((XrAppConsumedSwapchainEXT)wine_swapchain_from_app_consumed_swapchain_handle(params->appConsumedSwapchain)->host_swapchain), &properties_host);
     convert_XrAppConsumedSwapchainPropertiesEXT_host_to_win32(&properties_host, (XrAppConsumedSwapchainPropertiesEXT32 *)UlongToPtr(params->properties));
     return STATUS_SUCCESS;
 }
@@ -34285,7 +34285,7 @@ static NTSTATUS thunk64_xrReleaseAppConsumedSwapchainImageEXT(void *args)
 
     TRACE("0x%s, %p\n", wine_dbgstr_longlong(uint64_from_xr_handle(params->appConsumedSwapchain)), params->releaseInfo);
 
-    params->result = g_xr_host_instance_dispatch_table.p_xrReleaseAppConsumedSwapchainImageEXT(params->appConsumedSwapchain, params->releaseInfo);
+    params->result = g_xr_host_instance_dispatch_table.p_xrReleaseAppConsumedSwapchainImageEXT(((XrAppConsumedSwapchainEXT)wine_swapchain_from_app_consumed_swapchain_handle(params->appConsumedSwapchain)->host_swapchain), params->releaseInfo);
     return STATUS_SUCCESS;
 }
 #endif /* _WIN64 */
@@ -34310,7 +34310,7 @@ static NTSTATUS thunk32_xrReleaseAppConsumedSwapchainImageEXT(void *args)
         releaseInfo_host = conversion_context_alloc(ctx, sizeof(*releaseInfo_host));
         convert_XrAppConsumedSwapchainImageReleaseInfoEXT_win32_to_host((const XrAppConsumedSwapchainImageReleaseInfoEXT32 *)UlongToPtr(params->releaseInfo), releaseInfo_host);
     }
-    params->result = g_xr_host_instance_dispatch_table.p_xrReleaseAppConsumedSwapchainImageEXT(params->appConsumedSwapchain, releaseInfo_host);
+    params->result = g_xr_host_instance_dispatch_table.p_xrReleaseAppConsumedSwapchainImageEXT(((XrAppConsumedSwapchainEXT)wine_swapchain_from_app_consumed_swapchain_handle(params->appConsumedSwapchain)->host_swapchain), releaseInfo_host);
     free_conversion_context(ctx);
     return STATUS_SUCCESS;
 }
@@ -37322,6 +37322,7 @@ BOOL wine_xr_extension_supported(const char *name)
 BOOL wine_xr_is_type_wrapped(XrObjectType type)
 {
     return FALSE ||
+        type == XR_OBJECT_TYPE_APP_CONSUMED_SWAPCHAIN_EXT ||
         type == XR_OBJECT_TYPE_INSTANCE ||
         type == XR_OBJECT_TYPE_SESSION ||
         type == XR_OBJECT_TYPE_SWAPCHAIN;

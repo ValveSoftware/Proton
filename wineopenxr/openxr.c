@@ -221,6 +221,13 @@ XrResult WINAPI wine_xrCreateSwapchain(XrSession session,
                                                                createInfo, swapchain);
 }
 
+XrResult WINAPI wine_xrCreateAppConsumedSwapchainEXT(XrSession session,
+                                       const XrAppConsumedSwapchainCreateInfoEXT *createInfo,
+                                       XrAppConsumedSwapchainEXT *swapchain) {
+  return g_xr_host_instance_dispatch_table.p_xrCreateAppConsumedSwapchainEXT(wine_session_from_handle(session)->host_session,
+                                                               createInfo, swapchain);
+}
+
 XrResult WINAPI wine_xrEnumerateInstanceExtensionProperties(const char *layerName,
                                                             uint32_t propertyCapacityInput,
                                                             uint32_t *propertyCountOutput,

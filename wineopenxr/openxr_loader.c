@@ -936,8 +936,6 @@ XrResult WINAPI xrCreateSwapchain(XrSession session, const XrSwapchainCreateInfo
   struct xrCreateSwapchain_params params = {
       .session = session, .createInfo = &our_createInfo, .swapchain = &wine_swapchain->host_swapchain};
 
-  wine_swapchain->create_info = *createInfo;
-
   TRACE("%#I64x, %p, %p\n", (ULONG64)session, createInfo, swapchain);
 
   if (wine_session->session_type == SESSION_TYPE_D3D11 || wine_session->session_type == SESSION_TYPE_D3D12) {
@@ -967,8 +965,82 @@ XrResult WINAPI xrCreateSwapchain(XrSession session, const XrSwapchainCreateInfo
     return params.result;
   }
 
+  wine_swapchain->usage_flags = createInfo->usageFlags;
+  wine_swapchain->format = createInfo->format;
+  wine_swapchain->width = createInfo->width;
+  wine_swapchain->height = createInfo->height;
+  wine_swapchain->array_size = createInfo->arraySize;
+  wine_swapchain->mip_count = createInfo->mipCount;
+  wine_swapchain->sample_count = createInfo->sampleCount;
+
   wine_swapchain->session = wine_session;
   *swapchain = (XrSwapchain)(ULONG_PTR)wine_swapchain;
+
+  return XR_SUCCESS;
+}
+
+XrResult WINAPI xrCreateAppConsumedSwapchainEXT(XrSession session, const XrAppConsumedSwapchainCreateInfoEXT *createInfo, XrAppConsumedSwapchainEXT *swapchain) {
+  wine_XrSession *wine_session = wine_session_from_handle(session);
+  wine_XrSwapchain *wine_swapchain = calloc(1, sizeof(wine_XrSwapchain));
+  XrAppConsumedSwapchainCreateInfoEXT our_createInfo = *createInfo;
+  struct xrCreateAppConsumedSwapchainEXT_params params = {
+      .session = session, .createInfo = &our_createInfo, .appConsumedSwapchain = (XrAppConsumedSwapchainEXT *)&wine_swapchain->host_swapchain};
+  XrAppConsumedSwapchainPropertiesEXT props;
+  struct xrGetAppConsumedSwapchainPropertiesEXT_params prop_params = { .properties = &props };
+
+  TRACE("%#I64x, %p, %p\n", (ULONG64)session, createInfo, swapchain);
+
+  if (wine_session->session_type == SESSION_TYPE_D3D11 || wine_session->session_type == SESSION_TYPE_D3D12) {
+    BOOL format_is_depth;
+    our_createInfo.format = map_format_dxgi_to_vulkan(createInfo->format);
+    if (our_createInfo.format == VK_FORMAT_UNDEFINED) {
+      ERR("unable to set Vulkan format\n");
+      free(wine_swapchain);
+      return XR_ERROR_SWAPCHAIN_FORMAT_UNSUPPORTED;
+    }
+
+    our_createInfo.usageFlags |= XR_SWAPCHAIN_USAGE_MUTABLE_FORMAT_BIT;
+
+    format_is_depth = is_vulkan_format_depth(our_createInfo.format);
+    if ((createInfo->usageFlags & XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT) && format_is_depth) {
+      WARN("Swapchain has a color attachment usage, but it's format is for depth\n");
+    }
+    if ((createInfo->usageFlags & XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT) && !format_is_depth) {
+      WARN("Swapchain has a depth/stencil usage, but it's format is for color\n");
+    }
+  }
+
+  UNIX_CALL_CHECKED(xrCreateAppConsumedSwapchainEXT, &params);
+  if (params.result != XR_SUCCESS) {
+    WARN("xrCreateSwapchain failed: %d\n", params.result);
+    free(wine_swapchain);
+    return params.result;
+  }
+
+  wine_swapchain->session = wine_session;
+
+  prop_params.appConsumedSwapchain = (XrAppConsumedSwapchainEXT)(ULONG_PTR)wine_swapchain;
+  UNIX_CALL_CHECKED(xrGetAppConsumedSwapchainPropertiesEXT, &prop_params);
+  if (params.result != XR_SUCCESS) {
+    struct xrDestroyAppConsumedSwapchainEXT_params params = { .appConsumedSwapchain = (XrAppConsumedSwapchainEXT)(ULONG_PTR)wine_swapchain };
+
+    ERR("xrGetAppConsumedSwapchainPropertiesEXT failed.\n");
+    UNIX_CALL_CHECKED(xrDestroyAppConsumedSwapchainEXT, &params);
+    return params.result;
+  }
+
+  wine_swapchain->app_consumed = TRUE;
+  wine_swapchain->usage_flags = props.usageFlags;
+  wine_swapchain->format = props.format;
+  if (wine_session->session_type == SESSION_TYPE_D3D11 || wine_session->session_type == SESSION_TYPE_D3D12)
+    wine_swapchain->format = map_format_vulkan_to_dxgi(wine_swapchain->format);
+  wine_swapchain->width = props.width;
+  wine_swapchain->height = props.height;
+  wine_swapchain->array_size = props.arraySize;
+  wine_swapchain->mip_count = props.mipCount;
+  wine_swapchain->sample_count = props.sampleCount;
+
+  *swapchain = (XrAppConsumedSwapchainEXT)(ULONG_PTR)wine_swapchain;
 
   return XR_SUCCESS;
 }
@@ -994,18 +1066,8 @@ static void release_d3d12_resources(wine_XrSwapchain *swapchain, uint32_t image_
   free(swapchain->acquired_indices);
 }
 
-XrResult WINAPI xrDestroySwapchain(XrSwapchain swapchain) {
-  wine_XrSwapchain *wine_swapchain = wine_swapchain_from_handle(swapchain);
-  struct xrDestroySwapchain_params params = {.swapchain = swapchain};
-
-  TRACE("%#I64x.\n", (ULONG64)swapchain);
-
-  UNIX_CALL_CHECKED(xrDestroySwapchain, &params);
-  if (params.result != XR_SUCCESS) {
-    WARN("xrDestroySwapchain failed: %d\n", params.result);
-    return params.result;
-  }
-
+static void destroy_wine_swapchain(wine_XrSwapchain *wine_swapchain)
+{
   if (wine_swapchain->image_count) {
     UINT i;
     if (wine_swapchain->session->session_type == SESSION_TYPE_D3D11) {
@@ -1021,7 +1083,37 @@ XrResult WINAPI xrDestroySwapchain(XrSwapchain swapchain) {
   }
 
   free(wine_swapchain);
+}
 
+XrResult WINAPI xrDestroySwapchain(XrSwapchain swapchain) {
+  wine_XrSwapchain *wine_swapchain = wine_swapchain_from_handle(swapchain);
+  struct xrDestroySwapchain_params params = {.swapchain = swapchain};
+
+  TRACE("%#I64x.\n", (ULONG64)swapchain);
+
+  UNIX_CALL_CHECKED(xrDestroySwapchain, &params);
+  if (params.result != XR_SUCCESS) {
+    WARN("xrDestroySwapchain failed: %d\n", params.result);
+    return params.result;
+  }
+
+  destroy_wine_swapchain(wine_swapchain);
+  return XR_SUCCESS;
+}
+
+XrResult WINAPI xrDestroyAppConsumedSwapchainEXT(XrAppConsumedSwapchainEXT swapchain) {
+  wine_XrSwapchain *wine_swapchain = wine_swapchain_from_handle((XrSwapchain)swapchain);
+  struct xrDestroyAppConsumedSwapchainEXT_params params = {.appConsumedSwapchain = swapchain};
+
+  TRACE("%#I64x.\n", (ULONG64)swapchain);
+
+  UNIX_CALL_CHECKED(xrDestroyAppConsumedSwapchainEXT, &params);
+  if (params.result != XR_SUCCESS) {
+    WARN("xrDestroyAppConsumedSwapchainEXT failed: %d\n", params.result);
+    return params.result;
+  }
+
+  destroy_wine_swapchain(wine_swapchain);
   return XR_SUCCESS;
 }
 
@@ -1096,38 +1188,60 @@ static VkResult record_transition_command(wine_XrInstance *instance,
   return vkEndCommandBuffer(*out_cmd);
 }
 
-XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
+static XrResult WINAPI enumerate_swapchain_images(wine_XrSwapchain *wine_swapchain,
                                            uint32_t imageCapacityInput,
                                            uint32_t *imageCountOutput,
                                            XrSwapchainImageBaseHeader *images) {
-  wine_XrSwapchain *wine_swapchain = wine_swapchain_from_handle(swapchain);
   wine_XrInstance *wine_instance = wine_swapchain->session->instance;
   XrSwapchainImageVulkanKHR *our_vk;
   HRESULT hr;
   size_t image_size = 0;
   uint32_t i;
   struct xrEnumerateSwapchainImages_params params = {
-      .swapchain = swapchain,
+      .swapchain = (XrSwapchain)(uintptr_t)wine_swapchain,
+      .imageCapacityInput = imageCapacityInput,
+      .imageCountOutput = imageCountOutput,
+      .images = images,
+  };
+  struct xrEnumerateAppConsumedSwapchainImagesEXT_params ac_params = {
+      .appConsumedSwapchain = (XrAppConsumedSwapchainEXT)(uintptr_t)wine_swapchain,
       .imageCapacityInput = imageCapacityInput,
       .imageCountOutput = imageCountOutput,
       .images = images,
   };
 
-  TRACE("%#I64x, %u, %p, %p\n", (ULONG64)swapchain, imageCapacityInput, imageCountOutput, images);
+  TRACE("%p, %u, %p, %p\n", wine_swapchain, imageCapacityInput, imageCountOutput, images);
   if (wine_swapchain->session->session_type != SESSION_TYPE_D3D11 &&
       wine_swapchain->session->session_type != SESSION_TYPE_D3D12) {
+    if (wine_swapchain->app_consumed)
+    {
+      UNIX_CALL_CHECKED(xrEnumerateAppConsumedSwapchainImagesEXT, &ac_params);
+      return params.result;
+    }
     UNIX_CALL_CHECKED(xrEnumerateSwapchainImages, &params);
     return params.result;
   }
 
   if (!wine_swapchain->image_count) {
     uint32_t image_count;
-    params.imageCapacityInput = 0;
-    params.imageCountOutput = &image_count;
-    params.images = NULL;
-    UNIX_CALL_CHECKED(xrEnumerateSwapchainImages, &params);
-    if (params.result != XR_SUCCESS) {
-      return params.result;
+
+    if (wine_swapchain->app_consumed)
+    {
+      ac_params.imageCapacityInput = 0;
+      ac_params.imageCountOutput = &image_count;
+      ac_params.images = NULL;
+      UNIX_CALL_CHECKED(xrEnumerateAppConsumedSwapchainImagesEXT, &ac_params);
+      if (ac_params.result != XR_SUCCESS)
+        return ac_params.result;
+    }
+    else
+    {
+      params.imageCapacityInput = 0;
+      params.imageCountOutput = &image_count;
+      params.images = NULL;
+      UNIX_CALL_CHECKED(xrEnumerateSwapchainImages, &params);
+      if (params.result != XR_SUCCESS)
+        return params.result;
     }
 
     our_vk = malloc(sizeof(*our_vk) * image_count);
@@ -1136,28 +1250,41 @@ XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
       our_vk[i].next = NULL;
     }
 
-    params.imageCapacityInput = image_count;
-    params.images = (XrSwapchainImageBaseHeader *)our_vk;
-    UNIX_CALL_CHECKED(xrEnumerateSwapchainImages, &params);
-    if (params.result != XR_SUCCESS) {
-      free(our_vk);
-      return params.result;
+    if (wine_swapchain->app_consumed)
+    {
+      ac_params.imageCapacityInput = image_count;
+      ac_params.images = (XrSwapchainImageBaseHeader *)our_vk;
+      UNIX_CALL_CHECKED(xrEnumerateAppConsumedSwapchainImagesEXT, &ac_params);
+      if (ac_params.result != XR_SUCCESS) {
+        free(our_vk);
+        return ac_params.result;
+      }
+    }
+    else
+    {
+      params.imageCapacityInput = image_count;
+      params.images = (XrSwapchainImageBaseHeader *)our_vk;
+      UNIX_CALL_CHECKED(xrEnumerateSwapchainImages, &params);
+      if (params.result != XR_SUCCESS) {
+        free(our_vk);
+        return params.result;
+      }
     }
 
     if (wine_swapchain->session->session_type == SESSION_TYPE_D3D11) {
       XrSwapchainImageD3D11KHR *our_d3d11;
       D3D11_TEXTURE2D_DESC1 desc;
 
-      desc.Width = wine_swapchain->create_info.width;
-      desc.Height = wine_swapchain->create_info.height;
-      desc.MipLevels = wine_swapchain->create_info.mipCount;
-      desc.ArraySize = wine_swapchain->create_info.arraySize;
-      desc.Format = wine_swapchain->create_info.format;
+      desc.Width = wine_swapchain->width;
+      desc.Height = wine_swapchain->height;
+      desc.MipLevels = wine_swapchain->mip_count;
+      desc.ArraySize = wine_swapchain->array_size;
+      desc.Format = wine_swapchain->format;
       TRACE("creating dxvk texture with dxgi format %d (%x)\n", desc.Format, desc.Format);
-      desc.SampleDesc.Count = wine_swapchain->create_info.sampleCount;
+      desc.SampleDesc.Count = wine_swapchain->sample_count;
       desc.SampleDesc.Quality = 0;
       desc.Usage = D3D11_USAGE_DEFAULT;
-      desc.BindFlags = d3d11usage_from_XrSwapchainUsageFlags(wine_swapchain->create_info.usageFlags);
+      desc.BindFlags = d3d11usage_from_XrSwapchainUsageFlags(wine_swapchain->usage_flags);
       desc.CPUAccessFlags = 0;
       desc.MiscFlags = 0;
       desc.TextureLayout = D3D11_TEXTURE_LAYOUT_UNDEFINED;
@@ -1185,16 +1312,16 @@ XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
       ID3D12DeviceExt1 *device_ext;
       HRESULT hr = wine_instance->d3d12_device->lpVtbl->QueryInterface(wine_instance->d3d12_device,
                                                                        &IID_ID3D12DeviceExt1, (void **)&device_ext);
-      BOOL format_is_depth = is_vulkan_format_depth(map_format_dxgi_to_vulkan(wine_swapchain->create_info.format));
+      BOOL format_is_depth = is_vulkan_format_depth(map_format_dxgi_to_vulkan(wine_swapchain->format));
       BOOL succeeded = TRUE;
       const D3D12_RESOURCE_STATES incoming_state =
           format_is_depth ? D3D12_RESOURCE_STATE_DEPTH_WRITE : D3D12_RESOURCE_STATE_RENDER_TARGET;
       const VkImageLayout vk_layout =
           format_is_depth ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
       const VkImageSubresourceRange subresource = {
-          .layerCount = wine_swapchain->create_info.arraySize,
+          .layerCount = wine_swapchain->array_size,
           .baseArrayLayer = 0,
-          .levelCount = wine_swapchain->create_info.mipCount,
+          .levelCount = wine_swapchain->mip_count,
           .baseMipLevel = 0,
           .aspectMask =
               format_is_depth ? (VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT) : VK_IMAGE_ASPECT_COLOR_BIT,
@@ -1206,27 +1333,33 @@ XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
 
       desc.Alignment = 0;
       desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-      desc.Width = wine_swapchain->create_info.width;
-      desc.Height = wine_swapchain->create_info.height;
-      desc.MipLevels = wine_swapchain->create_info.mipCount;
-      desc.DepthOrArraySize = wine_swapchain->create_info.arraySize;
-      desc.Format = wine_swapchain->create_info.format;
+      desc.Width = wine_swapchain->width;
+      desc.Height = wine_swapchain->height;
+      desc.MipLevels = wine_swapchain->mip_count;
+      desc.DepthOrArraySize = wine_swapchain->array_size;
+      desc.Format = wine_swapchain->format;
       TRACE("creating vkd3d-proton texture with dxgi format %d (%x)\n", desc.Format, desc.Format);
-      desc.SampleDesc.Count = wine_swapchain->create_info.sampleCount;
+      desc.SampleDesc.Count = wine_swapchain->sample_count;
       desc.SampleDesc.Quality = 0;
       desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
       desc.Flags = 0;
-      if (!format_is_depth) {
+
+      if (wine_swapchain->usage_flags & XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT)
+      {
+        if (format_is_depth)
+          ERR("XR_SWAPCHAIN_USAGE_COLOR_ATTACHMENT_BIT with depth format.\n");
         desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
-      } else {
+      }
+      if (wine_swapchain->usage_flags & XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)
+      {
+        if (!format_is_depth)
+          ERR("XR_SWAPCHAIN_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT with color format.\n");
         desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-        if (!(wine_swapchain->create_info.usageFlags & XR_SWAPCHAIN_USAGE_SAMPLED_BIT)) {
-          desc.Flags |= D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE;
-        }
       }
-      if (wine_swapchain->create_info.usageFlags & XR_SWAPCHAIN_USAGE_UNORDERED_ACCESS_BIT) {
+      if (!(wine_swapchain->usage_flags & XR_SWAPCHAIN_USAGE_SAMPLED_BIT))
+        desc.Flags |= D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE;
+      if (wine_swapchain->usage_flags & XR_SWAPCHAIN_USAGE_UNORDERED_ACCESS_BIT)
         desc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
-      }
 
       our_d3d12 = calloc(1, sizeof(XrSwapchainImageD3D12KHR) * image_count);
       for (i = 0; i < image_count; ++i) {
@@ -1284,6 +1417,36 @@ XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
   }
   memcpy(images, wine_swapchain->images, image_size * min(wine_swapchain->image_count, imageCapacityInput));
   return XR_SUCCESS;
+}
+
+XrResult WINAPI xrEnumerateSwapchainImages(XrSwapchain swapchain,
+                                           uint32_t imageCapacityInput,
+                                           uint32_t *imageCountOutput,
+                                           XrSwapchainImageBaseHeader *images) {
+  wine_XrSwapchain *wine_swapchain = wine_swapchain_from_handle(swapchain);
+
+  if (wine_swapchain->app_consumed)
+  {
+    ERR( "app consumed swapchain.\n" );
+    return XR_ERROR_HANDLE_INVALID;
+  }
+
+  return enumerate_swapchain_images(wine_swapchain, imageCapacityInput, imageCountOutput, images);
+}
+
+XrResult WINAPI xrEnumerateAppConsumedSwapchainImagesEXT(XrAppConsumedSwapchainEXT swapchain,
+                                                         uint32_t imageCapacityInput,
+                                                         uint32_t *imageCountOutput,
+                                                         XrSwapchainImageBaseHeader *images) {
+  wine_XrSwapchain *wine_swapchain = wine_swapchain_from_handle((XrSwapchain)swapchain);
+
+  if (!wine_swapchain->app_consumed)
+  {
+    ERR( "not app consumed swapchain.\n" );
+    return XR_ERROR_HANDLE_INVALID;
+  }
+
+  return enumerate_swapchain_images(wine_swapchain, imageCapacityInput, imageCountOutput, images);
 }
 
 static void lock_d3d_queue(wine_XrInstance *instance, BOOL drain_queue)
@@ -1363,6 +1526,26 @@ XrResult WINAPI xrAcquireSwapchainImage(XrSwapchain swapchain,
   return params.result;
 }
 
+XrResult WINAPI xrAcquireAppConsumedSwapchainImageEXT(XrAppConsumedSwapchainEXT appConsumedSwapchain,
+                                                      const XrAppConsumedSwapchainImageAcquireInfoEXT *acquireInfo,
+                                                      XrAppConsumedSwapchainImageStateEXT *image)
+{
+    wine_XrSwapchain *wine_swapchain = wine_swapchain_from_handle((XrSwapchain)appConsumedSwapchain);
+    wine_XrInstance *wine_instance = wine_swapchain->session->instance;
+
+    struct xrAcquireAppConsumedSwapchainImageEXT_params params =
+    {
+      .appConsumedSwapchain = appConsumedSwapchain,
+      .acquireInfo = acquireInfo,
+      .image = image,
+    };
+
+    lock_d3d_queue(wine_instance, FALSE);
+    UNIX_CALL_CHECKED(xrAcquireAppConsumedSwapchainImageEXT, &params);
+    unlock_d3d_queue(wine_instance, FALSE);
+    return params.result;
+}
+
 XrResult WINAPI xrReleaseSwapchainImage(XrSwapchain swapchain, const XrSwapchainImageReleaseInfo *releaseInfo) {
   wine_XrSwapchain *wine_swapchain = wine_swapchain_from_handle(swapchain);
   wine_XrInstance *wine_instance = wine_swapchain->session->instance;
@@ -1418,6 +1601,23 @@ XrResult WINAPI xrReleaseSwapchainImage(XrSwapchain swapchain, const XrSwapchain
   }
   unlock_d3d_queue(wine_instance, TRUE);
   return params.result;
+}
+
+XrResult WINAPI xrReleaseAppConsumedSwapchainImageEXT(XrAppConsumedSwapchainEXT appConsumedSwapchain,
+                                                      const XrAppConsumedSwapchainImageReleaseInfoEXT *releaseInfo)
+{
+    wine_XrSwapchain *wine_swapchain = wine_swapchain_from_handle((XrSwapchain)appConsumedSwapchain);
+    wine_XrInstance *wine_instance = wine_swapchain->session->instance;
+    struct xrReleaseAppConsumedSwapchainImageEXT_params params =
+    {
+      .appConsumedSwapchain = appConsumedSwapchain,
+      .releaseInfo = releaseInfo,
+    };
+
+    lock_d3d_queue(wine_instance, TRUE);
+    UNIX_CALL_CHECKED(xrReleaseAppConsumedSwapchainImageEXT, &params);
+    unlock_d3d_queue(wine_instance, TRUE);
+    return params.result;
 }
 
 XrResult WINAPI xrBeginFrame(XrSession session, const XrFrameBeginInfo *frameBeginInfo) {

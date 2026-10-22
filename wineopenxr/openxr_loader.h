@@ -94,12 +94,20 @@ typedef struct {
   BOOL *acquired;
   uint32_t *acquired_indices;
 
-  XrSwapchainCreateInfo create_info;
+  BOOL app_consumed;
+  XrSwapchainUsageFlags usage_flags;
+  int64_t format;
+  uint32_t width, height, array_size, mip_count, sample_count;
+
   VkCommandBuffer *cmd_release;
   VkCommandBuffer *cmd_acquire;
 } wine_XrSwapchain;
 
 static inline wine_XrSwapchain *wine_swapchain_from_handle(XrSwapchain handle) {
+  return (wine_XrSwapchain *)(uintptr_t)handle;
+}
+
+static inline wine_XrSwapchain *wine_swapchain_from_app_consumed_swapchain_handle(XrAppConsumedSwapchainEXT handle) {
   return (wine_XrSwapchain *)(uintptr_t)handle;
 }
 

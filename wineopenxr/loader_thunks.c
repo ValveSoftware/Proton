@@ -23,16 +23,6 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(openxr);
 
-XrResult WINAPI xrAcquireAppConsumedSwapchainImageEXT(XrAppConsumedSwapchainEXT appConsumedSwapchain, const XrAppConsumedSwapchainImageAcquireInfoEXT *acquireInfo, XrAppConsumedSwapchainImageStateEXT *image)
-{
-    struct xrAcquireAppConsumedSwapchainImageEXT_params params;
-    params.appConsumedSwapchain = appConsumedSwapchain;
-    params.acquireInfo = acquireInfo;
-    params.image = image;
-    UNIX_CALL_CHECKED(xrAcquireAppConsumedSwapchainImageEXT, &params);
-    return params.result;
-}
-
 XrResult WINAPI xrAddTrackableImageDatabaseANDROID(XrTrackableTrackerANDROID tracker, XrTrackableImageDatabaseANDROID database)
 {
     struct xrAddTrackableImageDatabaseANDROID_params params;
@@ -250,16 +240,6 @@ XrResult WINAPI xrCreateAnchorSpaceBD(XrSession session, const XrAnchorSpaceCrea
     params.createInfo = createInfo;
     params.space = space;
     UNIX_CALL_CHECKED(xrCreateAnchorSpaceBD, &params);
-    return params.result;
-}
-
-XrResult WINAPI xrCreateAppConsumedSwapchainEXT(XrSession session, const XrAppConsumedSwapchainCreateInfoEXT *createInfo, XrAppConsumedSwapchainEXT *appConsumedSwapchain)
-{
-    struct xrCreateAppConsumedSwapchainEXT_params params;
-    params.session = session;
-    params.createInfo = createInfo;
-    params.appConsumedSwapchain = appConsumedSwapchain;
-    UNIX_CALL_CHECKED(xrCreateAppConsumedSwapchainEXT, &params);
     return params.result;
 }
 
@@ -1151,14 +1131,6 @@ XrResult WINAPI xrDestroyAnchorBD(XrAnchorBD anchor)
     return params.result;
 }
 
-XrResult WINAPI xrDestroyAppConsumedSwapchainEXT(XrAppConsumedSwapchainEXT appConsumedSwapchain)
-{
-    struct xrDestroyAppConsumedSwapchainEXT_params params;
-    params.appConsumedSwapchain = appConsumedSwapchain;
-    UNIX_CALL_CHECKED(xrDestroyAppConsumedSwapchainEXT, &params);
-    return params.result;
-}
-
 XrResult WINAPI xrDestroyBodyTrackerBD(XrBodyTrackerBD bodyTracker)
 {
     struct xrDestroyBodyTrackerBD_params params;
@@ -1661,17 +1633,6 @@ XrResult WINAPI xrEnumerateApiLayerProperties(uint32_t propertyCapacityInput, ui
     params.propertyCountOutput = propertyCountOutput;
     params.properties = properties;
     UNIX_CALL_CHECKED(xrEnumerateApiLayerProperties, &params);
-    return params.result;
-}
-
-XrResult WINAPI xrEnumerateAppConsumedSwapchainImagesEXT(XrAppConsumedSwapchainEXT appConsumedSwapchain, uint32_t imageCapacityInput, uint32_t *imageCountOutput, XrSwapchainImageBaseHeader *images)
-{
-    struct xrEnumerateAppConsumedSwapchainImagesEXT_params params;
-    params.appConsumedSwapchain = appConsumedSwapchain;
-    params.imageCapacityInput = imageCapacityInput;
-    params.imageCountOutput = imageCountOutput;
-    params.images = images;
-    UNIX_CALL_CHECKED(xrEnumerateAppConsumedSwapchainImagesEXT, &params);
     return params.result;
 }
 
@@ -3830,15 +3791,6 @@ XrResult WINAPI xrRaycastANDROID(XrSession session, const XrRaycastInfoANDROID *
     params.rayInfo = rayInfo;
     params.results = results;
     UNIX_CALL_CHECKED(xrRaycastANDROID, &params);
-    return params.result;
-}
-
-XrResult WINAPI xrReleaseAppConsumedSwapchainImageEXT(XrAppConsumedSwapchainEXT appConsumedSwapchain, const XrAppConsumedSwapchainImageReleaseInfoEXT *releaseInfo)
-{
-    struct xrReleaseAppConsumedSwapchainImageEXT_params params;
-    params.appConsumedSwapchain = appConsumedSwapchain;
-    params.releaseInfo = releaseInfo;
-    UNIX_CALL_CHECKED(xrReleaseAppConsumedSwapchainImageEXT, &params);
     return params.result;
 }
 

@@ -149,6 +149,7 @@ MANUAL_UNIX_THUNKS = {
     "xrCreateSession",
     "xrDestroySession",
     "xrCreateSwapchain",
+    "xrCreateAppConsumedSwapchainEXT",
     "xrGetInstanceProcAddr",
     "xrEnumerateInstanceExtensionProperties",
     "xrConvertTimeToWin32PerformanceCounterKHR",
@@ -182,10 +183,15 @@ MANUAL_LOADER_THUNKS = {
     "xrEnumerateSwapchainFormats",
     "xrEnumerateSwapchainFormats2EXT",
     "xrCreateSwapchain",
+    "xrCreateAppConsumedSwapchainEXT",
     "xrDestroySwapchain",
+    "xrDestroyAppConsumedSwapchainEXT",
     "xrEnumerateSwapchainImages",
+    "xrEnumerateAppConsumedSwapchainImagesEXT",
     "xrAcquireSwapchainImage",
+    "xrAcquireAppConsumedSwapchainImageEXT",
     "xrReleaseSwapchainImage",
+    "xrReleaseAppConsumedSwapchainImageEXT",
     "xrBeginFrame",
     "xrEndFrame",
     "xrGetVulkanDeviceExtensionsKHR",
@@ -919,6 +925,8 @@ class Handle(Type):
             return "wine_session_from_handle({0})->host_session".format(name)
         if self.name == "XrSwapchain":
             return "wine_swapchain_from_handle({0})->host_swapchain".format(name)
+        if self.name == "XrAppConsumedSwapchainEXT":
+            return "((XrAppConsumedSwapchainEXT)wine_swapchain_from_app_consumed_swapchain_handle({0})->host_swapchain)".format(name)
 
         if self.is_dispatchable():
             LOGGER.error("Unhandled host handle for: {0}".format(self.name))
