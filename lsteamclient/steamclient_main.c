@@ -356,6 +356,8 @@ static BOOL get_env_win(const WCHAR *name, char *value, unsigned int size)
     return TRUE;
 }
 
+static BOOL steamclient_loaded;
+
 static int load_steamclient(void)
 {
     char steam_app_id[4096], ignore_child_processes[4096];
@@ -381,8 +383,17 @@ static int load_steamclient(void)
         WSAStartup(0x202, &data);
         wsa_initialized = TRUE;
     }
+    steamclient_loaded = TRUE;
     SetLastError(saved_err);
     return 1;
+}
+
+/* Games call the callback functions every frame. They skip the environment sync in
+ * load_steamclient(), which scans the whole Windows environment and makes a Unix call;
+ * CreateInterface() and the other entry points still sync it. */
+static int load_steamclient_fast(void)
+{
+    return steamclient_loaded || load_steamclient();
 }
 
 void *CDECL CreateInterface(const char *name, int *return_code)
@@ -484,7 +495,7 @@ int8_t CDECL Steam_FreeLastCallback( int32_t pipe )
     struct steamclient_Steam_FreeLastCallback_params params = {.pipe = pipe};
     TRACE( "%u\n", pipe );
 
-    if (!load_steamclient()) return 0;
+    if (!load_steamclient_fast()) return 0;
 
     HeapFree( GetProcessHeap(), 0, last_callback_data );
     last_callback_data = NULL;
@@ -508,7 +519,7 @@ int8_t CDECL Steam_BGetCallback( int32_t pipe, w_CallbackMsg_t *win_msg, int32_t
 
     TRACE("%u, %p, %p\n", pipe, win_msg, ignored);
 
-    if (!load_steamclient()) return 0;
+    if (!load_steamclient_fast()) return 0;
 
     execute_pending_callbacks();
 
@@ -568,7 +579,7 @@ int8_t CDECL Steam_GetAPICallResult( int32_t pipe, uint64_t call, void *w_callba
 
     TRACE( "%u, x, %p, %u, %u, %p\n", pipe, w_callback, w_callback_len, id, failed );
 
-    if (!load_steamclient()) return FALSE;
+    if (!load_steamclient_fast()) return FALSE;
     STEAMCLIENT_CALL( steamclient_Steam_GetAPICallResult, &params );
     return params._ret;
 }
@@ -578,7 +589,7 @@ void CDECL Steam_ReleaseThreadLocalMemory(int bThreadExit)
     struct steamclient_Steam_ReleaseThreadLocalMemory_params params = {.thread_exit = bThreadExit};
     TRACE("%d\n", bThreadExit);
 
-    if (!load_steamclient()) return;
+    if (!load_steamclient_fast()) return;
 
     STEAMCLIENT_CALL( steamclient_Steam_ReleaseThreadLocalMemory, &params );
 }
