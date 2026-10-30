@@ -412,8 +412,11 @@ struct networking_message
 #endif /* __cplusplus */
 };
 
+#define W_REQUEST_MAGIC 0xe802211e9c94aaff
+
 struct w_request
 {
+    UINT64 magic;
     struct u_request u_request;
     struct u_response u_response;
     union

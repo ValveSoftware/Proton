@@ -2,6 +2,32 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
+static struct w_request *alloc_w_request(void)
+{
+    struct w_request *request;
+
+    request = calloc( 1, sizeof(*request) );
+    request->magic = W_REQUEST_MAGIC;
+    return request;
+}
+
+static void free_w_request( struct w_request *request )
+{
+    if (!request) return;
+    SecureZeroMemory( &request->magic, sizeof(request->magic) );
+    free( request );
+}
+
+static struct w_request *get_w_request( void *handle )
+{
+    struct w_request *request = handle;
+
+    if (!request) return NULL;
+    if (request->magic == W_REQUEST_MAGIC) return request;
+    ERR( "Bad magic %#I64x.\n", request->magic );
+    return NULL;
+}
+
 void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers001_CancelQuery(struct w_iface *_this, uint32_t eType)
 {
     struct ISteamMatchmakingServers_SteamMatchMakingServers001_CancelQuery_params params =
@@ -24,17 +50,16 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         .nFilters = nFilters,
         .pRequestServersResponse = pRequestServersResponse,
     };
-    struct w_request *request;
+    struct w_request *request = alloc_w_request();
 
     TRACE( "%p\n", _this );
 
-    if (!(request = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*request) ))) return NULL;
     params._ret = request;
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_RequestInternetServerList, &params );
     if (!request->u_request.handle)
     {
-        HeapFree( GetProcessHeap(), 0, request );
+        free_w_request( request );
         return NULL;
     }
 
@@ -49,17 +74,15 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         .iApp = iApp,
         .pRequestServersResponse = pRequestServersResponse,
     };
-    struct w_request *request;
+    struct w_request *request = alloc_w_request();
 
-    TRACE( "%p\n", _this );
+    TRACE( "%p, %p\n", _this, pRequestServersResponse );
 
-    if (!(request = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*request) ))) return NULL;
     params._ret = request;
-
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_RequestLANServerList, &params );
     if (!request->u_request.handle)
     {
-        HeapFree( GetProcessHeap(), 0, request );
+        free_w_request( request );
         return NULL;
     }
 
@@ -76,17 +99,16 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         .nFilters = nFilters,
         .pRequestServersResponse = pRequestServersResponse,
     };
-    struct w_request *request;
+    struct w_request *request = alloc_w_request();
 
     TRACE( "%p\n", _this );
 
-    if (!(request = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*request) ))) return NULL;
     params._ret = request;
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_RequestFriendsServerList, &params );
     if (!request->u_request.handle)
     {
-        HeapFree( GetProcessHeap(), 0, request );
+        free_w_request( request );
         return NULL;
     }
 
@@ -103,17 +125,16 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         .nFilters = nFilters,
         .pRequestServersResponse = pRequestServersResponse,
     };
-    struct w_request *request;
+    struct w_request *request = alloc_w_request();
 
     TRACE( "%p\n", _this );
 
-    if (!(request = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*request) ))) return NULL;
     params._ret = request;
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_RequestFavoritesServerList, &params );
     if (!request->u_request.handle)
     {
-        HeapFree( GetProcessHeap(), 0, request );
+        free_w_request( request );
         return NULL;
     }
 
@@ -130,17 +151,16 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         .nFilters = nFilters,
         .pRequestServersResponse = pRequestServersResponse,
     };
-    struct w_request *request;
+    struct w_request *request = alloc_w_request();;
 
     TRACE( "%p\n", _this );
 
-    if (!(request = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*request) ))) return NULL;
     params._ret = request;
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_RequestHistoryServerList, &params );
     if (!request->u_request.handle)
     {
-        HeapFree( GetProcessHeap(), 0, request );
+        free_w_request( request );
         return NULL;
     }
 
@@ -157,17 +177,16 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_Request
         .nFilters = nFilters,
         .pRequestServersResponse = pRequestServersResponse,
     };
-    struct w_request *request;
+    struct w_request *request = alloc_w_request();
 
     TRACE( "%p\n", _this );
 
-    if (!(request = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*request) ))) return NULL;
     params._ret = request;
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_RequestSpectatorServerList, &params );
     if (!request->u_request.handle)
     {
-        HeapFree( GetProcessHeap(), 0, request );
+        free_w_request( request );
         return NULL;
     }
 
@@ -179,7 +198,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_CancelQue
     struct ISteamMatchmakingServers_SteamMatchMakingServers002_CancelQuery_params params =
     {
         .u_iface = _this->u_iface,
-        .hRequest = hRequest,
+        .hRequest = get_w_request( hRequest ),
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_CancelQuery, &params );
@@ -191,17 +210,17 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRe
     struct ISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest_params params =
     {
         .u_iface = _this->u_iface,
-        .hServerListRequest = hServerListRequest,
+        .hServerListRequest = get_w_request( hServerListRequest ),
     };
-    struct w_request *request = hServerListRequest;
+    struct w_request *request = get_w_request( hServerListRequest );
 
     TRACE( "%p %p\n", _this, hServerListRequest );
     execute_pending_callbacks(); /* execute any pending callbacks that might still need to use the request */
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_ReleaseRequest, &params );
 
-    if (request) HeapFree( GetProcessHeap(), 0, request->details );
-    HeapFree( GetProcessHeap(), 0, request );
+    if (request) free( request->details );
+    free_w_request( request );
 }
 
 gameserveritem_t_105 * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers002_GetServerDetails( struct w_iface *_this, void *hRequest, int32_t iServer )
@@ -209,10 +228,10 @@ gameserveritem_t_105 * __thiscall winISteamMatchmakingServers_SteamMatchMakingSe
     struct ISteamMatchmakingServers_SteamMatchMakingServers002_GetServerDetails_params params =
     {
         .u_iface = _this->u_iface,
-        .hRequest = hRequest,
+        .hRequest = get_w_request( hRequest ),
         .iServer = iServer,
     };
-    struct w_request *request = hRequest;
+    struct w_request *request = get_w_request( hRequest );
 
     TRACE( "%p\n", _this );
 
@@ -221,13 +240,12 @@ gameserveritem_t_105 * __thiscall winISteamMatchmakingServers_SteamMatchMakingSe
         struct ISteamMatchmakingServers_SteamMatchMakingServers002_GetServerCount_params count_params =
         {
             .u_iface = _this->u_iface,
-            .hRequest = hRequest,
+            .hRequest = get_w_request( hRequest ),
         };
 
         STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers002_GetServerCount, &count_params );
         request->details_count = count_params._ret;
-        if (count_params._ret) request->details = HeapAlloc( GetProcessHeap(), 0,
-                                                             (count_params._ret + 1) * sizeof(*request->details) );
+        if (count_params._ret) request->details = malloc( (count_params._ret + 1) * sizeof(*request->details) );
     }
     if (request && request->details && (iServer < 0 || iServer >= request->details_count))
     {
@@ -257,17 +275,16 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_Request
         .nFilters = nFilters,
         .pRequestServersResponse = pRequestServersResponse,
     };
-    struct w_request *request;
+    struct w_request *request = alloc_w_request();
 
     TRACE( "%p\n", _this );
 
-    if (!(request = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*request) ))) return NULL;
     params._ret = request;
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers003_RequestInternetServerList, &params );
     if (!request->u_request.handle)
     {
-        HeapFree( GetProcessHeap(), 0, request );
+        free_w_request( request );
         return NULL;
     }
 
@@ -282,17 +299,16 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_Request
         .iApp = iApp,
         .pRequestServersResponse = pRequestServersResponse,
     };
-    struct w_request *request;
+    struct w_request *request = alloc_w_request();
 
     TRACE( "%p\n", _this );
 
-    if (!(request = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*request) ))) return NULL;
     params._ret = request;
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers003_RequestLANServerList, &params );
     if (!request->u_request.handle)
     {
-        HeapFree( GetProcessHeap(), 0, request );
+        free_w_request( request );
         return NULL;
     }
 
@@ -309,17 +325,16 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_Request
         .nFilters = nFilters,
         .pRequestServersResponse = pRequestServersResponse,
     };
-    struct w_request *request;
+    struct w_request *request = alloc_w_request();
 
     TRACE( "%p\n", _this );
 
-    if (!(request = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*request) ))) return NULL;
     params._ret = request;
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers003_RequestFriendsServerList, &params );
     if (!request->u_request.handle)
     {
-        HeapFree( GetProcessHeap(), 0, request );
+        free_w_request( request );
         return NULL;
     }
 
@@ -336,17 +351,16 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_Request
         .nFilters = nFilters,
         .pRequestServersResponse = pRequestServersResponse,
     };
-    struct w_request *request;
+    struct w_request *request = alloc_w_request();
 
     TRACE( "%p\n", _this );
 
-    if (!(request = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*request) ))) return NULL;
     params._ret = request;
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers003_RequestFavoritesServerList, &params );
     if (!request->u_request.handle)
     {
-        HeapFree( GetProcessHeap(), 0, request );
+        free_w_request( request );
         return NULL;
     }
 
@@ -363,17 +377,16 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_Request
         .nFilters = nFilters,
         .pRequestServersResponse = pRequestServersResponse,
     };
-    struct w_request *request;
+    struct w_request *request = alloc_w_request();
 
     TRACE( "%p\n", _this );
 
-    if (!(request = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*request) ))) return NULL;
     params._ret = request;
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers003_RequestHistoryServerList, &params );
     if (!request->u_request.handle)
     {
-        HeapFree( GetProcessHeap(), 0, request );
+        free_w_request( request );
         return NULL;
     }
 
@@ -390,17 +403,16 @@ void * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_Request
         .nFilters = nFilters,
         .pRequestServersResponse = pRequestServersResponse,
     };
-    struct w_request *request;
+    struct w_request *request = alloc_w_request();
 
     TRACE( "%p\n", _this );
 
-    if (!(request = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*request) ))) return NULL;
     params._ret = request;
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers003_RequestSpectatorServerList, &params );
     if (!request->u_request.handle)
     {
-        HeapFree( GetProcessHeap(), 0, request );
+        free_w_request( request );
         return NULL;
     }
 
@@ -412,7 +424,7 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_CancelQue
     struct ISteamMatchmakingServers_SteamMatchMakingServers003_CancelQuery_params params =
     {
         .u_iface = _this->u_iface,
-        .hRequest = hRequest,
+        .hRequest = get_w_request( hRequest ),
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers003_CancelQuery, &params );
@@ -424,17 +436,17 @@ void __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_ReleaseRe
     struct ISteamMatchmakingServers_SteamMatchMakingServers003_ReleaseRequest_params params =
     {
         .u_iface = _this->u_iface,
-        .hServerListRequest = hServerListRequest,
+        .hServerListRequest = get_w_request( hServerListRequest ),
     };
-    struct w_request *request = hServerListRequest;
+    struct w_request *request = get_w_request( hServerListRequest );
 
     TRACE( "%p %p\n", _this, hServerListRequest );
     execute_pending_callbacks(); /* execute any pending callbacks that might still need to use the request */
 
     STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers003_ReleaseRequest, &params );
 
-    if (request) HeapFree( GetProcessHeap(), 0, request->details );
-    HeapFree( GetProcessHeap(), 0, request );
+    if (request) free( request->details );
+    free_w_request( request );
 }
 
 gameserveritem_t_105 * __thiscall winISteamMatchmakingServers_SteamMatchMakingServers003_GetServerDetails( struct w_iface *_this, void *hRequest, int32_t iServer )
@@ -442,10 +454,10 @@ gameserveritem_t_105 * __thiscall winISteamMatchmakingServers_SteamMatchMakingSe
     struct ISteamMatchmakingServers_SteamMatchMakingServers003_GetServerDetails_params params =
     {
         .u_iface = _this->u_iface,
-        .hRequest = hRequest,
+        .hRequest = get_w_request( hRequest ),
         .iServer = iServer,
     };
-    struct w_request *request = hRequest;
+    struct w_request *request = get_w_request( hRequest );
 
     TRACE( "%p\n", _this );
 
@@ -454,13 +466,12 @@ gameserveritem_t_105 * __thiscall winISteamMatchmakingServers_SteamMatchMakingSe
         struct ISteamMatchmakingServers_SteamMatchMakingServers003_GetServerCount_params count_params =
         {
             .u_iface = _this->u_iface,
-            .hRequest = hRequest,
+            .hRequest = get_w_request( hRequest ),
         };
 
         STEAMCLIENT_CALL( ISteamMatchmakingServers_SteamMatchMakingServers003_GetServerCount, &count_params );
         request->details_count = count_params._ret;
-        if (count_params._ret) request->details = HeapAlloc( GetProcessHeap(), 0,
-                                                             (count_params._ret + 1) * sizeof(*request->details) );
+        if (count_params._ret) request->details = malloc( (count_params._ret + 1) * sizeof(*request->details) );
     }
     if (request && request->details && (iServer < 0 || iServer >= request->details_count))
     {
