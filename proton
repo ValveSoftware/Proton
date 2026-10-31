@@ -507,12 +507,19 @@ def get_pe_file_version(path):
 def find_game_xess_dll():
     """Walk the game install directory to locate a game-shipped libxess.dll."""
     install_path = g_session.env.get("STEAM_COMPAT_INSTALL_PATH")
-    if not install_path:
+    if install_path:
+        for root, _dirs, files in os.walk(install_path):
+            for name in files:
+                if name.lower() == "libxess.dll":
+                    return os.path.join(root, name)
         return None
-    for root, _dirs, files in os.walk(install_path):
-        for name in files:
+
+    # Not started by Steam (eg. "proton run game.exe"), so look next to the executable.
+    if len(sys.argv) > 2 and os.path.isfile(sys.argv[2]):
+        exe_dir = os.path.dirname(os.path.abspath(sys.argv[2]))
+        for name in os.listdir(exe_dir):
             if name.lower() == "libxess.dll":
-                return os.path.join(root, name)
+                return os.path.join(exe_dir, name)
     return None
 
 def is_xess_compatible(so_path):
