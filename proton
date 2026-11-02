@@ -226,6 +226,19 @@ def dir_sync(dst, src):
     for dir in comp.common_dirs:
         dir_sync(os.path.join(dst, dir), os.path.join(src, dir))
 
+def merge_tree(src, dst):
+    if not os.path.lexists(dst):
+        makedirs(os.path.dirname(dst))
+        shutil.move(src, dst)
+        return
+    if os.path.isdir(src) and not os.path.islink(src):
+        if not (os.path.isdir(dst) and not os.path.islink(dst)):
+            return
+        for item in os.listdir(src):
+            merge_tree(os.path.join(src, item), os.path.join(dst, item))
+    elif not os.path.lexists(dst):
+        shutil.move(src, dst)
+
 # copy_file_range implementation for old Python versions
 __syscall__copy_file_range = None
 
@@ -985,6 +998,51 @@ class CompatData:
                 os.remove(old)
                 os.symlink(src=link, dst=old)
 
+    def unify_driverstore(self):
+        # The Intel igdext loader in d3dext-sdk is case-sensitive and checks for
+        # L"DriverStore\\FileRepository". Unify any lowercase driverstore from Wine
+        # into CamelCase DriverStore to satisfy the loader while avoiding duplicate
+        # folders that collide during Steam's library move.
+        sys32 = os.path.join(self.prefix_dir, "drive_c/windows/system32")
+        legacy_store = os.path.join(sys32, "driverstore")
+        camel_store = os.path.join(sys32, "DriverStore")
+
+        try:
+            if os.path.isdir(legacy_store) and not os.path.islink(legacy_store):
+                is_same = False
+                try:
+                    if os.path.isdir(camel_store) and os.path.samefile(legacy_store, camel_store):
+                        is_same = True
+                except OSError:
+                    pass
+
+                if not is_same:
+                    lower_repo = os.path.join(legacy_store, "filerepository")
+                    camel_repo = os.path.join(camel_store, "FileRepository")
+                    if os.path.isdir(lower_repo) and not os.path.islink(lower_repo):
+                        merge_tree(lower_repo, camel_repo)
+                        shutil.rmtree(lower_repo, ignore_errors=True)
+
+                    merge_tree(legacy_store, camel_store)
+                    shutil.rmtree(legacy_store, ignore_errors=True)
+
+            if os.path.isdir(camel_store) and not os.path.islink(camel_store):
+                lower_repo = os.path.join(camel_store, "filerepository")
+                camel_repo = os.path.join(camel_store, "FileRepository")
+                if os.path.isdir(lower_repo) and not os.path.islink(lower_repo):
+                    is_same = False
+                    try:
+                        if os.path.isdir(camel_repo) and os.path.samefile(lower_repo, camel_repo):
+                            is_same = True
+                    except OSError:
+                        pass
+
+                    if not is_same:
+                        merge_tree(lower_repo, camel_repo)
+                        shutil.rmtree(lower_repo, ignore_errors=True)
+        except OSError:
+            pass
+
     def setup_prefix(self):
         with self.prefix_lock:
             if file_exists(self.version_file, follow_symlinks=True):
@@ -1254,6 +1312,8 @@ class CompatData:
                                  prefix=self.prefix_dir,
                                  track_file=tracked_files,
                                  link_debug=True)
+
+                self.unify_driverstore()
 
                 intc_store = "drive_c/windows/system32/DriverStore/FileRepository/igd_faux.inf_1"
                 makedirs(os.path.join(self.prefix_dir, intc_store))

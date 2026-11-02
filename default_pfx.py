@@ -7,6 +7,7 @@
 import os
 import subprocess
 import re
+import shutil
 
 def file_is_wine_builtin_dll(path):
     if not os.path.exists(path):
@@ -117,6 +118,53 @@ def fixup_drive_links(default_pfx_dir):
             if ":" in dir_:
                 os.remove(os.path.join(walk_dir, dir_))
 
+def merge_tree(src, dst):
+    if not os.path.lexists(dst):
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        shutil.move(src, dst)
+        return
+    if os.path.isdir(src) and not os.path.islink(src):
+        if not (os.path.isdir(dst) and not os.path.islink(dst)):
+            return
+        for item in os.listdir(src):
+            merge_tree(os.path.join(src, item), os.path.join(dst, item))
+    elif not os.path.lexists(dst):
+        shutil.move(src, dst)
+
+# normalize driverstore hierarchy to CamelCase DriverStore/FileRepository
+# to satisfy case-sensitive Intel igdext loader (wcsstr) and avoid case collision
+def fixup_driverstore(default_pfx_dir):
+    sys32 = os.path.join(default_pfx_dir, "drive_c/windows/system32")
+    legacy_store = os.path.join(sys32, "driverstore")
+    camel_store = os.path.join(sys32, "DriverStore")
+
+    if os.path.isdir(legacy_store) and not os.path.islink(legacy_store):
+        try:
+            if os.path.isdir(camel_store) and os.path.samefile(legacy_store, camel_store):
+                return
+        except OSError:
+            pass
+
+        lower_repo = os.path.join(legacy_store, "filerepository")
+        camel_repo = os.path.join(camel_store, "FileRepository")
+        if os.path.isdir(lower_repo) and not os.path.islink(lower_repo):
+            merge_tree(lower_repo, camel_repo)
+            shutil.rmtree(lower_repo, ignore_errors=True)
+
+        merge_tree(legacy_store, camel_store)
+        shutil.rmtree(legacy_store, ignore_errors=True)
+
+    if os.path.isdir(camel_store) and not os.path.islink(camel_store):
+        lower_repo = os.path.join(camel_store, "filerepository")
+        camel_repo = os.path.join(camel_store, "FileRepository")
+        if os.path.isdir(lower_repo) and not os.path.islink(lower_repo):
+            try:
+                if not (os.path.isdir(camel_repo) and os.path.samefile(lower_repo, camel_repo)):
+                    merge_tree(lower_repo, camel_repo)
+                    shutil.rmtree(lower_repo, ignore_errors=True)
+            except OSError:
+                pass
+
 def make_default_pfx(default_pfx_dir, dist_dir, arm64):
     local_env = dict(os.environ)
     libdir = dist_dir + '/lib/'
@@ -136,6 +184,7 @@ def make_default_pfx(default_pfx_dir, dist_dir, arm64):
         os.path.join(bin_dir, 'wineserver') + " -w"],
 
         env=local_env, check=True)
+    fixup_driverstore(default_pfx_dir)
     setup_dll_symlinks(default_pfx_dir, dist_dir, arm64)
     fixup_drive_links(default_pfx_dir)
 
