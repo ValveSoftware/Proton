@@ -1244,11 +1244,11 @@ class CompatData:
                     if file_exists(nvapi32_dll + '.debug', follow_symlinks=False):
                         os.unlink(nvapi32_dll + '.debug')
 
-                # Try to detect known DLLs that ship with the NVIDIA Linux Driver
-                # and add them into the prefix
+                # Try to detect known DLLs and executables that ship with
+                # the NVIDIA Linux Driver and add them into the prefix
                 if g_session.nvidia_wine_dll_dir:
-                    for dll in ["_nvngx.dll", "nvngx.dll"]:
-                        try_copy(g_session.nvidia_wine_dll_dir + "/" + dll,
+                    for f in ["_nvngx.dll", "nvngx.dll", "nvngx_update.exe"]:
+                        try_copy(g_session.nvidia_wine_dll_dir + "/" + f,
                                  "drive_c/windows/system32",
                                  optional=True,
                                  prefix=self.prefix_dir,
