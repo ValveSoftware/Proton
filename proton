@@ -1589,6 +1589,12 @@ class Session:
                     ]:
                 self.env["PROTON_USE_WOW64"] = "1"
 
+        if "WINE_IGNORE_STARTUP_SHOW_WINDOW" not in self.env and "SteamGameId" in self.env:
+            if self.env["SteamGameId"] in [
+                    "1361210",
+                    ]:
+                self.env["WINE_IGNORE_STARTUP_SHOW_WINDOW"] = "1"
+
         self.env.pop("WINEARCH", "")
         if "PROTON_USE_WOW64" in self.env and self.env["PROTON_USE_WOW64"] == "1" and platform.machine() == "x86_64":
             self.env["WINEARCH"] = "wow64"
