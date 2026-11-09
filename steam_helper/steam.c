@@ -41,6 +41,7 @@
 #include "ntstatus.h"
 #define WIN32_NO_STATUS
 #include <windows.h>
+#include <tlhelp32.h>
 #include <winsvc.h>
 #include <winternl.h>
 #include <shellapi.h>
@@ -901,6 +902,246 @@ static DWORD WINAPI steam_drm_thread(void *arg)
     return 0;
 }
 
+/* Ubisoft Connect (upc.exe) is started by the game through a bridge process which lives exactly as long
+ * as the game, but upc.exe and its helpers keep running after the game exits. That keeps the wine session
+ * and so the game alive from Steam's point of view, so close them once the bridge is gone. */
+static const WCHAR *ubisoft_bridge_names[] =
+{
+    L"UbisoftGameLauncher.exe",
+    L"UbisoftGameLauncher64.exe",
+    L"UbisoftConnectLauncher.exe",
+};
+
+/* Seconds without the bridge or a visible Ubisoft Connect window before closing it, checked once a second. */
+#define UBISOFT_QUIET_SECONDS 3
+
+struct ubisoft_processes
+{
+    const WCHAR *dir;   /* Ubisoft Connect's install directory, with a trailing backslash */
+    BOOL bridge;
+    unsigned int count;
+    DWORD pids[MAXIMUM_WAIT_OBJECTS];
+};
+
+/* Reads Ubisoft Connect's install directory into dir, returns FALSE if it isn't installed. */
+static BOOL get_ubisoft_install_dir( WCHAR *dir, DWORD dir_size )
+{
+    DWORD size = (dir_size - 1) * sizeof(WCHAR);
+    size_t len;
+
+    if (RegGetValueW( HKEY_LOCAL_MACHINE, L"Software\\Ubisoft\\Launcher", L"InstallDir",
+                      RRF_RT_REG_SZ | RRF_SUBKEY_WOW6432KEY, NULL, dir, &size ))
+        return FALSE;
+    if (!(len = wcslen( dir ))) return FALSE;
+    if (dir[len - 1] != '\\') wcscpy( dir + len, L"\\" );
+    TRACE( "Ubisoft Connect installed in %s.\n", debugstr_w(dir) );
+    return TRUE;
+}
+
+/* Looks for the bridge and, if want_pids is set, for the processes running from Ubisoft Connect's directory. */
+static BOOL scan_ubisoft_processes( struct ubisoft_processes *procs, BOOL want_pids )
+{
+    PROCESSENTRY32W entry = { sizeof(entry) };
+    unsigned int i, dir_len = wcslen( procs->dir );
+    HANDLE snapshot, process;
+    WCHAR path[MAX_PATH];
+    DWORD size;
+
+    procs->bridge = FALSE;
+    procs->count = 0;
+
+    snapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
+    if (snapshot == INVALID_HANDLE_VALUE)
+    {
+        ERR( "Failed to create process snapshot, err %lu.\n", GetLastError() );
+        return FALSE;
+    }
+
+    if (Process32FirstW( snapshot, &entry ))
+    {
+        do
+        {
+            for (i = 0; i < ARRAY_SIZE(ubisoft_bridge_names); ++i)
+                if (!lstrcmpiW( entry.szExeFile, ubisoft_bridge_names[i] )) procs->bridge = TRUE;
+        } while (!procs->bridge && Process32NextW( snapshot, &entry ));
+    }
+
+    if (!procs->bridge && want_pids && Process32FirstW( snapshot, &entry ))
+    {
+        do
+        {
+            if (!(process = OpenProcess( PROCESS_QUERY_LIMITED_INFORMATION, FALSE, entry.th32ProcessID ))) continue;
+            size = ARRAY_SIZE(path);
+            if (QueryFullProcessImageNameW( process, 0, path, &size ) && size > dir_len
+                    && CompareStringOrdinal( path, dir_len, procs->dir, dir_len, TRUE ) == CSTR_EQUAL)
+                procs->pids[procs->count++] = entry.th32ProcessID;
+            CloseHandle( process );
+        } while (procs->count < ARRAY_SIZE(procs->pids) && Process32NextW( snapshot, &entry ));
+    }
+
+    CloseHandle( snapshot );
+    return TRUE;
+}
+
+static BOOL is_ubisoft_window( HWND hwnd, const struct ubisoft_processes *procs )
+{
+    unsigned int i;
+    DWORD pid;
+
+    GetWindowThreadProcessId( hwnd, &pid );
+    for (i = 0; i < procs->count; ++i)
+        if (procs->pids[i] == pid) return TRUE;
+    return FALSE;
+}
+
+struct ubisoft_visible_params
+{
+    const struct ubisoft_processes *procs;
+    BOOL visible;
+};
+
+static BOOL CALLBACK find_visible_ubisoft_window( HWND hwnd, LPARAM lparam )
+{
+    struct ubisoft_visible_params *params = (struct ubisoft_visible_params *)lparam;
+
+    if (!is_ubisoft_window( hwnd, params->procs ) || !IsWindowVisible( hwnd )) return TRUE;
+    params->visible = TRUE;
+    return FALSE;
+}
+
+/* upc.exe shows a window while it syncs cloud saves after the game exits, or when it needs the user,
+ * e.g. to resolve a cloud save conflict. */
+static BOOL ubisoft_window_visible( const struct ubisoft_processes *procs )
+{
+    struct ubisoft_visible_params params = { procs, FALSE };
+
+    EnumWindows( find_visible_ubisoft_window, (LPARAM)&params );
+    return params.visible;
+}
+
+struct ubisoft_message_params
+{
+    const struct ubisoft_processes *procs;
+    UINT msg;
+    WPARAM wparam;
+    BOOL accepted;
+};
+
+static BOOL CALLBACK send_ubisoft_window_message( HWND hwnd, LPARAM lparam )
+{
+    struct ubisoft_message_params *params = (struct ubisoft_message_params *)lparam;
+    DWORD_PTR result;
+
+    if (!is_ubisoft_window( hwnd, params->procs )) return TRUE;
+    if (!SendMessageTimeoutW( hwnd, params->msg, params->wparam, 0, SMTO_ABORTIFHUNG, 5000, &result ))
+    {
+        /* Not responding, likely still busy, so ask again later. */
+        TRACE( "Message %#x to hwnd %p timed out.\n", params->msg, hwnd );
+        params->accepted = FALSE;
+    }
+    else if (params->msg == WM_QUERYENDSESSION && !result)
+        params->accepted = FALSE;
+    return TRUE;
+}
+
+/* Sends msg to every Ubisoft Connect window. Returns FALSE if any of them doesn't respond or,
+ * for WM_QUERYENDSESSION, refuses. */
+static BOOL send_ubisoft_message( const struct ubisoft_processes *procs, UINT msg, WPARAM wparam )
+{
+    struct ubisoft_message_params params = { procs, msg, wparam, TRUE };
+
+    EnumWindows( send_ubisoft_window_message, (LPARAM)&params );
+    return params.accepted;
+}
+
+/* Returns FALSE if upc.exe isn't ready to quit yet, e.g. it refused, didn't respond or shows a window. */
+static BOOL close_ubisoft_launcher( struct ubisoft_processes *procs )
+{
+    HANDLE handles[ARRAY_SIZE(procs->pids)];
+    unsigned int i, count, pass;
+    BOOL accepted, visible;
+
+    /* upc.exe ignores WM_CLOSE but handles session end. WM_ENDSESSION is sent either way, to end the session
+     * or to tell it that it was cancelled. */
+    accepted = send_ubisoft_message( procs, WM_QUERYENDSESSION, 0 );
+    if (!send_ubisoft_message( procs, WM_ENDSESSION, accepted ) || !accepted) return FALSE;
+
+    /* It doesn't exit on its own after that, and some of its windowless helpers may outlive it. */
+    for (pass = 0;; ++pass)
+    {
+        if (!scan_ubisoft_processes( procs, TRUE ) || procs->bridge) return FALSE;
+        if (!procs->count) return TRUE;
+        /* Something keeps coming back, e.g. a respawning helper, so retry later. */
+        if (pass == 3) return FALSE;
+
+        for (i = count = 0; i < procs->count; ++i)
+        {
+            if ((handles[count] = OpenProcess( SYNCHRONIZE | PROCESS_TERMINATE | PROCESS_QUERY_LIMITED_INFORMATION,
+                                               FALSE, procs->pids[i] )))
+                ++count;
+        }
+        /* WM_ENDSESSION returned, so it's done cleaning up, but give helpers a moment to exit on their own. */
+        if (count) WaitForMultipleObjects( count, handles, TRUE, 500 );
+
+        /* Back off if it showed a window in the meantime, e.g. while cleaning up. */
+        visible = ubisoft_window_visible( procs );
+        for (i = 0; i < count; ++i)
+        {
+            if (!visible && WaitForSingleObject( handles[i], 0 ) == WAIT_TIMEOUT)
+            {
+                TRACE( "Terminating process %04lx.\n", GetProcessId( handles[i] ) );
+                TerminateProcess( handles[i], 0 );
+            }
+            CloseHandle( handles[i] );
+        }
+        if (visible) return FALSE;
+    }
+}
+
+/* arg is Ubisoft Connect's install directory, from get_ubisoft_install_dir(). */
+static DWORD WINAPI ubisoft_launcher_thread(void *arg)
+{
+    struct ubisoft_processes procs = { arg };
+    unsigned int quiet = 0;
+    BOOL armed = FALSE;
+
+    for (;;)
+    {
+        Sleep( 1000 );
+        if (!scan_ubisoft_processes( &procs, armed )) continue;
+
+        if (procs.bridge)
+        {
+            if (!armed) TRACE( "Ubisoft game launcher started.\n" );
+            armed = TRUE;
+            quiet = 0;
+            continue;
+        }
+        if (!armed) continue;
+        if (!procs.count)
+        {
+            TRACE( "Ubisoft Connect exited.\n" );
+            armed = FALSE;
+            continue;
+        }
+
+        /* Tolerate the bridge being briefly restarted, and never close Ubisoft Connect while it shows a window. */
+        if (ubisoft_window_visible( &procs )) quiet = 0;
+        else ++quiet;
+        if (quiet < UBISOFT_QUIET_SECONDS) continue;
+
+        quiet = 0;
+        if (close_ubisoft_launcher( &procs ))
+        {
+            TRACE( "Closed Ubisoft Connect.\n" );
+            armed = FALSE;
+        }
+        else TRACE( "Ubisoft Connect isn't ready to quit, retrying.\n" );
+    }
+
+    return 0;
+}
+
 BOOL is_ptraced(void)
 {
     DWORD len;
@@ -915,6 +1156,7 @@ BOOL is_ptraced(void)
 
 int main(int argc, char *argv[])
 {
+    static WCHAR ubisoft_dir[MAX_PATH];
     HANDLE wait_handle = INVALID_HANDLE_VALUE;
     HANDLE event2 = INVALID_HANDLE_VALUE;
     HANDLE event = INVALID_HANDLE_VALUE;
@@ -998,6 +1240,10 @@ int main(int argc, char *argv[])
 
         if (game_process)
             CreateThread(NULL, 0, steam_drm_thread, child, 0, NULL);
+
+        if (game_process && !env_nonzero("PROTON_KEEP_UBISOFT_LAUNCHER")
+                && get_ubisoft_install_dir( ubisoft_dir, ARRAY_SIZE(ubisoft_dir) ))
+            CreateThread(NULL, 0, ubisoft_launcher_thread, ubisoft_dir, 0, NULL);
     }
 
     if (game_process)

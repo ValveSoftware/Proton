@@ -320,6 +320,7 @@ the Wine prefix. Removing the option will revert to the previous behavior.
 |                       | `PROTON_LOG_DIR`                   | Output log files into the directory specified. Defaults to your home directory. |
 |                       | `PROTON_WAIT_ATTACH`               | Wait for a debugger to attach to steam.exe before launching the game process. To attach to the game process at startup, debuggers should be set to follow child processes. |
 |                       | `PROTON_CRASH_REPORT_DIR`          | Write crash logs into this directory. Does not clean up old logs, so may eat all your disk space eventually. |
+|                       | `PROTON_KEEP_UBISOFT_LAUNCHER`     | Don't close Ubisoft Connect after the game exits. By default, Proton closes it once its post-game cloud sync is done so Steam no longer shows the game as running. |
 | `wined3d`             | `PROTON_USE_WINED3D`               | Use OpenGL-based wined3d instead of Vulkan-based DXVK for d3d11, d3d10, and d3d9. |
 | `nod3d11`             | `PROTON_NO_D3D11`                  | Disable `d3d11.dll`, for d3d11 games which can fall back to and run better with d3d9. |
 | `nod3d10`             | `PROTON_NO_D3D10`                  | Disable `d3d10.dll` and `dxgi.dll`, for d3d10 games which can fall back to and run better with d3d9. |
