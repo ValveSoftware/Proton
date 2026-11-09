@@ -1142,6 +1142,37 @@ static DWORD WINAPI ubisoft_launcher_thread(void *arg)
     return 0;
 }
 
+/* Only close Ubisoft Connect if it was started as a dependency of the launched game. If the user launched
+ * Ubisoft Connect itself, it should keep running. Games install to a "games" subdirectory of Ubisoft Connect's
+ * directory by default, so only executables directly in that directory count. Names are also compared because
+ * the same file can be reached through a different path, e.g. Z:\. */
+static BOOL launched_ubisoft_connect( HANDLE child, const WCHAR *dir )
+{
+    static const WCHAR *names[] = { L"upc.exe", L"UbisoftConnect.exe" };
+    unsigned int i, dir_len = wcslen( dir );
+    WCHAR path[MAX_PATH];
+    const WCHAR *name;
+    DWORD size = ARRAY_SIZE(path);
+
+    if (child == INVALID_HANDLE_VALUE) return FALSE;
+    if (!QueryFullProcessImageNameW( child, 0, path, &size ))
+    {
+        ERR( "Failed to get launched executable path, err %lu.\n", GetLastError() );
+        return FALSE;
+    }
+
+    if (size > dir_len && CompareStringOrdinal( path, dir_len, dir, dir_len, TRUE ) == CSTR_EQUAL
+            && !wcschr( path + dir_len, '\\' ))
+        return TRUE;
+
+    name = PathFindFileNameW( path );
+    for (i = 0; i < ARRAY_SIZE(names); ++i)
+        if (!lstrcmpiW( name, names[i] )) return TRUE;
+    for (i = 0; i < ARRAY_SIZE(ubisoft_bridge_names); ++i)
+        if (!lstrcmpiW( name, ubisoft_bridge_names[i] )) return TRUE;
+    return FALSE;
+}
+
 BOOL is_ptraced(void)
 {
     DWORD len;
@@ -1242,7 +1273,8 @@ int main(int argc, char *argv[])
             CreateThread(NULL, 0, steam_drm_thread, child, 0, NULL);
 
         if (game_process && !env_nonzero("PROTON_KEEP_UBISOFT_LAUNCHER")
-                && get_ubisoft_install_dir( ubisoft_dir, ARRAY_SIZE(ubisoft_dir) ))
+                && get_ubisoft_install_dir( ubisoft_dir, ARRAY_SIZE(ubisoft_dir) )
+                && !launched_ubisoft_connect( child, ubisoft_dir ))
             CreateThread(NULL, 0, ubisoft_launcher_thread, ubisoft_dir, 0, NULL);
     }
 
