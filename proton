@@ -1444,6 +1444,7 @@ def default_compat_config():
                 "1026680", #FINAL FANTASY VIII - REMASTERED
                 "3513350", #Wuthering Waves
                 "3837340", #FINAL FANTASY VII
+                "3285880", #MONOMOOON
                 ]:
             ret.add("noxalia")
 
