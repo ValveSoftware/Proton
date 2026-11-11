@@ -604,6 +604,8 @@ w_Texture_t vrclient_translate_texture_d3d12( const w_Texture_t *texture, w_VRVu
     case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB: vk_format = VK_FORMAT_R8G8B8A8_SRGB; break;
     case DXGI_FORMAT_R8G8B8A8_UNORM: vk_format = VK_FORMAT_R8G8B8A8_UNORM; break;
     case DXGI_FORMAT_B8G8R8A8_TYPELESS: vk_format = VK_FORMAT_B8G8R8A8_UNORM; break;
+    case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB: vk_format = VK_FORMAT_B8G8R8A8_SRGB; break;
+    case DXGI_FORMAT_B8G8R8A8_UNORM: vk_format = VK_FORMAT_B8G8R8A8_UNORM; break;
     default:
         ERR("Unsupported DXGI format %#x.\n", resource_desc.Format);
         return *texture;
