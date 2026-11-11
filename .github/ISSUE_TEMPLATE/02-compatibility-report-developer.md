@@ -18,11 +18,15 @@ about: Game compatibility issues.
 
 ## Notes for future users commenting on this thread
 
-Please add `PROTON_LOG=1 %command%` to the game's launch options and
+Please include the following information in your replies to this thread.
+
+Add `PROTON_LOG=1 %command%` to the game's launch options and
 attach the generated $HOME/steam-$APPID.log to your comment as a file.
 
-Also include your your system information.
+Include your your system information:
 - GPU: e.g. RX 580 or GTX 970
 - Video driver version: e.g. Mesa 18.2 or nvidia 396.54
 - Kernel version: e.g. 4.17
 - Proton version: e.g. Proton 11 or Proton Experimental
+
+Add a brief description of your problem and steps to reproduce it.
