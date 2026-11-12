@@ -71,6 +71,9 @@ enum callback_type
     CALL_IFACE_VTABLE_0_ADD_PLAYER_TO_LIST,
     CALL_IFACE_VTABLE_0_RULES_RESPONDED,
     CALL_IFACE_VTABLE_0_FRIENDS_RESPONDED,
+    CALL_CREATE_CONNECTION_SIGNALING,
+    CALL_IFACE_VTABLE_0_CONNECTION_SEND_SIGNAL,
+    CALL_IFACE_VTABLE_1_CONNECTION_RELEASE,
 };
 
 struct callback
@@ -165,11 +168,42 @@ struct callback
             int64_t connected;
             const char name[1];
         } friends_responded;
+
+        struct
+        {
+            union
+            {
+                ULONG_PTR (*W_CDECL w_func)( void *local_iface, const SteamNetworkingIdentity *identityPeer,
+                                             int nLocalVirtualPort, int nRemoteVirtualPort );
+                UINT64 __pad;
+            };
+            char iface_version[64];
+            UINT64 u_ISteamNetworkingSockets;
+            SteamNetworkingIdentity identityPeer;
+            int nLocalVirtualPort;
+            int nRemoteVirtualPort;
+        } create_connection_signaling;
+
+        struct
+        {
+            UINT64 win_class;
+            uint32_t hConn;
+            uint32_t cbMsg;
+            SteamNetConnectionInfo_t_153a info;
+            const char msg[1];
+        } connection_send_signal;
+
+        struct
+        {
+            UINT64 win_class;
+        } connection_release;
     };
 };
 
 struct steamclient_next_callback_params
 {
+    uint64_t set_result_function;
+    uint64_t set_result_context;
     int8_t _ret;
     struct callback *callback;
     uint32_t size;
@@ -177,9 +211,25 @@ struct steamclient_next_callback_params
 
 struct wow64_steamclient_next_callback_params
 {
+    uint64_t set_result_function;
+    uint64_t set_result_context;
     int8_t _ret;
     W32_PTR(struct callback *callback, callback, struct callback *);
     uint32_t size;
+};
+
+struct steamclient_set_callback_result_params
+{
+    uint64_t function;
+    uint64_t context;
+    uint64_t result;
+};
+
+struct wow64_steamclient_set_callback_result_params
+{
+    uint64_t function;
+    uint64_t context;
+    uint64_t result;
 };
 
 struct steamclient_CreateInterface_params

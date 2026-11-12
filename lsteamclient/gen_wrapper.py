@@ -245,6 +245,7 @@ UNIX_FUNCS = [
     'steamclient_init',
     'steamclient_init_registry',
     'steamclient_next_callback',
+    "steamclient_set_callback_result",
     'steamclient_get_unix_buffer',
     'steamclient_CreateInterface',
     'steamclient_Steam_GetAPICallResult',

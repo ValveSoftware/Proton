@@ -20,6 +20,9 @@ char *g_tmppath;
 struct callback_entry
 {
     struct list entry;
+    callback_before_delivery_func_t before_delivery;
+    callback_set_result_func_t set_result;
+    uint64_t context;
     struct callback callback;
 };
 
@@ -146,6 +149,83 @@ void queue_vtable_callback_0_friends_responded( struct w_iface *w_iface, CSteamI
     entry->callback.friends_responded.steamid = steamID;
     entry->callback.friends_responded.connected = bCurrentlyConnected;
     memcpy( (char *)entry->callback.friends_responded.name, pchName, name_size );
+
+    pthread_mutex_lock( &callbacks_lock );
+    list_add_tail( &callbacks, &entry->entry );
+    pthread_mutex_unlock( &callbacks_lock );
+}
+
+void queue_create_connection_signaling_callback( w_create_connection_signaling_callback_func w_func,
+        void *u_ISteamNetworkingSockets, int iface_version, const SteamNetworkingIdentity *identityPeer,
+        int nLocalVirtualPort, int nRemoteVirtualPort, callback_set_result_func_t set_result_func,
+        uint64_t context )
+{
+    uint32_t size = 0;
+    struct callback_entry *entry;
+
+    size += sizeof(struct callback_entry);
+    if (!(entry = (struct callback_entry *)calloc( 1, size ))) return;
+    entry->callback.type = CALL_CREATE_CONNECTION_SIGNALING;
+    size -= offsetof( struct callback_entry, callback );
+    entry->callback.size = size;
+    entry->set_result = set_result_func;
+    entry->context = context;
+
+    entry->callback.create_connection_signaling.w_func = w_func;
+    sprintf( entry->callback.create_connection_signaling.iface_version, "SteamNetworkingSockets%03d", iface_version );
+    entry->callback.create_connection_signaling.u_ISteamNetworkingSockets = (ULONG_PTR)u_ISteamNetworkingSockets;
+    entry->callback.create_connection_signaling.identityPeer = *identityPeer;
+    entry->callback.create_connection_signaling.nLocalVirtualPort = nLocalVirtualPort;
+    entry->callback.create_connection_signaling.nRemoteVirtualPort = nRemoteVirtualPort;
+
+    pthread_mutex_lock( &callbacks_lock );
+    list_add_tail( &callbacks, &entry->entry );
+    pthread_mutex_unlock( &callbacks_lock );
+}
+
+void queue_connection_send_signal( uint64_t win_class,  uint32_t hConn, const SteamNetConnectionInfo_t_153a *info,
+                                   uint32_t cbMsg, const void *msg, callback_before_delivery_func_t before_delivery,
+                                   callback_set_result_func_t set_result_func, uint64_t context )
+{
+    uint32_t msg_size = cbMsg, size = msg_size;
+    struct callback_entry *entry;
+
+    size += sizeof(struct callback_entry);
+    if (!(entry = (struct callback_entry *)calloc( 1, size ))) return;
+    entry->callback.type = CALL_IFACE_VTABLE_0_CONNECTION_SEND_SIGNAL;
+    size -= offsetof( struct callback_entry, callback );
+    entry->callback.size = size;
+    entry->before_delivery = before_delivery;
+    entry->set_result = set_result_func;
+    entry->context = context;
+
+    entry->callback.connection_send_signal.win_class = win_class;
+    entry->callback.connection_send_signal.hConn = hConn;
+    entry->callback.connection_send_signal.info = *info;
+    entry->callback.connection_send_signal.cbMsg = cbMsg;
+    memcpy( (void *)entry->callback.connection_send_signal.msg, msg, cbMsg );
+
+    pthread_mutex_lock( &callbacks_lock );
+    list_add_tail( &callbacks, &entry->entry );
+    pthread_mutex_unlock( &callbacks_lock );
+}
+
+void queue_connection_release( uint64_t win_class, callback_before_delivery_func_t before_delivery,
+                               callback_set_result_func_t set_result_func, uint64_t context )
+{
+    uint32_t size = 0;
+    struct callback_entry *entry;
+
+    size += sizeof(struct callback_entry);
+    if (!(entry = (struct callback_entry *)calloc( 1, size ))) return;
+    entry->callback.type = CALL_IFACE_VTABLE_1_CONNECTION_RELEASE;
+    size -= offsetof( struct callback_entry, callback );
+    entry->callback.size = size;
+    entry->before_delivery = before_delivery;
+    entry->set_result = set_result_func;
+    entry->context = context;
+
+    entry->callback.connection_release.win_class = win_class;
 
     pthread_mutex_lock( &callbacks_lock );
     list_add_tail( &callbacks, &entry->entry );
@@ -301,10 +381,21 @@ static NTSTATUS steamclient_next_callback( Params *params, bool wow64 )
     struct list *ptr;
 
     pthread_mutex_lock( &callbacks_lock );
-    if ((ptr = list_head( &callbacks )))
+    while ((ptr = list_head( &callbacks )))
     {
         struct callback_entry *entry = LIST_ENTRY( ptr, struct callback_entry, entry );
 
+        if (entry->before_delivery)
+        {
+            if (!entry->before_delivery( &entry->callback, entry->context ))
+            {
+                list_remove( &entry->entry );
+                free( entry );
+                continue;
+            }
+        }
+        params->set_result_context = entry->context;
+        params->set_result_function = (ULONG_PTR)entry->set_result;
         params->size = entry->callback.size;
         if (params->size <= capacity)
         {
@@ -312,10 +403,20 @@ static NTSTATUS steamclient_next_callback( Params *params, bool wow64 )
             list_remove( &entry->entry );
             free( entry );
         }
+        break;
     }
     pthread_mutex_unlock( &callbacks_lock );
 
     params->_ret = !!ptr;
+    return 0;
+}
+
+template< typename Params >
+static NTSTATUS steamclient_set_callback_result( Params *params, bool wow64 )
+{
+    callback_set_result_func_t func = (callback_set_result_func_t)(ULONG_PTR)params->function;
+
+    func( params->result, params->context );
     return 0;
 }
 
@@ -1344,6 +1445,7 @@ void convert_callback_utow( int id, void *u_callback, int u_callback_len, void *
 STEAMCLIENT_UNIX_FUNC( steamclient_init )
 STEAMCLIENT_UNIX_FUNC( steamclient_init_registry )
 STEAMCLIENT_UNIX_FUNC( steamclient_next_callback )
+STEAMCLIENT_UNIX_FUNC( steamclient_set_callback_result )
 STEAMCLIENT_UNIX_FUNC( steamclient_get_unix_buffer )
 STEAMCLIENT_UNIX_FUNC( steamclient_CreateInterface )
 STEAMCLIENT_UNIX_FUNC( steamclient_Steam_GetAPICallResult )

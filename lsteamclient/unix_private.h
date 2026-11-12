@@ -22,6 +22,10 @@ extern "C"
 #endif /* __cplusplus */
 
 struct w_iface;
+
+typedef bool (*callback_before_delivery_func_t)( struct callback *cb, uint64_t context );
+typedef void (*callback_set_result_func_t)( uint64_t retval, uint64_t context );
+
 extern void queue_vtable_callback( struct w_iface *w_iface, enum callback_type type, uint64_t arg0, uint64_t arg1 );
 extern void queue_vtable_callback_0_server_responded( struct w_iface *w_iface, gameserveritem_t_165 *server );
 extern void queue_vtable_callback_0_add_player_to_list( struct w_iface *w_iface, const char *pchName, int nScore, float flTimePlayed );
@@ -30,6 +34,18 @@ extern void queue_vtable_callback_0_friends_responded( struct w_iface *w_iface, 
 
 typedef void (*W_CDECL w_cdecl_func)( void * );
 extern void queue_cdecl_func_callback( w_cdecl_func func, void *data, uint32_t data_size );
+
+typedef ULONG_PTR (*W_CDECL w_create_connection_signaling_callback_func)( void *local_iface, const SteamNetworkingIdentity *identityPeer,
+                                                                          int nLocalVirtualPort, int nRemoteVirtualPort );
+
+extern void queue_create_connection_signaling_callback( w_create_connection_signaling_callback_func w_func,
+        void *u_ISteamNetworkingSockets, int iface_version, const SteamNetworkingIdentity *identityPeer,
+        int nLocalVirtualPort, int nRemoteVirtualPort, callback_set_result_func_t set_result_func, uint64_t context );
+extern void queue_connection_send_signal( uint64_t win_class,  uint32_t hConn, const SteamNetConnectionInfo_t_153a *info,
+                                          uint32_t cbMsg, const void *msg, callback_before_delivery_func_t before_delivery,
+                                          callback_set_result_func_t set_result_func, uint64_t context );
+extern void queue_connection_release( uint64_t win_class, callback_before_delivery_func_t before_delivery,
+                                      callback_set_result_func_t set_result_func, uint64_t context );
 
 extern uint32_t manual_convert_nNativeKeyCode( uint32_t win_vk );
 
@@ -81,6 +97,8 @@ extern NTSTATUS steamclient_init_registry( void * );
 extern NTSTATUS wow64_steamclient_init_registry( void * );
 extern NTSTATUS steamclient_next_callback( void * );
 extern NTSTATUS wow64_steamclient_next_callback( void * );
+extern NTSTATUS steamclient_set_callback_result( void * );
+extern NTSTATUS wow64_steamclient_set_callback_result( void * );
 extern NTSTATUS steamclient_get_unix_buffer( void * );
 extern NTSTATUS wow64_steamclient_get_unix_buffer( void * );
 extern NTSTATUS steamclient_CreateInterface( void * );
