@@ -491,24 +491,6 @@ NTSTATUS wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_GetGameCoordina
 }
 #endif
 
-NTSTATUS ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal( void *args )
-{
-    struct ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal_params *params = (struct ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal_params *)args;
-    struct u_ISteamNetworkingSockets_SteamNetworkingSockets012 *iface = (struct u_ISteamNetworkingSockets_SteamNetworkingSockets012 *)params->u_iface;
-    params->_ret = iface->ReceivedP2PCustomSignal( params->pMsg, params->cbMsg, params->pContext );
-    return 0;
-}
-
-#if defined(__x86_64__) || defined(__aarch64__)
-NTSTATUS wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal( void *args )
-{
-    struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal_params *params = (struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal_params *)args;
-    struct u_ISteamNetworkingSockets_SteamNetworkingSockets012 *iface = (struct u_ISteamNetworkingSockets_SteamNetworkingSockets012 *)params->u_iface;
-    params->_ret = iface->ReceivedP2PCustomSignal( params->pMsg, params->cbMsg, params->pContext );
-    return 0;
-}
-#endif
-
 NTSTATUS ISteamNetworkingSockets_SteamNetworkingSockets012_GetCertificateRequest( void *args )
 {
     struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetCertificateRequest_params *params = (struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetCertificateRequest_params *)args;
