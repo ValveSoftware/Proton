@@ -315,7 +315,10 @@ class wrap_callback_cdecl_impl
         static void *w_callback_func;
         static void U_CDECL u_callback( u_callback_type *u_dat )
         {
-            TRACE( "u_callback %p, w_callback_func %p, u_dat %p.\n", u_callback, w_callback_func, u_dat );
+            /* This may be called from native thread. */
+            if (TRACE_ON(steamclient))
+                fprintf( stderr, "trace:steamclient:wrap_callback_cdecl_impl::u_callback %p, w_callback_func %p, u_dat %p.\n",
+                         u_callback, w_callback_func, u_dat );
             if (std::is_same<w_callback_type, u_callback_type>::value)
             {
                 if (w_callback_func) queue_cdecl_func_callback( (w_cdecl_func)w_callback_func, u_dat, sizeof(*u_dat) );
