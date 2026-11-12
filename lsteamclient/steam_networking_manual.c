@@ -400,6 +400,21 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_SendMessage
     for (i = 0; i < nMessages; i++) pMessages[i]->m_pfnRelease( pMessages[i] );
 }
 
+int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal(struct w_iface *_this, const void *pMsg, int32_t cbMsg, w_ISteamNetworkingCustomSignalingRecvContext *pContext)
+{
+    struct ISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pMsg = pMsg,
+        .cbMsg = cbMsg,
+        .pContext = pContext,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal, &params );
+    execute_pending_callbacks();
+    return params._ret;
+}
+
 /* ISteamNetworkingSockets_SteamNetworkingSockets008 */
 
 int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnConnection( struct w_iface *_this,
@@ -441,6 +456,21 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveM
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets008_ReceiveMessagesOnPollGroup, &params );
     if (!networking_message_pool_receive_147( nMaxMessages, params._ret, params.ppOutMessages )) return 0;
 
+    return params._ret;
+}
+
+int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal(struct w_iface *_this, const void *pMsg, int32_t cbMsg, w_ISteamNetworkingCustomSignalingRecvContext *pContext)
+{
+    struct ISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pMsg = pMsg,
+        .cbMsg = cbMsg,
+        .pContext = pContext,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal, &params );
+    execute_pending_callbacks();
     return params._ret;
 }
 
@@ -531,6 +561,21 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_SendMessage
 
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets009_SendMessages, &params );
     for (i = 0; i < nMessages; i++) pMessages[i]->m_pfnRelease( pMessages[i] );
+}
+
+int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSignal(struct w_iface *_this, const void *pMsg, int32_t cbMsg, w_ISteamNetworkingCustomSignalingRecvContext *pContext)
+{
+    struct ISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSignal_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pMsg = pMsg,
+        .cbMsg = cbMsg,
+        .pContext = pContext,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSignal, &params );
+    execute_pending_callbacks();
+    return params._ret;
 }
 
 /* ISteamNetworkingUtils_SteamNetworkingUtils003 */
@@ -671,6 +716,21 @@ int32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceiveM
     return params._ret;
 }
 
+int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal(struct w_iface *_this, const void *pMsg, int32_t cbMsg, w_ISteamNetworkingCustomSignalingRecvContext *pContext)
+{
+    struct ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pMsg = pMsg,
+        .cbMsg = cbMsg,
+        .pContext = pContext,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal, &params );
+    execute_pending_callbacks();
+    return params._ret;
+}
+
 /* ISteamNetworkingUtils_SteamNetworkingUtils004 */
 
 void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_SendMessages(struct w_iface *_this, int32_t nMessages, w_SteamNetworkingMessage_t_153a *const *pMessages, int64_t *pOutMessageNumberOrResult)
@@ -789,4 +849,19 @@ void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets013_SendMessage
 
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets013_SendMessages, &params );
     for (i = 0; i < nMessages; i++) pMessages[i]->m_pfnRelease( pMessages[i] );
+}
+
+int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets013_ReceivedP2PCustomSignal(struct w_iface *_this, const void *pMsg, int32_t cbMsg, w_ISteamNetworkingCustomSignalingRecvContext *pContext)
+{
+    struct ISteamNetworkingSockets_SteamNetworkingSockets013_ReceivedP2PCustomSignal_params params =
+    {
+        .u_iface = _this->u_iface,
+        .pMsg = pMsg,
+        .cbMsg = cbMsg,
+        .pContext = pContext,
+    };
+    TRACE("%p\n", _this);
+    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets013_ReceivedP2PCustomSignal, &params );
+    execute_pending_callbacks();
+    return params._ret;
 }

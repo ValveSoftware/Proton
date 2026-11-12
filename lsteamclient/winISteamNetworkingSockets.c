@@ -1315,20 +1315,6 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_Connect
     return params._ret;
 }
 
-int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal(struct w_iface *_this, const void *pMsg, int32_t cbMsg, w_ISteamNetworkingCustomSignalingRecvContext *pContext)
-{
-    struct ISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal_params params =
-    {
-        .u_iface = _this->u_iface,
-        .pMsg = pMsg,
-        .cbMsg = cbMsg,
-        .pContext = pContext,
-    };
-    TRACE("%p\n", _this);
-    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets006_ReceivedP2PCustomSignal, &params );
-    return params._ret;
-}
-
 void __thiscall winISteamNetworkingSockets_SteamNetworkingSockets006_destructor(struct w_iface *_this)
 {/* never called */}
 
@@ -1860,20 +1846,6 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_Connect
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignaling, &params );
-    return params._ret;
-}
-
-int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal(struct w_iface *_this, const void *pMsg, int32_t cbMsg, w_ISteamNetworkingCustomSignalingRecvContext *pContext)
-{
-    struct ISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal_params params =
-    {
-        .u_iface = _this->u_iface,
-        .pMsg = pMsg,
-        .cbMsg = cbMsg,
-        .pContext = pContext,
-    };
-    TRACE("%p\n", _this);
-    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets008_ReceivedP2PCustomSignal, &params );
     return params._ret;
 }
 
@@ -2443,20 +2415,6 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_Connect
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2PCustomSignaling, &params );
-    return params._ret;
-}
-
-int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSignal(struct w_iface *_this, const void *pMsg, int32_t cbMsg, void /*ISteamNetworkingSignalingRecvContext*/ *pContext)
-{
-    struct ISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSignal_params params =
-    {
-        .u_iface = _this->u_iface,
-        .pMsg = pMsg,
-        .cbMsg = cbMsg,
-        .pContext = pContext,
-    };
-    TRACE("%p\n", _this);
-    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets009_ReceivedP2PCustomSignal, &params );
     return params._ret;
 }
 
@@ -3051,20 +3009,6 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_Connect
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2PCustomSignaling, &params );
-    return params._ret;
-}
-
-int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal(struct w_iface *_this, const void *pMsg, int32_t cbMsg, void /*ISteamNetworkingSignalingRecvContext*/ *pContext)
-{
-    struct ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal_params params =
-    {
-        .u_iface = _this->u_iface,
-        .pMsg = pMsg,
-        .cbMsg = cbMsg,
-        .pContext = pContext,
-    };
-    TRACE("%p\n", _this);
-    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets012_ReceivedP2PCustomSignal, &params );
     return params._ret;
 }
 
@@ -3740,20 +3684,6 @@ uint32_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets013_Connect
     };
     TRACE("%p\n", _this);
     STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectP2PCustomSignaling, &params );
-    return params._ret;
-}
-
-int8_t __thiscall winISteamNetworkingSockets_SteamNetworkingSockets013_ReceivedP2PCustomSignal(struct w_iface *_this, const void *pMsg, int32_t cbMsg, void /*ISteamNetworkingSignalingRecvContext*/ *pContext)
-{
-    struct ISteamNetworkingSockets_SteamNetworkingSockets013_ReceivedP2PCustomSignal_params params =
-    {
-        .u_iface = _this->u_iface,
-        .pMsg = pMsg,
-        .cbMsg = cbMsg,
-        .pContext = pContext,
-    };
-    TRACE("%p\n", _this);
-    STEAMCLIENT_CALL( ISteamNetworkingSockets_SteamNetworkingSockets013_ReceivedP2PCustomSignal, &params );
     return params._ret;
 }
 

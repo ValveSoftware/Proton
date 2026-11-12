@@ -271,7 +271,7 @@ MANUAL_METHODS = {
     "ISteamNetworkingSockets_RunCallbacks": lambda ver, abi: abi == 'w',
     "ISteamNetworkingSockets_SendMessages": True,
     "ISteamNetworkingSockets_ConnectP2PCustomSignaling": lambda ver, abi: abi == 'u' and (ver <= 8 or ver >= 12),
-    "ISteamNetworkingSockets_ReceivedP2PCustomSignal": lambda ver, abi: abi == 'u',
+    "ISteamNetworkingSockets_ReceivedP2PCustomSignal": True,
     "ISteamNetworkingSockets_CreateListenSocketIP": lambda ver, abi: abi == 'u' and ver >= 12,
     "ISteamNetworkingSockets_ConnectByIPAddress": lambda ver, abi: abi == 'u' and ver >= 12,
     "ISteamNetworkingSockets_CreateListenSocketP2P": lambda ver, abi: abi == 'u' and ver >= 12,
