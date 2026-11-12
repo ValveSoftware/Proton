@@ -226,6 +226,45 @@ def dir_sync(dst, src):
     for dir in comp.common_dirs:
         dir_sync(os.path.join(dst, dir), os.path.join(src, dir))
 
+def merge_tree(src, dst):
+    """Merge directory tree src into dst without clobbering existing entries."""
+    if not file_exists(dst, follow_symlinks=False):
+        makedirs(os.path.dirname(dst))
+        shutil.move(src, dst)
+        return
+    if os.path.isdir(src) and not os.path.islink(src):
+        if not (os.path.isdir(dst) and not os.path.islink(dst)):
+            return
+        for item in os.listdir(src):
+            merge_tree(os.path.join(src, item), os.path.join(dst, item))
+
+def normalize_dir_case(parent_dir, lower_name, camel_name):
+    """Migrate parent_dir/lower_name into parent_dir/camel_name."""
+    if not os.path.isdir(parent_dir):
+        return
+
+    lower_path = os.path.join(parent_dir, lower_name)
+    camel_path = os.path.join(parent_dir, camel_name)
+
+    if not (os.path.isdir(lower_path) and not os.path.islink(lower_path)):
+        return
+
+    if file_exists(camel_path, follow_symlinks=False):
+        if not (os.path.isdir(camel_path) and not os.path.islink(camel_path)):
+            log(f'Skipping DriverStore migration: "{camel_path}" is not a directory.')
+            return
+        if os.path.samefile(lower_path, camel_path):
+            entries = os.listdir(parent_dir)
+            if lower_name in entries and camel_name not in entries:
+                tmp_path = os.path.join(parent_dir, lower_name + ".case_tmp")
+                if not file_exists(tmp_path, follow_symlinks=False):
+                    os.rename(lower_path, tmp_path)
+                    os.rename(tmp_path, camel_path)
+            return
+
+    merge_tree(lower_path, camel_path)
+    shutil.rmtree(lower_path, ignore_errors=True)
+
 # copy_file_range implementation for old Python versions
 __syscall__copy_file_range = None
 
@@ -985,6 +1024,17 @@ class CompatData:
                 os.remove(old)
                 os.symlink(src=link, dst=old)
 
+    def unify_driverstore(self):
+        """Unify Wine's lowercase driverstore/filerepository into CamelCase DriverStore/FileRepository."""
+        # Intel's igdext loader (d3dext-sdk) matches L"DriverStore\\FileRepository" case-sensitively,
+        # while Steam's library mover collides if both lowercase and CamelCase folders exist.
+        sys32 = os.path.join(self.prefix_dir, "drive_c/windows/system32")
+        try:
+            normalize_dir_case(sys32, "driverstore", "DriverStore")
+            normalize_dir_case(os.path.join(sys32, "DriverStore"), "filerepository", "FileRepository")
+        except OSError as e:
+            log(f"Error while unifying DriverStore: {e}")
+
     def setup_prefix(self):
         with self.prefix_lock:
             if file_exists(self.version_file, follow_symlinks=True):
@@ -1011,6 +1061,7 @@ class CompatData:
                 os.sync()
 
             self.migrate_user_paths()
+            self.unify_driverstore()
 
             if not file_exists(self.prefix_dir + "/dosdevices/c:", follow_symlinks=False):
                 os.symlink("../drive_c", self.prefix_dir + "/dosdevices/c:")
