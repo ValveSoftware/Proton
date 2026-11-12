@@ -4922,7 +4922,7 @@ void __thiscall winISteamGameServer_SteamGameServer015_SetAdvertiseServerActive(
     STEAMCLIENT_CALL( ISteamGameServer_SteamGameServer015_SetAdvertiseServerActive, &params );
 }
 
-uint32_t __thiscall winISteamGameServer_SteamGameServer015_GetAuthSessionTicket(struct w_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity_144 *pSnid)
+uint32_t __thiscall winISteamGameServer_SteamGameServer015_GetAuthSessionTicket(struct w_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity *pSnid)
 {
     struct ISteamGameServer_SteamGameServer015_GetAuthSessionTicket_params params =
     {

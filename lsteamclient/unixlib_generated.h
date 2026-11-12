@@ -74398,7 +74398,7 @@ struct ISteamGameServer_SteamGameServer015_GetAuthSessionTicket_params
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
-    const SteamNetworkingIdentity_144 *pSnid;
+    const SteamNetworkingIdentity *pSnid;
 };
 
 struct wow64_ISteamGameServer_SteamGameServer015_GetAuthSessionTicket_params
@@ -74408,7 +74408,7 @@ struct wow64_ISteamGameServer_SteamGameServer015_GetAuthSessionTicket_params
     W32_PTR(void *pTicket, pTicket, void *);
     int32_t cbMaxTicket;
     W32_PTR(uint32_t *pcbTicket, pcbTicket, uint32_t *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pSnid, pSnid, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pSnid, pSnid, const SteamNetworkingIdentity *);
 };
 
 struct ISteamGameServer_SteamGameServer015_BeginAuthSession_params
@@ -85855,7 +85855,7 @@ struct ISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUser_par
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityRemote;
+    const SteamNetworkingIdentity *identityRemote;
     const void *pubData;
     uint32_t cubData;
     int32_t nSendFlags;
@@ -85866,7 +85866,7 @@ struct wow64_ISteamNetworkingMessages_SteamNetworkingMessages002_SendMessageToUs
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityRemote, identityRemote, const SteamNetworkingIdentity *);
     W32_PTR(const void *pubData, pubData, const void *);
     uint32_t cubData;
     int32_t nSendFlags;
@@ -85895,35 +85895,35 @@ struct ISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSessionWithUser
 {
     struct u_iface u_iface;
     int8_t _ret;
-    const SteamNetworkingIdentity_144 *identityRemote;
+    const SteamNetworkingIdentity *identityRemote;
 };
 
 struct wow64_ISteamNetworkingMessages_SteamNetworkingMessages002_AcceptSessionWithUser_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityRemote, identityRemote, const SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingMessages_SteamNetworkingMessages002_CloseSessionWithUser_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    const SteamNetworkingIdentity_144 *identityRemote;
+    const SteamNetworkingIdentity *identityRemote;
 };
 
 struct wow64_ISteamNetworkingMessages_SteamNetworkingMessages002_CloseSessionWithUser_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityRemote, identityRemote, const SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWithUser_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    const SteamNetworkingIdentity_144 *identityRemote;
+    const SteamNetworkingIdentity *identityRemote;
     int32_t nLocalChannel;
 };
 
@@ -85931,7 +85931,7 @@ struct wow64_ISteamNetworkingMessages_SteamNetworkingMessages002_CloseChannelWit
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityRemote, identityRemote, const SteamNetworkingIdentity *);
     int32_t nLocalChannel;
 };
 
@@ -85939,7 +85939,7 @@ struct ISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConnectionI
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityRemote;
+    const SteamNetworkingIdentity *identityRemote;
     SteamNetConnectionInfo_t_153a *pConnectionInfo;
     SteamNetConnectionRealTimeStatus_t_164 *pQuickStatus;
 };
@@ -85948,7 +85948,7 @@ struct wow64_ISteamNetworkingMessages_SteamNetworkingMessages002_GetSessionConne
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityRemote, identityRemote, const SteamNetworkingIdentity *);
     W32_PTR(SteamNetConnectionInfo_t_153a *pConnectionInfo, pConnectionInfo, SteamNetConnectionInfo_t_153a *);
     W32_PTR(SteamNetConnectionRealTimeStatus_t_164 *pQuickStatus, pQuickStatus, SteamNetConnectionRealTimeStatus_t_164 *);
 };
@@ -85999,7 +85999,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets002_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityRemote;
+    const SteamNetworkingIdentity *identityRemote;
     int32_t nVirtualPort;
 };
 
@@ -86007,7 +86007,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets002_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityRemote, identityRemote, const SteamNetworkingIdentity *);
     int32_t nVirtualPort;
 };
 
@@ -86264,8 +86264,8 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets002_CreateSocketPair_params
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
     int8_t bUseNetworkLoopback;
-    const SteamNetworkingIdentity_144 *pIdentity1;
-    const SteamNetworkingIdentity_144 *pIdentity2;
+    const SteamNetworkingIdentity *pIdentity1;
+    const SteamNetworkingIdentity *pIdentity2;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets002_CreateSocketPair_params
@@ -86275,22 +86275,22 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets002_CreateSocketPair_
     W32_PTR(uint32_t *pOutConnection1, pOutConnection1, uint32_t *);
     W32_PTR(uint32_t *pOutConnection2, pOutConnection2, uint32_t *);
     int8_t bUseNetworkLoopback;
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity1, pIdentity1, const SteamNetworkingIdentity_144 *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity2, pIdentity2, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity1, pIdentity1, const SteamNetworkingIdentity *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity2, pIdentity2, const SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    SteamNetworkingIdentity_144 *pIdentity;
+    SteamNetworkingIdentity *pIdentity;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets002_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(SteamNetworkingIdentity_144 *pIdentity, pIdentity, SteamNetworkingIdentity_144 *);
+    W32_PTR(SteamNetworkingIdentity *pIdentity, pIdentity, SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets002_ReceivedRelayAuthTicket_params
@@ -86315,7 +86315,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets002_FindRelayAuthTicketForS
 {
     struct u_iface u_iface;
     int32_t _ret;
-    const SteamNetworkingIdentity_144 *identityGameServer;
+    const SteamNetworkingIdentity *identityGameServer;
     int32_t nVirtualPort;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
 };
@@ -86324,7 +86324,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets002_FindRelayAuthTick
 {
     struct u_iface u_iface;
     int32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityGameServer, identityGameServer, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityGameServer, identityGameServer, const SteamNetworkingIdentity *);
     int32_t nVirtualPort;
     W32_PTR(SteamDatagramRelayAuthTicket *pOutParsedTicket, pOutParsedTicket, SteamDatagramRelayAuthTicket *);
 };
@@ -86333,7 +86333,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets002_ConnectToHostedDedicate
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityTarget;
+    const SteamNetworkingIdentity *identityTarget;
     int32_t nVirtualPort;
 };
 
@@ -86341,7 +86341,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets002_ConnectToHostedDe
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityTarget, identityTarget, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityTarget, identityTarget, const SteamNetworkingIdentity *);
     int32_t nVirtualPort;
 };
 
@@ -86443,7 +86443,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets004_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityRemote;
+    const SteamNetworkingIdentity *identityRemote;
     int32_t nVirtualPort;
 };
 
@@ -86451,7 +86451,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets004_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityRemote, identityRemote, const SteamNetworkingIdentity *);
     int32_t nVirtualPort;
 };
 
@@ -86708,8 +86708,8 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets004_CreateSocketPair_params
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
     int8_t bUseNetworkLoopback;
-    const SteamNetworkingIdentity_144 *pIdentity1;
-    const SteamNetworkingIdentity_144 *pIdentity2;
+    const SteamNetworkingIdentity *pIdentity1;
+    const SteamNetworkingIdentity *pIdentity2;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets004_CreateSocketPair_params
@@ -86719,22 +86719,22 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets004_CreateSocketPair_
     W32_PTR(uint32_t *pOutConnection1, pOutConnection1, uint32_t *);
     W32_PTR(uint32_t *pOutConnection2, pOutConnection2, uint32_t *);
     int8_t bUseNetworkLoopback;
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity1, pIdentity1, const SteamNetworkingIdentity_144 *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity2, pIdentity2, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity1, pIdentity1, const SteamNetworkingIdentity *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity2, pIdentity2, const SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets004_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    SteamNetworkingIdentity_144 *pIdentity;
+    SteamNetworkingIdentity *pIdentity;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets004_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(SteamNetworkingIdentity_144 *pIdentity, pIdentity, SteamNetworkingIdentity_144 *);
+    W32_PTR(SteamNetworkingIdentity *pIdentity, pIdentity, SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets004_InitAuthentication_params
@@ -86785,7 +86785,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets004_FindRelayAuthTicketForS
 {
     struct u_iface u_iface;
     int32_t _ret;
-    const SteamNetworkingIdentity_144 *identityGameServer;
+    const SteamNetworkingIdentity *identityGameServer;
     int32_t nVirtualPort;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
 };
@@ -86794,7 +86794,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets004_FindRelayAuthTick
 {
     struct u_iface u_iface;
     int32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityGameServer, identityGameServer, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityGameServer, identityGameServer, const SteamNetworkingIdentity *);
     int32_t nVirtualPort;
     W32_PTR(SteamDatagramRelayAuthTicket *pOutParsedTicket, pOutParsedTicket, SteamDatagramRelayAuthTicket *);
 };
@@ -86803,7 +86803,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets004_ConnectToHostedDedicate
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityTarget;
+    const SteamNetworkingIdentity *identityTarget;
     int32_t nVirtualPort;
 };
 
@@ -86811,7 +86811,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets004_ConnectToHostedDe
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityTarget, identityTarget, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityTarget, identityTarget, const SteamNetworkingIdentity *);
     int32_t nVirtualPort;
 };
 
@@ -86943,7 +86943,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityRemote;
+    const SteamNetworkingIdentity *identityRemote;
     int32_t nVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -86953,7 +86953,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityRemote, identityRemote, const SteamNetworkingIdentity *);
     int32_t nVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -87230,8 +87230,8 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_CreateSocketPair_params
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
     int8_t bUseNetworkLoopback;
-    const SteamNetworkingIdentity_144 *pIdentity1;
-    const SteamNetworkingIdentity_144 *pIdentity2;
+    const SteamNetworkingIdentity *pIdentity1;
+    const SteamNetworkingIdentity *pIdentity2;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets006_CreateSocketPair_params
@@ -87241,22 +87241,22 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets006_CreateSocketPair_
     W32_PTR(uint32_t *pOutConnection1, pOutConnection1, uint32_t *);
     W32_PTR(uint32_t *pOutConnection2, pOutConnection2, uint32_t *);
     int8_t bUseNetworkLoopback;
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity1, pIdentity1, const SteamNetworkingIdentity_144 *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity2, pIdentity2, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity1, pIdentity1, const SteamNetworkingIdentity *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity2, pIdentity2, const SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    SteamNetworkingIdentity_144 *pIdentity;
+    SteamNetworkingIdentity *pIdentity;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets006_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(SteamNetworkingIdentity_144 *pIdentity, pIdentity, SteamNetworkingIdentity_144 *);
+    W32_PTR(SteamNetworkingIdentity *pIdentity, pIdentity, SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets006_InitAuthentication_params
@@ -87307,7 +87307,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_FindRelayAuthTicketForS
 {
     struct u_iface u_iface;
     int32_t _ret;
-    const SteamNetworkingIdentity_144 *identityGameServer;
+    const SteamNetworkingIdentity *identityGameServer;
     int32_t nVirtualPort;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
 };
@@ -87316,7 +87316,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets006_FindRelayAuthTick
 {
     struct u_iface u_iface;
     int32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityGameServer, identityGameServer, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityGameServer, identityGameServer, const SteamNetworkingIdentity *);
     int32_t nVirtualPort;
     W32_PTR(SteamDatagramRelayAuthTicket *pOutParsedTicket, pOutParsedTicket, SteamDatagramRelayAuthTicket *);
 };
@@ -87325,7 +87325,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_ConnectToHostedDedicate
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityTarget;
+    const SteamNetworkingIdentity *identityTarget;
     int32_t nVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -87335,7 +87335,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets006_ConnectToHostedDe
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityTarget, identityTarget, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityTarget, identityTarget, const SteamNetworkingIdentity *);
     int32_t nVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -87420,7 +87420,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2PCustomSignali
     struct u_iface u_iface;
     uint32_t _ret;
     w_ISteamNetworkingConnectionCustomSignaling *pSignaling;
-    const SteamNetworkingIdentity_144 *pPeerIdentity;
+    const SteamNetworkingIdentity *pPeerIdentity;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
 };
@@ -87430,7 +87430,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets006_ConnectP2PCustomS
     struct u_iface u_iface;
     uint32_t _ret;
     W32_PTR(w32_ISteamNetworkingConnectionCustomSignaling *pSignaling, pSignaling, w32_ISteamNetworkingConnectionCustomSignaling *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pPeerIdentity, pPeerIdentity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pPeerIdentity, pPeerIdentity, const SteamNetworkingIdentity *);
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
 };
@@ -87511,7 +87511,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityRemote;
+    const SteamNetworkingIdentity *identityRemote;
     int32_t nVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -87521,7 +87521,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityRemote, identityRemote, const SteamNetworkingIdentity *);
     int32_t nVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -87780,8 +87780,8 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_CreateSocketPair_params
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
     int8_t bUseNetworkLoopback;
-    const SteamNetworkingIdentity_144 *pIdentity1;
-    const SteamNetworkingIdentity_144 *pIdentity2;
+    const SteamNetworkingIdentity *pIdentity1;
+    const SteamNetworkingIdentity *pIdentity2;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets008_CreateSocketPair_params
@@ -87791,22 +87791,22 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets008_CreateSocketPair_
     W32_PTR(uint32_t *pOutConnection1, pOutConnection1, uint32_t *);
     W32_PTR(uint32_t *pOutConnection2, pOutConnection2, uint32_t *);
     int8_t bUseNetworkLoopback;
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity1, pIdentity1, const SteamNetworkingIdentity_144 *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity2, pIdentity2, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity1, pIdentity1, const SteamNetworkingIdentity *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity2, pIdentity2, const SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    SteamNetworkingIdentity_144 *pIdentity;
+    SteamNetworkingIdentity *pIdentity;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets008_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(SteamNetworkingIdentity_144 *pIdentity, pIdentity, SteamNetworkingIdentity_144 *);
+    W32_PTR(SteamNetworkingIdentity *pIdentity, pIdentity, SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets008_InitAuthentication_params
@@ -87917,7 +87917,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_FindRelayAuthTicketForS
 {
     struct u_iface u_iface;
     int32_t _ret;
-    const SteamNetworkingIdentity_144 *identityGameServer;
+    const SteamNetworkingIdentity *identityGameServer;
     int32_t nVirtualPort;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
 };
@@ -87926,7 +87926,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets008_FindRelayAuthTick
 {
     struct u_iface u_iface;
     int32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityGameServer, identityGameServer, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityGameServer, identityGameServer, const SteamNetworkingIdentity *);
     int32_t nVirtualPort;
     W32_PTR(SteamDatagramRelayAuthTicket *pOutParsedTicket, pOutParsedTicket, SteamDatagramRelayAuthTicket *);
 };
@@ -87935,7 +87935,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_ConnectToHostedDedicate
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityTarget;
+    const SteamNetworkingIdentity *identityTarget;
     int32_t nVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -87945,7 +87945,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets008_ConnectToHostedDe
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityTarget, identityTarget, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityTarget, identityTarget, const SteamNetworkingIdentity *);
     int32_t nVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -88030,7 +88030,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomSignali
     struct u_iface u_iface;
     uint32_t _ret;
     w_ISteamNetworkingConnectionCustomSignaling *pSignaling;
-    const SteamNetworkingIdentity_144 *pPeerIdentity;
+    const SteamNetworkingIdentity *pPeerIdentity;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
 };
@@ -88040,7 +88040,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets008_ConnectP2PCustomS
     struct u_iface u_iface;
     uint32_t _ret;
     W32_PTR(w32_ISteamNetworkingConnectionCustomSignaling *pSignaling, pSignaling, w32_ISteamNetworkingConnectionCustomSignaling *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pPeerIdentity, pPeerIdentity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pPeerIdentity, pPeerIdentity, const SteamNetworkingIdentity *);
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
 };
@@ -88157,7 +88157,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityRemote;
+    const SteamNetworkingIdentity *identityRemote;
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -88167,7 +88167,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityRemote, identityRemote, const SteamNetworkingIdentity *);
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -88426,8 +88426,8 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_CreateSocketPair_params
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
     int8_t bUseNetworkLoopback;
-    const SteamNetworkingIdentity_144 *pIdentity1;
-    const SteamNetworkingIdentity_144 *pIdentity2;
+    const SteamNetworkingIdentity *pIdentity1;
+    const SteamNetworkingIdentity *pIdentity2;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets009_CreateSocketPair_params
@@ -88437,22 +88437,22 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets009_CreateSocketPair_
     W32_PTR(uint32_t *pOutConnection1, pOutConnection1, uint32_t *);
     W32_PTR(uint32_t *pOutConnection2, pOutConnection2, uint32_t *);
     int8_t bUseNetworkLoopback;
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity1, pIdentity1, const SteamNetworkingIdentity_144 *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity2, pIdentity2, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity1, pIdentity1, const SteamNetworkingIdentity *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity2, pIdentity2, const SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    SteamNetworkingIdentity_144 *pIdentity;
+    SteamNetworkingIdentity *pIdentity;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets009_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(SteamNetworkingIdentity_144 *pIdentity, pIdentity, SteamNetworkingIdentity_144 *);
+    W32_PTR(SteamNetworkingIdentity *pIdentity, pIdentity, SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets009_InitAuthentication_params
@@ -88563,7 +88563,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_FindRelayAuthTicketForS
 {
     struct u_iface u_iface;
     int32_t _ret;
-    const SteamNetworkingIdentity_144 *identityGameServer;
+    const SteamNetworkingIdentity *identityGameServer;
     int32_t nRemoteVirtualPort;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
 };
@@ -88572,7 +88572,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets009_FindRelayAuthTick
 {
     struct u_iface u_iface;
     int32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityGameServer, identityGameServer, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityGameServer, identityGameServer, const SteamNetworkingIdentity *);
     int32_t nRemoteVirtualPort;
     W32_PTR(SteamDatagramRelayAuthTicket *pOutParsedTicket, pOutParsedTicket, SteamDatagramRelayAuthTicket *);
 };
@@ -88581,7 +88581,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_ConnectToHostedDedicate
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityTarget;
+    const SteamNetworkingIdentity *identityTarget;
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -88591,7 +88591,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets009_ConnectToHostedDe
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityTarget, identityTarget, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityTarget, identityTarget, const SteamNetworkingIdentity *);
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -88676,7 +88676,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2PCustomSignali
     struct u_iface u_iface;
     uint32_t _ret;
     void /*ISteamNetworkingConnectionSignaling*/ *pSignaling;
-    const SteamNetworkingIdentity_144 *pPeerIdentity;
+    const SteamNetworkingIdentity *pPeerIdentity;
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -88687,7 +88687,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets009_ConnectP2PCustomS
     struct u_iface u_iface;
     uint32_t _ret;
     W32_PTR(void /*ISteamNetworkingConnectionSignaling*/ *pSignaling, pSignaling, void /*ISteamNetworkingConnectionSignaling*/ *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pPeerIdentity, pPeerIdentity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pPeerIdentity, pPeerIdentity, const SteamNetworkingIdentity *);
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -88815,7 +88815,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityRemote;
+    const SteamNetworkingIdentity *identityRemote;
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -88825,7 +88825,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityRemote, identityRemote, const SteamNetworkingIdentity *);
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -89088,8 +89088,8 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_CreateSocketPair_params
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
     int8_t bUseNetworkLoopback;
-    const SteamNetworkingIdentity_144 *pIdentity1;
-    const SteamNetworkingIdentity_144 *pIdentity2;
+    const SteamNetworkingIdentity *pIdentity1;
+    const SteamNetworkingIdentity *pIdentity2;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_CreateSocketPair_params
@@ -89099,8 +89099,8 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_CreateSocketPair_
     W32_PTR(uint32_t *pOutConnection1, pOutConnection1, uint32_t *);
     W32_PTR(uint32_t *pOutConnection2, pOutConnection2, uint32_t *);
     int8_t bUseNetworkLoopback;
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity1, pIdentity1, const SteamNetworkingIdentity_144 *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity2, pIdentity2, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity1, pIdentity1, const SteamNetworkingIdentity *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity2, pIdentity2, const SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_ConfigureConnectionLanes_params
@@ -89127,14 +89127,14 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    SteamNetworkingIdentity_144 *pIdentity;
+    SteamNetworkingIdentity *pIdentity;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(SteamNetworkingIdentity_144 *pIdentity, pIdentity, SteamNetworkingIdentity_144 *);
+    W32_PTR(SteamNetworkingIdentity *pIdentity, pIdentity, SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_InitAuthentication_params
@@ -89245,7 +89245,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_FindRelayAuthTicketForS
 {
     struct u_iface u_iface;
     int32_t _ret;
-    const SteamNetworkingIdentity_144 *identityGameServer;
+    const SteamNetworkingIdentity *identityGameServer;
     int32_t nRemoteVirtualPort;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
 };
@@ -89254,7 +89254,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_FindRelayAuthTick
 {
     struct u_iface u_iface;
     int32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityGameServer, identityGameServer, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityGameServer, identityGameServer, const SteamNetworkingIdentity *);
     int32_t nRemoteVirtualPort;
     W32_PTR(SteamDatagramRelayAuthTicket *pOutParsedTicket, pOutParsedTicket, SteamDatagramRelayAuthTicket *);
 };
@@ -89263,7 +89263,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_ConnectToHostedDedicate
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityTarget;
+    const SteamNetworkingIdentity *identityTarget;
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -89273,7 +89273,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_ConnectToHostedDe
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityTarget, identityTarget, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityTarget, identityTarget, const SteamNetworkingIdentity *);
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -89358,7 +89358,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2PCustomSignali
     struct u_iface u_iface;
     uint32_t _ret;
     void /*ISteamNetworkingConnectionSignaling*/ *pSignaling;
-    const SteamNetworkingIdentity_144 *pPeerIdentity;
+    const SteamNetworkingIdentity *pPeerIdentity;
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -89369,7 +89369,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_ConnectP2PCustomS
     struct u_iface u_iface;
     uint32_t _ret;
     W32_PTR(void /*ISteamNetworkingConnectionSignaling*/ *pSignaling, pSignaling, void /*ISteamNetworkingConnectionSignaling*/ *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pPeerIdentity, pPeerIdentity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pPeerIdentity, pPeerIdentity, const SteamNetworkingIdentity *);
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -89432,13 +89432,13 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_SetCertificate_pa
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_ResetIdentity_params
 {
     struct u_iface u_iface;
-    const SteamNetworkingIdentity_144 *pIdentity;
+    const SteamNetworkingIdentity *pIdentity;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets012_ResetIdentity_params
 {
     struct u_iface u_iface;
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity, pIdentity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity, pIdentity, const SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets012_RunCallbacks_params
@@ -89585,7 +89585,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityRemote;
+    const SteamNetworkingIdentity *identityRemote;
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -89595,7 +89595,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectP2P_params
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityRemote, identityRemote, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityRemote, identityRemote, const SteamNetworkingIdentity *);
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -89860,8 +89860,8 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets013_CreateSocketPair_params
     uint32_t *pOutConnection1;
     uint32_t *pOutConnection2;
     int8_t bUseNetworkLoopback;
-    const SteamNetworkingIdentity_144 *pPeerIdentity1;
-    const SteamNetworkingIdentity_144 *pPeerIdentity2;
+    const SteamNetworkingIdentity *pPeerIdentity1;
+    const SteamNetworkingIdentity *pPeerIdentity2;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateSocketPair_params
@@ -89871,8 +89871,8 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_CreateSocketPair_
     W32_PTR(uint32_t *pOutConnection1, pOutConnection1, uint32_t *);
     W32_PTR(uint32_t *pOutConnection2, pOutConnection2, uint32_t *);
     int8_t bUseNetworkLoopback;
-    W32_PTR(const SteamNetworkingIdentity_144 *pPeerIdentity1, pPeerIdentity1, const SteamNetworkingIdentity_144 *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pPeerIdentity2, pPeerIdentity2, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pPeerIdentity1, pPeerIdentity1, const SteamNetworkingIdentity *);
+    W32_PTR(const SteamNetworkingIdentity *pPeerIdentity2, pPeerIdentity2, const SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets013_ConfigureConnectionLanes_params
@@ -89899,14 +89899,14 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets013_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    SteamNetworkingIdentity_144 *pIdentity;
+    SteamNetworkingIdentity *pIdentity;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_GetIdentity_params
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(SteamNetworkingIdentity_144 *pIdentity, pIdentity, SteamNetworkingIdentity_144 *);
+    W32_PTR(SteamNetworkingIdentity *pIdentity, pIdentity, SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets013_InitAuthentication_params
@@ -90017,7 +90017,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets013_FindRelayAuthTicketForS
 {
     struct u_iface u_iface;
     int32_t _ret;
-    const SteamNetworkingIdentity_144 *identityGameServer;
+    const SteamNetworkingIdentity *identityGameServer;
     int32_t nRemoteVirtualPort;
     SteamDatagramRelayAuthTicket *pOutParsedTicket;
 };
@@ -90026,7 +90026,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_FindRelayAuthTick
 {
     struct u_iface u_iface;
     int32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityGameServer, identityGameServer, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityGameServer, identityGameServer, const SteamNetworkingIdentity *);
     int32_t nRemoteVirtualPort;
     W32_PTR(SteamDatagramRelayAuthTicket *pOutParsedTicket, pOutParsedTicket, SteamDatagramRelayAuthTicket *);
 };
@@ -90035,7 +90035,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectToHostedDedicate
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    const SteamNetworkingIdentity_144 *identityTarget;
+    const SteamNetworkingIdentity *identityTarget;
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -90045,7 +90045,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectToHostedDe
 {
     struct u_iface u_iface;
     uint32_t _ret;
-    W32_PTR(const SteamNetworkingIdentity_144 *identityTarget, identityTarget, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identityTarget, identityTarget, const SteamNetworkingIdentity *);
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -90130,7 +90130,7 @@ struct ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectP2PCustomSignali
     struct u_iface u_iface;
     uint32_t _ret;
     void /*ISteamNetworkingConnectionSignaling*/ *pSignaling;
-    const SteamNetworkingIdentity_144 *pPeerIdentity;
+    const SteamNetworkingIdentity *pPeerIdentity;
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     const SteamNetworkingConfigValue_t *pOptions;
@@ -90141,7 +90141,7 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ConnectP2PCustomS
     struct u_iface u_iface;
     uint32_t _ret;
     W32_PTR(void /*ISteamNetworkingConnectionSignaling*/ *pSignaling, pSignaling, void /*ISteamNetworkingConnectionSignaling*/ *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pPeerIdentity, pPeerIdentity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pPeerIdentity, pPeerIdentity, const SteamNetworkingIdentity *);
     int32_t nRemoteVirtualPort;
     int32_t nOptions;
     W32_PTR(const SteamNetworkingConfigValue_t *pOptions, pOptions, const SteamNetworkingConfigValue_t *);
@@ -90204,13 +90204,13 @@ struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_SetCertificate_pa
 struct ISteamNetworkingSockets_SteamNetworkingSockets013_ResetIdentity_params
 {
     struct u_iface u_iface;
-    const SteamNetworkingIdentity_144 *pIdentity;
+    const SteamNetworkingIdentity *pIdentity;
 };
 
 struct wow64_ISteamNetworkingSockets_SteamNetworkingSockets013_ResetIdentity_params
 {
     struct u_iface u_iface;
-    W32_PTR(const SteamNetworkingIdentity_144 *pIdentity, pIdentity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pIdentity, pIdentity, const SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingSockets_SteamNetworkingSockets013_RunCallbacks_params
@@ -90850,7 +90850,7 @@ struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIPAddr
 struct ISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ToString_params
 {
     struct u_iface u_iface;
-    const SteamNetworkingIdentity_144 *identity;
+    const SteamNetworkingIdentity *identity;
     char *buf;
     uint32_t cbBuf;
 };
@@ -90858,7 +90858,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ToS
 struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_ToString_params
 {
     struct u_iface u_iface;
-    W32_PTR(const SteamNetworkingIdentity_144 *identity, identity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identity, identity, const SteamNetworkingIdentity *);
     W32_PTR(char *buf, buf, char *);
     uint32_t cbBuf;
 };
@@ -90867,7 +90867,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdentity_Par
 {
     struct u_iface u_iface;
     int8_t _ret;
-    SteamNetworkingIdentity_144 *pIdentity;
+    SteamNetworkingIdentity *pIdentity;
     const char *pszStr;
 };
 
@@ -90875,7 +90875,7 @@ struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils001_SteamNetworkingIdenti
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(SteamNetworkingIdentity_144 *pIdentity, pIdentity, SteamNetworkingIdentity_144 *);
+    W32_PTR(SteamNetworkingIdentity *pIdentity, pIdentity, SteamNetworkingIdentity *);
     W32_PTR(const char *pszStr, pszStr, const char *);
 };
 
@@ -91186,7 +91186,7 @@ struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIPAddr
 struct ISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ToString_params
 {
     struct u_iface u_iface;
-    const SteamNetworkingIdentity_144 *identity;
+    const SteamNetworkingIdentity *identity;
     char *buf;
     uint32_t cbBuf;
 };
@@ -91194,7 +91194,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ToS
 struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_ToString_params
 {
     struct u_iface u_iface;
-    W32_PTR(const SteamNetworkingIdentity_144 *identity, identity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identity, identity, const SteamNetworkingIdentity *);
     W32_PTR(char *buf, buf, char *);
     uint32_t cbBuf;
 };
@@ -91203,7 +91203,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdentity_Par
 {
     struct u_iface u_iface;
     int8_t _ret;
-    SteamNetworkingIdentity_144 *pIdentity;
+    SteamNetworkingIdentity *pIdentity;
     const char *pszStr;
 };
 
@@ -91211,7 +91211,7 @@ struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils002_SteamNetworkingIdenti
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(SteamNetworkingIdentity_144 *pIdentity, pIdentity, SteamNetworkingIdentity_144 *);
+    W32_PTR(SteamNetworkingIdentity *pIdentity, pIdentity, SteamNetworkingIdentity *);
     W32_PTR(const char *pszStr, pszStr, const char *);
 };
 
@@ -91536,7 +91536,7 @@ struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIPAddr
 struct ISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ToString_params
 {
     struct u_iface u_iface;
-    const SteamNetworkingIdentity_144 *identity;
+    const SteamNetworkingIdentity *identity;
     char *buf;
     uint32_t cbBuf;
 };
@@ -91544,7 +91544,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ToS
 struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_ToString_params
 {
     struct u_iface u_iface;
-    W32_PTR(const SteamNetworkingIdentity_144 *identity, identity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identity, identity, const SteamNetworkingIdentity *);
     W32_PTR(char *buf, buf, char *);
     uint32_t cbBuf;
 };
@@ -91553,7 +91553,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdentity_Par
 {
     struct u_iface u_iface;
     int8_t _ret;
-    SteamNetworkingIdentity_144 *pIdentity;
+    SteamNetworkingIdentity *pIdentity;
     const char *pszStr;
 };
 
@@ -91561,7 +91561,7 @@ struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils003_SteamNetworkingIdenti
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(SteamNetworkingIdentity_144 *pIdentity, pIdentity, SteamNetworkingIdentity_144 *);
+    W32_PTR(SteamNetworkingIdentity *pIdentity, pIdentity, SteamNetworkingIdentity *);
     W32_PTR(const char *pszStr, pszStr, const char *);
 };
 
@@ -91786,7 +91786,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP_pa
     struct u_iface u_iface;
     uint32_t _ret;
     const SteamNetworkingIPAddr *fakeIP;
-    SteamNetworkingIdentity_144 *pOutRealIdentity;
+    SteamNetworkingIdentity *pOutRealIdentity;
 };
 
 struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFakeIP_params
@@ -91794,7 +91794,7 @@ struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils004_GetRealIdentityForFak
     struct u_iface u_iface;
     uint32_t _ret;
     W32_PTR(const SteamNetworkingIPAddr *fakeIP, fakeIP, const SteamNetworkingIPAddr *);
-    W32_PTR(SteamNetworkingIdentity_144 *pOutRealIdentity, pOutRealIdentity, SteamNetworkingIdentity_144 *);
+    W32_PTR(SteamNetworkingIdentity *pOutRealIdentity, pOutRealIdentity, SteamNetworkingIdentity *);
 };
 
 struct ISteamNetworkingUtils_SteamNetworkingUtils004_SetConfigValue_params
@@ -91928,7 +91928,7 @@ struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIPAddr
 struct ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ToString_params
 {
     struct u_iface u_iface;
-    const SteamNetworkingIdentity_144 *identity;
+    const SteamNetworkingIdentity *identity;
     char *buf;
     uint32_t cbBuf;
 };
@@ -91936,7 +91936,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ToS
 struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_ToString_params
 {
     struct u_iface u_iface;
-    W32_PTR(const SteamNetworkingIdentity_144 *identity, identity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *identity, identity, const SteamNetworkingIdentity *);
     W32_PTR(char *buf, buf, char *);
     uint32_t cbBuf;
 };
@@ -91945,7 +91945,7 @@ struct ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdentity_Par
 {
     struct u_iface u_iface;
     int8_t _ret;
-    SteamNetworkingIdentity_144 *pIdentity;
+    SteamNetworkingIdentity *pIdentity;
     const char *pszStr;
 };
 
@@ -91953,7 +91953,7 @@ struct wow64_ISteamNetworkingUtils_SteamNetworkingUtils004_SteamNetworkingIdenti
 {
     struct u_iface u_iface;
     int8_t _ret;
-    W32_PTR(SteamNetworkingIdentity_144 *pIdentity, pIdentity, SteamNetworkingIdentity_144 *);
+    W32_PTR(SteamNetworkingIdentity *pIdentity, pIdentity, SteamNetworkingIdentity *);
     W32_PTR(const char *pszStr, pszStr, const char *);
 };
 
@@ -97844,7 +97844,7 @@ struct ISteamUser_SteamUser022_GetAuthSessionTicket_params
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
-    const SteamNetworkingIdentity_144 *pSteamNetworkingIdentity;
+    const SteamNetworkingIdentity *pSteamNetworkingIdentity;
 };
 
 struct wow64_ISteamUser_SteamUser022_GetAuthSessionTicket_params
@@ -97854,7 +97854,7 @@ struct wow64_ISteamUser_SteamUser022_GetAuthSessionTicket_params
     W32_PTR(void *pTicket, pTicket, void *);
     int32_t cbMaxTicket;
     W32_PTR(uint32_t *pcbTicket, pcbTicket, uint32_t *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pSteamNetworkingIdentity, pSteamNetworkingIdentity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pSteamNetworkingIdentity, pSteamNetworkingIdentity, const SteamNetworkingIdentity *);
 };
 
 struct ISteamUser_SteamUser022_BeginAuthSession_params
@@ -98322,7 +98322,7 @@ struct ISteamUser_SteamUser023_GetAuthSessionTicket_params
     void *pTicket;
     int32_t cbMaxTicket;
     uint32_t *pcbTicket;
-    const SteamNetworkingIdentity_144 *pSteamNetworkingIdentity;
+    const SteamNetworkingIdentity *pSteamNetworkingIdentity;
 };
 
 struct wow64_ISteamUser_SteamUser023_GetAuthSessionTicket_params
@@ -98332,7 +98332,7 @@ struct wow64_ISteamUser_SteamUser023_GetAuthSessionTicket_params
     W32_PTR(void *pTicket, pTicket, void *);
     int32_t cbMaxTicket;
     W32_PTR(uint32_t *pcbTicket, pcbTicket, uint32_t *);
-    W32_PTR(const SteamNetworkingIdentity_144 *pSteamNetworkingIdentity, pSteamNetworkingIdentity, const SteamNetworkingIdentity_144 *);
+    W32_PTR(const SteamNetworkingIdentity *pSteamNetworkingIdentity, pSteamNetworkingIdentity, const SteamNetworkingIdentity *);
 };
 
 struct ISteamUser_SteamUser023_GetAuthTicketForWebApi_params

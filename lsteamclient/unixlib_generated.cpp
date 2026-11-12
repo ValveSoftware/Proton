@@ -13133,19 +13133,13 @@ C_ASSERT( sizeof(SteamNetworkingIPAddr().data) >= 16 );
 C_ASSERT( offsetof(SteamNetworkingIPAddr, m_port) == 16 );
 C_ASSERT( sizeof(SteamNetworkingIPAddr().m_port) >= 2 );
 
-C_ASSERT( sizeof(SteamNetworkingIdentity_144) >= 136 );
-C_ASSERT( offsetof(SteamNetworkingIdentity_144, m_eType) == 0 );
-C_ASSERT( sizeof(SteamNetworkingIdentity_144().m_eType) >= 4 );
-C_ASSERT( offsetof(SteamNetworkingIdentity_144, m_cbSize) == 4 );
-C_ASSERT( sizeof(SteamNetworkingIdentity_144().m_cbSize) >= 4 );
-C_ASSERT( offsetof(SteamNetworkingIdentity_144, data) == 8 );
-C_ASSERT( sizeof(SteamNetworkingIdentity_144().data) >= 128 );
-
-C_ASSERT( sizeof(SteamNetworkingIdentity_151) >= 8 );
-C_ASSERT( offsetof(SteamNetworkingIdentity_151, m_eType) == 0 );
-C_ASSERT( sizeof(SteamNetworkingIdentity_151().m_eType) >= 4 );
-C_ASSERT( offsetof(SteamNetworkingIdentity_151, m_cbSize) == 4 );
-C_ASSERT( sizeof(SteamNetworkingIdentity_151().m_cbSize) >= 4 );
+C_ASSERT( sizeof(SteamNetworkingIdentity) >= 136 );
+C_ASSERT( offsetof(SteamNetworkingIdentity, m_eType) == 0 );
+C_ASSERT( sizeof(SteamNetworkingIdentity().m_eType) >= 4 );
+C_ASSERT( offsetof(SteamNetworkingIdentity, m_cbSize) == 4 );
+C_ASSERT( sizeof(SteamNetworkingIdentity().m_cbSize) >= 4 );
+C_ASSERT( offsetof(SteamNetworkingIdentity, data) == 8 );
+C_ASSERT( sizeof(SteamNetworkingIdentity().data) >= 128 );
 
 C_ASSERT( sizeof(SteamNetConnectionInfo_t_153a) >= 696 );
 C_ASSERT( offsetof(SteamNetConnectionInfo_t_153a, m_identityRemote) == 0 );
@@ -13200,32 +13194,6 @@ C_ASSERT( offsetof(SteamNetConnectionInfo_t_144, m_szConnectionDescription) == 3
 C_ASSERT( sizeof(SteamNetConnectionInfo_t_144().m_szConnectionDescription) >= 128 );
 C_ASSERT( offsetof(SteamNetConnectionInfo_t_144, reserved) == 440 );
 C_ASSERT( sizeof(SteamNetConnectionInfo_t_144().reserved) >= 256 );
-
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151) >= 568 );
-C_ASSERT( offsetof(SteamNetConnectionInfo_t_151, m_identityRemote) == 0 );
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151().m_identityRemote) >= 8 );
-C_ASSERT( offsetof(SteamNetConnectionInfo_t_151, m_nUserData) == 8 );
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151().m_nUserData) >= 8 );
-C_ASSERT( offsetof(SteamNetConnectionInfo_t_151, m_hListenSocket) == 16 );
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151().m_hListenSocket) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionInfo_t_151, m_addrRemote) == 20 );
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151().m_addrRemote) >= 18 );
-C_ASSERT( offsetof(SteamNetConnectionInfo_t_151, m__pad1) == 38 );
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151().m__pad1) >= 2 );
-C_ASSERT( offsetof(SteamNetConnectionInfo_t_151, m_idPOPRemote) == 40 );
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151().m_idPOPRemote) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionInfo_t_151, m_idPOPRelay) == 44 );
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151().m_idPOPRelay) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionInfo_t_151, m_eState) == 48 );
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151().m_eState) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionInfo_t_151, m_eEndReason) == 52 );
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151().m_eEndReason) >= 4 );
-C_ASSERT( offsetof(SteamNetConnectionInfo_t_151, m_szEndDebug) == 56 );
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151().m_szEndDebug) >= 128 );
-C_ASSERT( offsetof(SteamNetConnectionInfo_t_151, m_szConnectionDescription) == 184 );
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151().m_szConnectionDescription) >= 128 );
-C_ASSERT( offsetof(SteamNetConnectionInfo_t_151, reserved) == 312 );
-C_ASSERT( sizeof(SteamNetConnectionInfo_t_151().reserved) >= 256 );
 
 C_ASSERT( sizeof(servernetadr_t) >= 8 );
 C_ASSERT( offsetof(servernetadr_t, m_usConnectionPort) == 0 );
@@ -14627,17 +14595,9 @@ C_ASSERT( sizeof(SteamNetworkingMessagesSessionFailed_t_150) >= 696 );
 C_ASSERT( offsetof(SteamNetworkingMessagesSessionFailed_t_150, m_info) == 0 );
 C_ASSERT( sizeof(SteamNetworkingMessagesSessionFailed_t_150().m_info) >= 696 );
 
-C_ASSERT( sizeof(SteamNetworkingMessagesSessionFailed_t_151) >= 568 );
-C_ASSERT( offsetof(SteamNetworkingMessagesSessionFailed_t_151, m_info) == 0 );
-C_ASSERT( sizeof(SteamNetworkingMessagesSessionFailed_t_151().m_info) >= 568 );
-
-C_ASSERT( sizeof(SteamNetworkingMessagesSessionRequest_t_150) >= 136 );
-C_ASSERT( offsetof(SteamNetworkingMessagesSessionRequest_t_150, m_identityRemote) == 0 );
-C_ASSERT( sizeof(SteamNetworkingMessagesSessionRequest_t_150().m_identityRemote) >= 136 );
-
-C_ASSERT( sizeof(SteamNetworkingMessagesSessionRequest_t_151) >= 8 );
-C_ASSERT( offsetof(SteamNetworkingMessagesSessionRequest_t_151, m_identityRemote) == 0 );
-C_ASSERT( sizeof(SteamNetworkingMessagesSessionRequest_t_151().m_identityRemote) >= 8 );
+C_ASSERT( sizeof(SteamNetworkingMessagesSessionRequest_t) >= 136 );
+C_ASSERT( offsetof(SteamNetworkingMessagesSessionRequest_t, m_identityRemote) == 0 );
+C_ASSERT( sizeof(SteamNetworkingMessagesSessionRequest_t().m_identityRemote) >= 136 );
 
 C_ASSERT( sizeof(SteamNetworkingPOPIDRender) >= 8 );
 C_ASSERT( offsetof(SteamNetworkingPOPIDRender, buf) == 0 );
@@ -27253,38 +27213,6 @@ C_ASSERT( sizeof(u32_SteamNetConnectionStatusChangedCallback_t_144().m_info) >= 
 C_ASSERT( offsetof(u32_SteamNetConnectionStatusChangedCallback_t_144, m_eOldState) == 700 );
 C_ASSERT( sizeof(u32_SteamNetConnectionStatusChangedCallback_t_144().m_eOldState) >= 4 );
 
-C_ASSERT( sizeof(w64_SteamNetConnectionStatusChangedCallback_t_151) >= 584 );
-C_ASSERT( offsetof(w64_SteamNetConnectionStatusChangedCallback_t_151, m_hConn) == 0 );
-C_ASSERT( sizeof(w64_SteamNetConnectionStatusChangedCallback_t_151().m_hConn) >= 4 );
-C_ASSERT( offsetof(w64_SteamNetConnectionStatusChangedCallback_t_151, m_info) == 8 );
-C_ASSERT( sizeof(w64_SteamNetConnectionStatusChangedCallback_t_151().m_info) >= 568 );
-C_ASSERT( offsetof(w64_SteamNetConnectionStatusChangedCallback_t_151, m_eOldState) == 576 );
-C_ASSERT( sizeof(w64_SteamNetConnectionStatusChangedCallback_t_151().m_eOldState) >= 4 );
-
-C_ASSERT( sizeof(u64_SteamNetConnectionStatusChangedCallback_t_151) >= 576 );
-C_ASSERT( offsetof(u64_SteamNetConnectionStatusChangedCallback_t_151, m_hConn) == 0 );
-C_ASSERT( sizeof(u64_SteamNetConnectionStatusChangedCallback_t_151().m_hConn) >= 4 );
-C_ASSERT( offsetof(u64_SteamNetConnectionStatusChangedCallback_t_151, m_info) == 4 );
-C_ASSERT( sizeof(u64_SteamNetConnectionStatusChangedCallback_t_151().m_info) >= 568 );
-C_ASSERT( offsetof(u64_SteamNetConnectionStatusChangedCallback_t_151, m_eOldState) == 572 );
-C_ASSERT( sizeof(u64_SteamNetConnectionStatusChangedCallback_t_151().m_eOldState) >= 4 );
-
-C_ASSERT( sizeof(w32_SteamNetConnectionStatusChangedCallback_t_151) >= 584 );
-C_ASSERT( offsetof(w32_SteamNetConnectionStatusChangedCallback_t_151, m_hConn) == 0 );
-C_ASSERT( sizeof(w32_SteamNetConnectionStatusChangedCallback_t_151().m_hConn) >= 4 );
-C_ASSERT( offsetof(w32_SteamNetConnectionStatusChangedCallback_t_151, m_info) == 8 );
-C_ASSERT( sizeof(w32_SteamNetConnectionStatusChangedCallback_t_151().m_info) >= 568 );
-C_ASSERT( offsetof(w32_SteamNetConnectionStatusChangedCallback_t_151, m_eOldState) == 576 );
-C_ASSERT( sizeof(w32_SteamNetConnectionStatusChangedCallback_t_151().m_eOldState) >= 4 );
-
-C_ASSERT( sizeof(u32_SteamNetConnectionStatusChangedCallback_t_151) >= 576 );
-C_ASSERT( offsetof(u32_SteamNetConnectionStatusChangedCallback_t_151, m_hConn) == 0 );
-C_ASSERT( sizeof(u32_SteamNetConnectionStatusChangedCallback_t_151().m_hConn) >= 4 );
-C_ASSERT( offsetof(u32_SteamNetConnectionStatusChangedCallback_t_151, m_info) == 4 );
-C_ASSERT( sizeof(u32_SteamNetConnectionStatusChangedCallback_t_151().m_info) >= 568 );
-C_ASSERT( offsetof(u32_SteamNetConnectionStatusChangedCallback_t_151, m_eOldState) == 572 );
-C_ASSERT( sizeof(u32_SteamNetConnectionStatusChangedCallback_t_151().m_eOldState) >= 4 );
-
 #if defined(__x86_64__) || defined(__aarch64__)
 w64_SteamNetConnectionStatusChangedCallback_t_153a::operator u64_SteamNetConnectionStatusChangedCallback_t_153a() const
 {
@@ -27410,72 +27338,6 @@ w32_SteamNetConnectionStatusChangedCallback_t_144::operator u64_SteamNetConnecti
 u64_SteamNetConnectionStatusChangedCallback_t_144::operator w32_SteamNetConnectionStatusChangedCallback_t_144() const
 {
     w32_SteamNetConnectionStatusChangedCallback_t_144 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
-w64_SteamNetConnectionStatusChangedCallback_t_151::operator u64_SteamNetConnectionStatusChangedCallback_t_151() const
-{
-    u64_SteamNetConnectionStatusChangedCallback_t_151 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
-u64_SteamNetConnectionStatusChangedCallback_t_151::operator w64_SteamNetConnectionStatusChangedCallback_t_151() const
-{
-    w64_SteamNetConnectionStatusChangedCallback_t_151 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
-    return ret;
-}
-#endif
-
-#ifdef __i386__
-w32_SteamNetConnectionStatusChangedCallback_t_151::operator u32_SteamNetConnectionStatusChangedCallback_t_151() const
-{
-    u32_SteamNetConnectionStatusChangedCallback_t_151 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
-    return ret;
-}
-#endif
-
-#ifdef __i386__
-u32_SteamNetConnectionStatusChangedCallback_t_151::operator w32_SteamNetConnectionStatusChangedCallback_t_151() const
-{
-    w32_SteamNetConnectionStatusChangedCallback_t_151 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
-w32_SteamNetConnectionStatusChangedCallback_t_151::operator u64_SteamNetConnectionStatusChangedCallback_t_151() const
-{
-    u64_SteamNetConnectionStatusChangedCallback_t_151 ret;
-    ret.m_hConn = this->m_hConn;
-    ret.m_info = this->m_info;
-    ret.m_eOldState = this->m_eOldState;
-    return ret;
-}
-#endif
-
-#if defined(__x86_64__) || defined(__aarch64__)
-u64_SteamNetConnectionStatusChangedCallback_t_151::operator w32_SteamNetConnectionStatusChangedCallback_t_151() const
-{
-    w32_SteamNetConnectionStatusChangedCallback_t_151 ret;
     ret.m_hConn = this->m_hConn;
     ret.m_info = this->m_info;
     ret.m_eOldState = this->m_eOldState;
@@ -27706,110 +27568,6 @@ C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_147, m_nFlags) == 184 );
 C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_147().m_nFlags) >= 4 );
 C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_147, m_nUserData) == 188 );
 C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_147().m_nUserData) >= 8 );
-
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151) >= 80 );
-C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_151, m_pData) == 0 );
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151().m_pData) >= 8 );
-C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_151, m_cbSize) == 8 );
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151().m_cbSize) >= 4 );
-C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_151, m_conn) == 12 );
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151().m_conn) >= 4 );
-C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_151, m_identityPeer) == 16 );
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151().m_identityPeer) >= 8 );
-C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_151, m_nConnUserData) == 24 );
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151().m_nConnUserData) >= 8 );
-C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_151, m_usecTimeReceived) == 32 );
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151().m_usecTimeReceived) >= 8 );
-C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_151, m_nMessageNumber) == 40 );
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151().m_nMessageNumber) >= 8 );
-C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_151, m_pfnFreeData) == 48 );
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151().m_pfnFreeData) >= 8 );
-C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_151, m_pfnRelease) == 56 );
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151().m_pfnRelease) >= 8 );
-C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_151, m_nChannel) == 64 );
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151().m_nChannel) >= 4 );
-C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_151, m_nFlags) == 68 );
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151().m_nFlags) >= 4 );
-C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_151, m_nUserData) == 72 );
-C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_151().m_nUserData) >= 8 );
-
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151) >= 80 );
-C_ASSERT( offsetof(u64_SteamNetworkingMessage_t_151, m_pData) == 0 );
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151().m_pData) >= 8 );
-C_ASSERT( offsetof(u64_SteamNetworkingMessage_t_151, m_cbSize) == 8 );
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151().m_cbSize) >= 4 );
-C_ASSERT( offsetof(u64_SteamNetworkingMessage_t_151, m_conn) == 12 );
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151().m_conn) >= 4 );
-C_ASSERT( offsetof(u64_SteamNetworkingMessage_t_151, m_identityPeer) == 16 );
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151().m_identityPeer) >= 8 );
-C_ASSERT( offsetof(u64_SteamNetworkingMessage_t_151, m_nConnUserData) == 24 );
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151().m_nConnUserData) >= 8 );
-C_ASSERT( offsetof(u64_SteamNetworkingMessage_t_151, m_usecTimeReceived) == 32 );
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151().m_usecTimeReceived) >= 8 );
-C_ASSERT( offsetof(u64_SteamNetworkingMessage_t_151, m_nMessageNumber) == 40 );
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151().m_nMessageNumber) >= 8 );
-C_ASSERT( offsetof(u64_SteamNetworkingMessage_t_151, m_pfnFreeData) == 48 );
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151().m_pfnFreeData) >= 8 );
-C_ASSERT( offsetof(u64_SteamNetworkingMessage_t_151, m_pfnRelease) == 56 );
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151().m_pfnRelease) >= 8 );
-C_ASSERT( offsetof(u64_SteamNetworkingMessage_t_151, m_nChannel) == 64 );
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151().m_nChannel) >= 4 );
-C_ASSERT( offsetof(u64_SteamNetworkingMessage_t_151, m_nFlags) == 68 );
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151().m_nFlags) >= 4 );
-C_ASSERT( offsetof(u64_SteamNetworkingMessage_t_151, m_nUserData) == 72 );
-C_ASSERT( sizeof(u64_SteamNetworkingMessage_t_151().m_nUserData) >= 8 );
-
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151) >= 72 );
-C_ASSERT( offsetof(w32_SteamNetworkingMessage_t_151, m_pData) == 0 );
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151().m_pData) >= 4 );
-C_ASSERT( offsetof(w32_SteamNetworkingMessage_t_151, m_cbSize) == 4 );
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151().m_cbSize) >= 4 );
-C_ASSERT( offsetof(w32_SteamNetworkingMessage_t_151, m_conn) == 8 );
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151().m_conn) >= 4 );
-C_ASSERT( offsetof(w32_SteamNetworkingMessage_t_151, m_identityPeer) == 12 );
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151().m_identityPeer) >= 8 );
-C_ASSERT( offsetof(w32_SteamNetworkingMessage_t_151, m_nConnUserData) == 24 );
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151().m_nConnUserData) >= 8 );
-C_ASSERT( offsetof(w32_SteamNetworkingMessage_t_151, m_usecTimeReceived) == 32 );
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151().m_usecTimeReceived) >= 8 );
-C_ASSERT( offsetof(w32_SteamNetworkingMessage_t_151, m_nMessageNumber) == 40 );
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151().m_nMessageNumber) >= 8 );
-C_ASSERT( offsetof(w32_SteamNetworkingMessage_t_151, m_pfnFreeData) == 48 );
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151().m_pfnFreeData) >= 4 );
-C_ASSERT( offsetof(w32_SteamNetworkingMessage_t_151, m_pfnRelease) == 52 );
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151().m_pfnRelease) >= 4 );
-C_ASSERT( offsetof(w32_SteamNetworkingMessage_t_151, m_nChannel) == 56 );
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151().m_nChannel) >= 4 );
-C_ASSERT( offsetof(w32_SteamNetworkingMessage_t_151, m_nFlags) == 60 );
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151().m_nFlags) >= 4 );
-C_ASSERT( offsetof(w32_SteamNetworkingMessage_t_151, m_nUserData) == 64 );
-C_ASSERT( sizeof(w32_SteamNetworkingMessage_t_151().m_nUserData) >= 8 );
-
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151) >= 68 );
-C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_151, m_pData) == 0 );
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151().m_pData) >= 4 );
-C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_151, m_cbSize) == 4 );
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151().m_cbSize) >= 4 );
-C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_151, m_conn) == 8 );
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151().m_conn) >= 4 );
-C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_151, m_identityPeer) == 12 );
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151().m_identityPeer) >= 8 );
-C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_151, m_nConnUserData) == 20 );
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151().m_nConnUserData) >= 8 );
-C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_151, m_usecTimeReceived) == 28 );
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151().m_usecTimeReceived) >= 8 );
-C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_151, m_nMessageNumber) == 36 );
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151().m_nMessageNumber) >= 8 );
-C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_151, m_pfnFreeData) == 44 );
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151().m_pfnFreeData) >= 4 );
-C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_151, m_pfnRelease) == 48 );
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151().m_pfnRelease) >= 4 );
-C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_151, m_nChannel) == 52 );
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151().m_nChannel) >= 4 );
-C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_151, m_nFlags) == 56 );
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151().m_nFlags) >= 4 );
-C_ASSERT( offsetof(u32_SteamNetworkingMessage_t_151, m_nUserData) == 60 );
-C_ASSERT( sizeof(u32_SteamNetworkingMessage_t_151().m_nUserData) >= 8 );
 
 C_ASSERT( sizeof(w64_SteamNetworkingMessage_t_144) >= 200 );
 C_ASSERT( offsetof(w64_SteamNetworkingMessage_t_144, m_pData) == 0 );
@@ -28454,7 +28212,6 @@ const struct callback_def callback_data[] =
     /*{ 1112, 122, 24, 20 },*/
     { 1221, 165, 712, 704, []( void *d, const void *s ){ *(w32_SteamNetConnectionStatusChangedCallback_t_153a *)d = *(const u32_SteamNetConnectionStatusChangedCallback_t_153a *)s; } },
     /*{ 1221, 152, 712, 704 },*/
-    { 1221, 151, 584, 576, []( void *d, const void *s ){ *(w32_SteamNetConnectionStatusChangedCallback_t_151 *)d = *(const u32_SteamNetConnectionStatusChangedCallback_t_151 *)s; } },
     { 1303, 151, 288, 280, []( void *d, const void *s ){ *(w32_RemoteStorageAppSyncProgress_t_123 *)d = *(const u32_RemoteStorageAppSyncProgress_t_123 *)s; } },
     /*{ 1303, 122, 288, 280 },*/
     { 1307, 165, 280, 272, []( void *d, const void *s ){ *(w32_RemoteStorageFileShareResult_t_128x *)d = *(const u32_RemoteStorageFileShareResult_t_128x *)s; } },
@@ -28566,7 +28323,6 @@ const struct callback_def wow64_callback_data[] =
     { 1112, 122, 24, 24, []( void *d, const void *s ){ *(w32_PS3TrophiesInstalled_t_112x *)d = *(const u64_PS3TrophiesInstalled_t_112x *)s; } },
     { 1221, 165, 712, 704, []( void *d, const void *s ){ *(w32_SteamNetConnectionStatusChangedCallback_t_153a *)d = *(const u64_SteamNetConnectionStatusChangedCallback_t_153a *)s; } },
     /*{ 1221, 152, 712, 704 },*/
-    { 1221, 151, 584, 576, []( void *d, const void *s ){ *(w32_SteamNetConnectionStatusChangedCallback_t_151 *)d = *(const u64_SteamNetConnectionStatusChangedCallback_t_151 *)s; } },
     { 1303, 151, 288, 280, []( void *d, const void *s ){ *(w32_RemoteStorageAppSyncProgress_t_123 *)d = *(const u64_RemoteStorageAppSyncProgress_t_123 *)s; } },
     { 1303, 122, 288, 288, []( void *d, const void *s ){ *(w32_RemoteStorageAppSyncProgress_t_111x *)d = *(const u64_RemoteStorageAppSyncProgress_t_111x *)s; } },
     { 1307, 165, 280, 272, []( void *d, const void *s ){ *(w32_RemoteStorageFileShareResult_t_128x *)d = *(const u64_RemoteStorageFileShareResult_t_128x *)s; } },
@@ -28676,7 +28432,6 @@ const struct callback_def callback_data[] =
     { 1112, 122, 24, 24, []( void *d, const void *s ){ *(w64_PS3TrophiesInstalled_t_112x *)d = *(const u64_PS3TrophiesInstalled_t_112x *)s; } },
     { 1221, 165, 712, 704, []( void *d, const void *s ){ *(w64_SteamNetConnectionStatusChangedCallback_t_153a *)d = *(const u64_SteamNetConnectionStatusChangedCallback_t_153a *)s; } },
     /*{ 1221, 152, 712, 704 },*/
-    { 1221, 151, 584, 576, []( void *d, const void *s ){ *(w64_SteamNetConnectionStatusChangedCallback_t_151 *)d = *(const u64_SteamNetConnectionStatusChangedCallback_t_151 *)s; } },
     { 1303, 151, 288, 280, []( void *d, const void *s ){ *(w64_RemoteStorageAppSyncProgress_t_123 *)d = *(const u64_RemoteStorageAppSyncProgress_t_123 *)s; } },
     { 1303, 122, 288, 288, []( void *d, const void *s ){ *(w64_RemoteStorageAppSyncProgress_t_111x *)d = *(const u64_RemoteStorageAppSyncProgress_t_111x *)s; } },
     { 1307, 165, 280, 272, []( void *d, const void *s ){ *(w64_RemoteStorageFileShareResult_t_128x *)d = *(const u64_RemoteStorageFileShareResult_t_128x *)s; } },

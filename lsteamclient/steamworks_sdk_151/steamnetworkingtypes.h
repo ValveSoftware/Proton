@@ -295,14 +295,14 @@ struct SteamNetworkingIdentity
 	// set.  (Use the accessors!)  This is important to enable old code to work
 	// with new identity types.
 	int m_cbSize;
-	union data {
+	union {
 		uint64 m_steamID64;
 		char m_szGenericString[ k_cchMaxGenericString ];
 		uint8 m_genericBytes[ k_cbMaxGenericBytes ];
 		char m_szUnknownRawString[ k_cchMaxString ];
 		SteamNetworkingIPAddr m_ip;
 		uint32 m_reserved[ 32 ]; // Pad structure to leave easy room for future expansion
-	};
+	} data;
 };
 #pragma pack(pop)
 

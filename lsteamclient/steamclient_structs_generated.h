@@ -7,9 +7,9 @@ struct SteamNetworkingIPAddr
 };
 #pragma pack( pop )
 
-typedef struct SteamNetworkingIdentity_144 SteamNetworkingIdentity_144;
+typedef struct SteamNetworkingIdentity SteamNetworkingIdentity;
 #pragma pack( push, 1 )
-struct SteamNetworkingIdentity_144
+struct SteamNetworkingIdentity
 {
     uint32_t m_eType;
     int32_t m_cbSize;
@@ -17,20 +17,11 @@ struct SteamNetworkingIdentity_144
 };
 #pragma pack( pop )
 
-typedef struct SteamNetworkingIdentity_151 SteamNetworkingIdentity_151;
-#pragma pack( push, 1 )
-struct SteamNetworkingIdentity_151
-{
-    uint32_t m_eType;
-    int32_t m_cbSize;
-};
-#pragma pack( pop )
-
 typedef struct SteamNetConnectionInfo_t_153a SteamNetConnectionInfo_t_153a;
 #pragma pack( push, 8 )
 struct SteamNetConnectionInfo_t_153a
 {
-    SteamNetworkingIdentity_144 m_identityRemote;
+    SteamNetworkingIdentity m_identityRemote;
     int64_t m_nUserData;
     uint32_t m_hListenSocket;
     SteamNetworkingIPAddr m_addrRemote;
@@ -50,26 +41,7 @@ typedef struct SteamNetConnectionInfo_t_144 SteamNetConnectionInfo_t_144;
 #pragma pack( push, 8 )
 struct SteamNetConnectionInfo_t_144
 {
-    SteamNetworkingIdentity_144 m_identityRemote;
-    int64_t m_nUserData;
-    uint32_t m_hListenSocket;
-    SteamNetworkingIPAddr m_addrRemote;
-    uint16_t m__pad1;
-    uint32_t m_idPOPRemote;
-    uint32_t m_idPOPRelay;
-    uint32_t m_eState;
-    int32_t m_eEndReason;
-    char (m_szEndDebug)[128];
-    char (m_szConnectionDescription)[128];
-    uint32_t (reserved)[64];
-};
-#pragma pack( pop )
-
-typedef struct SteamNetConnectionInfo_t_151 SteamNetConnectionInfo_t_151;
-#pragma pack( push, 8 )
-struct SteamNetConnectionInfo_t_151
-{
-    SteamNetworkingIdentity_151 m_identityRemote;
+    SteamNetworkingIdentity m_identityRemote;
     int64_t m_nUserData;
     uint32_t m_hListenSocket;
     SteamNetworkingIPAddr m_addrRemote;
@@ -1985,7 +1957,7 @@ typedef struct SteamNetworkingFakeIPResult_t SteamNetworkingFakeIPResult_t;
 struct SteamNetworkingFakeIPResult_t
 {
     uint32_t m_eResult;
-    SteamNetworkingIdentity_144 m_identity;
+    SteamNetworkingIdentity m_identity;
     uint32_t m_unIP;
     uint16_t (m_unPorts)[8];
 };
@@ -2007,27 +1979,11 @@ struct SteamNetworkingMessagesSessionFailed_t_150
 };
 #pragma pack( pop )
 
-typedef struct SteamNetworkingMessagesSessionFailed_t_151 SteamNetworkingMessagesSessionFailed_t_151;
+typedef struct SteamNetworkingMessagesSessionRequest_t SteamNetworkingMessagesSessionRequest_t;
 #pragma pack( push, 1 )
-struct SteamNetworkingMessagesSessionFailed_t_151
+struct SteamNetworkingMessagesSessionRequest_t
 {
-    SteamNetConnectionInfo_t_151 m_info;
-};
-#pragma pack( pop )
-
-typedef struct SteamNetworkingMessagesSessionRequest_t_150 SteamNetworkingMessagesSessionRequest_t_150;
-#pragma pack( push, 1 )
-struct SteamNetworkingMessagesSessionRequest_t_150
-{
-    SteamNetworkingIdentity_144 m_identityRemote;
-};
-#pragma pack( pop )
-
-typedef struct SteamNetworkingMessagesSessionRequest_t_151 SteamNetworkingMessagesSessionRequest_t_151;
-#pragma pack( push, 1 )
-struct SteamNetworkingMessagesSessionRequest_t_151
-{
-    SteamNetworkingIdentity_151 m_identityRemote;
+    SteamNetworkingIdentity m_identityRemote;
 };
 #pragma pack( pop )
 
@@ -2983,10 +2939,6 @@ typedef struct u64_SteamNetConnectionStatusChangedCallback_t_144 u64_SteamNetCon
 typedef struct w64_SteamNetConnectionStatusChangedCallback_t_144 w64_SteamNetConnectionStatusChangedCallback_t_144;
 typedef struct u32_SteamNetConnectionStatusChangedCallback_t_144 u32_SteamNetConnectionStatusChangedCallback_t_144;
 typedef struct w32_SteamNetConnectionStatusChangedCallback_t_144 w32_SteamNetConnectionStatusChangedCallback_t_144;
-typedef struct u64_SteamNetConnectionStatusChangedCallback_t_151 u64_SteamNetConnectionStatusChangedCallback_t_151;
-typedef struct w64_SteamNetConnectionStatusChangedCallback_t_151 w64_SteamNetConnectionStatusChangedCallback_t_151;
-typedef struct u32_SteamNetConnectionStatusChangedCallback_t_151 u32_SteamNetConnectionStatusChangedCallback_t_151;
-typedef struct w32_SteamNetConnectionStatusChangedCallback_t_151 w32_SteamNetConnectionStatusChangedCallback_t_151;
 typedef struct u64_SteamNetworkingMessage_t_153a u64_SteamNetworkingMessage_t_153a;
 typedef struct w64_SteamNetworkingMessage_t_153a w64_SteamNetworkingMessage_t_153a;
 typedef struct u32_SteamNetworkingMessage_t_153a u32_SteamNetworkingMessage_t_153a;
@@ -2995,10 +2947,6 @@ typedef struct u64_SteamNetworkingMessage_t_147 u64_SteamNetworkingMessage_t_147
 typedef struct w64_SteamNetworkingMessage_t_147 w64_SteamNetworkingMessage_t_147;
 typedef struct u32_SteamNetworkingMessage_t_147 u32_SteamNetworkingMessage_t_147;
 typedef struct w32_SteamNetworkingMessage_t_147 w32_SteamNetworkingMessage_t_147;
-typedef struct u64_SteamNetworkingMessage_t_151 u64_SteamNetworkingMessage_t_151;
-typedef struct w64_SteamNetworkingMessage_t_151 w64_SteamNetworkingMessage_t_151;
-typedef struct u32_SteamNetworkingMessage_t_151 u32_SteamNetworkingMessage_t_151;
-typedef struct w32_SteamNetworkingMessage_t_151 w32_SteamNetworkingMessage_t_151;
 typedef struct u64_SteamNetworkingMessage_t_144 u64_SteamNetworkingMessage_t_144;
 typedef struct w64_SteamNetworkingMessage_t_144 w64_SteamNetworkingMessage_t_144;
 typedef struct u32_SteamNetworkingMessage_t_144 u32_SteamNetworkingMessage_t_144;
@@ -5880,16 +5828,16 @@ struct u_ISteamNetworkingConnectionCustomSignaling
 struct w_ISteamNetworkingCustomSignalingRecvContext
 {
 #ifdef __cplusplus
-    virtual w_ISteamNetworkingConnectionCustomSignaling * OnConnectRequest( uint32_t, const SteamNetworkingIdentity_144 * ) = 0;
-    virtual void SendRejectionSignal( const SteamNetworkingIdentity_144 *, const void *, int32_t ) = 0;
+    virtual w_ISteamNetworkingConnectionCustomSignaling * OnConnectRequest( uint32_t, const SteamNetworkingIdentity * ) = 0;
+    virtual void SendRejectionSignal( const SteamNetworkingIdentity *, const void *, int32_t ) = 0;
 #endif /* __cplusplus */
 };
 
 struct u_ISteamNetworkingCustomSignalingRecvContext
 {
 #ifdef __cplusplus
-    virtual u_ISteamNetworkingConnectionCustomSignaling * OnConnectRequest( uint32_t, const SteamNetworkingIdentity_144 * ) = 0;
-    virtual void SendRejectionSignal( const SteamNetworkingIdentity_144 *, const void *, int32_t ) = 0;
+    virtual u_ISteamNetworkingConnectionCustomSignaling * OnConnectRequest( uint32_t, const SteamNetworkingIdentity * ) = 0;
+    virtual void SendRejectionSignal( const SteamNetworkingIdentity *, const void *, int32_t ) = 0;
 #endif /* __cplusplus */
 };
 
@@ -10608,79 +10556,12 @@ typedef u64_SteamNetConnectionStatusChangedCallback_t_144 u_SteamNetConnectionSt
 #endif
 
 #pragma pack( push, 8 )
-struct w64_SteamNetConnectionStatusChangedCallback_t_151
-{
-    uint32_t m_hConn;
-    uint8_t __pad_4[4];
-    SteamNetConnectionInfo_t_151 m_info;
-    uint32_t m_eOldState;
-    uint8_t __pad_580[4];
-#ifdef __cplusplus
-    operator u64_SteamNetConnectionStatusChangedCallback_t_151() const;
-#endif /* __cplusplus */
-};
-#pragma pack( pop )
-
-#pragma pack( push, 4 )
-struct u64_SteamNetConnectionStatusChangedCallback_t_151
-{
-    uint32_t m_hConn;
-    SteamNetConnectionInfo_t_151 m_info;
-    uint32_t m_eOldState;
-#ifdef __cplusplus
-    operator w64_SteamNetConnectionStatusChangedCallback_t_151() const;
-#endif /* __cplusplus */
-#ifdef __cplusplus
-    operator w32_SteamNetConnectionStatusChangedCallback_t_151() const;
-#endif /* __cplusplus */
-};
-#pragma pack( pop )
-
-#pragma pack( push, 8 )
-struct w32_SteamNetConnectionStatusChangedCallback_t_151
-{
-    uint32_t m_hConn;
-    uint8_t __pad_4[4];
-    SteamNetConnectionInfo_t_151 m_info;
-    uint32_t m_eOldState;
-    uint8_t __pad_580[4];
-#ifdef __cplusplus
-    operator u32_SteamNetConnectionStatusChangedCallback_t_151() const;
-#endif /* __cplusplus */
-#ifdef __cplusplus
-    operator u64_SteamNetConnectionStatusChangedCallback_t_151() const;
-#endif /* __cplusplus */
-};
-#pragma pack( pop )
-
-#pragma pack( push, 4 )
-struct u32_SteamNetConnectionStatusChangedCallback_t_151
-{
-    uint32_t m_hConn;
-    SteamNetConnectionInfo_t_151 m_info;
-    uint32_t m_eOldState;
-#ifdef __cplusplus
-    operator w32_SteamNetConnectionStatusChangedCallback_t_151() const;
-#endif /* __cplusplus */
-};
-#pragma pack( pop )
-
-#ifdef __i386__
-typedef w32_SteamNetConnectionStatusChangedCallback_t_151 w_SteamNetConnectionStatusChangedCallback_t_151;
-typedef u32_SteamNetConnectionStatusChangedCallback_t_151 u_SteamNetConnectionStatusChangedCallback_t_151;
-#endif
-#if defined(__x86_64__) || defined(__aarch64__)
-typedef w64_SteamNetConnectionStatusChangedCallback_t_151 w_SteamNetConnectionStatusChangedCallback_t_151;
-typedef u64_SteamNetConnectionStatusChangedCallback_t_151 u_SteamNetConnectionStatusChangedCallback_t_151;
-#endif
-
-#pragma pack( push, 8 )
 struct w64_SteamNetworkingMessage_t_153a
 {
     W64_PTR(void *m_pData, m_pData, void *);
     int32_t m_cbSize;
     uint32_t m_conn;
-    SteamNetworkingIdentity_144 m_identityPeer;
+    SteamNetworkingIdentity m_identityPeer;
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
@@ -10704,7 +10585,7 @@ struct u64_SteamNetworkingMessage_t_153a
     U64_PTR(void *m_pData, m_pData, void *);
     int32_t m_cbSize;
     uint32_t m_conn;
-    SteamNetworkingIdentity_144 m_identityPeer;
+    SteamNetworkingIdentity m_identityPeer;
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
@@ -10731,7 +10612,7 @@ struct w32_SteamNetworkingMessage_t_153a
     W32_PTR(void *m_pData, m_pData, void *);
     int32_t m_cbSize;
     uint32_t m_conn;
-    SteamNetworkingIdentity_144 m_identityPeer;
+    SteamNetworkingIdentity m_identityPeer;
     uint8_t __pad_148[4];
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
@@ -10759,7 +10640,7 @@ struct u32_SteamNetworkingMessage_t_153a
     U32_PTR(void *m_pData, m_pData, void *);
     int32_t m_cbSize;
     uint32_t m_conn;
-    SteamNetworkingIdentity_144 m_identityPeer;
+    SteamNetworkingIdentity m_identityPeer;
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
@@ -10791,7 +10672,7 @@ struct w64_SteamNetworkingMessage_t_147
     W64_PTR(void *m_pData, m_pData, void *);
     int32_t m_cbSize;
     uint32_t m_conn;
-    SteamNetworkingIdentity_144 m_identityPeer;
+    SteamNetworkingIdentity m_identityPeer;
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
@@ -10812,7 +10693,7 @@ struct u64_SteamNetworkingMessage_t_147
     U64_PTR(void *m_pData, m_pData, void *);
     int32_t m_cbSize;
     uint32_t m_conn;
-    SteamNetworkingIdentity_144 m_identityPeer;
+    SteamNetworkingIdentity m_identityPeer;
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
@@ -10836,7 +10717,7 @@ struct w32_SteamNetworkingMessage_t_147
     W32_PTR(void *m_pData, m_pData, void *);
     int32_t m_cbSize;
     uint32_t m_conn;
-    SteamNetworkingIdentity_144 m_identityPeer;
+    SteamNetworkingIdentity m_identityPeer;
     uint8_t __pad_148[4];
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
@@ -10861,7 +10742,7 @@ struct u32_SteamNetworkingMessage_t_147
     U32_PTR(void *m_pData, m_pData, void *);
     int32_t m_cbSize;
     uint32_t m_conn;
-    SteamNetworkingIdentity_144 m_identityPeer;
+    SteamNetworkingIdentity m_identityPeer;
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
@@ -10886,112 +10767,12 @@ typedef u64_SteamNetworkingMessage_t_147 u_SteamNetworkingMessage_t_147;
 #endif
 
 #pragma pack( push, 8 )
-struct w64_SteamNetworkingMessage_t_151
-{
-    W64_PTR(void *m_pData, m_pData, void *);
-    int32_t m_cbSize;
-    uint32_t m_conn;
-    SteamNetworkingIdentity_151 m_identityPeer;
-    int64_t m_nConnUserData;
-    int64_t m_usecTimeReceived;
-    int64_t m_nMessageNumber;
-    W64_PTR(void (*W_CDECL m_pfnFreeData)(w64_SteamNetworkingMessage_t_151 *), m_pfnFreeData, void (*W_CDECL )(w64_SteamNetworkingMessage_t_151 *));
-    W64_PTR(void (*W_CDECL m_pfnRelease)(w64_SteamNetworkingMessage_t_151 *), m_pfnRelease, void (*W_CDECL )(w64_SteamNetworkingMessage_t_151 *));
-    int32_t m_nChannel;
-    int32_t m_nFlags;
-    int64_t m_nUserData;
-#ifdef __cplusplus
-    operator u64_SteamNetworkingMessage_t_151() const;
-#endif /* __cplusplus */
-};
-#pragma pack( pop )
-
-#pragma pack( push, 8 )
-struct u64_SteamNetworkingMessage_t_151
-{
-    U64_PTR(void *m_pData, m_pData, void *);
-    int32_t m_cbSize;
-    uint32_t m_conn;
-    SteamNetworkingIdentity_151 m_identityPeer;
-    int64_t m_nConnUserData;
-    int64_t m_usecTimeReceived;
-    int64_t m_nMessageNumber;
-    U64_PTR(void (*U_CDECL m_pfnFreeData)(u64_SteamNetworkingMessage_t_151 *), m_pfnFreeData, void (*U_CDECL )(u64_SteamNetworkingMessage_t_151 *));
-    U64_PTR(void (*U_CDECL m_pfnRelease)(u64_SteamNetworkingMessage_t_151 *), m_pfnRelease, void (*U_CDECL )(u64_SteamNetworkingMessage_t_151 *));
-    int32_t m_nChannel;
-    int32_t m_nFlags;
-    int64_t m_nUserData;
-#ifdef __cplusplus
-    operator w64_SteamNetworkingMessage_t_151() const;
-#endif /* __cplusplus */
-#ifdef __cplusplus
-    operator w32_SteamNetworkingMessage_t_151() const;
-#endif /* __cplusplus */
-};
-#pragma pack( pop )
-
-#pragma pack( push, 8 )
-struct w32_SteamNetworkingMessage_t_151
-{
-    W32_PTR(void *m_pData, m_pData, void *);
-    int32_t m_cbSize;
-    uint32_t m_conn;
-    SteamNetworkingIdentity_151 m_identityPeer;
-    uint8_t __pad_20[4];
-    int64_t m_nConnUserData;
-    int64_t m_usecTimeReceived;
-    int64_t m_nMessageNumber;
-    W32_PTR(void (*W_CDECL m_pfnFreeData)(w32_SteamNetworkingMessage_t_151 *), m_pfnFreeData, void (*W_CDECL )(w32_SteamNetworkingMessage_t_151 *));
-    W32_PTR(void (*W_CDECL m_pfnRelease)(w32_SteamNetworkingMessage_t_151 *), m_pfnRelease, void (*W_CDECL )(w32_SteamNetworkingMessage_t_151 *));
-    int32_t m_nChannel;
-    int32_t m_nFlags;
-    int64_t m_nUserData;
-#ifdef __cplusplus
-    operator u32_SteamNetworkingMessage_t_151() const;
-#endif /* __cplusplus */
-#ifdef __cplusplus
-    operator u64_SteamNetworkingMessage_t_151() const;
-#endif /* __cplusplus */
-};
-#pragma pack( pop )
-
-#pragma pack( push, 4 )
-struct u32_SteamNetworkingMessage_t_151
-{
-    U32_PTR(void *m_pData, m_pData, void *);
-    int32_t m_cbSize;
-    uint32_t m_conn;
-    SteamNetworkingIdentity_151 m_identityPeer;
-    int64_t m_nConnUserData;
-    int64_t m_usecTimeReceived;
-    int64_t m_nMessageNumber;
-    U32_PTR(void (*U_CDECL m_pfnFreeData)(u32_SteamNetworkingMessage_t_151 *), m_pfnFreeData, void (*U_CDECL )(u32_SteamNetworkingMessage_t_151 *));
-    U32_PTR(void (*U_CDECL m_pfnRelease)(u32_SteamNetworkingMessage_t_151 *), m_pfnRelease, void (*U_CDECL )(u32_SteamNetworkingMessage_t_151 *));
-    int32_t m_nChannel;
-    int32_t m_nFlags;
-    int64_t m_nUserData;
-#ifdef __cplusplus
-    operator w32_SteamNetworkingMessage_t_151() const;
-#endif /* __cplusplus */
-};
-#pragma pack( pop )
-
-#ifdef __i386__
-typedef w32_SteamNetworkingMessage_t_151 w_SteamNetworkingMessage_t_151;
-typedef u32_SteamNetworkingMessage_t_151 u_SteamNetworkingMessage_t_151;
-#endif
-#if defined(__x86_64__) || defined(__aarch64__)
-typedef w64_SteamNetworkingMessage_t_151 w_SteamNetworkingMessage_t_151;
-typedef u64_SteamNetworkingMessage_t_151 u_SteamNetworkingMessage_t_151;
-#endif
-
-#pragma pack( push, 8 )
 struct w64_SteamNetworkingMessage_t_144
 {
     W64_PTR(void *m_pData, m_pData, void *);
     uint32_t m_cbSize;
     uint32_t m_conn;
-    SteamNetworkingIdentity_144 m_sender;
+    SteamNetworkingIdentity m_sender;
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
@@ -11011,7 +10792,7 @@ struct u64_SteamNetworkingMessage_t_144
     U64_PTR(void *m_pData, m_pData, void *);
     uint32_t m_cbSize;
     uint32_t m_conn;
-    SteamNetworkingIdentity_144 m_sender;
+    SteamNetworkingIdentity m_sender;
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;
@@ -11034,7 +10815,7 @@ struct w32_SteamNetworkingMessage_t_144
     W32_PTR(void *m_pData, m_pData, void *);
     uint32_t m_cbSize;
     uint32_t m_conn;
-    SteamNetworkingIdentity_144 m_sender;
+    SteamNetworkingIdentity m_sender;
     uint8_t __pad_148[4];
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
@@ -11058,7 +10839,7 @@ struct u32_SteamNetworkingMessage_t_144
     U32_PTR(void *m_pData, m_pData, void *);
     uint32_t m_cbSize;
     uint32_t m_conn;
-    SteamNetworkingIdentity_144 m_sender;
+    SteamNetworkingIdentity m_sender;
     int64_t m_nConnUserData;
     int64_t m_usecTimeReceived;
     int64_t m_nMessageNumber;

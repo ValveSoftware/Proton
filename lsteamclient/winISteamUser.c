@@ -5878,7 +5878,7 @@ uint32_t __thiscall winISteamUser_SteamUser022_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUser_SteamUser022_GetAuthSessionTicket(struct w_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity_144 *pSteamNetworkingIdentity)
+uint32_t __thiscall winISteamUser_SteamUser022_GetAuthSessionTicket(struct w_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity *pSteamNetworkingIdentity)
 {
     struct ISteamUser_SteamUser022_GetAuthSessionTicket_params params =
     {
@@ -6364,7 +6364,7 @@ uint32_t __thiscall winISteamUser_SteamUser023_GetVoiceOptimalSampleRate(struct 
     return params._ret;
 }
 
-uint32_t __thiscall winISteamUser_SteamUser023_GetAuthSessionTicket(struct w_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity_144 *pSteamNetworkingIdentity)
+uint32_t __thiscall winISteamUser_SteamUser023_GetAuthSessionTicket(struct w_iface *_this, void *pTicket, int32_t cbMaxTicket, uint32_t *pcbTicket, const SteamNetworkingIdentity *pSteamNetworkingIdentity)
 {
     struct ISteamUser_SteamUser023_GetAuthSessionTicket_params params =
     {

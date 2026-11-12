@@ -344,13 +344,13 @@ void *wrap_callback_cdecl_impl<w_callback_type, u_callback_type>::w_callback_fun
 template <int sdk_version>
 void *wrap_callback_cdecl( int eValue, void ***w_callback_ptr )
 {
-    static_assert(sdk_version == 151 || sdk_version == 153);
+    static_assert(sdk_version == 150 || sdk_version == 153);
 
     switch (eValue)
     {
         case 201 /*ConnectionStatusChanged*/:
-            if (sdk_version == 151)
-                return wrap_callback_cdecl_impl<w_SteamNetConnectionStatusChangedCallback_t_151, u_SteamNetConnectionStatusChangedCallback_t_151>
+            if (sdk_version == 150)
+                return wrap_callback_cdecl_impl<w_SteamNetConnectionStatusChangedCallback_t_144, u_SteamNetConnectionStatusChangedCallback_t_144>
                        ::get_wrapped_callback( w_callback_ptr );
             return wrap_callback_cdecl_impl<w_SteamNetConnectionStatusChangedCallback_t_153a, u_SteamNetConnectionStatusChangedCallback_t_153a>
                    ::get_wrapped_callback( w_callback_ptr );
@@ -359,10 +359,10 @@ void *wrap_callback_cdecl( int eValue, void ***w_callback_ptr )
         case 203 /*RelayNetworkStatusChanged*/:
             return wrap_callback_cdecl_impl<SteamRelayNetworkStatus_t, SteamRelayNetworkStatus_t>::get_wrapped_callback( w_callback_ptr );
         case 204 /*MessagesSessionRequest*/:
-            return wrap_callback_cdecl_impl<SteamNetworkingMessagesSessionRequest_t_151, SteamNetworkingMessagesSessionRequest_t_151>::get_wrapped_callback( w_callback_ptr );
+            return wrap_callback_cdecl_impl<SteamNetworkingMessagesSessionRequest_t, SteamNetworkingMessagesSessionRequest_t>::get_wrapped_callback( w_callback_ptr );
         case 205 /*MessagesSessionFailed*/:
-            if (sdk_version == 151)
-                return wrap_callback_cdecl_impl<SteamNetworkingMessagesSessionFailed_t_151, SteamNetworkingMessagesSessionFailed_t_151>
+            if (sdk_version == 150)
+                return wrap_callback_cdecl_impl<SteamNetworkingMessagesSessionFailed_t_150, SteamNetworkingMessagesSessionFailed_t_150>
                        ::get_wrapped_callback( w_callback_ptr );
             return wrap_callback_cdecl_impl<SteamNetworkingMessagesSessionFailed_t_153a, SteamNetworkingMessagesSessionFailed_t_153a>
                    ::get_wrapped_callback( w_callback_ptr );
@@ -424,7 +424,7 @@ static NTSTATUS ISteamNetworkingUtils_SetConfigValue( u_ISteamNetworkingUtils_St
 
     TRACE("eValue %d, pArg %p.\n", params->eValue, params->pArg);
 
-    if (params->pArg && (u_fn = wrap_callback_cdecl<151>( params->eValue, &w_callback_ptr )))
+    if (params->pArg && (u_fn = wrap_callback_cdecl<150>( params->eValue, &w_callback_ptr )))
     {
         if (!*(void **)(const void *)params->pArg) u_fn = NULL;
         params->_ret = iface->SetConfigValue( params->eValue, params->eScopeType,
