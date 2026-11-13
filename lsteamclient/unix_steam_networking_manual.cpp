@@ -7,8 +7,6 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
-class wrap_ISteamNetworkingCustomSignalingRecvContext;
-
 class wrap_ISteamNetworkingConnectionSignaling : public u_ISteamNetworkingConnectionCustomSignaling
 {
     static constexpr uint64_t uninitialized_value = 0x4545bcaf1d55cd8d;
@@ -95,6 +93,47 @@ public:
     ~wrap_ISteamNetworkingConnectionSignaling()
     {
         TRACE( "destroyed %p.\n", this );
+    }
+};
+
+class ISteamNetworkingSignalingRecvContext
+{
+public:
+    virtual u_ISteamNetworkingConnectionCustomSignaling *OnConnectRequest( /*HSteamNetConnection*/uint32_t hConn, const SteamNetworkingIdentity *identityPeer, int nLocalVirtualPort ) = 0;
+    virtual void SendRejectionSignal( const SteamNetworkingIdentity *identityPeer, const void *pMsg, int cbMsg ) = 0;
+};
+
+class wrap_ISteamNetworkingCustomSignalingRecvContext : public ISteamNetworkingSignalingRecvContext
+{
+    u_ISteamNetworkingConnectionCustomSignaling * OnConnectRequest( uint32_t hconn, const SteamNetworkingIdentity *identityPeer, int nLocalVirtualPort ) override
+    {
+        static int once;
+
+        u_ISteamNetworkingConnectionCustomSignaling *signaling_wrapper = new wrap_ISteamNetworkingConnectionSignaling();
+
+        TRACE( "%#x %p %d.\n", hconn, identityPeer, nLocalVirtualPort );
+
+        /* The last interface definition in headers doesn't have nLocalVirtualPort parameter while there newer class
+         * apparently has the parameter. Just use the new one for now (will work for win64 with old too but not for win32. */
+        if (!once++) FIXME( "Using the newer class definition without version check.\n" );
+        queue_on_connect_request( win_class, hconn, identityPeer, nLocalVirtualPort,
+                                  wrap_ISteamNetworkingConnectionSignaling::set_win_create_connection_signaling_callback_result,
+                                  (ULONG_PTR)signaling_wrapper );
+        return signaling_wrapper;
+    }
+
+    void SendRejectionSignal( const SteamNetworkingIdentity *identityPeer, const void * pMsg, int cbMsg ) override
+    {
+        TRACE( "%p %p, %d.\n", identityPeer, pMsg, cbMsg );
+        queue_send_rejection_signal( win_class, identityPeer, cbMsg, pMsg );
+    }
+
+public:
+    uint64_t win_class;
+
+    wrap_ISteamNetworkingCustomSignalingRecvContext( void *win_class )
+    {
+        this->win_class = (ULONG_PTR)win_class;
     }
 };
 
@@ -420,47 +459,6 @@ class wrap_callback_cdecl_impl
 
 template<typename w_callback_type, typename u_callback_type>
 void *wrap_callback_cdecl_impl<w_callback_type, u_callback_type>::w_callback_func;
-
-class ISteamNetworkingSignalingRecvContext
-{
-public:
-    virtual u_ISteamNetworkingConnectionCustomSignaling *OnConnectRequest( /*HSteamNetConnection*/uint32_t hConn, const SteamNetworkingIdentity *identityPeer, int nLocalVirtualPort ) = 0;
-    virtual void SendRejectionSignal( const SteamNetworkingIdentity *identityPeer, const void *pMsg, int cbMsg ) = 0;
-};
-
-class wrap_ISteamNetworkingCustomSignalingRecvContext : public ISteamNetworkingSignalingRecvContext
-{
-    u_ISteamNetworkingConnectionCustomSignaling * OnConnectRequest( uint32_t hconn, const SteamNetworkingIdentity *identityPeer, int nLocalVirtualPort ) override
-    {
-        static int once;
-
-        u_ISteamNetworkingConnectionCustomSignaling *signaling_wrapper = new wrap_ISteamNetworkingConnectionSignaling();
-
-        TRACE( "%#x %p %d.\n", hconn, identityPeer, nLocalVirtualPort );
-
-        /* The last interface definition in headers doesn't have nLocalVirtualPort parameter while there newer class
-         * apparently has the parameter. Just use the new one for now (will work for win64 with old too but not for win32. */
-        if (!once++) FIXME( "Using the newer class definition without version check.\n" );
-        queue_on_connect_request( win_class, hconn, identityPeer, nLocalVirtualPort,
-                                  wrap_ISteamNetworkingConnectionSignaling::set_win_create_connection_signaling_callback_result,
-                                  (ULONG_PTR)signaling_wrapper );
-        return signaling_wrapper;
-    }
-
-    void SendRejectionSignal( const SteamNetworkingIdentity *identityPeer, const void * pMsg, int cbMsg ) override
-    {
-        TRACE( "%p %p, %d.\n", identityPeer, pMsg, cbMsg );
-        queue_send_rejection_signal( win_class, identityPeer, cbMsg, pMsg );
-    }
-
-public:
-    uint64_t win_class;
-
-    wrap_ISteamNetworkingCustomSignalingRecvContext( void *win_class )
-    {
-        this->win_class = (ULONG_PTR)win_class;
-    }
-};
 
 static void *create_connection_signaling_callback_w_func;
 static int create_connection_signaling_callback_sdk_version;
