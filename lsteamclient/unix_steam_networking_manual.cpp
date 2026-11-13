@@ -7,8 +7,96 @@
 
 WINE_DEFAULT_DEBUG_CHANNEL(steamclient);
 
-class wrap_ISteamNetworkingConnectionSignaling;
 class wrap_ISteamNetworkingCustomSignalingRecvContext;
+
+class wrap_ISteamNetworkingConnectionSignaling : public u_ISteamNetworkingConnectionCustomSignaling
+{
+    static constexpr uint64_t uninitialized_value = 0x4545bcaf1d55cd8d;
+    bool last_send_signal_win_ret = true;
+
+    int8_t SendSignal( /*HSteamNetConnection*/uint32_t hConn, const SteamNetConnectionInfo_t_144 *info, const void *pMsg, int32_t cbMsg ) override
+    {
+        if (TRACE_ON(steamclient))
+            fprintf( stderr, "trace:steamclient:wrap_ISteamNetworkingConnectionSignaling::SendSignal %p, %#x, %p, %p, %d, last ret %d.\n",
+                     this, hConn, info, pMsg, cbMsg, last_send_signal_win_ret );
+        if (!last_send_signal_win_ret) return 0;
+        queue_connection_send_signal( win_class, hConn, (const SteamNetConnectionInfo_t_153a *)info, cbMsg, pMsg,
+                                      before_delivery, send_signal_set_result, (ULONG_PTR)this );
+        return 1;
+    }
+
+    void Release() override
+    {
+        if (TRACE_ON(steamclient))
+            fprintf( stderr, "trace:steamclient:wrap_ISteamNetworkingConnectionSignaling::Release %p.\n", this );
+        queue_connection_release( win_class, before_delivery, release_set_result, (ULONG_PTR)this );
+    }
+
+    /* This is called right before Win side gets the callback data, fix up win class value */
+    static bool before_delivery( struct callback *cb, uint64_t context )
+    {
+        class wrap_ISteamNetworkingConnectionSignaling *c = (class wrap_ISteamNetworkingConnectionSignaling *)(ULONG_PTR)context;
+
+        cb->connection_send_signal.win_class = c->win_class;
+        if (!c->win_class)
+        {
+            FIXME( "NULL win_class.\n" );
+            if (cb->type == CALL_IFACE_VTABLE_1_CONNECTION_RELEASE)
+                delete c;
+            return true;
+        }
+        if (c->win_class == uninitialized_value)
+        {
+            ERR( "wrap_ISteamNetworkingConnectionSignaling win_class is not initialized.\n" );
+            return false;
+        }
+        return true;
+    }
+
+    static void send_signal_set_result( uint64_t retval, uint64_t context )
+    {
+        class wrap_ISteamNetworkingConnectionSignaling *c = (class wrap_ISteamNetworkingConnectionSignaling *)(ULONG_PTR)context;
+        TRACE( "result %d.\n", (int)(retval & 0xff) );
+        c->last_send_signal_win_ret = !!(retval & 0xff);
+    }
+
+    static void release_set_result( uint64_t retval, uint64_t context )
+    {
+        class wrap_ISteamNetworkingConnectionSignaling *c = (class wrap_ISteamNetworkingConnectionSignaling *)(ULONG_PTR)context;
+        delete c;
+    }
+
+public:
+    uint64_t win_class;
+
+    static void set_win_create_connection_signaling_callback_result( uint64_t retval, uint64_t context )
+    {
+        class wrap_ISteamNetworkingConnectionSignaling *c = (class wrap_ISteamNetworkingConnectionSignaling *)(ULONG_PTR)context;
+        c->win_class = retval;
+    }
+
+
+    wrap_ISteamNetworkingConnectionSignaling()
+    {
+        if (TRACE_ON(steamclient))
+            fprintf( stderr, "trace:steamclient:wrap_ISteamNetworkingConnectionSignaling() created %p.\n", this );
+        win_class = uninitialized_value;
+    }
+
+    wrap_ISteamNetworkingConnectionSignaling(void *win_class)
+    {
+        if (TRACE_ON(steamclient))
+            fprintf( stderr, "trace:steamclient:wrap_ISteamNetworkingConnectionSignaling() created %p, win_class %p.\n",
+                     this, win_class );
+
+        this->win_class = (ULONG_PTR)win_class;
+    }
+
+    ~wrap_ISteamNetworkingConnectionSignaling()
+    {
+        TRACE( "destroyed %p.\n", this );
+    }
+};
 
 template< typename Wmsg >
 static void steam_networking_message_utow( Wmsg &dst, const u_SteamNetworkingMessage_t_144 &src )
@@ -332,95 +420,6 @@ class wrap_callback_cdecl_impl
 
 template<typename w_callback_type, typename u_callback_type>
 void *wrap_callback_cdecl_impl<w_callback_type, u_callback_type>::w_callback_func;
-
-class wrap_ISteamNetworkingConnectionSignaling : public u_ISteamNetworkingConnectionCustomSignaling
-{
-    static constexpr uint64_t uninitialized_value = 0x4545bcaf1d55cd8d;
-    bool last_send_signal_win_ret = true;
-
-    int8_t SendSignal( /*HSteamNetConnection*/uint32_t hConn, const SteamNetConnectionInfo_t_144 *info, const void *pMsg, int32_t cbMsg ) override
-    {
-        if (TRACE_ON(steamclient))
-            fprintf( stderr, "trace:steamclient:wrap_ISteamNetworkingConnectionSignaling::SendSignal %p, %#x, %p, %p, %d, last ret %d.\n",
-                     this, hConn, info, pMsg, cbMsg, last_send_signal_win_ret );
-        if (!last_send_signal_win_ret) return 0;
-        queue_connection_send_signal( win_class, hConn, (const SteamNetConnectionInfo_t_153a *)info, cbMsg, pMsg,
-                                      before_delivery, send_signal_set_result, (ULONG_PTR)this );
-        return 1;
-    }
-
-    void Release() override
-    {
-        if (TRACE_ON(steamclient))
-            fprintf( stderr, "trace:steamclient:wrap_ISteamNetworkingConnectionSignaling::Release %p.\n", this );
-        queue_connection_release( win_class, before_delivery, release_set_result, (ULONG_PTR)this );
-    }
-
-    /* This is called right before Win side gets the callback data, fix up win class value */
-    static bool before_delivery( struct callback *cb, uint64_t context )
-    {
-        class wrap_ISteamNetworkingConnectionSignaling *c = (class wrap_ISteamNetworkingConnectionSignaling *)(ULONG_PTR)context;
-
-        cb->connection_send_signal.win_class = c->win_class;
-        if (!c->win_class)
-        {
-            FIXME( "NULL win_class.\n" );
-            if (cb->type == CALL_IFACE_VTABLE_1_CONNECTION_RELEASE)
-                delete c;
-            return true;
-        }
-        if (c->win_class == uninitialized_value)
-        {
-            ERR( "wrap_ISteamNetworkingConnectionSignaling win_class is not initialized.\n" );
-            return false;
-        }
-        return true;
-    }
-
-    static void send_signal_set_result( uint64_t retval, uint64_t context )
-    {
-        class wrap_ISteamNetworkingConnectionSignaling *c = (class wrap_ISteamNetworkingConnectionSignaling *)(ULONG_PTR)context;
-        TRACE( "result %d.\n", (int)(retval & 0xff) );
-        c->last_send_signal_win_ret = !!(retval & 0xff);
-    }
-
-    static void release_set_result( uint64_t retval, uint64_t context )
-    {
-        class wrap_ISteamNetworkingConnectionSignaling *c = (class wrap_ISteamNetworkingConnectionSignaling *)(ULONG_PTR)context;
-        delete c;
-    }
-
-public:
-    uint64_t win_class;
-
-    static void set_win_create_connection_signaling_callback_result( uint64_t retval, uint64_t context )
-    {
-        class wrap_ISteamNetworkingConnectionSignaling *c = (class wrap_ISteamNetworkingConnectionSignaling *)(ULONG_PTR)context;
-        c->win_class = retval;
-    }
-
-
-    wrap_ISteamNetworkingConnectionSignaling()
-    {
-        if (TRACE_ON(steamclient))
-            fprintf( stderr, "trace:steamclient:wrap_ISteamNetworkingConnectionSignaling() created %p.\n", this );
-        win_class = uninitialized_value;
-    }
-
-    wrap_ISteamNetworkingConnectionSignaling(void *win_class)
-    {
-        if (TRACE_ON(steamclient))
-            fprintf( stderr, "trace:steamclient:wrap_ISteamNetworkingConnectionSignaling() created %p, win_class %p.\n",
-                     this, win_class );
-
-        this->win_class = (ULONG_PTR)win_class;
-    }
-
-    ~wrap_ISteamNetworkingConnectionSignaling()
-    {
-        TRACE( "destroyed %p.\n", this );
-    }
-};
 
 class ISteamNetworkingSignalingRecvContext
 {
