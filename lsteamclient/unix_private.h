@@ -46,6 +46,9 @@ extern void queue_connection_send_signal( uint64_t win_class,  uint32_t hConn, c
                                           callback_set_result_func_t set_result_func, uint64_t context );
 extern void queue_connection_release( uint64_t win_class, callback_before_delivery_func_t before_delivery,
                                       callback_set_result_func_t set_result_func, uint64_t context );
+extern void queue_on_connect_request( uint64_t win_class, uint32_t hconn, const SteamNetworkingIdentity *identityPeer, int nLocalVirtualPort,
+                                      callback_set_result_func_t set_result_func, uint64_t context );
+extern void queue_send_rejection_signal( uint64_t win_class, const SteamNetworkingIdentity *identityPeer, uint32_t cbMsg, const void *msg );
 
 extern uint32_t manual_convert_nNativeKeyCode( uint32_t win_vk );
 

@@ -520,6 +520,31 @@ void execute_pending_callbacks(void)
             STEAMCLIENT_CALL( steamclient_set_callback_result, &set_result_params );
             break;
         }
+        case CALL_IFACE_VTABLE_0_ON_CONNECT_REQUEST:
+        {
+            struct steamclient_set_callback_result_params set_result_params =
+            {
+                .function = params.set_result_function, .context = params.set_result_context,
+            };
+            TRACE( "CALL_IFACE_VTABLE_0_ON_CONNECT_REQUEST, win_class %#I64x.\n", params.callback->on_connect_request.win_class );
+            set_result_params.result = CALL_VTBL_FUNC( (ULONG_PTR)params.callback->on_connect_request.win_class, 0,
+                    ULONG_PTR, (void *, uint32_t, const SteamNetworkingIdentity *, int local_port),
+                    ((void *)(ULONG_PTR)params.callback->on_connect_request.win_class,
+                    params.callback->on_connect_request.hConn, &params.callback->on_connect_request.identityPeer,
+                    params.callback->on_connect_request.nLocalVirtualPort) );
+            TRACE( "CALL_IFACE_VTABLE_0_ON_CONNECT_REQUEST ret iface %#I64x.\n", set_result_params.result );
+            STEAMCLIENT_CALL( steamclient_set_callback_result, &set_result_params );
+            break;
+        }
+
+        case CALL_IFACE_VTABLE_1_SEND_REJECTION_SIGNAL:
+            TRACE( "CALL_IFACE_VTABLE_1_SEND_REJECTION_SIGNAL, win_class %#I64x.\n", params.callback->connection_send_signal.win_class );
+            CALL_VTBL_FUNC( (ULONG_PTR)params.callback->send_rejection_signal.win_class, 4,
+                    void, (void *, const SteamNetworkingIdentity *, const void *, uint32_t),
+                    ((void *)(ULONG_PTR)params.callback->send_rejection_signal.win_class,
+                    &params.callback->send_rejection_signal.identityPeer,
+                    params.callback->send_rejection_signal.msg, params.callback->connection_send_signal.cbMsg) );
+            break;
         }
     }
 

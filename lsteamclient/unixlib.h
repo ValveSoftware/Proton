@@ -74,6 +74,8 @@ enum callback_type
     CALL_CREATE_CONNECTION_SIGNALING,
     CALL_IFACE_VTABLE_0_CONNECTION_SEND_SIGNAL,
     CALL_IFACE_VTABLE_1_CONNECTION_RELEASE,
+    CALL_IFACE_VTABLE_0_ON_CONNECT_REQUEST,
+    CALL_IFACE_VTABLE_1_SEND_REJECTION_SIGNAL,
 };
 
 struct callback
@@ -197,6 +199,22 @@ struct callback
         {
             UINT64 win_class;
         } connection_release;
+
+        struct
+        {
+            UINT64 win_class;
+            SteamNetworkingIdentity identityPeer;
+            uint32_t hConn;
+            int nLocalVirtualPort;
+        } on_connect_request;
+
+        struct
+        {
+            UINT64 win_class;
+            SteamNetworkingIdentity identityPeer;
+            uint32_t cbMsg;
+            const char msg[1];
+        } send_rejection_signal;
     };
 };
 

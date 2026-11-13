@@ -232,6 +232,52 @@ void queue_connection_release( uint64_t win_class, callback_before_delivery_func
     pthread_mutex_unlock( &callbacks_lock );
 }
 
+void queue_on_connect_request( uint64_t win_class, uint32_t hconn, const SteamNetworkingIdentity *identityPeer, int nLocalVirtualPort,
+                               callback_set_result_func_t set_result_func, uint64_t context )
+{
+    uint32_t size = 0;
+    struct callback_entry *entry;
+
+    size += sizeof(struct callback_entry);
+    if (!(entry = (struct callback_entry *)calloc( 1, size ))) return;
+    entry->callback.type = CALL_IFACE_VTABLE_0_ON_CONNECT_REQUEST;
+    size -= offsetof( struct callback_entry, callback );
+    entry->callback.size = size;
+    entry->set_result = set_result_func;
+    entry->context = context;
+
+    entry->callback.on_connect_request.win_class = win_class;
+    entry->callback.on_connect_request.hConn = hconn;
+    entry->callback.on_connect_request.identityPeer = *identityPeer;
+    entry->callback.on_connect_request.nLocalVirtualPort = nLocalVirtualPort;
+
+    pthread_mutex_lock( &callbacks_lock );
+    list_add_tail( &callbacks, &entry->entry );
+    pthread_mutex_unlock( &callbacks_lock );
+}
+
+void queue_send_rejection_signal( uint64_t win_class, const SteamNetworkingIdentity *identityPeer, uint32_t cbMsg, const void *msg )
+{
+    uint32_t msg_size = cbMsg, size = msg_size;
+    struct callback_entry *entry;
+
+    size += sizeof(struct callback_entry);
+    if (!(entry = (struct callback_entry *)calloc( 1, size ))) return;
+    entry->callback.type = CALL_IFACE_VTABLE_1_SEND_REJECTION_SIGNAL;
+    size -= offsetof( struct callback_entry, callback );
+    entry->callback.size = size;
+
+    entry->callback.send_rejection_signal.win_class = win_class;
+    entry->callback.send_rejection_signal.identityPeer = *identityPeer;
+    entry->callback.send_rejection_signal.cbMsg = cbMsg;
+    memcpy( (void *)entry->callback.send_rejection_signal.msg, msg, cbMsg );
+
+    pthread_mutex_lock( &callbacks_lock );
+    list_add_tail( &callbacks, &entry->entry );
+    pthread_mutex_unlock( &callbacks_lock );
+
+}
+
 static w_FSteamNetworkingSocketsDebugOutput w_steam_networking_socket_debug_output;
 static void u_steam_networking_socket_debug_output( uint32_t nType, const char *pszMsg )
 {
