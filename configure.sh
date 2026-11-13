@@ -21,7 +21,7 @@ fi
 
 sh_quote() {
         local quoted
-        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted:0:-1}";
+        quoted="$(printf '%q ' "$@")"; [[ $# -eq 0 ]] || echo "${quoted}" | sed 's/ $//';
 }
 err()      { echo >&2 "${COLOR_ERR}!!${COLOR_CLEAR} $*"; }
 stat()     { echo >&2 "${COLOR_STAT}::${COLOR_CLEAR} $*"; }
@@ -48,15 +48,42 @@ dependency_command() {
 
 CONTAINER_MOUNT_OPTS=""
 
+# The container platform follows the *target* architecture, not the host's: an
+# arm64 build needs an arm64 container even on an x86_64 host, and an x86_64
+# build needs an amd64 container on an arm64 host. --platform is only passed
+# when the host is not already native for it, so same-arch builds are unchanged.
+CONTAINER_PLATFORM=""
+TARGET_PLATFORM=""
+HOST_PLATFORM=""
+
+platform_of_arch() {
+    case "$1" in
+        arm64|aarch64)  echo "linux/arm64" ;;
+        *)              echo "linux/amd64" ;;
+    esac
+}
+
+set_container_platform() {
+    TARGET_PLATFORM="$(platform_of_arch "$1")"
+    HOST_PLATFORM="$(platform_of_arch "$(uname -m)")"
+    if [[ "$TARGET_PLATFORM" != "$HOST_PLATFORM" ]]; then
+        CONTAINER_PLATFORM="--platform $TARGET_PLATFORM"
+        info "Host is $HOST_PLATFORM, target needs $TARGET_PLATFORM: using '$CONTAINER_PLATFORM'"
+    else
+        CONTAINER_PLATFORM=""
+    fi
+}
+
 check_container_engine() {
+    local platform="$CONTAINER_PLATFORM"
     stat "Trying $1."
-    if ! cmd $1 run --rm $2; then
+    if ! cmd $1 run $platform --rm $2; then
         info "$1 is unable to run the container."
         return 1
     fi
 
     touch permission_check
-    local inner_uid="$($1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
+    local inner_uid="$($1 run $platform -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
                                             --rm $2 \
                                             stat --format "%u" /test/permission_check 2>&1)"
     rm permission_check
@@ -75,6 +102,16 @@ check_container_engine() {
     else
         err "File owner's UID doesn't map to 0 or $(id -u) in the container."
         die "Don't know how to map permissions. Please check your $1 setup."
+    fi
+
+    # Only x86_64-on-Apple-Silicon goes through Rosetta; a native arm64 container
+    # must not be required to have it.
+    if [ "$(uname)" = "Darwin" ] && [[ "$HOST_PLATFORM" == "linux/arm64" ]] \
+       && [[ "$TARGET_PLATFORM" == "linux/amd64" ]]; then
+        if ! $1 run $platform --rm $2 \
+             bash -c 'ls -ahl /proc/$$/exe 2>/dev/null | grep -q "rosetta"'; then
+            die "macOS: The container needs to be using Rosetta instruction emulation."
+        fi
     fi
 }
 
@@ -115,7 +152,7 @@ function configure() {
     info "No build name specified, using default: $build_name"
   fi
 
-  if [[ ${build_name,,} == *proton* ]]; then
+  if echo "$build_name" | tr '[:upper:]' '[:lower:]' | grep -q 'proton'; then
     internal_tool_name=${build_name}
   else
     internal_tool_name=${build_name}-proton
@@ -126,6 +163,14 @@ function configure() {
     target_arch="$arg_target_arch"
   fi
   info "Build targetting: $target_arch"
+
+  set_container_platform "$target_arch"
+
+  # a non-native target needs its platform pinned for the build itself, not just
+  # for the engine probe above
+  if [[ -n "$CONTAINER_PLATFORM" ]]; then
+    arg_docker_opts="${arg_docker_opts} ${CONTAINER_PLATFORM}"
+  fi
 
   # nothing specified, getting the default value from the Makefile to test the
   # container engine
@@ -158,6 +203,27 @@ function configure() {
 
   stat "Using $arg_container_engine."
 
+  if [ "$(uname)" = "Darwin" ]; then
+      # the default file handle limit is far below what rsync and the source
+      # setup stages need, and the resulting failures are opaque
+      if [ "$(sysctl -n kern.maxfiles)" -lt 100000 ]; then
+          die "macOS: system file handle limit too low. See README.md for instructions."
+      fi
+
+      # neither Docker nor Podman provide a machine-id on macOS, and Wine needs one
+      machine_id_file="$(pwd)/etc/machine-id"
+      if [ ! -s "$machine_id_file" ]; then
+        mkdir -p "$(pwd)/etc"
+        uuidgen | tr -d '-' | tr '[:upper:]' '[:lower:]' > "$machine_id_file"
+        chmod 444 "$machine_id_file"
+        info "macOS: generated container machine-id: $(cat "$machine_id_file")"
+      fi
+      arg_docker_opts="${arg_docker_opts} -v $(pwd)/etc/machine-id:/etc/machine-id"
+
+      # macOS resolves make to a path inside Xcode, which does not exist in the container
+      arg_make_override="/usr/bin/make"
+  fi
+
   ## Write out config
   # Don't die after this point or we'll have rather unhelpfully deleted the Makefile
   [[ ! -e "$MAKEFILE" ]] || rm "$MAKEFILE"
@@ -170,6 +236,10 @@ function configure() {
     echo "BUILD_NAME := $(escape_for_make "$build_name")"
     echo "TARGET_ARCH := $(escape_for_make "$target_arch")"
     echo "INTERNAL_TOOL_NAME := $(escape_for_make "$internal_tool_name")"
+
+    if [[ -n "$arg_make_override" ]]; then
+      echo "MAKE := $(escape_for_make "$arg_make_override")"
+    fi
 
     # SteamRT was specified, baking it into the Makefile
     if [[ -n $arg_protonsdk_image ]]; then
@@ -206,6 +276,7 @@ arg_build_name=""
 arg_target_arch=""
 arg_container_engine=""
 arg_docker_opts=""
+arg_make_override=""
 arg_relabel_volumes=""
 arg_enable_ccache=""
 arg_help=""
