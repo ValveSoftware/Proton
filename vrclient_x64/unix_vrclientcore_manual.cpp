@@ -27,9 +27,12 @@ static NTSTATUS IVRClientCore_Init( Iface *iface, Params *params, bool wow64 )
 template< typename Iface, typename Params >
 static NTSTATUS IVRMailbox_undoc3( Iface *iface, Params *params, bool wow64 )
 {
-    char *c = json_convert_paths( params->c );
+    const char *c = json_convert_paths( params->c );
+    if (!c) c = params->c;
+
     params->_ret = (uint32_t)iface->undoc3( params->a, params->b, c );
-    free( c );
+
+    if (c != params->c) free( (char *)c );
     return 0;
 }
 
