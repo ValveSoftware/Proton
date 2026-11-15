@@ -2270,19 +2270,12 @@ class ArrayConversionFunction(object):
 
         if needs_copy and self.array.is_struct() and self.array.struct.polymorphic:
             win32 = self.direction == Direction.OUTPUT and self.conv
-            if pointer_array and self.conv and self.direction == Direction.INPUT:
-                inp = f"(({win_type} *)UlongToPtr(in[0]))->"
-            elif pointer_array:
-                inp = "in[0]->"
+            if pointer_array:
+                suffix = "32" if win32 else ""
+                body += f"    out_elem_size = sizeof({self.array.struct.name}{suffix}_any);\n\n"
             else:
-                inp = "in->"
-            if not pointer_array:
-                dstvar2 = "in_elem_size"
                 win32_2 = self.direction == Direction.INPUT and self.conv
-            else:
-                win32_2 = None
-                dstvar2 = None
-            body += self.array.struct.polymorphic_elem_size(inp, "out_elem_size", win32, dstvar2, win32_2)
+                body += self.array.struct.polymorphic_elem_size("in->", "out_elem_size", win32, "in_elem_size", win32_2)
 
         if self.direction == Direction.INPUT:
             if not pointer_array and self.array.is_struct() and self.array.struct.polymorphic:
