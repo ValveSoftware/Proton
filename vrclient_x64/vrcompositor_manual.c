@@ -194,7 +194,7 @@ void free_compositor_data_d3d12_device(void)
     memset(compositor_data.vk_command_buffers, 0, sizeof(compositor_data.vk_command_buffers));
 }
 
-static void compositor_data_set_d3d12_device( ID3D12DXVKInteropDevice *d3d12_device, ID3D12DXVKInteropDevice2 *d3d12_device2,
+void compositor_data_set_d3d12_device( ID3D12DXVKInteropDevice *d3d12_device, ID3D12DXVKInteropDevice2 *d3d12_device2,
                                               ID3D12CommandQueue *d3d12_queue, const w_VRVulkanTextureData_t *vkdata)
 {
         const WCHAR winevulkan_dll[] = L"winevulkan.dll";
@@ -247,7 +247,7 @@ static void compositor_data_set_d3d12_device( ID3D12DXVKInteropDevice *d3d12_dev
         compositor_data.p_vkAllocateCommandBuffers(compositor_data.vk_device, &allocate_info, compositor_data.vk_command_buffers);
 }
 
-static void transition_image_layout(VkImage image, const VkImageSubresourceRange *subres, VkImageLayout from_layout, VkImageLayout to_layout)
+void compositor_data_transition_image_layout(VkImage image, const VkImageSubresourceRange *subres, VkImageLayout from_layout, VkImageLayout to_layout)
 {
     VkCommandBufferBeginInfo begin_info = {
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
@@ -374,7 +374,7 @@ static const w_Texture_t *load_compositor_texture_d3d12( uint32_t eye, const w_T
     state->subresources.layerCount = image_info.arrayLayers;
 
     state->d3d12_device->lpVtbl->LockCommandQueue( state->d3d12_device, queue_iface );
-    transition_image_layout((VkImage)state->vkdata.m_nImage, &state->subresources, state->image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+    compositor_data_transition_image_layout((VkImage)state->vkdata.m_nImage, &state->subresources, state->image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
     if (*flags & Submit_TextureWithDepth)
     {
         w_D3D12TextureData_t *texture_data = ((w_VRTextureWithPoseAndDepth_t*)texture)->depth.handle;
@@ -393,7 +393,7 @@ static const w_Texture_t *load_compositor_texture_d3d12( uint32_t eye, const w_T
                 state->depth_subresources = state->subresources;
                 state->depth_subresources.levelCount = image_info.mipLevels;
                 state->depth_subresources.layerCount = image_info.arrayLayers;
-                transition_image_layout((VkImage)state->vkdata_depth.m_nImage, &state->depth_subresources, state->depth_image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+                compositor_data_transition_image_layout((VkImage)state->vkdata_depth.m_nImage, &state->depth_subresources, state->depth_image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
             }
             else ERR( "Invalid D3D12 depth texture %p.\n", texture_data );
         }
@@ -415,7 +415,7 @@ static const w_Texture_t *load_compositor_texture_d3d12( uint32_t eye, const w_T
                 state->motion_subresources = state->subresources;
                 state->motion_subresources.levelCount = image_info.mipLevels;
                 state->motion_subresources.layerCount = image_info.arrayLayers;
-                transition_image_layout((VkImage)state->vkdata_motion.m_nImage, &state->motion_subresources, state->motion_image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+                compositor_data_transition_image_layout((VkImage)state->vkdata_motion.m_nImage, &state->motion_subresources, state->motion_image_layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
             }
             else ERR( "Invalid D3D12 motion texture %p.\n", texture_data );
         }
@@ -428,10 +428,10 @@ static void free_compositor_texture_d3d12( struct submit_state *state )
 {
     if (!state->d3d12_device) return;
 
-    transition_image_layout((VkImage)state->vkdata.m_nImage, &state->subresources, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->image_layout);
-    if (state->vkdata_depth.m_nImage) transition_image_layout((VkImage)state->vkdata_depth.m_nImage, &state->depth_subresources,
+    compositor_data_transition_image_layout((VkImage)state->vkdata.m_nImage, &state->subresources, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->image_layout);
+    if (state->vkdata_depth.m_nImage) compositor_data_transition_image_layout((VkImage)state->vkdata_depth.m_nImage, &state->depth_subresources,
             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->depth_image_layout);
-    if (state->vkdata_motion.m_nImage) transition_image_layout((VkImage)state->vkdata_motion.m_nImage, &state->motion_subresources,
+    if (state->vkdata_motion.m_nImage) compositor_data_transition_image_layout((VkImage)state->vkdata_motion.m_nImage, &state->motion_subresources,
             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->motion_image_layout);
     state->d3d12_device->lpVtbl->UnlockCommandQueue( state->d3d12_device, state->d3d12_queue );
 }
@@ -615,7 +615,7 @@ static const w_Texture_t *set_skybox_override_d3d12_init( const w_Texture_t *tex
     }
     state->d3d12_device->lpVtbl->LockCommandQueue( state->d3d12_device, state->d3d12_queue );
     for (i = 0; i < state->image_count; ++i)
-        transition_image_layout( (VkImage)state->images[i].image, &state->images[i].subresources,
+        compositor_data_transition_image_layout( (VkImage)state->images[i].image, &state->images[i].subresources,
                                  state->images[i].layout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL );
 
     state->texture_type = TextureType_DirectX12;
@@ -653,7 +653,7 @@ static void set_skybox_override_done( struct set_skybox_override_state *state )
     {
         for (i = 0; i < state->image_count; ++i)
         {
-            transition_image_layout( (VkImage)state->images[i].image, &state->images[i].subresources,
+            compositor_data_transition_image_layout( (VkImage)state->images[i].image, &state->images[i].subresources,
                                      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, state->images[i].layout);
         }
         state->d3d12_device->lpVtbl->UnlockCommandQueue( state->d3d12_device, state->d3d12_queue );
