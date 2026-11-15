@@ -106,7 +106,10 @@ extern iface_destructor find_iface_destructor( const char *iface_version );
 extern void init_rtti( char *base );
 
 struct w_iface *create_win_interface( const char *name, struct u_iface u_iface );
+void compositor_data_set_d3d12_device( ID3D12DXVKInteropDevice *d3d12_device, ID3D12DXVKInteropDevice2 *d3d12_device2,
+                                              ID3D12CommandQueue *d3d12_queue, const w_VRVulkanTextureData_t *vkdata);
 void free_compositor_data_d3d12_device(void);
+void transition_image_layout(VkImage image, const VkImageSubresourceRange *subres, VkImageLayout from_layout, VkImageLayout to_layout);
 
 extern void *get_unix_buffer( struct u_buffer buf );
 

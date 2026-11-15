@@ -194,7 +194,7 @@ void free_compositor_data_d3d12_device(void)
     memset(compositor_data.vk_command_buffers, 0, sizeof(compositor_data.vk_command_buffers));
 }
 
-static void compositor_data_set_d3d12_device( ID3D12DXVKInteropDevice *d3d12_device, ID3D12DXVKInteropDevice2 *d3d12_device2,
+void compositor_data_set_d3d12_device( ID3D12DXVKInteropDevice *d3d12_device, ID3D12DXVKInteropDevice2 *d3d12_device2,
                                               ID3D12CommandQueue *d3d12_queue, const w_VRVulkanTextureData_t *vkdata)
 {
         const WCHAR winevulkan_dll[] = L"winevulkan.dll";
@@ -247,7 +247,7 @@ static void compositor_data_set_d3d12_device( ID3D12DXVKInteropDevice *d3d12_dev
         compositor_data.p_vkAllocateCommandBuffers(compositor_data.vk_device, &allocate_info, compositor_data.vk_command_buffers);
 }
 
-static void transition_image_layout(VkImage image, const VkImageSubresourceRange *subres, VkImageLayout from_layout, VkImageLayout to_layout)
+void transition_image_layout(VkImage image, const VkImageSubresourceRange *subres, VkImageLayout from_layout, VkImageLayout to_layout)
 {
     VkCommandBufferBeginInfo begin_info = {
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
