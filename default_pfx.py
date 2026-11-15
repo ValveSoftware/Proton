@@ -7,6 +7,7 @@
 import os
 import subprocess
 import re
+import shutil
 
 def file_is_wine_builtin_dll(path):
     if not os.path.exists(path):
@@ -117,6 +118,51 @@ def fixup_drive_links(default_pfx_dir):
             if ":" in dir_:
                 os.remove(os.path.join(walk_dir, dir_))
 
+def merge_tree(src, dst):
+    """Merge directory tree src into dst without clobbering existing entries."""
+    if not os.path.lexists(dst):
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        shutil.move(src, dst)
+        return
+    if os.path.isdir(src) and not os.path.islink(src):
+        if not (os.path.isdir(dst) and not os.path.islink(dst)):
+            return
+        for item in os.listdir(src):
+            merge_tree(os.path.join(src, item), os.path.join(dst, item))
+
+def normalize_dir_case(parent_dir, lower_name, camel_name):
+    """Migrate parent_dir/lower_name into parent_dir/camel_name."""
+    if not os.path.isdir(parent_dir):
+        return
+
+    lower_path = os.path.join(parent_dir, lower_name)
+    camel_path = os.path.join(parent_dir, camel_name)
+
+    if not (os.path.isdir(lower_path) and not os.path.islink(lower_path)):
+        return
+
+    if os.path.lexists(camel_path):
+        if not (os.path.isdir(camel_path) and not os.path.islink(camel_path)):
+            return
+        if os.path.samefile(lower_path, camel_path):
+            entries = os.listdir(parent_dir)
+            if lower_name in entries and camel_name not in entries:
+                tmp_path = os.path.join(parent_dir, lower_name + ".case_tmp")
+                if not os.path.lexists(tmp_path):
+                    os.rename(lower_path, tmp_path)
+                    os.rename(tmp_path, camel_path)
+            return
+
+    merge_tree(lower_path, camel_path)
+    shutil.rmtree(lower_path, ignore_errors=True)
+
+# Intel's igdext loader (d3dext-sdk) matches L"DriverStore\\FileRepository" case-sensitively,
+# while Wine creates lowercase driverstore/filerepository during wineboot.
+def fixup_driverstore(default_pfx_dir):
+    sys32 = os.path.join(default_pfx_dir, "drive_c/windows/system32")
+    normalize_dir_case(sys32, "driverstore", "DriverStore")
+    normalize_dir_case(os.path.join(sys32, "DriverStore"), "filerepository", "FileRepository")
+
 def make_default_pfx(default_pfx_dir, dist_dir, arm64):
     local_env = dict(os.environ)
     libdir = dist_dir + '/lib/'
@@ -136,6 +182,7 @@ def make_default_pfx(default_pfx_dir, dist_dir, arm64):
         os.path.join(bin_dir, 'wineserver') + " -w"],
 
         env=local_env, check=True)
+    fixup_driverstore(default_pfx_dir)
     setup_dll_symlinks(default_pfx_dir, dist_dir, arm64)
     fixup_drive_links(default_pfx_dir)
 
