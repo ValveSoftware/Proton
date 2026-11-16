@@ -551,6 +551,14 @@ def get_replace_reg_value(file, key, name, new_value=None):
 
     return old_value
 
+def remove_file_and_empty_parent_dirs(path):
+    if file_exists(path, follow_symlinks=False):
+        os.remove(path)
+        parent = os.path.dirname(path)
+        while len(os.listdir(parent)) == 0:
+            os.rmdir(parent)
+            parent = os.path.dirname(parent)
+
 class Proton:
     def __init__(self, base_dir):
         self.base_dir = base_dir + "/"
@@ -1255,7 +1263,9 @@ class CompatData:
                                  track_file=tracked_files,
                                  link_debug=True)
 
-                intc_store = "drive_c/windows/system32/DriverStore/FileRepository/igd_faux.inf_1"
+                remove_file_and_empty_parent_dirs(os.path.join(self.prefix_dir,
+                                                               "drive_c/windows/system32/DriverStore/FileRepository/igd_faux.inf_1/igdext64.dll"))
+                intc_store = "drive_c/windows/system32/driverstore/filerepository/igd_faux.inf_1"
                 makedirs(os.path.join(self.prefix_dir, intc_store))
                 try_copy(g_proton.arch_pe_dir("wine/igdext", False) + "igdext64.dll",
                          intc_store,
