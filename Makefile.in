@@ -1326,12 +1326,6 @@ $(DIST_XALIA): $(SRC)/contrib/$(XALIA_ZIP) $(SRC)/xalia-fixups.gudl
 	mv $(DIST_XALIA_DIR)/main.gudl $(DIST_XALIA_DIR)/main.gudl.orig
 	cat $(SRC)/xalia-fixups.gudl $(DIST_XALIA_DIR)/main.gudl.orig|sed 's/\xef\xbb\xbf//' > $(DIST_XALIA_DIR)/main.gudl
 	rm $(DIST_XALIA_DIR)/main.gudl.orig
-	rm $(DIST_XALIA_DIR)/SDL3.dll
-ifeq ($(TARGET_ARCH),arm64)
-	ln -s ../wine/mono/wine-mono/lib/arm64/SDL3.dll $(DIST_XALIA_DIR)/SDL3.dll
-else
-	ln -s ../wine/mono/wine-mono/lib/x86_64/SDL3.dll $(DIST_XALIA_DIR)/SDL3.dll
-endif
 	touch $@
 
 all-dist: $(DIST_XALIA)
