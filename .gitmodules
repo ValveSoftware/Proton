@@ -78,3 +78,6 @@
 [submodule "dxvk-igdext"]
 	path = dxvk-igdext
 	url = https://github.com/GameTechDev/dxvk-igdext
+[submodule "piper-phonemize"]
+	path = piper-phonemize
+	url = https://github.com/shaunren/piper-phonemize
