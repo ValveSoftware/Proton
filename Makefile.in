@@ -485,9 +485,11 @@ $(eval $(call rules-cmake,piper-phonemize,aarch64,unix))
 
 $(OBJ)/.piper-phonemize-x86_64-post-build:
 	mv $(PIPER_PHONEMIZE_x86_64_DST)/lib/*.so* $(PIPER_PHONEMIZE_x86_64_DST)/lib/$(x86_64-unix_TARGET)
+	touch $@
 
 $(OBJ)/.piper-phonemize-aarch64-post-build:
 	mv $(PIPER_PHONEMIZE_aarch64_DST)/lib/*.so* $(PIPER_PHONEMIZE_aarch64_DST)/lib/$(aarch64-unix_TARGET)
+	touch $@
 
 ##
 ## piper
