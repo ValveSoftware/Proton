@@ -76,6 +76,9 @@ KEY_RE = re.compile(r'\[(.+)\] ([0-9]+)')
 VALUE_RE = re.compile(r'"(.*)"="(.+)"')
 
 def filter_registry(filename):
+    if not os.path.isfile(filename):
+        return
+
     """Remove registry values that contain a fully qualified path
     inside some well-known registry keys. These paths are devised on
     the build machine and it makes no sense to distribute them. Plus,
@@ -141,6 +144,9 @@ def make_default_pfx(default_pfx_dir, dist_dir, arm64):
 
     filter_registry(os.path.join(default_pfx_dir, 'user.reg'))
     filter_registry(os.path.join(default_pfx_dir, 'system.reg'))
+    filter_registry(os.path.join(default_pfx_dir, 'userlocalsystem.reg'))
+    filter_registry(os.path.join(default_pfx_dir, 'userlocalservice.reg'))
+    filter_registry(os.path.join(default_pfx_dir, 'usernetworkservice.reg'))
 
 if __name__ == '__main__':
     import sys
