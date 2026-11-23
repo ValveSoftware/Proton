@@ -474,7 +474,7 @@ $(eval $(call rules-makedep,steamexe,aarch64))
 ##
 
 PIPER_PHONEMIZE_SOURCE_ARGS = \
-  --exclude lib/**/*
+  --exclude lib
 
 PIPER_PHONEMIZE_x86_64_CMAKE_ARGS = -DONNXRUNTIME_URL=https://proton-archive.steamos.cloud/download/onnx/onnxruntime-linux-x64-1.14.1.tgz
 PIPER_PHONEMIZE_aarch64_CMAKE_ARGS = -DONNXRUNTIME_URL=https://proton-archive.steamos.cloud/download/onnx/onnxruntime-linux-aarch64-1.14.1.tgz
