@@ -1058,6 +1058,15 @@ class CompatData:
                     "vcruntime1*.dll," +
                     "ucrtbase.dll," +
 
+                    #.NET Framework 4.x redist
+                    "diasymreader.dll," +
+                    "dxva2.dll," +
+                    "evr.dll," +
+                    "fusion.dll," +
+                    "mscoree.dll," +
+                    "ngen.exe," +
+                    "uiautomationcore.dll," +
+
                     #there are different instances (comctl32.dll in system32 and a copy of comctl32_v6.dll
                     #in winsxs, handle that by leaving a copy)
                     "comctl32.dll," +
