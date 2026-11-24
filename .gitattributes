@@ -1,2 +1,3 @@
 *.sc linguist-detectable=false
 *.SC linguist-detectable=false
+*.K linguist-detectable=false
