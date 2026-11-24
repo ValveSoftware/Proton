@@ -231,7 +231,7 @@ function parse_args() {
     # Looks like an argument does it have a --foo=bar value?
     if [[ ${arg%=*} != "$arg" ]]; then
       val="${arg#*=}"
-      arg="${arg%=*}"
+      arg="${arg%%=*}"
       val_passed=1
     else
       # Otherwise for args that want a value, assume "--arg val" form
