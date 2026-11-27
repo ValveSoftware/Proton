@@ -932,6 +932,11 @@ $(OBJ)/.fex-post-source:
 	git -C $(SRCDIR)/FEX rev-parse --short=7 HEAD > $(FEX_SRC)/.git_rev
 	touch $@
 
+# share contents is duplicated between FEX arm64ec and aarch64 targets - only copy one
+$(OBJ)/.fex-aarch64-post-build:
+	mkdir -p $(DST_DIR)/share/fex-emu
+	cp -a $(FEX_aarch64_DST)/share/fex-emu/* $(DST_DIR)/share/fex-emu
+
 FEX_UNIXLIB_CMAKE_ARGS = $(FEX_COMMON_CMAKE_ARGS)
 
 FEX_UNIXLIB_aarch64_CMAKE_ARGS = -DCMAKE_INSTALL_LIBDIR=$(FEX_UNIXLIB_aarch64_DST)/lib/wine/aarch64-unix
